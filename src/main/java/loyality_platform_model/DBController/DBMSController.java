@@ -1,5 +1,6 @@
 package loyality_platform_model.DBController;
 
+//Todo finire.
 public class DBMSController {
 
     private static DBMSController instance;
