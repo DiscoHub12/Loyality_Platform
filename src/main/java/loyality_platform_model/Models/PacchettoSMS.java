@@ -7,7 +7,6 @@ public class PacchettoSMS {
 
     public PacchettoSMS(double prezzo,int messaggiDisponibili){
         id++;
-
         this.prezzo=prezzo;
         this.messaggiDisponibili=messaggiDisponibili;
     }
@@ -23,6 +22,10 @@ public class PacchettoSMS {
     }
     public void setMessaggiDisponibili(int n){
         this.messaggiDisponibili=n;
+    }
+
+    public int getMessaggiDisponibili() {
+        return messaggiDisponibili;
     }
 }
 

@@ -21,5 +21,13 @@ public class ConfigurazioneSMS {
     public void setOra(Date o){
         this.ora=o;
     }
+
+    @Override
+    public String toString() {
+        return "ConfigurazioneSMS{" +
+                "testoConfigurato='" + testoConfigurato + '\'' +
+                ", ora=" + ora +
+                '}';
+    }
 }
 

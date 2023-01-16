@@ -1,6 +1,9 @@
 package loyality_platform_model.Models;
-import java.util.ArrayList;
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 /**
  the class represents the card of a specific customer.
  A card is identified by an id and its owner.
@@ -14,52 +17,51 @@ public class Tessera {
      * unique id for this card.
      */
     private static int id;
-    /**
-     * This attribute indicates the owner of the card
-     */
-    private Cliente cliente;
+
     /**
      * This attribute indicates loyalty program list
      */
-    private final List<ProgrammaFedelta> programmiFedelta;
+    private final Set<ProgrammaFedelta> programmiFedelta;
     /**
      * constructor allows you to create a new card within the platform
-     * @param cliente card owner.
      */
-    public Tessera(Cliente cliente){
+    public Tessera(){
         id++;
-        this.cliente=cliente;
-        this.programmiFedelta=new ArrayList<>();
+        this.programmiFedelta=new HashSet<>();
     }
     public int getId(){
-        return this.id;
+        return id;
     }
-    public Cliente getCliente(){
-        return this.cliente;
-    }
-    public List<ProgrammaFedelta> getProgrammiFedelta() {
+    public Set<ProgrammaFedelta> getProgrammiFedelta() {
         return this.programmiFedelta;
     }
-    public void addProgrammaFedelta(ProgrammaFedelta programmaFedeltà) {
-        this.programmiFedelta.add(programmaFedeltà);
+    public void addProgrammaFedelta(ProgrammaFedelta programmaFedelta) {
+        this.programmiFedelta.add(programmaFedelta);
     }
 
-    public void removeProgrammmaFedelta(ProgrammaFedelta programmaFedeltà) {
-        this.programmiFedelta.remove(programmaFedeltà);
+    public void removeProgrammmaFedelta(ProgrammaFedelta programmaFedelta) {
+        this.programmiFedelta.remove(programmaFedelta);
     }
     //guardare classe programmi fedelta
-    public void addPunti(int p,ProgrammaFedelta programmaFedeltà) {
+    public void addPunti(int p,ProgrammaFedelta programmaFedelta) {
         //TODO implementare
     }
     //guardare classe programmi fedelta
-    public void removePunti(int p,ProgrammaFedelta programmaFedeltà) {
+    public void removePunti(int p,ProgrammaFedelta programmaFedelta) {
         //TODO implementare
     }
     public String toString(){
         return "Tessera{" +
                 "id=" + id +
-                ", cliente=" + this.cliente +
-                ", lista di programmi fedelta=" + this.programmiFedelta + //da vedere
+                ", lista di programmi fedelta=" + toStringProgrammiFedelta() +
                 '}';
+    }
+
+    private String toStringProgrammiFedelta(){
+        StringBuilder stringBuilder = new StringBuilder();
+        for(ProgrammaFedelta programmaFedelta : this.getProgrammiFedelta()){
+            stringBuilder.append("\n-").append(programmaFedelta);
+        }
+        return stringBuilder.toString();
     }
 }

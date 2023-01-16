@@ -1,8 +1,6 @@
 package loyality_platform_model.Models;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -22,12 +20,12 @@ public class Cliente {
      * This attribute rapresents the
      * the customer's name.
      */
-    private String nome;
+    private final String nome;
     /**
      * This attribute rapresents the
      * the customer's surname.
      */
-    private String cognome;
+    private final String cognome;
     /**
      * This attribute rapresents the
      * the customer's phone number.
@@ -45,27 +43,17 @@ public class Cliente {
     /**
      * This attribute contains the customer card
      */
-    private Tessera tessera;
+    private final Tessera tessera;
     /**
      * This attribute indicates whether the customer has been identified
      */
     private boolean identificato;
+
     /**
-     * This attribute represents a set of companies
+     * This attribute indicates a set of visits
      */
-    private Set<Azienda> listaAziende;
-    /**
-     * This attribute indicates a list of visits
-     */
-    private final List<Visita> visite;
-    /**
-     * This attribute indicates a list of reviews
-     */
-    private List<String> recensioni;
-    /**
-     * This attribute indicates a set of sms
-     */
-    private Set<SMS> sms;
+    private final Set<Visita> visite;
+
 
     /**
      * constructor allows you to create a new client within the platform.
@@ -83,7 +71,7 @@ public class Cliente {
         this.tessera=tessera;
         this.visitaPrenotata=false;
         this.identificato=false;
-        this.visite=new ArrayList<>();
+        this.visite=new HashSet<>();
 
     }
     public String getNome() {
@@ -104,40 +92,44 @@ public class Cliente {
         return id;
     }
 
-    public String getNumeroTelefono() {
+    public String getTelefono() {
         return telefono;
     }
 
-    public void setNumeroTelefono(String numeroTelefono) {
-        this.telefono = numeroTelefono;
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
     }
-    public String getEmail() {
+
+    public String getMail() {
         return mail;
     }
 
-    public void setEmail(String email) {
-        this.mail = email;
+    public void setMail(String mail) {
+        this.mail = mail;
     }
 
-    public Set<SMS> getSms() {
-        return sms;
+    public boolean isVisitaPrenotata() {
+        return visitaPrenotata;
     }
 
-    public List<Visita> getVisite(){
+    public void setVisitaPrenotata(boolean visitaPrenotata) {
+        this.visitaPrenotata = visitaPrenotata;
+    }
+
+    public Set<Visita> getVisite() {
         return visite;
     }
 
+
     public void iscriviProgrammaFedelta(){
-        //TODO
-
-    }
-
-    public boolean cercaNegozio(String nome){
         //TODO implementare
-        return false;
     }
 
-    public void addVisita(Visita visita) {
+    public void cercaNegozio(String nome){
+        //TODO implementare
+    }
+
+    public void prenotaVisita(Visita visita) {
         this.visite.add(visita);
         visitaPrenotata=true;
     }
@@ -147,27 +139,19 @@ public class Cliente {
         visitaPrenotata=false;
     }
 
-    public void modificaVisita(Visita presente, Visita nuovaVisita) {
-        for (Visita visita : this.visite) {
-            Visita tmp = visita;
-            if (presente.equals(tmp)) {
-                visita = nuovaVisita;
-            }
-        }
-    }
-
     public Tessera getTessera(){
         return this.tessera;
     }
 
-    public String getDetailsTessera(Tessera t){
-        return t.toString();
+    public String getDetailsTessera(){
+        return this.getTessera().toString();
     }
+
     public String getDetailsProgrammaFedelta(){
-        //da vedere
-        String s="niente";
-        return  s;
+        //TODO implementare
+        return null;
     }
+
     public String toString(){
         return "Cliente{" +
                 "id=" + id +
@@ -175,13 +159,16 @@ public class Cliente {
                 ", cognome=" + cognome +
                 ", telefono=" + telefono +
                 ", mail=" + mail +
-                ", visita prenotata=" + visitaPrenotata +
+                ", visite prenotate=" + toStringVisite() +
                 ", tessera=" + tessera +
                 '}';
     }
 
-    public void scriviRecensione(String recensione){
-        this.recensioni.add(recensione);
+    private String toStringVisite(){
+        StringBuilder stringBuilder = new StringBuilder();
+        for(Visita visita : this.getVisite()){
+            stringBuilder.append("\n-").append(visita);
+        }
+        return stringBuilder.toString();
     }
-
 }
