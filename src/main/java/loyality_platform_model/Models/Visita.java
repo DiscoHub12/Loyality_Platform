@@ -4,47 +4,47 @@ import java.util.Date;
 import java.util.Objects;
 
 /**
- * Class that represent the concept of a Visit.
+ * Class that rapresent the concept of a Visit.
  * A Visit can be booked by a specific Costumer , or by
  * an Employee once the Costumer has been identified.
- * A normal visit, consists of a date, the place and
- * much other information.
+ * A normal visit, consists od a Date, the Place and
+ * many other information.
  */
 public class Visita {
 
     /**
-     * This attribute represents the unique
+     * This attribute rapresents the unique
      * id of this Visit.
      */
     private static int idVisita;
 
     /**
-     * This attribute represents the
+     * This attribute rapresents the
      * Date of this Visit.
      */
     private Date data;
 
     /**
-     * This attribute represents the
+     * This attribute rapresents the
      * Place of this Visit.
      */
     private String luogo;
 
     /**
-     * This attribute represents the
+     * This attribute rapresents the
      * Hour duration of this Visit.
      */
     private String ora;
 
     /**
-     * This attribute represents the status
-     * of the visit, so whether it was completed
+     * This attribute rapresents the status
+     * of the visit, so whther it was completed
      * or not.
      */
     private boolean completata;
 
     /**
-     * Constructor that allow to create a
+     * Constructor that alllow to create a
      * Visit with certain information.
      *
      * @param luogo the Place of this Visit.
@@ -59,12 +59,12 @@ public class Visita {
         this.completata = false;
     }
 
-    public static int getIdVisita() {
+    public int getIdVisita() {
         return idVisita;
     }
 
     public Date getData() {
-        return this.data;
+        return data;
     }
 
     public void setData(Date data) {
@@ -73,7 +73,7 @@ public class Visita {
     }
 
     public String getLuogo() {
-        return this.luogo;
+        return luogo;
     }
 
     public void setLuogo(String luogo) {
