@@ -8,9 +8,11 @@ public class GestorePiattaforma {
 
     private String email;
 
-    public GestorePiattaforma(String nome, String cognome) {
+    public GestorePiattaforma(String nome, String cognome, String email) {
+        id++;
         this.nome = nome;
         this.cognome = cognome;
+        this.setEmail(email);
     }
 
     public static int getId() {
