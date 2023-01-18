@@ -8,11 +8,14 @@ public class GestorePuntoVendita {
 
     private String email;
 
-    public GestorePuntoVendita(String nome, String cognome, String email) {
+    private final Azienda azienda;
+
+    public GestorePuntoVendita(Azienda azienda, String nome, String cognome, String email) {
         id++;
         this.nome = nome;
         this.cognome = cognome;
         this.setEmail(email);
+        this.azienda=azienda;
     }
 
     public static int getId() {
@@ -33,6 +36,10 @@ public class GestorePuntoVendita {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Azienda getAzienda(){
+        return azienda;
     }
 
     @Override
