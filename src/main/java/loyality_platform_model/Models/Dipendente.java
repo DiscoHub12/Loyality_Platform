@@ -64,7 +64,7 @@ public class Dipendente {
      * @param email       the email for the Employee.
      * @param restrizioni the restrictions for the Employee.
      */
-    private Dipendente(String nome, String cognome, String email, boolean restrizioni) {
+    public Dipendente(String nome, String cognome, String email, boolean restrizioni) {
         idDipendente++;
         if (Objects.equals(nome, "") || Objects.equals(cognome, "") || Objects.equals(email, ""))
             throw new IllegalArgumentException("Illegal value for nome, cognome or email");
@@ -78,29 +78,29 @@ public class Dipendente {
         return idDipendente;
     }
 
-    private String getNome() {
+    public String getNome() {
         return this.nome;
     }
 
-    private String getCognome() {
+    public String getCognome() {
         return this.cognome;
     }
 
-    private String getEmail() {
+    public String getEmail() {
         return this.email;
     }
 
-    private void setEmail(String email) {
+    public void setEmail(String email) {
         if (Objects.equals(email, ""))
             throw new IllegalArgumentException("Illegal email for Employee.");
         this.email = email;
     }
 
-    private boolean isRestrizioni() {
+    public boolean isRestrizioni() {
         return this.restrizioni;
     }
 
-    private void setRestrizioni(GestorePuntoVendita gestorePuntoVendita, boolean restrizioni) {
+    public void setRestrizioni(GestorePuntoVendita gestorePuntoVendita, boolean restrizioni) {
         Objects.requireNonNull(gestorePuntoVendita);
         this.restrizioni = restrizioni;
     }
