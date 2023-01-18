@@ -29,9 +29,9 @@ public class Azienda {
 
     private PacchettoSMS pacchettoSms;
 
-    public Azienda(String nomeAzienda, GestorePuntoVendita titolare, SpazioFedelta spazioFedelta) {
+    public Azienda(GestorePuntoVendita titolare, SpazioFedelta spazioFedelta) {
         id++;
-        this.setNomeAzienda(nomeAzienda);
+        this.setNomeAzienda(spazioFedelta.getNome());
         this.setTitolare(titolare);
         this.spazioFedelta = spazioFedelta;
         this.dipendenti = new HashSet<>();
