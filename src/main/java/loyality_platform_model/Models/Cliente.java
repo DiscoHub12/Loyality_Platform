@@ -1,14 +1,15 @@
 package loyality_platform_model.Models;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
- the class represents a customer within the platform.
- A customer is registered with his classic data
- (such as name, surname, telephone and email),
- and can subscribe to loyalty programs, book and cancel visits,
- search for shops and write reviews.
+ * the class represents a customer within the platform.
+ * A customer is registered with his classic data
+ * (such as name, surname, telephone and email),
+ * and can subscribe to loyalty programs, book and cancel visits,
+ * search for shops and write reviews.
  */
 public class Cliente {
     /**
@@ -54,26 +55,31 @@ public class Cliente {
      */
     private final Set<Visita> visite;
 
+    private final Set<SMS> smsCliente;
+
 
     /**
      * constructor allows you to create a new client within the platform.
-     * @param nome    the customer's name.
-     * @param cognome the surname about this customer.
-     * @param telefono   the phone number about this customer.
-     * @param mail   the Email about this customer.
+     *
+     * @param nome     the customer's name.
+     * @param cognome  the surname about this customer.
+     * @param telefono the phone number about this customer.
+     * @param mail     the Email about this customer.
      */
-    public Cliente(String nome, String cognome, String telefono, String mail, Tessera tessera){
+    public Cliente(String nome, String cognome, String telefono, String mail, Tessera tessera) {
         id++;
         this.nome = nome;
         this.cognome = cognome;
         this.telefono = telefono;
         this.mail = mail;
-        this.tessera=tessera;
-        this.visitaPrenotata=false;
-        this.identificato=false;
-        this.visite=new HashSet<>();
+        this.tessera = tessera;
+        this.visitaPrenotata = false;
+        this.identificato = false;
+        this.visite = new HashSet<>();
+        this.smsCliente = new HashSet<>();
 
     }
+
     public String getNome() {
         return nome;
     }
@@ -81,10 +87,12 @@ public class Cliente {
     public String getCognome() {
         return cognome;
     }
+
     public boolean isIdentificato() {
         return identificato;
     }
-    public void setIdentificato(boolean identificato){
+
+    public void setIdentificato(boolean identificato) {
         this.identificato = identificato;
     }
 
@@ -120,39 +128,48 @@ public class Cliente {
         return visite;
     }
 
+    public Set<SMS> getSmsCliente() {
+        return this.smsCliente;
+    }
 
-    public void iscriviProgrammaFedelta(){
+
+    public void iscriviProgrammaFedelta() {
         //TODO implementare
     }
 
-    public void cercaNegozio(String nome){
+    public void cercaNegozio(String nome) {
         //TODO implementare
     }
 
     public void prenotaVisita(Visita visita) {
         this.visite.add(visita);
-        visitaPrenotata=true;
+        visitaPrenotata = true;
+    }
+
+    public void addVisita(Visita visita) {
+        Objects.requireNonNull(visita);
+        this.visite.add(visita);
     }
 
     public void removeVisita(Visita visita) {
         this.visite.remove(visita);
-        visitaPrenotata=false;
+        visitaPrenotata = false;
     }
 
-    public Tessera getTessera(){
+    public Tessera getTessera() {
         return this.tessera;
     }
 
-    public String getDetailsTessera(){
+    public String getDetailsTessera() {
         return this.getTessera().toString();
     }
 
-    public String getDetailsProgrammaFedelta(){
+    public String getDetailsProgrammaFedelta() {
         //TODO implementare
         return null;
     }
 
-    public String toString(){
+    public String toString() {
         return "Cliente{" +
                 "id=" + id +
                 ", nome=" + nome +
@@ -164,9 +181,9 @@ public class Cliente {
                 '}';
     }
 
-    private String toStringVisite(){
+    private String toStringVisite() {
         StringBuilder stringBuilder = new StringBuilder();
-        for(Visita visita : this.getVisite()){
+        for (Visita visita : this.getVisite()) {
             stringBuilder.append("\n-").append(visita);
         }
         return stringBuilder.toString();
