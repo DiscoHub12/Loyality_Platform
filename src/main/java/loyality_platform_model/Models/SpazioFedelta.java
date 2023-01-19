@@ -133,7 +133,7 @@ public class SpazioFedelta {
         linkEsterni.remove(link);
     }
 
-    public String toStringLinkEsterni() {
+    private String toStringLinkEsterni() {
         StringBuilder tmp = new StringBuilder();
         for (String s : this.linkEsterni) {
             tmp.append("\n-").append(s);
