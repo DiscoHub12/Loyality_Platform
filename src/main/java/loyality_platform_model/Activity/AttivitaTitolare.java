@@ -27,7 +27,9 @@ public class AttivitaTitolare {
             throw new IllegalArgumentException("Illegal surname for user");
         if(Objects.equals(email, ""))
             throw new IllegalArgumentException("Illegal email for user");
-        new Dipendente(nome, cognome, email, restrizioni);
+        Dipendente dipendente= new  Dipendente(nome, cognome, email, restrizioni);
+        this.getGestorePuntoVendita().getAzienda().addDipendente(dipendente);
+        //Aggiungi a db
     }
 
 
@@ -47,14 +49,15 @@ public class AttivitaTitolare {
         for(Dipendente dipendente1 : this.getGestorePuntoVendita().getAzienda().getDipendenti()) {
             if(dipendente.equals(dipendente1)){
                 this.getGestorePuntoVendita().getAzienda().rimuoviDipendente(dipendente);
+                //Rimuovi da db
             }
         }
     }
 
-    public void addProgramma (ProgrammaFedelta programmaFedelta){
+    public void addProgrammaFedelta(ProgrammaFedelta programmaFedelta){
         Objects.requireNonNull(programmaFedelta);
         this.getGestorePuntoVendita().getAzienda().addProgrammaFedelta(programmaFedelta);
-
+        //Aggiungi a db
     }
 
     public void rimuoviProgramma (ProgrammaFedelta programmaFedelta) {
@@ -62,6 +65,7 @@ public class AttivitaTitolare {
         for(ProgrammaFedelta programmaFedelta1 : this.getGestorePuntoVendita().getAzienda().getProgrammiAttivi()){
             if(programmaFedelta.equals(programmaFedelta1)){
                 this.getGestorePuntoVendita().getAzienda().rimuoviProgrammaFedelta(programmaFedelta);
+                //Rimuovi da db
             }
         }
     }
