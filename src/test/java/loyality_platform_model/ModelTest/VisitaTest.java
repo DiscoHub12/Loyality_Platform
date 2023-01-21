@@ -5,8 +5,12 @@ import loyality_platform_model.Models.Visita;
 import org.junit.jupiter.api.Test;
 import java.util.Calendar;
 import java.util.Date;
-
 import static org.junit.jupiter.api.Assertions.*;
+
+/**
+ * IMPLEMENTED BY : Alessio Giacché.
+ */
+
 
 public class VisitaTest {
 
