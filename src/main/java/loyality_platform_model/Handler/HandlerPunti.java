@@ -7,6 +7,11 @@ import java.util.List;
 import java.util.Objects;
 
 /**
+ * IMPLEMENTED BY : Alessio Giacché.
+ */
+
+
+/**
  * Class that represents a customer points manager.
  * In fact, it has a number of features, such as adding points to
  * certain customers, removing them and much more.

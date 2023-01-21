@@ -4,11 +4,16 @@ import java.util.Date;
 import java.util.Objects;
 
 /**
+ * IMPLEMENTED BY : Alessio Giacché.
+ */
+
+
+/**
  * Class that rapresent the concept of a Visit.
  * A Visit can be booked by a specific Costumer , or by
  * an Employee once the Costumer has been identified.
  * A normal visit, consists od a Date, the Place and
- * many other information.
+ * much other information.
  */
 public class Visita {
 

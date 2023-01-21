@@ -5,6 +5,11 @@ import java.util.List;
 import java.util.Objects;
 
 /**
+ * IMPLEMENTED BY : Alessio Giacché.
+ */
+
+
+/**
  * Class that rapresent the concept of Loyalty Space.
  * This Loyality Space is an Object that is container
  * within any Company, in fact it contains Company

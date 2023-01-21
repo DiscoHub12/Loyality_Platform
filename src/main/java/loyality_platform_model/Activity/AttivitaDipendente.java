@@ -11,6 +11,11 @@ import java.util.List;
 import java.util.Objects;
 
 /**
+ * IMPLEMENTED BY : Alessio Giacché.
+ */
+
+
+/**
  * Class that represents the activities that an Employee is able to perform.
  * Indeed, within it, we find a whole series of methods that allow a particular
  * Employee to perform.

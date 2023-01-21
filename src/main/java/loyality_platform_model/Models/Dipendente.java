@@ -5,6 +5,11 @@ import loyality_platform_model.Activity.AttivitaDipendente;
 import java.util.Objects;
 
 /**
+ * IMPLEMENTED BY : Alessio Giacché.
+ */
+
+
+/**
  * Class representing an Employee within this platform.
  * An employee, based on the restrictions that are imposed
  * on him (initially default) is able to perform a series

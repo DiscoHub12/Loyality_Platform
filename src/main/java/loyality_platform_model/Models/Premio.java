@@ -1,6 +1,11 @@
 package loyality_platform_model.Models;
 
 /**
+ * IMPLEMENTED BY : Alessio Giacché.
+ */
+
+
+/**
  * Class that rapresents the concept of Award.
  * A Reward can be redeemed by a particular Costumer (member)
  * if he reaches the required number of points.

@@ -9,6 +9,11 @@ import java.util.Date;
 import java.util.Objects;
 
 /**
+ * IMPLEMENTED BY : Alessio Giacché.
+ */
+
+
+/**
  * Class that represents a customer visit manager.
  * Able to perform certain functions, such as creating a visit,
  * associating a visit to a particular customer and so on.

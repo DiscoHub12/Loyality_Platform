@@ -6,6 +6,11 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
+ * IMPLEMENTED BY : Alessio Giacché.
+ */
+
+
+/**
  * Class that rapresent the concept of Reward Catalog.
  * This Catalog is owned by one of the many Loyality Programs,
  * and can be modified and biult directly by the Manager who

@@ -11,6 +11,11 @@ import java.util.Date;
 import java.util.Objects;
 
 /**
+ * IMPLEMENTED BY : Alessio Giacché.
+ */
+
+
+/**
  * Class representing the activities that an Employee is able to perform
  * within a profile of a particular identified Customer.
  * In fact, within it, we find a whole series of methods that allow a particular

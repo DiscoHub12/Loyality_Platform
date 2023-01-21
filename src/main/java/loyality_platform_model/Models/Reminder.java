@@ -7,6 +7,11 @@ import java.util.List;
 import java.util.Objects;
 
 /**
+ * IMPLEMENTED BY : Alessio Giacché.
+ */
+
+
+/**
  * Class that rapresents the concept of a
  * Reminder, taken as notifications. In fact,
  * this Reminder sends a Notification/SMS to a Client

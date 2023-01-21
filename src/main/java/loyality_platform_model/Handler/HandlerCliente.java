@@ -8,6 +8,11 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
+ * IMPLEMENTED BY : Alessio Giacché.
+ */
+
+
+/**
  * Class that rapresent a Costumer manager capable
  * of fetching all available information and able to identify a Client.
  * Inside, it has a temporary variable that represents any identified
