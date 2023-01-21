@@ -9,15 +9,15 @@ public class AttivitaTitolare {
 
     public final DBMSController dbmsController;
 
-    public final GestorePuntoVendita gestorePuntoVendita;
+    public final Azienda azienda;
 
-    public AttivitaTitolare(GestorePuntoVendita gestorePuntoVendita) {
+    public AttivitaTitolare(Azienda azienda) {
         this.dbmsController = DBMSController.getInstance();
-        this.gestorePuntoVendita= gestorePuntoVendita;
+        this.azienda= azienda;
     }
 
-    public GestorePuntoVendita getGestorePuntoVendita() {
-        return gestorePuntoVendita;
+    public Azienda getAzienda() {
+        return azienda;
     }
 
     public void creaUtente(String nome, String cognome, String email, boolean restrizioni) {
@@ -28,43 +28,47 @@ public class AttivitaTitolare {
         if(Objects.equals(email, ""))
             throw new IllegalArgumentException("Illegal email for user");
         Dipendente dipendente= new  Dipendente(nome, cognome, email, restrizioni);
-        this.getGestorePuntoVendita().getAzienda().addDipendente(dipendente);
-        //Aggiungi a db
+        this.getAzienda().addDipendente(dipendente);
+        this.dbmsController.addDipendenteAzienda(this.getAzienda(), dipendente);
     }
 
 
     //Da rivedere
     public void modificaUtente(Dipendente dipendente, String email, boolean restrizioni){
         Objects.requireNonNull(dipendente);
-        for (Dipendente dipendente1 : this.getGestorePuntoVendita().getAzienda().getDipendenti()){
-            if(dipendente.equals(dipendente1)){
-                dipendente.setEmail(email);
-                dipendente.setRestrizioni(this.getGestorePuntoVendita(), restrizioni);
-            }
+        if(Objects.equals(email, ""))
+            throw new IllegalArgumentException("Illegal email for user");
+        if(this.getAzienda().getDipendenti().contains(dipendente)){
+            Dipendente dipendente1 = new Dipendente(dipendente.getNome(), dipendente.getCognome(), email, restrizioni);
+            this.getAzienda().getDipendenti().remove(dipendente);
+            this.getAzienda().getDipendenti().add(dipendente1);
+            this.dbmsController.modificaDipendenteAzienda(dipendente, this.getAzienda(), dipendente1);
         }
+        throw new IllegalArgumentException("User not exists");
     }
 
     public void rimuoviUtente(Dipendente dipendente){
         Objects.requireNonNull(dipendente);
-        for(Dipendente dipendente1 : this.getGestorePuntoVendita().getAzienda().getDipendenti()) {
-            if(dipendente.equals(dipendente1)){
-                this.getGestorePuntoVendita().getAzienda().rimuoviDipendente(dipendente);
-                //Rimuovi da db
-            }
+        if(this.getAzienda().getDipendenti().contains(dipendente)){
+            this.getAzienda().getDipendenti().remove(dipendente);
+            this.dbmsController.removeDipendenteAzienda(this.getAzienda(), dipendente);
         }
+        throw new IllegalArgumentException("User not exists");
     }
 
+    //TODO finire
     public void addProgrammaFedelta(ProgrammaFedelta programmaFedelta){
         Objects.requireNonNull(programmaFedelta);
-        this.getGestorePuntoVendita().getAzienda().addProgrammaFedelta(programmaFedelta);
+        this.getAzienda().addProgrammaFedelta(programmaFedelta);
         //Aggiungi a db
     }
 
+    //TODO finire
     public void rimuoviProgramma (ProgrammaFedelta programmaFedelta) {
         Objects.requireNonNull(programmaFedelta);
-        for(ProgrammaFedelta programmaFedelta1 : this.getGestorePuntoVendita().getAzienda().getProgrammiAttivi()){
+        for(ProgrammaFedelta programmaFedelta1 : this.getAzienda().getProgrammiAttivi()){
             if(programmaFedelta.equals(programmaFedelta1)){
-                this.getGestorePuntoVendita().getAzienda().rimuoviProgrammaFedelta(programmaFedelta);
+                this.getAzienda().rimuoviProgrammaFedelta(programmaFedelta);
                 //Rimuovi da db
             }
         }
@@ -74,14 +78,16 @@ public class AttivitaTitolare {
     //TODO implementare catalogo premi
     //TODO implementare invita esercenti
 
+    //TODO finire db
     public void addAbbonamento(Abbonamento abbonamento){
         Objects.requireNonNull(abbonamento);
-        this.getGestorePuntoVendita().getAzienda().setAbbonamento(abbonamento);
+        this.getAzienda().setAbbonamento(abbonamento);
     }
 
+    //TODO finire db
     public void addPacchettoSms(PacchettoSMS pacchettoSms){
         Objects.requireNonNull(pacchettoSms);
-        this.getGestorePuntoVendita().getAzienda().setPacchettoSms(pacchettoSms);
+        this.getAzienda().setPacchettoSms(pacchettoSms);
     }
 
 
