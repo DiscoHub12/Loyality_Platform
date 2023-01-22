@@ -30,13 +30,13 @@ public class VisitaTest {
         Visita visita = new Visita(luogo, data, ora);
         assertEquals(1, visita.getIdVisita());
         Visita visita2 = new Visita(luogo, data, ora);
-        assertEquals(2, visita.getIdVisita());
+        assertEquals(2, visita2.getIdVisita());
         Visita visita3 = new Visita(luogo, data, ora);
-        assertEquals(3, visita.getIdVisita());
+        assertEquals(3, visita3.getIdVisita());
         Visita visita4 = new Visita(luogo, data, ora);
-        assertEquals(4, visita.getIdVisita());
+        assertEquals(4, visita4.getIdVisita());
         Visita visita5 = new Visita(luogo, data, ora);
-        assertEquals(5, visita.getIdVisita());
+        assertEquals(5, visita5.getIdVisita());
     }
 
     @Test
