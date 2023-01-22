@@ -7,7 +7,7 @@ import java.util.Date;
  * purchased by companies that want to join the platform.
  */
 public class Abbonamento {
-    private static int id;
+    private static int idAbbonamento;
 
     private final Date dataInizio;
 
@@ -16,7 +16,7 @@ public class Abbonamento {
     private double prezzo;
 
     public Abbonamento(Date dataInizio, Date dataFine, double prezzo) {
-        id++;
+        idAbbonamento++;
         this.dataInizio = dataInizio;
         this.dataFine = dataFine;
         this.setPrezzo(prezzo);
@@ -27,7 +27,7 @@ public class Abbonamento {
      * @return the subscription id.
      */
     public static int getId() {
-        return id;
+        return idAbbonamento;
     }
 
     /**

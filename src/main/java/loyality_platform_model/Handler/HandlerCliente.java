@@ -32,12 +32,23 @@ public class HandlerCliente {
      */
     private Cliente clienteIdentificato;
 
+    private static HandlerCliente instance;
+
     /**
      * Costructor who creates a Client manager.
      * Recall the Db instance to retrieve permanent data.
      */
-    public HandlerCliente() {
+    public HandlerCliente(Cliente cliente) {
+        Objects.requireNonNull(cliente);
         this.dbmsController = DBMSController.getInstance();
+        this.clienteIdentificato=cliente;
+    }
+
+    public static HandlerCliente getInstance(Cliente cliente) {
+        if(instance == null){
+            instance = new HandlerCliente(cliente);
+        }
+        return instance;
     }
 
     /**

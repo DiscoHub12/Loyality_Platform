@@ -5,13 +5,15 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
+ * IMPLEMENTED BY : Sofia Scattolini.
+ *
  * Class representing a company within this platform.
  A company has its own loyalty space containing all its information,
  as loyalty programs and a set of customers and employees.
  */
 
 public class Azienda {
-    private static int id;
+    private static int idAzienda;
 
     private String nomeAzienda;
 
@@ -30,7 +32,7 @@ public class Azienda {
     private PacchettoSMS pacchettoSms;
 
     public Azienda(GestorePuntoVendita titolare, SpazioFedelta spazioFedelta) {
-        id++;
+        idAzienda++;
         this.setNomeAzienda(spazioFedelta.getNome());
         this.setTitolare(titolare);
         this.spazioFedelta = spazioFedelta;
@@ -44,7 +46,7 @@ public class Azienda {
      * @return the company id.
      */
     public static int getId() {
-        return id;
+        return idAzienda;
     }
 
     /**
@@ -95,6 +97,9 @@ public class Azienda {
      * @param dipendente new employee.
      */
     public void addDipendente (Dipendente dipendente) {
+        Objects.requireNonNull(dipendente);
+        if(this.getDipendenti().contains(dipendente))
+            throw new IllegalArgumentException("Employee already present.");
         this.dipendenti.add(dipendente);
     }
 
@@ -111,6 +116,9 @@ public class Azienda {
      * @param dipendente employee to remove.
      */
     public void rimuoviDipendente(Dipendente dipendente){
+        Objects.requireNonNull(dipendente);
+        if(!this.getDipendenti().contains(dipendente))
+            throw new IllegalArgumentException("Employee not exists.");
         this.dipendenti.remove(dipendente);
     }
 
@@ -119,6 +127,9 @@ public class Azienda {
      * @param programmaFedelta new loyalty program.
      */
     public void addProgrammaFedelta(ProgrammaFedelta programmaFedelta){
+        Objects.requireNonNull(programmaFedelta);
+        if(this.getProgrammiAttivi().contains(programmaFedelta))
+            throw new IllegalArgumentException("Loyalty program already present.");
         this.programmiAttivi.add(programmaFedelta);
     }
 
@@ -135,6 +146,9 @@ public class Azienda {
      * @param programmaFedelta loyalty program to be removed.
      */
     public void rimuoviProgrammaFedelta(ProgrammaFedelta programmaFedelta){
+        Objects.requireNonNull(programmaFedelta);
+        if(!this.getProgrammiAttivi().contains(programmaFedelta))
+            throw new IllegalArgumentException("Loyalty program not exists.");
         this.programmiAttivi.remove(programmaFedelta);
     }
 
@@ -143,6 +157,9 @@ public class Azienda {
      * @param cliente new costumer.
      */
     public void addCliente (Cliente cliente){
+        Objects.requireNonNull(cliente);
+        if(this.getClienti().contains(cliente))
+            throw new IllegalArgumentException("Customer already present.");
         this.clienti.add(cliente);
     }
 
@@ -191,7 +208,7 @@ public class Azienda {
     @Override
     public String toString() {
         return "Azienda{" +
-                "id=" + id +
+                "id=" + idAzienda +
                 ", spazioFedelta=" + spazioFedelta +
                 ", titolare=" + titolare +
                 ", dipendenti=" + toStringDipendenti() +

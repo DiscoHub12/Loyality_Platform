@@ -1,4 +1,97 @@
 package loyality_platform_model.Handler;
 
+import loyality_platform_model.DBController.DBMSController;
+import loyality_platform_model.Models.Cliente;
+import loyality_platform_model.Models.ConfigurazioneSMS;
+import loyality_platform_model.Models.SMS;
+import java.util.Objects;
+import java.util.Set;
+
+/**
+ * IMPLEMENTED BY : Sofia Scattolini.
+ *
+ * Classes representing a capable message manager
+ * to send text messages to a single customer or to a group of customers.
+ */
 public class HandlerMessaggi {
+
+    //TODO rivedere
+    //TODO implementare db
+
+    private final DBMSController dbmsController;
+
+    public HandlerMessaggi() {
+        this.dbmsController = DBMSController.getInstance();
+    }
+
+    /**
+     * This method allows you to create a new SMS.
+     * @param testo sms text.
+     * @param oraInvio sms ora.
+     * @param configurato <code>true</code> if the sms is configured <code>false</code> otherwise.
+     * @return new sms.
+     */
+    public SMS creaSMS(String testo, String oraInvio, boolean configurato){
+        if (Objects.equals(testo, ""))
+            throw new IllegalArgumentException("Illegal text for sms.");
+        if (Objects.equals(oraInvio, ""))
+            throw new IllegalArgumentException("Illegal ora for sms.");
+       return new SMS(testo, oraInvio, configurato);
+    }
+
+    /**
+     * This method allows you to send a text message to a customer.
+     * @param sms sms to send.
+     * @param cliente customer who must receive the SMS.
+     */
+    public void inviaSMS(SMS sms, Cliente cliente){
+        Objects.requireNonNull(sms);
+        Objects.requireNonNull(cliente);
+        HandlerCliente.getInstance(cliente).getSMSCliente().add(creaSMS(sms.getTesto(), sms.getOraInvio(), sms.isConfigurato()));
+    }
+
+    /**
+     * This method allows you to send a text message to a set of customers.
+     * @param sms sms to send.
+     * @param clienti set of customers who must receive the SMS.
+     */
+    public void inviaSmsGenerale(SMS sms, Set<Cliente> clienti){
+        Objects.requireNonNull(sms);
+        Objects.requireNonNull(clienti);
+        for(Cliente cliente : clienti){
+            HandlerCliente.getInstance(cliente).getSMSCliente().add(creaSMS(sms.getTesto(), sms.getOraInvio(), sms.isConfigurato()));
+        }
+    }
+
+    /**
+     * This method allows you to send a configured text message to a customer.
+     * @param sms sms to send.
+     * @param configurazioneSMS configured text message.
+     * @param cliente customer who must receive the SMS.
+     */
+    public void inviaSMSConfigurato(SMS sms, ConfigurazioneSMS configurazioneSMS, Cliente cliente){
+        Objects.requireNonNull(sms);
+        Objects.requireNonNull(configurazioneSMS);
+        Objects.requireNonNull(cliente);
+        sms.setConfigurato(true);
+        sms.setMessaggioConfigurato(configurazioneSMS);
+        HandlerCliente.getInstance(cliente).getSMSCliente().add(creaSMS(sms.getTesto(), sms.getOraInvio(), sms.isConfigurato()));
+    }
+
+    /**
+     * This method allows you to send a configured text message to a set of customers.
+     * @param sms sms to send.
+     * @param configurazioneSMS configured text message.
+     * @param clienti set of customers who must receive the SMS.
+     */
+    public void inviaSMSGeneraleConfigurato(SMS sms, ConfigurazioneSMS configurazioneSMS, Set<Cliente> clienti){
+        Objects.requireNonNull(sms);
+        Objects.requireNonNull(clienti);
+        Objects.requireNonNull(configurazioneSMS);
+        sms.setMessaggioConfigurato(configurazioneSMS);
+        sms.setConfigurato(true);
+        for(Cliente cliente : clienti){
+            HandlerCliente.getInstance(cliente).getSMSCliente().add(creaSMS(sms.getTesto(), sms.getOraInvio(), sms.isConfigurato()));
+        }
+    }
 }
