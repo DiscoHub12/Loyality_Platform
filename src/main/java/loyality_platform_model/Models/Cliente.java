@@ -3,7 +3,9 @@ package loyality_platform_model.Models;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-
+/**
+ * IMPLEMENTED BY : Fabio Evangelista.
+ */
 /**
  * the class represents a customer within the platform.
  * A customer is registered with his classic data
@@ -54,7 +56,9 @@ public class Cliente {
      * This attribute indicates a set of visits
      */
     private final Set<Visita> visite;
-
+    /**
+     * This attribute indicates a set of SMS
+     */
     private final Set<SMS> smsCliente;
 
 
@@ -79,89 +83,103 @@ public class Cliente {
         this.smsCliente = new HashSet<>();
 
     }
-
+    /**
+     * method that returns the name of the customer
+     */
     public String getNome() {
         return nome;
     }
-
+    /**
+     * method that returns the surname of the customer
+     */
     public String getCognome() {
         return cognome;
     }
-
+    /**
+     * boolean method indicating if the customer has already been identified
+     */
     public boolean isIdentificato() {
         return identificato;
     }
-
+    /**
+     * method that allows you to enter whether the customer has been identified or not
+     */
     public void setIdentificato(boolean identificato) {
         this.identificato = identificato;
     }
-
+    /**
+     * method that returns the customer's id
+     */
     public static int getId() {
         return id;
     }
-
+    /**
+     * method that returns the customer's phone number
+     */
     public String getTelefono() {
         return telefono;
     }
-
+    /**
+     * method that allows you to change the customer's telephone number
+     */
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
-
+    /**
+     * method that returns the customer's email
+     */
     public String getMail() {
         return mail;
     }
-
+    /**
+     * method that allows you to change the customer's email
+     */
     public void setMail(String mail) {
         this.mail = mail;
     }
-
-    public boolean isVisitaPrenotata() {
-        return visitaPrenotata;
-    }
-
-    public void setVisitaPrenotata(boolean visitaPrenotata) {
-        this.visitaPrenotata = visitaPrenotata;
-    }
-
+    /**
+     * method that returns customer visits
+     */
     public Set<Visita> getVisite() {
         return visite;
     }
-
+    /**
+     * method that returns the customer's SMS
+     */
     public Set<SMS> getSmsCliente() {
         return this.smsCliente;
     }
-
-
-    public void iscriviProgrammaFedelta() {
-        //TODO implementare
-    }
-
-    public void cercaNegozio(String nome) {
-        //TODO implementare
-    }
-
-    public void prenotaVisita(Visita visita) {
-        this.visite.add(visita);
-        visitaPrenotata = true;
-    }
-
+    /**
+     * method that adds a visit to the customer
+     */
     public void addVisita(Visita visita) {
         Objects.requireNonNull(visita);
         this.visite.add(visita);
     }
-
+    /**
+     * method that remove a visit to the customer
+     */
     public void removeVisita(Visita visita) {
         this.visite.remove(visita);
         visitaPrenotata = false;
     }
-
+    /**
+     * method that returns the card belonging to the customer
+     */
     public Tessera getTessera() {
         return this.tessera;
     }
-
-    public String getDetailsTessera() {
-        return this.getTessera().toString();
+    /**
+     * method that adds SMS to the client
+     */
+    public void aggiungiSMS(SMS sms){
+        this.smsCliente.add(sms);
+    }
+    /**
+     * method that remove SMS to the client
+     */
+    public void rimuoviSMS(SMS sms){
+        this.smsCliente.remove(sms);
     }
 
     public String getDetailsProgrammaFedelta() {

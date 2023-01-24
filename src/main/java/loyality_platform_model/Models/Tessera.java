@@ -3,7 +3,9 @@ package loyality_platform_model.Models;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
+/**
+ * IMPLEMENTED BY : Fabio Evangelista.
+ */
 /**
  * the class represents the card of a specific customer.
  * A card is identified by an id and its owner.
