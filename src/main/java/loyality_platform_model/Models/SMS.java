@@ -15,12 +15,11 @@ public class SMS {
 
     private boolean configurato = false;
 
-    public SMS(String testo, String oraInvio, boolean configurato) {
+    public SMS(String testo, String oraInvio) {
         this.setTesto(testo);
         if (Objects.equals(oraInvio, ""))
             throw new IllegalArgumentException("Illegal ora for sms.");
         this.oraInvio = oraInvio;
-        this.setConfigurato(configurato);
     }
 
     /**

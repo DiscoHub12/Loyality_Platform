@@ -24,19 +24,22 @@ public class HandlerMessaggi {
         this.dbmsController = DBMSController.getInstance();
     }
 
+    public DBMSController getDbmsController() {
+        return dbmsController;
+    }
+
     /**
      * This method allows you to create a new SMS.
      * @param testo sms text.
      * @param oraInvio sms ora.
-     * @param configurato <code>true</code> if the sms is configured <code>false</code> otherwise.
      * @return new sms.
      */
-    public SMS creaSMS(String testo, String oraInvio, boolean configurato){
+    public SMS creaSMS(String testo, String oraInvio){
         if (Objects.equals(testo, ""))
             throw new IllegalArgumentException("Illegal text for sms.");
         if (Objects.equals(oraInvio, ""))
             throw new IllegalArgumentException("Illegal ora for sms.");
-       return new SMS(testo, oraInvio, configurato);
+       return new SMS(testo, oraInvio);
     }
 
     /**
@@ -47,7 +50,8 @@ public class HandlerMessaggi {
     public void inviaSMS(SMS sms, Cliente cliente){
         Objects.requireNonNull(sms);
         Objects.requireNonNull(cliente);
-        HandlerCliente.getInstance(cliente).getSMSCliente().add(creaSMS(sms.getTesto(), sms.getOraInvio(), sms.isConfigurato()));
+        SMS sms1 = creaSMS(sms.getTesto(), sms.getOraInvio());
+        HandlerCliente.getInstance(cliente).getSMSCliente().add(sms1);
     }
 
     /**
@@ -58,8 +62,9 @@ public class HandlerMessaggi {
     public void inviaSmsGenerale(SMS sms, Set<Cliente> clienti){
         Objects.requireNonNull(sms);
         Objects.requireNonNull(clienti);
+        SMS sms1 = creaSMS(sms.getTesto(), sms.getOraInvio());
         for(Cliente cliente : clienti){
-            HandlerCliente.getInstance(cliente).getSMSCliente().add(creaSMS(sms.getTesto(), sms.getOraInvio(), sms.isConfigurato()));
+            HandlerCliente.getInstance(cliente).getSMSCliente().add(sms1);
         }
     }
 
@@ -75,7 +80,8 @@ public class HandlerMessaggi {
         Objects.requireNonNull(cliente);
         sms.setConfigurato(true);
         sms.setMessaggioConfigurato(configurazioneSMS);
-        HandlerCliente.getInstance(cliente).getSMSCliente().add(creaSMS(sms.getTesto(), sms.getOraInvio(), sms.isConfigurato()));
+        SMS sms1 = creaSMS(sms.getTesto(), sms.getOraInvio());
+        HandlerCliente.getInstance(cliente).getSMSCliente().add(sms1);
     }
 
     /**
@@ -90,8 +96,9 @@ public class HandlerMessaggi {
         Objects.requireNonNull(configurazioneSMS);
         sms.setMessaggioConfigurato(configurazioneSMS);
         sms.setConfigurato(true);
+        SMS sms1 = creaSMS(sms.getTesto(), sms.getOraInvio());
         for(Cliente cliente : clienti){
-            HandlerCliente.getInstance(cliente).getSMSCliente().add(creaSMS(sms.getTesto(), sms.getOraInvio(), sms.isConfigurato()));
+            HandlerCliente.getInstance(cliente).getSMSCliente().add(sms1);
         }
     }
 }
