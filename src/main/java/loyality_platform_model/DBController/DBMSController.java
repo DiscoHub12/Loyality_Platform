@@ -1,9 +1,6 @@
 package loyality_platform_model.DBController;
 
-import loyality_platform_model.Models.Azienda;
-import loyality_platform_model.Models.Cliente;
-import loyality_platform_model.Models.Dipendente;
-import loyality_platform_model.Models.ProgrammaFedelta;
+import loyality_platform_model.Models.*;
 
 import java.util.*;
 
@@ -35,7 +32,7 @@ public class DBMSController {
     private final Map<Azienda, Set<Dipendente>> dipendentiAzienda;
 
     private final Map<Azienda, Set<ProgrammaFedelta>> programmiAzienda;
-
+    private final Map<Tessera, Cliente> tesseraCliente;
 
     public DBMSController(String nameDb) {
         this.nameDb = nameDb;
@@ -43,6 +40,7 @@ public class DBMSController {
         this.programmiDisponibili = new HashSet<>();
         this.dipendentiAzienda = new HashMap<>();
         this.programmiAzienda = new HashMap<>();
+        this.tesseraCliente=new HashMap<>();
     }
 
     public static DBMSController getInstance() {
@@ -158,6 +156,33 @@ public class DBMSController {
                 entry.getValue().remove(programmaFedelta);
             }
             throw new IllegalArgumentException("Company not exists");
+        }
+    }
+    public Map<Tessera, Cliente> getTesseraCliente() {
+        return tesseraCliente;
+    }
+    public void addTessera(Tessera tessera, Cliente cliente) {
+        Objects.requireNonNull(tessera);
+        Objects.requireNonNull(cliente);
+        for (Map.Entry<Tessera, Cliente> entry : this.getTesseraCliente().entrySet()) {
+            if (tessera.equals(entry.getKey()) || cliente.equals(entry.getValue())) {
+                throw new IllegalArgumentException("User already exists.");
+            }
+            else {
+                tesseraCliente.put(tessera,cliente);
+            }
+        }
+    }
+    public void removeTessera(Tessera tessera, Cliente cliente){
+        Objects.requireNonNull(tessera);
+        Objects.requireNonNull(cliente);
+        for (Map.Entry<Tessera, Cliente> entry : this.getTesseraCliente().entrySet()) {
+            if (tessera.equals(entry.getKey()) || cliente.equals(entry.getValue())) {
+                tesseraCliente.remove(tessera,cliente);
+            }
+            else{
+                throw new IllegalArgumentException("Card not exists.");
+            }
         }
     }
 }
