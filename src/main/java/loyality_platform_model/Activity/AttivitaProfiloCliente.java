@@ -90,7 +90,7 @@ public class AttivitaProfiloCliente {
     public void inviaSMS(HandlerMessaggi gestoreMessaggi, SMS sms) {
         Objects.requireNonNull(gestoreMessaggi);
         Objects.requireNonNull(sms);
-        //Todo implementare, manca HandlerMessaggi
+        gestoreMessaggi.inviaSMS(sms, this.clienteIdentificato);
     }
 
     /**

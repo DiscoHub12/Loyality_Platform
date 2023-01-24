@@ -9,6 +9,7 @@ import loyality_platform_model.Models.SMS;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * IMPLEMENTED BY : Alessio Giacché.
@@ -76,11 +77,11 @@ public class AttivitaDipendente {
      * @param sms             the message to send.
      * @throws NullPointerException if the <gestoreMessaggi> or <clienti> or <sms> are null.
      */
-    public void inviaSMSGenerali(HandlerMessaggi gestoreMessaggi, List<Cliente> clienti, SMS sms) {
+    public void inviaSMSGenerali(HandlerMessaggi gestoreMessaggi, Set<Cliente> clienti, SMS sms) {
         Objects.requireNonNull(gestoreMessaggi);
         Objects.requireNonNull(clienti);
         Objects.requireNonNull(sms);
-        //Todo implementare, manca HandlerMessaggi
+        gestoreMessaggi.inviaSmsGenerale(sms, clienti);
     }
 
     /**

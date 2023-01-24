@@ -2,6 +2,7 @@ package loyality_platform_model.Handler;
 
 import loyality_platform_model.DBController.DBMSController;
 import loyality_platform_model.Models.Cliente;
+import loyality_platform_model.Models.Tessera;
 
 import java.util.List;
 import java.util.Objects;
@@ -47,8 +48,7 @@ public class HandlerPunti {
         Objects.requireNonNull(cliente);
         if (numeroPunti <= 0)
             throw new IllegalArgumentException("Illegal number of point.");
-
-        //Todo implementare, manca Cliente e Tessera
+        cliente.getTessera().addPunti(numeroPunti);
     }
 
     /**
@@ -62,7 +62,10 @@ public class HandlerPunti {
      * @throws IllegalArgumentException if the number of points is incorrect.
      */
     public void rimuoviPunti(Cliente cliente, int numeroPunti) {
-        //Todo implementare, manca Cliente e Tessera
+        Objects.requireNonNull(cliente);
+        if (numeroPunti <= 0)
+            throw new IllegalArgumentException("Illegal number of point");
+        cliente.getTessera().removePunti(numeroPunti);
     }
 
     /**
@@ -76,7 +79,12 @@ public class HandlerPunti {
      * @throws IllegalArgumentException if the number of points to add is incorrect.
      */
     public void aggiungiPuntiGenerale(List<Cliente> clienti, int numeroPunti) {
-        //Todo implementare, manca Cliente e Tessera
+        Objects.requireNonNull(clienti);
+        if (numeroPunti <= 0)
+            throw new IllegalArgumentException("Illegal number of points.");
+        for(Cliente cliente : clienti){
+            cliente.getTessera().addPunti(numeroPunti);
+        }
     }
 
     /**
@@ -90,7 +98,12 @@ public class HandlerPunti {
      * @throws IllegalArgumentException if the number of points to add is incorrect.
      */
     public void rimuoviPuntiGenerale(List<Cliente> clienti, int numeroPunti) {
-        //Todo implementare, manca Cliente e Tessera
+        Objects.requireNonNull(clienti);
+        if (numeroPunti <= 0)
+            throw new IllegalArgumentException("Illegal number of points.");
+        for(Cliente cliente : clienti){
+            cliente.getTessera().removePunti(numeroPunti);
+        }
     }
 
 }
