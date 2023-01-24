@@ -121,7 +121,10 @@ public class HandlerVisite {
      * @throws NullPointerException if the <gestoreMessaggi> or <cliente> or <sms > is null.
      */
     public void inviaSMS(HandlerMessaggi gestoreMessaggi, Cliente cliente, SMS sms) {
-        //Todo implementare, manca Cliente, HandlerMessaggi.
+        Objects.requireNonNull(gestoreMessaggi);
+        Objects.requireNonNull(cliente);
+        Objects.requireNonNull(sms);
+        gestoreMessaggi.inviaSMS(sms, cliente);
     }
 
 }
