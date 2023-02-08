@@ -1,74 +1,120 @@
 package loyality_platform_model.Models;
 
 import java.util.HashSet;
-import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+
+
 /**
- * IMPLEMENTED BY : Fabio Evangelista.
- */
-/**
- * the class represents the card of a specific customer.
+ * IMPLEMENTED BY : Sofia Scattolini.
+ *
+ * The class represents the card of a specific customer.
  * A card is identified by an id and its owner.
  * Loyalty programs to which the customer is a member are also marked.
  * Inside we can subscribe to a new loyalty program or remove an old one and add or remove points.
  */
 
 public class Tessera {
-    /**
-     * This attribute rapresents the
-     * unique id for this card.
-     */
-    private static int id;
 
-    /**
-     * This attribute indicates loyalty program list
-     */
-    private final Set<ProgrammaFedelta> programmiFedelta;
+    private static int idTessera;
 
-    /**
-     * Total points that this Card have.
-     */
+    private final int idCliente;
+    private Set<ProgrammaFedelta> programmiFedelta;
 
-    private int puntiTessera;
+    private int punti;
 
-    /**
-     * constructor allows you to create a new card within the platform
-     */
-    public Tessera() {
-        id++;
+    public Tessera(int idCliente) {
+        idTessera++;
+        this.idCliente = idCliente;
         this.programmiFedelta = new HashSet<>();
     }
 
-    public int getId() {
-        return id;
+    /**
+     * This method returns the card id
+     * @return the card id.
+     */
+    public static int getIdTessera() {
+        return idTessera;
     }
 
+    /**
+     * This method returns the customer id
+     * @return the customer id.
+     */
+    public int getIdCliente() {
+        return idCliente;
+    }
+
+
+    /**
+     * This method returns a loyalty programs to which the customer is a member.
+     * @return loyalty programs to which the customer is a member.
+     */
     public Set<ProgrammaFedelta> getProgrammiFedelta() {
-        return this.programmiFedelta;
+        return programmiFedelta;
     }
 
-    public void addProgrammaFedelta(ProgrammaFedelta programmaFedelta) {
-        this.programmiFedelta.add(programmaFedelta);
+    /**
+     * This method returns the number of points the customer owns.
+     * @return the number of points the customer owns.
+     */
+    public int getPunti() {
+        return punti;
     }
 
-    public void removeProgrammmaFedelta(ProgrammaFedelta programmaFedelta) {
-        this.programmiFedelta.remove(programmaFedelta);
+    /**
+     * This method adds a new loyalty program.
+     * @param programmaFedelta new loyalty program.
+     */
+    public void addPogrammaFedelta(ProgrammaFedelta programmaFedelta){
+        Objects.requireNonNull(programmaFedelta);
+        if(this.getProgrammiFedelta().contains(programmaFedelta))
+            throw new IllegalArgumentException("Program already present.");
+        this.getProgrammiFedelta().add(programmaFedelta);
     }
 
-    //guardare classe programmi fedelta
-    public void addPunti(int p) {
-        this.puntiTessera += p;
-    }
+    /**
+     * This method removes a loyalty program.
+     * @param programmaFedelta loyalty program to be removed.
+     */
+   public void deleteProgrammaFedelta(ProgrammaFedelta programmaFedelta){
+        Objects.requireNonNull(programmaFedelta);
+       if(!this.getProgrammiFedelta().contains(programmaFedelta))
+           throw new IllegalArgumentException("Program not exists.");
+       this.getProgrammiFedelta().remove(programmaFedelta);
 
-    //guardare classe programmi fedelta
-    public void removePunti(int p) {
-        this.puntiTessera -= p;
-    }
+   }
 
+   public void updateSetProgrammi(Set<ProgrammaFedelta> setAggiornato){
+       this.programmiFedelta = setAggiornato;
+   }
+
+    /**
+     * This method adds a certain number of points.
+     * @param punti number of points to add.
+     */
+   public void addPunti(int punti){
+        if(punti < 1)
+            throw new IllegalArgumentException("Numero punti errato");
+        this.punti += punti;
+   }
+
+    /**
+     * This method removes a certain number of points.
+     * @param punti number of points to remove.
+     */
+   public void deletePunti (int punti){
+       if(punti < 1)
+           throw new IllegalArgumentException("Numero punti errato");
+       this.punti -= punti;
+   }
+
+    @Override
     public String toString() {
         return "Tessera{" +
-                "id=" + id +
-                ", lista di programmi fedelta=" + toStringProgrammiFedelta() +
+                "idCliente =" + idCliente +
+                ", programmiFedelta =" + toStringProgrammiFedelta() +
+                ", punti =" + punti +
                 '}';
     }
 

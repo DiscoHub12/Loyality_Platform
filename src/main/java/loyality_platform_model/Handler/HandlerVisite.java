@@ -1,6 +1,6 @@
 package loyality_platform_model.Handler;
 
-import loyality_platform_model.DBController.DBMSController;
+import loyality_platform_model.DBMS.DBMS;
 import loyality_platform_model.Models.Cliente;
 import loyality_platform_model.Models.SMS;
 import loyality_platform_model.Models.Visita;
@@ -23,14 +23,14 @@ public class HandlerVisite {
     /**
      * This attribute rapresent the database.
      */
-    public DBMSController dbmsController;
+    public DBMS dbms;
 
     /**
      * Constructor that allows you to create a HandlerVisite
      * object taking the instance of the DataBase for data persistence.
      */
     public HandlerVisite() {
-        this.dbmsController = DBMSController.getInstance();
+        this.dbms = DBMS.getInstance();
     }
 
     /**

@@ -105,12 +105,6 @@ public class Visita {
         this.completata = completata;
     }
 
-    public Reminder creaReminder(String nomeVisita, Date data) {
-        Objects.requireNonNull(data);
-        if (Objects.equals(nomeVisita, ""))
-            throw new IllegalArgumentException("Invalid name for the Reminder.");
-        return new Reminder(nomeVisita, data);
-    }
 
     public String toString() {
         return "\n\t VISIT DETAILS : " +

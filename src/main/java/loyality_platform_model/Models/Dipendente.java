@@ -1,6 +1,5 @@
 package loyality_platform_model.Models;
 
-import loyality_platform_model.Activity.AttivitaDipendente;
 
 import java.util.Objects;
 
@@ -54,11 +53,6 @@ public class Dipendente {
      */
     private boolean restrizioni;
 
-    /**
-     * Class that represents the general activities
-     * that an employee can perform within the platform.
-     */
-    private AttivitaDipendente attivitaDipendente;
 
     /**
      * Constructor that creates an object of type Employee.

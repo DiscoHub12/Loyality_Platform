@@ -1,7 +1,6 @@
 package loyality_platform_model.Handler;
 
-import loyality_platform_model.Activity.AttivitaProfiloCliente;
-import loyality_platform_model.DBController.DBMSController;
+import loyality_platform_model.DBMS.DBMS;
 import loyality_platform_model.Models.*;
 
 import java.util.Objects;
@@ -24,7 +23,7 @@ public class HandlerCliente {
     /**
      * This attribute represents the DataBase.
      */
-    private final DBMSController dbmsController;
+    private final DBMS dbms;
 
     /**
      * Once a Client is identified, he is associated
@@ -40,7 +39,7 @@ public class HandlerCliente {
      */
     public HandlerCliente(Cliente cliente) {
         Objects.requireNonNull(cliente);
-        this.dbmsController = DBMSController.getInstance();
+        this.dbms = DBMS.getInstance();
         this.clienteIdentificato=cliente;
     }
 
@@ -51,36 +50,6 @@ public class HandlerCliente {
         return instance;
     }
 
-    /**
-     * Method that tries to identify the customer,
-     * passing name and surname, if the customer is found,
-     * it is identified, and we will associate it with a temporary variable,
-     * to carry out our operations.
-     * @param nome the Name of the Costumer.
-     * @param cognome the Surname of the Costumer.
-     * @throws IllegalArgumentException if the Name or Surname is not valid or if the Costumer
-     * with this Name and Surname is already identified.
-     */
-    public AttivitaProfiloCliente identificaCliente(String nome, String cognome) {
-        AttivitaProfiloCliente activity = null;
-        if (Objects.equals(nome, "") || Objects.equals(cognome, ""))
-            throw new IllegalArgumentException("Illegal Name or Surname to identify the Customer.");
-        for (Cliente cliente : this.dbmsController.getClientiIscritti()) {
-            if (Objects.equals(cliente.getNome(), nome) && Objects.equals(cliente.getCognome(), cognome)) {
-                if (cliente.isIdentificato())
-                    throw new IllegalArgumentException("Costumer already identify.");
-            } else{
-                this.clienteIdentificato = cliente;
-                this.clienteIdentificato.setIdentificato(true);
-                cliente.setIdentificato(true);
-                activity = new AttivitaProfiloCliente(cliente);
-            }
-        }
-        if(activity == null){
-            throw new IllegalArgumentException("Costumer is not identify.");
-        }
-        return activity;
-    }
 
     /**
      * Method that returns the card of an identified Customer, if he has it.
@@ -155,7 +124,7 @@ public class HandlerCliente {
      * identified.
      */
     public void esciProfiloCliente() {
-        for (Cliente cliente : this.dbmsController.getClientiIscritti()) {
+        for (Cliente cliente : this.dbms.getClientiIscritti()) {
             if (cliente == this.clienteIdentificato) {
                 cliente.setIdentificato(false);
             }

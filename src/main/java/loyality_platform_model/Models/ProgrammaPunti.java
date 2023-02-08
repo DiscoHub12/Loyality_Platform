@@ -1,5 +1,6 @@
 package loyality_platform_model.Models;
 
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -16,13 +17,17 @@ import java.util.Objects;
  * Thanks to these points, the Customer will be able to choose prizes
  * that are present in the Prize Catalogue.
  */
-public class ProgrammaPunti {
+public class ProgrammaPunti implements ProgrammaFedelta {
 
     /**
      * This attribute represents the id of a
      * given points program.
      */
-    private static int id;
+    private static int idProgramma;
+
+    private String nome;
+
+    private Date dataAttivazione;
 
     /**
      * This attribute represents the amount that
@@ -76,7 +81,7 @@ public class ProgrammaPunti {
      * @param catalogoPremi  a Prize Catalogue.
      */
     public ProgrammaPunti(double importoSpesa, int puntiPerImporto, int puntiVIP, CatalogoPremi catalogoPremi){
-        id++;
+        idProgramma++;
         setImportoSpesa(importoSpesa);
         setPuntiPerImporto(puntiPerImporto);
         setPuntiVIP(puntiVIP);
@@ -96,7 +101,7 @@ public class ProgrammaPunti {
      * @param catalogoPremi  a Prize Catalogue.
      */
     public ProgrammaPunti(double importoSpesa, int puntiPerImporto, int numeroPuntiMassimi, int puntiVIP, CatalogoPremi catalogoPremi){
-        id++;
+        idProgramma++;
         setImportoSpesa(importoSpesa);
         setPuntiPerImporto(puntiPerImporto);
         setNumeroPuntiMassimi(numeroPuntiMassimi);
@@ -160,5 +165,39 @@ public class ProgrammaPunti {
     public void setCatalogoPremi(CatalogoPremi catalogoPremi) {
         Objects.requireNonNull(catalogoPremi);
         this.catalogoPremi = catalogoPremi;
+    }
+
+    @Override
+    public int getIdProgramma() {
+        return idProgramma;
+    }
+
+    @Override
+    public String getNome() {
+        return nome;
+    }
+
+    @Override
+    public Date getDataAttivazione() {
+        return dataAttivazione;
+    }
+
+    @Override
+    public Tipo getTipoProgramma() {
+        return Tipo.ProgrammaPunti;
+    }
+
+    @Override
+    public String toString() {
+        return "ProgrammaPunti{" +
+                "nome='" + nome + '\'' +
+                ", dataAttivazione=" + dataAttivazione +
+                ", importoSpesa=" + importoSpesa +
+                ", puntiPerImporto=" + puntiPerImporto +
+                ", maxPunti=" + maxPunti +
+                ", numeroPuntiMassimi=" + numeroPuntiMassimi +
+                ", puntiVIP=" + puntiVIP +
+                ", catalogoPremi=" + catalogoPremi +
+                '}';
     }
 }

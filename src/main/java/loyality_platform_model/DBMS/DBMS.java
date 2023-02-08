@@ -1,4 +1,4 @@
-package loyality_platform_model.DBController;
+package loyality_platform_model.DBMS;
 
 import loyality_platform_model.Models.*;
 
@@ -8,13 +8,13 @@ import java.util.*;
  * Class representing the DataBase, capable of persisting data within
  * the Platform.
  */
-public class DBMSController {
+public class DBMS {
 
     /**
      * This attribute represents the instance of the class, capable of
      * being able to invoke it without instantiating a new class and losing persistence.
      */
-    private static DBMSController instance;
+    private static DBMS instance;
 
     /**
      * This attribute rapresent the name of this DataBase.
@@ -34,7 +34,7 @@ public class DBMSController {
     private final Map<Azienda, Set<ProgrammaFedelta>> programmiAzienda;
     private final Map<Tessera, Cliente> tesseraCliente;
 
-    public DBMSController(String nameDb) {
+    public DBMS(String nameDb) {
         this.nameDb = nameDb;
         this.clientiIscritti = new HashSet<>();
         this.programmiDisponibili = new HashSet<>();
@@ -43,9 +43,9 @@ public class DBMSController {
         this.tesseraCliente=new HashMap<>();
     }
 
-    public static DBMSController getInstance() {
+    public static DBMS getInstance() {
         if (instance == null) {
-            instance = new DBMSController(getInstance().nameDb);
+            instance = new DBMS(getInstance().nameDb);
         }
         return instance;
     }

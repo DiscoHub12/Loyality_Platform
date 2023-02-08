@@ -1,5 +1,6 @@
 package loyality_platform_model.Models;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -16,31 +17,59 @@ import java.util.Objects;
  *  Thanks to these levels the Customer will be able to choose the rewards
  *  present in the Awards Catalogue.
  */
-public class ProgrammaLivelli {
+public class ProgrammaLivelli implements ProgrammaFedelta {
 
-    private static int idProgrammaLivelli;
+    private static int idProgramma;
+
+    private String nome;
+
+    private Date dataAttivazione;
 
     private int massimoLivelli, livelloVip;
 
-    private final Map<Integer, Integer> puntiPerLivello;
+    private final Map<Integer, Integer> policyLivelli;
 
     private CatalogoPremi catalogoPremi;
 
-    public ProgrammaLivelli(int massimoLivelli, int livelloVip, CatalogoPremi catalogoPremi) {
-        idProgrammaLivelli++;
+    private final Tipo tipoProgramma = Tipo.ProgrammaLivelli;
+
+    public ProgrammaLivelli(String nome, int massimoLivelli, int livelloVip) {
+        idProgramma++;
+        this.setNome(nome);
         this.setMassimoLivelli(massimoLivelli);
         this.setLivelloVip(livelloVip);
-        this.setCatalogoPremi(catalogoPremi);
-        puntiPerLivello = new HashMap<>();
+        policyLivelli = new HashMap<>();
     }
 
-    /**
-     * This method returns the program id
-     * @return the program id.
-     */
-    public static int getIdProgrammaLivelli() {
-        return idProgrammaLivelli;
+    @Override
+    public int getIdProgramma() {
+        return idProgramma;
     }
+
+    @Override
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setDataAttivazione(Date dataAttivazione) {
+        this.dataAttivazione = dataAttivazione;
+    }
+
+    @Override
+    public Date getDataAttivazione() {
+        return dataAttivazione;
+    }
+
+    @Override
+    public Tipo getTipoProgramma() {
+        return tipoProgramma;
+    }
+
+
 
     /**
      * This method returns the maximum number of levels.
@@ -83,7 +112,7 @@ public class ProgrammaLivelli {
      * @return the number of points to get for each level.
      */
     public Map<Integer, Integer> getPuntiPerLivello() {
-        return puntiPerLivello;
+        return policyLivelli;
     }
 
     /**
@@ -111,7 +140,7 @@ public class ProgrammaLivelli {
         int appoggio = 1;
         if(punti < 1 )
             throw new IllegalArgumentException("Invalid number of points.");
-         appoggio += this.getPuntiPerLivello().get(this.puntiPerLivello.size());
+         appoggio += this.getPuntiPerLivello().get(this.policyLivelli.size());
          if(appoggio > this.getMassimoLivelli())
              throw new IllegalArgumentException("Is not possible to add a new level.");
         this.getPuntiPerLivello().put(appoggio, punti);
@@ -122,7 +151,7 @@ public class ProgrammaLivelli {
      * @param livello layer to remove.
      */
     public void rimuoviLivello(int livello){
-        if(livello < 1 || livello> this.puntiPerLivello.size())
+        if(livello < 1 || livello> this.policyLivelli.size())
             throw new IllegalArgumentException("Invalid number of level.");
         if(!this.getPuntiPerLivello().containsKey(livello))
             throw new IllegalArgumentException("Level not exist.");
@@ -137,12 +166,24 @@ public class ProgrammaLivelli {
     public void modificaPuntiPerLivello(int punti, int livello){
         if(punti < 1 )
             throw new IllegalArgumentException("Invalid number of points.");
-        if(livello < 1 || livello> this.puntiPerLivello.size())
+        if(livello < 1 || livello> this.policyLivelli.size())
             throw new IllegalArgumentException("Invalid number of level.");
         for (Map.Entry<Integer, Integer> entry : this.getPuntiPerLivello().entrySet()){
             if(livello== entry.getKey()){
                 this.getPuntiPerLivello().replace(livello, entry.getValue(), punti);
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return "ProgrammaLivelli{" +
+                "nome='" + nome + '\'' +
+                ", dataAttivazione=" + dataAttivazione +
+                ", massimoLivelli=" + massimoLivelli +
+                ", livelloVip=" + livelloVip +
+                ", puntiPerLivello=" + policyLivelli +
+                ", catalogoPremi=" + catalogoPremi +
+                '}';
     }
 }

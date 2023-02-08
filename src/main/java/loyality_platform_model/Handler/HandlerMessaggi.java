@@ -1,6 +1,6 @@
 package loyality_platform_model.Handler;
 
-import loyality_platform_model.DBController.DBMSController;
+import loyality_platform_model.DBMS.DBMS;
 import loyality_platform_model.Models.Cliente;
 import loyality_platform_model.Models.ConfigurazioneSMS;
 import loyality_platform_model.Models.SMS;
@@ -18,14 +18,14 @@ public class HandlerMessaggi {
     //TODO rivedere
     //TODO implementare db
 
-    private final DBMSController dbmsController;
+    private final DBMS dbms;
 
     public HandlerMessaggi() {
-        this.dbmsController = DBMSController.getInstance();
+        this.dbms = DBMS.getInstance();
     }
 
-    public DBMSController getDbmsController() {
-        return dbmsController;
+    public DBMS getDbmsController() {
+        return dbms;
     }
 
     /**

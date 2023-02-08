@@ -1,6 +1,6 @@
 package loyality_platform_model.Handler;
 
-import loyality_platform_model.DBController.DBMSController;
+import loyality_platform_model.DBMS.DBMS;
 import loyality_platform_model.Models.Azienda;
 import loyality_platform_model.Models.Cliente;
 import loyality_platform_model.Models.Dipendente;
@@ -16,7 +16,7 @@ import java.util.Set;
  */
 public class HandlerAzienda {
 
-    private final DBMSController dbmsController;
+    private final DBMS dbms;
 
     private final Azienda azienda;
 
@@ -24,7 +24,7 @@ public class HandlerAzienda {
 
     public HandlerAzienda(Azienda azienda) {
         Objects.requireNonNull(azienda);
-        this.dbmsController = DBMSController.getInstance();
+        this.dbms = DBMS.getInstance();
         this.azienda = azienda;
     }
 
