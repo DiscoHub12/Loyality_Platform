@@ -1,11 +1,6 @@
 package loyality_platform_model.Models;
 
-import java.util.Date;
-import java.util.Objects;
-
-/**
- * IMPLEMENTED BY : Alessio Giacché.
- */
+import java.util.*;
 
 /**
  * Class that represents one of the many loyalty programs
@@ -19,74 +14,37 @@ import java.util.Objects;
  */
 public class ProgrammaPunti implements ProgrammaFedelta {
 
-    /**
-     * This attribute represents the id of a
-     * given points program.
-     */
     private static int idProgramma;
 
     private String nome;
 
-    private Date dataAttivazione;
+    private Date dataAttivazione = null;
 
-    /**
-     * This attribute represents the amount that
-     * a specific Customer must pay to obtain a certain
-     * number of points.
-     */
-    private double importoSpesa;
+    private boolean maxPunti = false;
 
-    /**
-     * This attribute represents the points that
-     * a given Customer achieves when they spend the
-     * expected amount.
-     */
-    private int puntiPerImporto;
+    private int numeroPuntiMassimi = 0;
 
-    /**
-     * This attribute represents a boolean value that
-     * indicates whether this specific program has a maximum of
-     * attainable points or not.
-     */
-    private boolean maxPunti;
-
-    /**
-     * This attribute represents (if this program has a
-     * maximum of points) the maximum number of points.
-     */
-    private int numeroPuntiMassimi;
-
-    /**
-     * This attribute represents the number of
-     * points to reach the VIP level.
-     */
     private int puntiVIP;
 
-    /**
-     * This object represents a Prize Catalogue.
-     * The Rewards Catalog is part of every loyalty program,
-     * as it contains a list of available rewards,
-     * given to Customers who reach certain points.
-     */
-    private CatalogoPremi catalogoPremi;
+    private int puntiSpesa;
+
+    private double importoSpesa;
+
+    private CatalogoPremi catalogoPremi = null;
+
+    private final Tipo tipoProgramma = Tipo.PROGRAMMAPUNTI;
 
     /**
      * Constructor who creates a Loyalty Program of the Points Program type.
      * This constructor is called if this Points Program does not have a
      * maximum number of points. It requests the fundamental attributes for creation,
      * and invokes set methods which contain controls within them.
-     * @param importoSpesa the amount that a specific Customer must pay to obtain a certain number of points.
-     * @param puntiPerImporto the points that a given Customer achieves when they spend the expected amount.
-     * @param puntiVIP the number of points to reach the VIP level.
-     * @param catalogoPremi  a Prize Catalogue.
      */
-    public ProgrammaPunti(double importoSpesa, int puntiPerImporto, int puntiVIP, CatalogoPremi catalogoPremi){
+    public ProgrammaPunti(String nome, int puntiVIP, int puntiSpesa, double importoSpesa) {
         idProgramma++;
-        setImportoSpesa(importoSpesa);
-        setPuntiPerImporto(puntiPerImporto);
-        setPuntiVIP(puntiVIP);
-        setCatalogoPremi(catalogoPremi);
-        this.maxPunti = false;
+        this.setPuntiVIP(puntiVIP);
+        this.setPuntiSpesa(puntiSpesa);
+        this.setImportoSpesa(importoSpesa);
     }
 
     /**
@@ -94,110 +52,210 @@ public class ProgrammaPunti implements ProgrammaFedelta {
      * This constructor is called if this Points Program have a
      * maximum number of points. It requests the fundamental attributes for creation,
      * and invokes set methods which contain controls within them.
-     * @param importoSpesa the amount that a specific Customer must pay to obtain a certain number of points.
-     * @param puntiPerImporto the points that a given Customer achieves when they spend the expected amount.
-     * @param numeroPuntiMassimi the max number of points that Costumer must have.
-     * @param puntiVIP the number of points to reach the VIP level.
-     * @param catalogoPremi  a Prize Catalogue.
      */
-    public ProgrammaPunti(double importoSpesa, int puntiPerImporto, int numeroPuntiMassimi, int puntiVIP, CatalogoPremi catalogoPremi){
+    public ProgrammaPunti(String nome, int numeroPuntiMassimi, int puntiVIP, int puntiSpesa, double importoSpesa) {
         idProgramma++;
-        setImportoSpesa(importoSpesa);
-        setPuntiPerImporto(puntiPerImporto);
-        setNumeroPuntiMassimi(numeroPuntiMassimi);
-        setPuntiVIP(puntiVIP);
-        setCatalogoPremi(catalogoPremi);
+        this.setNumeroPuntiMassimi(numeroPuntiMassimi);
+        this.setPuntiVIP(puntiVIP);
+        this.setPuntiSpesa(puntiSpesa);
+        this.setImportoSpesa(importoSpesa);
         this.maxPunti = true;
     }
 
-    public double getImportoSpesa() {
-        return importoSpesa;
-    }
-
-    public void setImportoSpesa(double importoSpesa) {
-        if(importoSpesa <= 0)
-            throw new IllegalArgumentException("Illegal expense amount.");
-        this.importoSpesa = importoSpesa;
-    }
-
-    public int getPuntiPerImporto() {
-        return puntiPerImporto;
-    }
-
-    public void setPuntiPerImporto(int puntiPerImporto) {
-        if(puntiPerImporto <= 0)
-            throw new IllegalArgumentException("Illegal number of points for expense amount.");
-        this.puntiPerImporto = puntiPerImporto;
-    }
-
-    public boolean isMaxPunti() {
-        return maxPunti;
-    }
-
-    public void setMaxPunti(boolean maxPunti) {
-        this.maxPunti = maxPunti;
-    }
-
-    public int getNumeroPuntiMassimi() {
-        return numeroPuntiMassimi;
-    }
-
-    public void setNumeroPuntiMassimi(int numeroPuntiMassimi) {
-        if(numeroPuntiMassimi <= 0)
-            throw new IllegalArgumentException("Illegal max number of points.");
-        this.numeroPuntiMassimi = numeroPuntiMassimi;
-    }
-
-    public int getPuntiVIP() {
-        return puntiVIP;
-    }
-
-    public void setPuntiVIP(int puntiVIP) {
-        if(puntiVIP <= 0)
-            throw new IllegalArgumentException("Illegal number for VIP level.");
-        this.puntiVIP = puntiVIP;
-    }
-
-    public CatalogoPremi getCatalogoPremi() {
-        return catalogoPremi;
-    }
-
-    public void setCatalogoPremi(CatalogoPremi catalogoPremi) {
-        Objects.requireNonNull(catalogoPremi);
-        this.catalogoPremi = catalogoPremi;
-    }
-
+    /**
+     * This method returns the program id
+     * @return the program id.
+     */
     @Override
     public int getIdProgramma() {
         return idProgramma;
     }
 
+    /**
+     * This method return the program name.
+     * @return the program name.
+     */
     @Override
     public String getNome() {
         return nome;
     }
 
+    /**
+     * This method changes the name of the program.
+     * @param nome new program name.
+     */
+    public void setNome(String nome) {
+        if (Objects.equals(nome, ""))
+            throw new IllegalArgumentException("Name not valid.");
+        this.nome = nome;
+    }
+
+    /**
+     * This method returns the activation date of the program.
+     * @return the activation date of the program.
+     */
     @Override
     public Date getDataAttivazione() {
         return dataAttivazione;
     }
 
+    /**
+     * This method sets the activation date of the program.
+     * @param dataAttivazione the activation date of the program.
+     */
+    @Override
+    public void setDataAttivazione(Date dataAttivazione) {
+        Objects.requireNonNull(dataAttivazione);
+        this.dataAttivazione = dataAttivazione;
+    }
+
+    /**
+     * This method returns the type of the program.
+     * @return the type of the program.
+     */
     @Override
     public Tipo getTipoProgramma() {
-        return Tipo.ProgrammaPunti;
+        return tipoProgramma;
+    }
+
+    /**
+     * This method returns <code>true</code> if the manager wants to put a maximum of points,
+     * <code>false</code> otherwise.
+     * @return <code>true</code> if the manager wants to put a maximum of points,
+     * <code>false</code> otherwise.
+     */
+    public boolean isMaxPunti() {
+        return maxPunti;
+    }
+
+    /**
+     * This method sets the variable to tell whether or not there are a maximum number of points.
+     * @param maxPunti <code>true</code> if there are a maximum number of points
+     *                 <code>false</code> otherwise.
+     */
+    public void setMaxPunti(boolean maxPunti) {
+        this.maxPunti = maxPunti;
+    }
+
+    /**
+     * This method returns the maximum number of points.
+     * @return the maximum number of points.
+     */
+    public int getNumeroPuntiMassimi() {
+        return numeroPuntiMassimi;
+    }
+
+    /**
+     * This method sets the maximum number of points.
+     * @param numeroPuntiMassimi new maximum number of points.
+     */
+    public void setNumeroPuntiMassimi(int numeroPuntiMassimi) {
+        if (numeroPuntiMassimi < 1)
+            throw new IllegalArgumentException("Illegal max number of points.");
+        this.numeroPuntiMassimi = numeroPuntiMassimi;
+    }
+
+    /**
+     * This method returns the number of points to become VIP.
+     * @return the number of points to become VIP.
+     */
+    public int getPuntiVIP() {
+        return puntiVIP;
+    }
+
+    /**
+     * This method sets the number of points to become VIP.
+     * @param puntiVIP new number of points to become VIP.
+     */
+    public void setPuntiVIP(int puntiVIP) {
+        if (puntiVIP < 1 || puntiVIP > numeroPuntiMassimi)
+            throw new IllegalArgumentException("Illegal number for VIP level.");
+        this.puntiVIP = puntiVIP;
+    }
+
+
+    /**
+     * This method returns the number of points to be associated with the amount spent.
+     * @return the number of points.
+     */
+    public int getPuntiSpesa() {
+        return puntiSpesa;
+    }
+
+    /**
+     * This method sets the number of points to be associated with the amount spent.
+     * @param puntiSpesa the number of points.
+     */
+    public void setPuntiSpesa(int puntiSpesa) {
+        if (puntiSpesa < 1)
+            throw new IllegalArgumentException("Illegal number of points.");
+        this.puntiSpesa = puntiSpesa;
+    }
+
+    /**
+     * This method returns the amount to be spent in order for the points to be awarded.
+     * @return  the amount to be spent.
+     */
+    public double getImportoSpesa() {
+        return importoSpesa;
+    }
+
+    /**
+     * This method sets the amount to be spent in order for points to be awarded.
+     * @param importoSpesa the amount to be spent.
+     */
+    public void setImportoSpesa(double importoSpesa) {
+        if (importoSpesa < 1)
+            throw new IllegalArgumentException("Illegal number of imports.");
+        this.importoSpesa = importoSpesa;
+    }
+
+    /**
+     * This method returns the rewards catalog of this loyalty program.
+     * @return the rewards catalog of this loyalty program.
+     */
+    public CatalogoPremi getCatalogoPremi() {
+        return catalogoPremi;
+    }
+
+    /**
+     * This method sets up the rewards catalog of this loyalty program.
+     * @param catalogoPremi catalog of this loyalty program.
+     */
+    public void setCatalogoPremi(CatalogoPremi catalogoPremi) {
+        Objects.requireNonNull(catalogoPremi);
+        this.catalogoPremi = catalogoPremi;
+    }
+
+    /**
+     * Equals method of the program class, simply
+     * compare if the passed object is equivalent to this program,
+     * by checking the id, and the name.
+     * Returns true if the object is equal, false otherwise.
+     *
+     * @param object the Object to compare.
+     * @return true if is equals, false otherwise.
+     */
+    public boolean equals(Object object) {
+        if (object == null)
+            return false;
+        if (object instanceof ProgrammaPunti tmp) {
+            return this.getIdProgramma() == tmp.getIdProgramma() && Objects.equals(this.getNome(), tmp.getNome());
+        }
+        return false;
     }
 
     @Override
     public String toString() {
-        return "ProgrammaPunti{" +
-                "nome='" + nome + '\'' +
-                ", dataAttivazione=" + dataAttivazione +
-                ", importoSpesa=" + importoSpesa +
-                ", puntiPerImporto=" + puntiPerImporto +
-                ", maxPunti=" + maxPunti +
-                ", numeroPuntiMassimi=" + numeroPuntiMassimi +
-                ", puntiVIP=" + puntiVIP +
-                ", catalogoPremi=" + catalogoPremi +
-                '}';
+        return "\t-DETAILS PROGRAMMA PUNTI-" +
+                "\nNome: " + nome +
+                "\nData Attivazione: " + dataAttivazione +
+                "\nMassimo Punti: " + maxPunti +
+                "\nNumeroPuntiMassimi: " + numeroPuntiMassimi +
+                "\nPunti VIP: " + puntiVIP +
+                "\nPunti Spesa: " + puntiSpesa +
+                "\nImporto Spesa: " + importoSpesa +
+                "\nCatalogo Premi: " + catalogoPremi +
+                "\nTipo Programma: " + tipoProgramma;
     }
 }
