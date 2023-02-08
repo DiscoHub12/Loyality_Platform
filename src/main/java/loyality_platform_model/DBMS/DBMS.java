@@ -24,6 +24,8 @@ public class DBMS {
 
     private final Map<Azienda, Set<Dipendente>> dipendentiAzienda;
 
+    private final Map<Azienda, Set<ProgrammaFedelta>> programmiAzienda;
+
     private final Set<Cliente> clientiIscritti;
 
 
@@ -55,6 +57,7 @@ public class DBMS {
         this.nameDb = nameDb;
         this.aziendeIscritte = new HashSet<>();
         this.dipendentiAzienda = new HashMap<>();
+        this.programmiAzienda = new HashMap<>();
         this.clientiIscritti = new HashSet<>();
         this.SMSCliente = new HashMap<>();
         this.premiCliente = new HashMap<>();
@@ -107,6 +110,22 @@ public class DBMS {
     }
 
     public void removeDipendente(Azienda azienda, Dipendente dipendente){
+        //TODO implementare
+    }
+
+    public Map<Azienda, Set<ProgrammaFedelta>> getProgrammiAzienda() {
+        return programmiAzienda;
+    }
+
+    public void addProgrammaAzienda(Azienda azienda, ProgrammaFedelta programmaFedelta){
+        //TODO implementare
+    }
+
+    public void updateProgrammaAzienda(Azienda azienda, ProgrammaFedelta programmaFedelta){
+        //TODO implementare
+    }
+
+    public void removeProgrammaAzienda(Azienda azienda, Cliente cliente){
         //TODO implementare
     }
 
@@ -172,16 +191,16 @@ public class DBMS {
     }
 
     public void addTessera(Tessera tessera){
-        //TODO implementare
+        Objects.requireNonNull(tessera);
+        if(this.getTessereClienti().contains(tessera))
+            throw new IllegalArgumentException("Tessera già registrata");
+        this.getTessereClienti().add(tessera);
     }
 
     public void updateTessera(Tessera tesseraOld, Tessera tesseraNew){
         //TODO implementare
     }
 
-    public void removeTessera(Tessera tessera){
-        //TODO implementare
-    }
 
     public Set<ProgrammaFedelta> getProgrammiDisponibili() {
         return programmiDisponibili;

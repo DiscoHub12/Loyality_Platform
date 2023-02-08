@@ -17,9 +17,9 @@ public class Tessera {
     private static int idTessera;
 
     private final int idCliente;
-    private Set<ProgrammaFedelta> programmiFedelta;
+    private final Set<ProgrammaFedelta> programmiFedelta;
 
-    private int punti;
+    private int punti = 0;
 
     public Tessera(int idCliente) {
         idTessera++;
@@ -83,10 +83,6 @@ public class Tessera {
 
    }
 
-   public void updateSetProgrammi(Set<ProgrammaFedelta> setAggiornato){
-       this.programmiFedelta = setAggiornato;
-   }
-
     /**
      * This method adds a certain number of points.
      * @param punti number of points to add.
@@ -102,7 +98,7 @@ public class Tessera {
      * @param punti number of points to remove.
      */
    public void deletePunti (int punti){
-       if(punti < 1)
+       if(punti < 1 || punti > this.getPunti())
            throw new IllegalArgumentException("Invalid points.");
        this.punti -= punti;
    }

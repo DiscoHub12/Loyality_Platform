@@ -55,6 +55,7 @@ public class ProgrammaPunti implements ProgrammaFedelta {
      */
     public ProgrammaPunti(String nome, int numeroPuntiMassimi, int puntiVIP, int puntiSpesa, double importoSpesa) {
         idProgramma++;
+        this.setNome(nome);
         this.setNumeroPuntiMassimi(numeroPuntiMassimi);
         this.setPuntiVIP(puntiVIP);
         this.setPuntiSpesa(puntiSpesa);
