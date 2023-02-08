@@ -33,37 +33,24 @@ public class CatalogoPremi {
      */
     private final Map<Premio, Integer> premi;
 
-    /**
-     * This attribute rapresents
-     */
-    private String nomeProgramma;
 
     /**
      * Constructor that allow to create a new Reward
      * Catalog that will be used within a specific Loyality
      * Program, and which be visible to a Costumer to
      * redem any reward.
+     * @param premiCatalogo the prizes of this catalogue
+     * @throws NullPointerException if the premiCatalogo is null.
      *
-     * @param nomeProgramma the name of this Reward Catalog.
      */
-    public CatalogoPremi(String nomeProgramma){
+    public CatalogoPremi(Map<Premio, Integer> premiCatalogo){
+        Objects.requireNonNull(premiCatalogo);
         idCatalogoPremi++;
-        this.setNomeProgramma(nomeProgramma);
-        this.premi = new HashMap<>();
+        this.premi = premiCatalogo;
     }
 
     public int getId(){
         return idCatalogoPremi;
-    }
-
-    public String getNomeProgramma(){
-        return this.nomeProgramma;
-    }
-
-    public void setNomeProgramma(String nomeProgramma){
-        if(Objects.equals(nomeProgramma, ""))
-            throw new IllegalArgumentException("Illegal name for Program");
-        this.nomeProgramma = nomeProgramma;
     }
 
     public Map<Premio, Integer> getPremi(){
@@ -95,5 +82,30 @@ public class CatalogoPremi {
             i++;
         }
         return tmp.toString();
+    }
+
+    /**
+     * Equals method of the CatalogoPremi class, simply
+     * compare if the passed object is equivalent to this CatalogoPremi,
+     * by checking the id, and the prizes.
+     * Returns true if the object is equal, false otherwise.
+     *
+     * @param object the Object to compare.
+     * @return true if is equals, false otherwise.
+     */
+    public boolean equals(Object object){
+        if(object == null)
+            return false;
+        if(object instanceof CatalogoPremi tmp){
+            if(this.getId() == tmp.getId() && this.getPremi() == tmp.getPremi())
+                return true;
+        }
+        return false;
+    }
+
+    public String toString(){
+        return "\t-DETAILS CATALOGO PREMI-" +
+                "\nId Catalogo : " + idCatalogoPremi +
+                "\nElenco Premi : " + toStringPremi();
     }
 }
