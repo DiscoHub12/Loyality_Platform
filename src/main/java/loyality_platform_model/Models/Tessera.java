@@ -6,8 +6,6 @@ import java.util.Set;
 
 
 /**
- * IMPLEMENTED BY : Sofia Scattolini.
- *
  * The class represents the card of a specific customer.
  * A card is identified by an id and its owner.
  * Loyalty programs to which the customer is a member are also marked.
@@ -111,7 +109,7 @@ public class Tessera {
 
     @Override
     public String toString() {
-        return "Tessera{" +
+        return "DETAILS TESSERA {" +
                 "idCliente =" + idCliente +
                 ", programmiFedelta =" + toStringProgrammiFedelta() +
                 ", punti =" + punti +
