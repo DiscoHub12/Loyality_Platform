@@ -31,7 +31,7 @@ public class Tessera {
      * This method returns the card id
      * @return the card id.
      */
-    public static int getIdTessera() {
+    public int getIdTessera() {
         return idTessera;
     }
 
@@ -93,7 +93,7 @@ public class Tessera {
      */
    public void addPunti(int punti){
         if(punti < 1)
-            throw new IllegalArgumentException("Numero punti errato");
+            throw new IllegalArgumentException("Invalid points.");
         this.punti += punti;
    }
 
@@ -103,17 +103,35 @@ public class Tessera {
      */
    public void deletePunti (int punti){
        if(punti < 1)
-           throw new IllegalArgumentException("Numero punti errato");
+           throw new IllegalArgumentException("Invalid points.");
        this.punti -= punti;
    }
 
+    /**
+     * Equals method of the card class, simply
+     * compare if the passed object is equivalent to this card,
+     * by checking the id, and the id Costumer.
+     * Returns true if the object is equal, false otherwise.
+     *
+     * @param object the Object to compare.
+     * @return true if is equals, false otherwise.
+     */
+    public boolean equals(Object object) {
+        if (object == null)
+            return false;
+        if (object instanceof Tessera tmp) {
+            return this.getIdTessera() == tmp.getIdTessera() && this.getIdCliente() == tmp.getIdCliente();
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
-        return "DETAILS TESSERA {" +
-                "idCliente =" + idCliente +
-                ", programmiFedelta =" + toStringProgrammiFedelta() +
-                ", punti =" + punti +
-                '}';
+        return "\t-DETAILS TESSERA-" +
+                "\nId Tessera: "+ idTessera +
+                "\nId Cliente: " + idCliente +
+                "\nProgrammiFedelta: " + toStringProgrammiFedelta() +
+                "\nPunti: " + punti ;
     }
 
     private String toStringProgrammiFedelta() {
