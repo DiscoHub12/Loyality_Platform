@@ -1,11 +1,8 @@
 package loyality_platform_model.Models;
 
-import java.util.HashSet;
+
 import java.util.Objects;
-import java.util.Set;
-/**
- * IMPLEMENTED BY : Fabio Evangelista.
- */
+
 /**
  * the class represents a customer within the platform.
  * A customer is registered with his classic data
@@ -14,196 +11,144 @@ import java.util.Set;
  * search for shops and write reviews.
  */
 public class Cliente {
+
     /**
      * This attribute rapresents the
      * unique id for this customer.
      */
-    private static int id;
+    private static int idCliente;
+
     /**
      * This attribute rapresents the
-     * the customer's name.
+     * customer's name.
      */
     private final String nome;
+
     /**
      * This attribute rapresents the
-     * the customer's surname.
+     * customer's surname.
      */
     private final String cognome;
+
     /**
      * This attribute rapresents the
-     * the customer's phone number.
+     * customer's email address.
+     */
+    private String email;
+
+    /**
+     * This attribute rapresents the
+     * customer's phone number.
      */
     private String telefono;
-    /**
-     * This attribute rapresents the
-     * the customer's email address.
-     */
-    private String mail;
-    /**
-     * This attribute indicates whether a visit has been booked or not
-     */
-    private boolean visitaPrenotata;
+
     /**
      * This attribute contains the customer card
      */
     private final Tessera tessera;
-    /**
-     * This attribute indicates whether the customer has been identified
-     */
-    private boolean identificato;
 
     /**
-     * This attribute indicates a set of visits
-     */
-    private final Set<Visita> visite;
-    /**
-     * This attribute indicates a set of SMS
-     */
-    private final Set<SMS> smsCliente;
-
-
-    /**
-     * constructor allows you to create a new client within the platform.
+     * constructor allows you to create a new Client within the platform.
      *
-     * @param nome     the customer's name.
-     * @param cognome  the surname about this customer.
-     * @param telefono the phone number about this customer.
-     * @param mail     the Email about this customer.
+     * @param nome     the name about this Costumer.
+     * @param cognome  the surname about this Customer.
+     * @param telefono the phone number about this Customer.
+     * @param email    the email about this Customer.
+     * @throws IllegalArgumentException if the name or the surname about this Employee is invalid.
      */
-    public Cliente(String nome, String cognome, String telefono, String mail, Tessera tessera) {
-        id++;
+    public Cliente(String nome, String cognome, String telefono, String email) {
+        if (Objects.equals(nome, "") || Objects.equals(cognome, ""))
+            throw new IllegalArgumentException("Illegal name or surname about this Employee.");
+        idCliente++;
         this.nome = nome;
         this.cognome = cognome;
-        this.telefono = telefono;
-        this.mail = mail;
-        this.tessera = tessera;
-        this.visitaPrenotata = false;
-        this.identificato = false;
-        this.visite = new HashSet<>();
-        this.smsCliente = new HashSet<>();
+        this.setTelefono(telefono);
+        this.setEmail(email);
+        this.tessera = null;
+    }
 
+    public int getIdCliente() {
+        return idCliente;
     }
-    /**
-     * method that returns the name of the customer
-     */
+
     public String getNome() {
-        return nome;
+        return this.nome;
     }
-    /**
-     * method that returns the surname of the customer
-     */
+
     public String getCognome() {
-        return cognome;
+        return this.cognome;
     }
-    /**
-     * boolean method indicating if the customer has already been identified
-     */
-    public boolean isIdentificato() {
-        return identificato;
-    }
-    /**
-     * method that allows you to enter whether the customer has been identified or not
-     */
-    public void setIdentificato(boolean identificato) {
-        this.identificato = identificato;
-    }
-    /**
-     * method that returns the customer's id
-     */
-    public static int getId() {
-        return id;
-    }
-    /**
-     * method that returns the customer's phone number
-     */
+
     public String getTelefono() {
-        return telefono;
+        return this.telefono;
     }
+
     /**
-     * method that allows you to change the customer's telephone number
+     * This set method, set the telephone
+     * number about this Employee (Cliente).
+     *
+     * @param telefono the new telephone number
+     * @throws IllegalArgumentException if the telephone number is not correct.
      */
     public void setTelefono(String telefono) {
+        if (Objects.equals(telefono, ""))
+            throw new IllegalArgumentException("Illegal telephone number.");
         this.telefono = telefono;
     }
-    /**
-     * method that returns the customer's email
-     */
-    public String getMail() {
-        return mail;
+
+    public String getEmail() {
+        return this.email;
     }
+
     /**
-     * method that allows you to change the customer's email
+     * This set method, set the email
+     * about this Employee (Cliente).
+     *
+     * @param email the new email about this Employee (Cliente)
+     * @throws IllegalArgumentException if the email is not correct.
      */
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setEmail(String email) {
+        if (Objects.equals(email, ""))
+            throw new IllegalArgumentException("Illegal telephone number.");
+        this.email = email;
     }
-    /**
-     * method that returns customer visits
-     */
-    public Set<Visita> getVisite() {
-        return visite;
-    }
-    /**
-     * method that returns the customer's SMS
-     */
-    public Set<SMS> getSmsCliente() {
-        return this.smsCliente;
-    }
-    /**
-     * method that adds a visit to the customer
-     */
-    public void addVisita(Visita visita) {
-        Objects.requireNonNull(visita);
-        this.visite.add(visita);
-    }
-    /**
-     * method that remove a visit to the customer
-     */
-    public void removeVisita(Visita visita) {
-        this.visite.remove(visita);
-        visitaPrenotata = false;
-    }
-    /**
-     * method that returns the card belonging to the customer
-     */
+
     public Tessera getTessera() {
         return this.tessera;
     }
-    /**
-     * method that adds SMS to the client
-     */
-    public void aggiungiSMS(SMS sms){
-        this.smsCliente.add(sms);
-    }
-    /**
-     * method that remove SMS to the client
-     */
-    public void rimuoviSMS(SMS sms){
-        this.smsCliente.remove(sms);
+
+    private String getIdTessera() {
+        //Todo ricordarsi il metodo getIdTessera della tessera.
+        return "\nId Tessera : ";
     }
 
-    public String getDetailsProgrammaFedelta() {
-        //TODO implementare
-        return null;
+    /**
+     * Equals method of the Cliente class, simply
+     * compare if the passed object is equivalent to this Costumer (Cliente),
+     * by checking the id, and the name.
+     * Returns true if the object is equal, false otherwise.
+     *
+     * @param object the Object to compare.
+     * @return true if is equals, false otherwise.
+     */
+    public boolean equals(Object object) {
+        if (object == null)
+            return false;
+        if (object instanceof Cliente tmp) {
+            if (this.getIdCliente() == tmp.getIdCliente() && this.getNome() == tmp.getNome())
+                return true;
+        }
+        return false;
     }
 
     public String toString() {
-        return "Cliente{" +
-                "id=" + id +
-                ", nome=" + nome +
-                ", cognome=" + cognome +
-                ", telefono=" + telefono +
-                ", mail=" + mail +
-                ", visite prenotate=" + toStringVisite() +
-                ", tessera=" + tessera +
-                '}';
-    }
-
-    private String toStringVisite() {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (Visita visita : this.getVisite()) {
-            stringBuilder.append("\n-").append(visita);
-        }
-        return stringBuilder.toString();
+        return "\t-DETAILS CLIENTE-" +
+                "\nId Cliente : " + idCliente +
+                "\nNome : " + this.getNome() +
+                "\nCognome : " + this.getCognome() +
+                "\nEmail : " + this.getEmail() +
+                "\nTelefono : " + this.getTelefono() +
+                getIdTessera();
+        //Todo mettere in questo campo l'id della tessera con il metodo
     }
 }
