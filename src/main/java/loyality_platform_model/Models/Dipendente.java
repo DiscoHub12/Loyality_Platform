@@ -1,11 +1,5 @@
 package loyality_platform_model.Models;
-
-
 import java.util.Objects;
-
-/**
- * IMPLEMENTED BY : Alessio Giacché.
- */
 
 
 /**
@@ -104,8 +98,28 @@ public class Dipendente {
         this.restrizioni = restrizioni;
     }
 
+    /**
+     * Equals method of the Employee (Dipendente) class, simply
+     * compare if the passed object is equivalent to this Employee(Dipendente),
+     * by checking the id, name and email about the Employee.
+     * Returns true if the object is equal, false otherwise.
+     *
+     * @param object the Object to compare.
+     * @return true if is equals, false otherwise.
+     */
+    public boolean equals(Object object) {
+        if (object == null)
+            return false;
+        if (object instanceof Dipendente tmp) {
+            if (this.getIdDipendente() == tmp.getIdDipendente() && this.getNome() == tmp.getNome() &&
+                    this.getEmail() == tmp.getDetails())
+                return true;
+        }
+        return false;
+    }
+
     public String getDetails() {
-        return "\tDetails Employee : " +
+        return "\t-DETAILS EMPLOYEE-" +
                 "\nNome : " + this.getNome() +
                 "\nCognome : " + this.getCognome() +
                 "\nEmail : " + this.getEmail() +
