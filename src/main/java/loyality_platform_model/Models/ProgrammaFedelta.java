@@ -1,16 +1,26 @@
 package loyality_platform_model.Models;
 
-import java.text.SimpleDateFormat;
+/**
+ * This interface represents a generic loyalty program characterized by a name,
+ * an activation date and a type.
+ */
+
 import java.util.Date;
-import java.util.Objects;
 
 public interface ProgrammaFedelta {
 
-    int getIdProgramma();
+     int getIdProgramma();
+
     String getNome();
+
+    void setNome(String nome);
 
     Date getDataAttivazione();
 
+    void setDataAttivazione(Date dataAttivazione);
+
     Tipo getTipoProgramma();
+
+    String toString();
 
 }
