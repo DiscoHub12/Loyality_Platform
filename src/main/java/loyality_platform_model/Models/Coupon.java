@@ -1,8 +1,14 @@
 package loyality_platform_model.Models;
-
 import java.util.Date;
 import java.util.Objects;
 
+
+/**
+ * Class representing the Coupon concept.
+ * Within this platform, an employee can assign a Coupon to a Customer,
+ * and a Customer when making a purchase can use Coupons which are nothing more
+ * than a discount to be applied to the current purchase.
+ */
 public class Coupon {
 
     /**
@@ -34,6 +40,7 @@ public class Coupon {
      * and it will be possible to provided it to a Costumer as a
      * gift, or a Costumer who owns it will be able to user it
      * for a Purchase.
+     *
      * @param valoreSconto the discount value of this Coupon.
      * @param dataScadenza expiration date of this Coupon.
      */
@@ -43,7 +50,7 @@ public class Coupon {
         this.setDataScadenza(dataScadenza);
     }
 
-    public static int getIdCoupon() {
+    public int getIdCoupon() {
         return idCoupon;
     }
 
@@ -52,7 +59,7 @@ public class Coupon {
     }
 
     public void setValoreSconto(int valoreSconto) {
-        if(valoreSconto < 5)
+        if (valoreSconto < 5)
             throw new IllegalArgumentException("Illegal discount value for the Coupon.");
         this.valoreSconto = valoreSconto;
     }
@@ -63,10 +70,11 @@ public class Coupon {
 
     /**
      * Method that set the actiovation Date about this Coupon.
+     *
      * @param dataAttivazione the activation Date.
      * @throws NullPointerException if the dataAttivazione is null.
      */
-    public void setDataAttivazione(Date dataAttivazione){
+    public void setDataAttivazione(Date dataAttivazione) {
         Objects.requireNonNull(dataAttivazione);
         this.dataAttivazione = dataAttivazione;
     }
@@ -77,11 +85,39 @@ public class Coupon {
 
     /**
      * Method that set the expiration date about this Coupon.
+     *
      * @param dataScadenza the expiration date.
      * @throws NullPointerException if the dataScadenza is null.
      */
     public void setDataScadenza(Date dataScadenza) {
         Objects.requireNonNull(dataScadenza);
         this.dataScadenza = dataScadenza;
+    }
+
+    /**
+     * Equals method of the Coupon, simply
+     * compare if the passed object is equivalent to this Coupon,
+     * by checking the id, and the value.
+     * Returns true if the object is equal, false otherwise.
+     *
+     * @param object the Object to compare.
+     * @return true if is equals, false otherwise.
+     */
+    public boolean equals(Object object) {
+        if (object == null)
+            return false;
+        if (object instanceof Coupon tmp) {
+            if (this.getIdCoupon() == tmp.getIdCoupon() && this.getValoreSconto() == tmp.getValoreSconto())
+                return true;
+        }
+        return false;
+    }
+
+    public String toString() {
+        return "\t-DETAILS COUPON-" +
+                "\nId Coupon : " + this.getIdCoupon() +
+                "\nValore Sconto : " + this.getValoreSconto() +
+                "\nData attivazione : " + this.getDataAttivazione() +
+                "\nData Scadenza : " + this.getDataScadenza();
     }
 }
