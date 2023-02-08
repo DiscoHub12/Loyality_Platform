@@ -1,9 +1,5 @@
 package loyality_platform_model.Models;
 
-/**
- * IMPLEMENTED BY : Alessio Giacché.
- */
-
 
 /**
  * Class that rapresents the concept of Award.
