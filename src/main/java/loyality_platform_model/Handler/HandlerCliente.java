@@ -6,10 +6,6 @@ import loyality_platform_model.Models.*;
 import java.util.Objects;
 import java.util.Set;
 
-/**
- * IMPLEMENTED BY : Alessio Giacché.
- */
-
 
 /**
  * Class that rapresent a Costumer manager capable
@@ -26,122 +22,152 @@ public class HandlerCliente {
     private final DBMS dbms;
 
     /**
-     * Once a Client is identified, he is associated
-     * with this temporary variable, able to access his information.
-     */
-    private Cliente clienteIdentificato;
-
-    private static HandlerCliente instance;
-
-    /**
      * Costructor who creates a Client manager.
      * Recall the Db instance to retrieve permanent data.
      */
-    public HandlerCliente(Cliente cliente) {
-        Objects.requireNonNull(cliente);
+    public HandlerCliente() {
         this.dbms = DBMS.getInstance();
-        this.clienteIdentificato=cliente;
-    }
-
-    public static HandlerCliente getInstance(Cliente cliente) {
-        if(instance == null){
-            instance = new HandlerCliente(cliente);
-        }
-        return instance;
-    }
-
-
-    /**
-     * Method that returns the card of an identified Customer, if he has it.
-     * @return the Caard of an identified Costumer.
-     * @throws IllegalArgumentException if the Costumer where you are trying to get the information
-     * is not identified.
-     */
-    public Tessera getTesseraCliente() {
-        if (!isIdentificato(this.clienteIdentificato))
-            throw new IllegalArgumentException("Costumer is not identified.");
-        return this.clienteIdentificato.getTessera();
     }
 
     /**
-     * Method that returns the list of loyalty Programs
-     * to which a particular identified customer is subscribed.
-     * @return the Set of Loyality Programs.
-     * @throws IllegalArgumentException if the Costumer where you are trying to get the information
-     * is not identified.
-     */
-    public Set<ProgrammaFedelta> getProgrammiFedeltaCliente() {
-        if (!isIdentificato(this.clienteIdentificato))
-            throw new IllegalArgumentException("Costumer is not identified.");
-        return this.clienteIdentificato.getTessera().getProgrammiFedelta();
-    }
-
-    /**
-     * Method that returns the list of Visits made by a
-     * particular identified Customer.
-     * @return the Set of Visits from identified Costumer.
-     * @throws IllegalArgumentException If the customer where you are trying to get the
-     *                                  information is not identified.
-     */
-    public Set<Visita> getVisite() {
-        if (!isIdentificato(this.clienteIdentificato))
-            throw new IllegalArgumentException("Costumer is not identified.");
-        return this.clienteIdentificato.getVisite();
-    }
-
-    /**
-     * Method that returns the list of SMS received from a
-     * particular identified Customer.
+     * This method allows you to identify a Customer
+     * who will be searched within the platform by name and surname.
      *
-     * @return the Set of SMS received from identified Costumer.
-     * @throws IllegalArgumentException If the customer where you are trying to get the
-     *                                  information is not identified.
+     * @param nome    the name about the Costumer to identify.
+     * @param cognome the surname about the Costumer to identify.
+     * @return a Costumer object if exists, null otherwise.
      */
-    public Set<SMS> getSMSCliente() {
-        if (!isIdentificato(this.clienteIdentificato))
-            throw new IllegalArgumentException("Costumer is not identified.");
-        return this.clienteIdentificato.getSmsCliente();
-    }
-
-    /**
-     * Method that returns all the details of a particular
-     * identified Customer.
-     *
-     * @return details of the identified Costumer.
-     * @throws IllegalArgumentException If the customer where you are trying to get the
-     *                                  information is not identified.
-     */
-    public String getDetailsCliente() {
-        if (!isIdentificato(this.clienteIdentificato))
-            throw new IllegalArgumentException("Costumer is not identified.");
-        return this.clienteIdentificato.toString();
-    }
-
-    /**
-     * Method that will exit to the Costumer's profile.
-     * So the identified Costumer's temporary variable
-     * will return to null, and the Client is no longer
-     * identified.
-     */
-    public void esciProfiloCliente() {
+    public Cliente identificaCliente(String nome, String cognome) {
+        if (Objects.equals(nome, "") || Objects.equals(cognome, ""))
+            throw new IllegalArgumentException("Illegal name or surname for identified Costumer.");
         for (Cliente cliente : this.dbms.getClientiIscritti()) {
-            if (cliente == this.clienteIdentificato) {
-                cliente.setIdentificato(false);
+            if (Objects.equals(cliente.getNome(), nome) && Objects.equals(cliente.getCognome(), cognome)) {
+                return cliente;
             }
         }
-        this.clienteIdentificato.setIdentificato(false);
-        this.clienteIdentificato = null;
+        return null;
     }
 
     /**
-     * Private method that avoids code duplication,
-     * able to return true if the client is still identified,
-     * false otherwise.
+     * This method allows you to identify a Customer
+     * who will be searched within the platform by the card code if he has
+     * one.
      *
-     * @param cliente The Costumer to check its status.
-     * @return true if the Costumer is identified, false otherwise.
+     * @param idTessera the card code about the Costumer to identify.
+     * @return a Costumer object if exists, null otherwise.
      */
-    private boolean isIdentificato(Cliente cliente) {
-        return cliente.isIdentificato();
+    public Cliente identificaClienteTessera(int idTessera) {
+        if (idTessera <= 0)
+            throw new IllegalArgumentException("Illegal number of Costumer's Card.");
+        for (Cliente cliente : this.dbms.getClientiIscritti()) {
+            //Todo manca id della tessera.
+        }
+        return null;
+    }
+
+    /**
+     * This method allows you to identify a Customer
+     * who will be searched within the platform by id.
+     *
+     * @param idCliente the id about the Costumer to identify;
+     * @return a Costumer object if exists, null otherwise.
+     */
+    public Cliente identificaClienteCodice(int idCliente) {
+        if (idCliente <= 0)
+            throw new IllegalArgumentException("Illegal id for the Costumer.");
+        for (Cliente cliente : this.dbms.getClientiIscritti()) {
+            if (cliente.getIdCliente() == idCliente) {
+                return cliente;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * This method allows you to take a Card of
+     * a particular Costumer, to be identified through
+     * his id.
+     *
+     * @param idCliente the id about the Costumer.
+     * @return the Card if the Costumer has one, null otherwise.
+     */
+    public Tessera getTesseraCliente(int idCliente) {
+        if (idCliente <= 0)
+            throw new IllegalArgumentException("Illegal id for the Costumer.");
+        for (Cliente cliente : this.dbms.getClientiIscritti()) {
+            if (cliente.getIdCliente() == idCliente) {
+                return cliente.getTessera();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * This method allows you to take all messages received
+     * from a particular Costumer if exists, to be identified by its id.
+     * @param idCliente the id about the Costumer.
+     * @return a list of SMS received from Costumer.
+     */
+    public Set<SMS> getSMSCliente(int idCliente) {
+        //Todo implementare
+        return null;
+    }
+
+    /**
+     * This method allows you to take all the Visits
+     * of a particular Customer if exists, to be identified
+     * through his id.
+     * @param idCliente the id about the Costumer.
+     * @return a list of Visits about the Costumer.
+     */
+    public Set<Visita> getVisiteCliente(int idCliente) {
+        //Todo implementare
+        return null;
+    }
+
+    /**
+     * This method allows you to take all the
+     * Rewards received from a particular Customer if exists,
+     * to be identified by his id.
+     * @param idCliente the id about the Customer.
+     * @return a list of rewards received froma  particular Customer.
+     */
+    public Set<Premio> getPremiCliente(int idCliente) {
+        //Todo implementare
+        return null;
+    }
+
+    /**
+     * This method allows you to take all the avaible
+     * Coupons received from a specific Customer, if exists,
+     * identified by id.
+     * @param idCliente the id about the Customer.
+     * @return a list of Coupons held by the Costumer, if any exists.
+     */
+    public Set<Coupon> getCouponCliente(int idCliente) {
+        //Todo implementare
+        return null;
+    }
+
+    /**
+     * This method allows you to validate a Purchase of a
+     * particular Customer registered on the Platform and on the
+     * company's, current, loyalty program.
+     * @param nome the name about the Customer.
+     * @param cognome the surname about the Customer.
+     */
+    public void convalidaAcquisto(String nome, String cognome) {
+        //Todo implementare
+    }
+
+    /**
+     * This method allows you to validate a Purchase of a
+     * particular Customer registered on the Platform and on the
+     * company's, current, loyalty program.
+     * @param idTessera the name about the Customer.
+     */
+    public void convalidaAcquisto(int idTessera) {
+        //Todo implementare
+
     }
 }
