@@ -1,13 +1,10 @@
 package loyality_platform_model.Models;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 /**
- * IMPLEMENTED BY : Sofia Scattolini.
- *
  *  Class representing one of many loyalty programs
  *  available within the platform.
  *  In particular, this program follows the rule of levels, ie
@@ -23,52 +20,86 @@ public class ProgrammaLivelli implements ProgrammaFedelta {
 
     private String nome;
 
-    private Date dataAttivazione;
+    private Date dataAttivazione= null;
 
     private int massimoLivelli, livelloVip;
 
-    private final Map<Integer, Integer> policyLivelli;
+    private final Map<Integer, Integer> policyLivelli; //Manca la gestione di questa, quindi add remove e modifica
 
-    private CatalogoPremi catalogoPremi;
+    private int puntiSpesa;
 
-    private final Tipo tipoProgramma = Tipo.ProgrammaLivelli;
+    private double importoSpesa;
 
-    public ProgrammaLivelli(String nome, int massimoLivelli, int livelloVip) {
+    private CatalogoPremi catalogoPremi = null;
+
+    private final Tipo tipoProgramma = Tipo.PROGRAMMALIVELLI;
+
+    public ProgrammaLivelli(String nome, int massimoLivelli, int livelloVip, Map<Integer, Integer> policyLivelli, int puntiSpesa, double importoSpesa) {
         idProgramma++;
         this.setNome(nome);
         this.setMassimoLivelli(massimoLivelli);
         this.setLivelloVip(livelloVip);
-        policyLivelli = new HashMap<>();
+        this.setPuntiSpesa(puntiSpesa);
+        this.setImportoSpesa(importoSpesa);
+        this.policyLivelli = policyLivelli ;
     }
 
+    /**
+     * This method returns the program id
+     * @return the program id.
+     */
     @Override
     public int getIdProgramma() {
         return idProgramma;
     }
 
+    /**
+     * This method return the program name.
+     * @return the program name.
+     */
     @Override
     public String getNome() {
         return nome;
     }
 
+    /**
+     * This method changes the name of the program.
+     * @param nome new program name.
+     */
+    @Override
     public void setNome(String nome) {
+        if (Objects.equals(nome, ""))
+            throw new IllegalArgumentException("Name not valid.");
         this.nome = nome;
     }
 
+    /**
+     * This method sets the activation date of the program.
+     * @param dataAttivazione the activation date of the program.
+     */
+    @Override
     public void setDataAttivazione(Date dataAttivazione) {
+        Objects.requireNonNull(dataAttivazione);
         this.dataAttivazione = dataAttivazione;
     }
 
+    /**
+     * This method returns the activation date of the program.
+     * @return the activation date of the program.
+     */
     @Override
     public Date getDataAttivazione() {
         return dataAttivazione;
     }
 
+    /**
+     * This method returns the type of the program.
+     * @return the type of the program.
+     */
     @Override
     public Tipo getTipoProgramma() {
         return tipoProgramma;
     }
-
 
 
     /**
@@ -111,21 +142,93 @@ public class ProgrammaLivelli implements ProgrammaFedelta {
      * This method returns the number of points to get for each level.
      * @return the number of points to get for each level.
      */
-    public Map<Integer, Integer> getPuntiPerLivello() {
+    public Map<Integer, Integer> getPolicyLivelli() {
         return policyLivelli;
     }
 
     /**
-     * This method returns the prize catalog.
-     * @return the prize catalog.
+     * This method adds a new layer and associates its points to it.
+     * @param punti points associated with that level.
+     */
+    public void addLivello(int punti){
+        int appoggio = 1;
+        if(punti < 1)
+            throw new IllegalArgumentException("Invalid points.");
+        appoggio += this.getPolicyLivelli().size();
+        this.getPolicyLivelli().put(appoggio, punti);
+    }
+
+    /**
+     * This method changes the number of points for a given level.
+     * @param livello level to change.
+     * @param punti number of points to be awarded at that level.
+     */
+    public void updatePuntiLivello(int livello, int punti){
+        if(livello < 0 || livello > this.getMassimoLivelli())
+            throw new IllegalArgumentException("Invalid level.");
+        if(punti < 1)
+            throw new IllegalArgumentException("Invalid points.");
+        this.getPolicyLivelli().replace(livello, punti);
+    }
+
+    /**
+     * This method removes me one layer.
+     * @param livello level to remove.
+     */
+    public void removeLivello(int livello){
+        if(livello < 0 || livello > this.getMassimoLivelli())
+            throw new IllegalArgumentException("Invalid level.");
+        this.getPolicyLivelli().remove(livello);
+    }
+
+    /**
+     * This method returns the number of points to be associated with the amount spent.
+     * @return the number of points.
+     */
+    public int getPuntiSpesa() {
+        return puntiSpesa;
+    }
+
+    /**
+     * This method sets the number of points to be associated with the amount spent.
+     * @param puntiSpesa the number of points.
+     */
+    public void setPuntiSpesa(int puntiSpesa) {
+        if (puntiSpesa < 1)
+            throw new IllegalArgumentException("Illegal number of points.");
+        this.puntiSpesa = puntiSpesa;
+    }
+
+    /**
+     * This method returns the amount to be spent in order for the points to be awarded.
+     * @return  the amount to be spent.
+     */
+    public double getImportoSpesa() {
+        return importoSpesa;
+    }
+
+    /**
+     * This method sets the amount to be spent in order for points to be awarded.
+     * @param importoSpesa the amount to be spent.
+     */
+    public void setImportoSpesa(double importoSpesa) {
+        if (importoSpesa < 1)
+            throw new IllegalArgumentException("Illegal number of imports.");
+        this.importoSpesa = importoSpesa;
+    }
+
+
+    /**
+     * This method returns the rewards catalog of this loyalty program.
+     * @return the rewards catalog of this loyalty program.
      */
     public CatalogoPremi getCatalogoPremi() {
         return catalogoPremi;
     }
 
     /**
-     * This method sets up the rewards catalog.
-     * @param catalogoPremi the rewards catalog.
+     * This method sets up the rewards catalog of this loyalty program.
+     * @param catalogoPremi catalog of this loyalty program.
      */
     public void setCatalogoPremi(CatalogoPremi catalogoPremi) {
         Objects.requireNonNull(catalogoPremi);
@@ -133,57 +236,31 @@ public class ProgrammaLivelli implements ProgrammaFedelta {
     }
 
     /**
-     * This method adds a new layer and the points associated with it.
-     * @param punti points associated at the level.
+     * Equals method of the program class, simply
+     * compare if the passed object is equivalent to this program,
+     * by checking the id, and the name.
+     * Returns true if the object is equal, false otherwise.
+     *
+     * @param object the Object to compare.
+     * @return true if is equals, false otherwise.
      */
-    public void aggiungiLivello(int punti) {
-        int appoggio = 1;
-        if(punti < 1 )
-            throw new IllegalArgumentException("Invalid number of points.");
-         appoggio += this.getPuntiPerLivello().get(this.policyLivelli.size());
-         if(appoggio > this.getMassimoLivelli())
-             throw new IllegalArgumentException("Is not possible to add a new level.");
-        this.getPuntiPerLivello().put(appoggio, punti);
-    }
-
-    /**
-     * This method removes a layer and its associated points.
-     * @param livello layer to remove.
-     */
-    public void rimuoviLivello(int livello){
-        if(livello < 1 || livello> this.policyLivelli.size())
-            throw new IllegalArgumentException("Invalid number of level.");
-        if(!this.getPuntiPerLivello().containsKey(livello))
-            throw new IllegalArgumentException("Level not exist.");
-        this.getPuntiPerLivello().remove(livello);
-    }
-
-    /**
-     * This method modifies the points for a certain level.
-     * @param punti points to edit.
-     * @param livello level taken into consideration.
-     */
-    public void modificaPuntiPerLivello(int punti, int livello){
-        if(punti < 1 )
-            throw new IllegalArgumentException("Invalid number of points.");
-        if(livello < 1 || livello> this.policyLivelli.size())
-            throw new IllegalArgumentException("Invalid number of level.");
-        for (Map.Entry<Integer, Integer> entry : this.getPuntiPerLivello().entrySet()){
-            if(livello== entry.getKey()){
-                this.getPuntiPerLivello().replace(livello, entry.getValue(), punti);
-            }
+    public boolean equals(Object object) {
+        if (object == null)
+            return false;
+        if (object instanceof ProgrammaPunti tmp) {
+            return this.getIdProgramma() == tmp.getIdProgramma() && Objects.equals(this.getNome(), tmp.getNome());
         }
+        return false;
     }
 
     @Override
     public String toString() {
-        return "ProgrammaLivelli{" +
-                "nome='" + nome + '\'' +
-                ", dataAttivazione=" + dataAttivazione +
-                ", massimoLivelli=" + massimoLivelli +
-                ", livelloVip=" + livelloVip +
-                ", puntiPerLivello=" + policyLivelli +
-                ", catalogoPremi=" + catalogoPremi +
-                '}';
+        return "\t-DETAILS PROGRAMMA LIVELLI-" +
+                "\nNome: " + nome +
+                "\nData Attivazione: " + dataAttivazione +
+                "\nMassimo Livelli: " + massimoLivelli +
+                "\nLivello Vip: " + livelloVip +
+                "\nPunti Per Livello: " + policyLivelli +
+                "\nCatalogo Premi: " + catalogoPremi;
     }
 }
