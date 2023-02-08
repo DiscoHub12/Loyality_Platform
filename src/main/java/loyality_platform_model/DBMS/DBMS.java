@@ -32,7 +32,7 @@ public class DBMS {
     private final Map<Cliente, Set<SMS>>  SMSCliente;
 
 
-    //private Map<Cliente, Set<Coupon>>  couponCliente;
+    private Map<Cliente, Set<Coupon>>  couponCliente;
 
 
     private final Map<Cliente, Set<Premio>> premiCliente;
@@ -60,6 +60,7 @@ public class DBMS {
         this.programmiAzienda = new HashMap<>();
         this.clientiIscritti = new HashSet<>();
         this.SMSCliente = new HashMap<>();
+        this.couponCliente = new HashMap<>();
         this.premiCliente = new HashMap<>();
         this.visiteCliente = new HashMap<>();
         this.tessereClienti = new HashSet<>();
@@ -151,6 +152,20 @@ public class DBMS {
 
     public void addSMS(Cliente cliente, SMS sms){
         //TODO implementare
+    }
+
+    public Map<Cliente, Set<Coupon>> getCouponCliente(){return this.couponCliente;}
+
+    public void addCoupon(Cliente cliente, Coupon coupon){
+        //Todo implementare
+    }
+
+    public void updateCoupon(Cliente cliente, Coupon oldCoupon, Coupon newCoupon){
+        //Todo implementare
+    }
+
+    public void removeCoupon(Cliente cliente, Coupon coupon){
+        //Todo implementare
     }
 
 
