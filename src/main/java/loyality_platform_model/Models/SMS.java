@@ -1,25 +1,34 @@
 package loyality_platform_model.Models;
 
+import java.util.Date;
 import java.util.Objects;
 
 /**
- * IMPLEMENTED BY : Sofia Scattolini.
- *
  * This class represents an SMS that may or may not have a predefined configuration.
  */
 public class SMS {
-
+    private static int idSMS;
     private String testo;
 
-    private final String oraInvio;
+    private Date dataInvio;
 
-    private boolean configurato = false;
+    private ConfigurazioneSMS configurazione;
 
-    public SMS(String testo, String oraInvio) {
-        this.setTesto(testo);
-        if (Objects.equals(oraInvio, ""))
-            throw new IllegalArgumentException("Illegal ora for sms.");
-        this.oraInvio = oraInvio;
+    public SMS(String testo, Date dataInvio) {
+        if (Objects.equals(testo, "")){
+            throw new IllegalArgumentException("Illegal text for sms.");}
+        idSMS++;
+        this.testo = testo;
+        this.dataInvio = dataInvio;
+
+    }
+    public SMS(ConfigurazioneSMS configurazione, Date dataInvio){
+        idSMS++;
+        this.testo= configurazione.getTestoConfigurato();
+        this.dataInvio=dataInvio;
+    }
+    public int getIdSMS(){
+        return this.idSMS;
     }
 
     /**
@@ -27,57 +36,24 @@ public class SMS {
      * @return the text of the SMS.
      */
     public String getTesto() {
-        return testo;
-    }
-
-    /**
-     * This method sets the text of the SMS.
-     * @param testo the text of the SMS.
-     */
-    public void setTesto(String testo) {
-        if (Objects.equals(testo, ""))
-            throw new IllegalArgumentException("Illegal text for sms.");
-        this.testo = testo;
+        return this.testo;
     }
 
     /**
      * This method returns the time the SMS was sent.
      * @return the time the SMS was sent.
      */
-    public String getOraInvio() {
-        return oraInvio;
+    public Date getDataInvio(){
+        return this.dataInvio;
     }
-
-    /**
-     * This method returns <code>true</code> if SMS is configured,
-     * <code>false</code> otherwise.
-     * @return <code>true</code> if SMS is configured, <code>false</code> otherwise.
-     */
-    public boolean isConfigurato() {
-        return configurato;
+    public ConfigurazioneSMS getConfigurazione(){
+        return this.configurazione;
     }
-
-    /**
-     * This method sets whether the sms is configured or not.
-     */
-    public void setConfigurato(boolean configurato) {
-        this.configurato = configurato;
-    }
-
-    /**
-     * This method sets up the SMS configuration.
-     * @param configurazioneSMS the SMS configuration.
-     */
-    public void setMessaggioConfigurato(ConfigurazioneSMS configurazioneSMS){
-        Objects.requireNonNull(configurazioneSMS);
-        this.setTesto(configurazioneSMS.getTestoConfigurato());
-    }
-
     @Override
     public String toString() {
         return "SMS{" +
-                "testo='" + testo + '\'' +
-                ", oraInvio='" + oraInvio + '\'' +
+                "testo='" + this.testo + '\'' +
+                ", oraInvio='" + this.dataInvio + '\'' +
                 '}';
     }
 }
