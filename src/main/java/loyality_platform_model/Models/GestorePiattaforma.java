@@ -9,13 +9,25 @@ package loyality_platform_model.Models;
  * subscriptions and SMS packages for companies that decide to register on the platform.
  */
 public class GestorePiattaforma {
-
+    /**
+     * attribute representing the platform manager id
+     */
     private static int idGestorePiattaforma;
-
+    /**
+     * attribute of type final representing name and surname of the platform manager
+     */
     private final String nome, cognome;
-
+    /**
+     * attribute representing the platform manager email
+     */
     private String email;
-
+    /**
+     * constructor that instantiates the object of the Platform Manager class,
+     * where the following parameters are passed.
+     * @param nome name of platform manager.
+     * @param cognome surname of platform manager.
+     * @param email email of platform manager
+     */
     public GestorePiattaforma(String nome, String cognome, String email) {
         idGestorePiattaforma++;
         this.nome = nome;
@@ -27,7 +39,7 @@ public class GestorePiattaforma {
      * This method returns the manager id
      * @return the manager id.
      */
-    public static int getId() {
+    public static int getIdGestore() {
         return idGestorePiattaforma;
     }
 
