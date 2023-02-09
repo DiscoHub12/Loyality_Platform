@@ -9,7 +9,7 @@ import java.util.Set;
 
 
 /**
- * Class that rapresent a Costumer manager capable
+ * Class that represent a Costumer manager capable
  * of fetching all available information and able to identify a Client.
  * Inside, it has a temporary variable that represents any identified
  * customer, and a class (object) that represents all the activities
@@ -63,7 +63,12 @@ public class HandlerCliente {
         if (idTessera <= 0)
             throw new IllegalArgumentException("Illegal number of Costumer's Card.");
         for (Tessera tessera : this.dbms.getTessereClienti()) {
-            //Todo manca il metodo tessera getIdTessera()
+            if (tessera.getIdTessera() == idTessera) {
+                for (Cliente cliente : this.dbms.getClientiIscritti()) {
+                    if (cliente.getIdCliente() == tessera.getIdCliente())
+                        return cliente;
+                }
+            }
         }
         return null;
     }
@@ -110,15 +115,16 @@ public class HandlerCliente {
     /**
      * This method allows you to take all messages received
      * from a particular Costumer if exists, to be identified by its id.
+     *
      * @param idCliente the id about the Costumer.
      * @return a list of SMS received from Costumer.
      * @throws IllegalArgumentException if the idCliente is not correct.
      */
     public Set<SMS> getSMSCliente(int idCliente) {
-        if(idCliente <= 0)
+        if (idCliente <= 0)
             throw new IllegalArgumentException("Illegal id for the Customer.");
-        for(Cliente cliente : this.dbms.getSMSCliente().keySet()){
-            if(cliente.getIdCliente() == idCliente){
+        for (Cliente cliente : this.dbms.getSMSCliente().keySet()) {
+            if (cliente.getIdCliente() == idCliente) {
                 return this.dbms.getSMSCliente().get(cliente);
             }
         }
@@ -129,16 +135,16 @@ public class HandlerCliente {
      * This method allows you to take all the Visits
      * of a particular Customer if exists, to be identified
      * through his id.
+     *
      * @param idCliente the id about the Costumer.
      * @return a list of Visits about the Costumer.
      * @throws IllegalArgumentException if the idCliente is not correct.
-     *
      */
     public Set<Visita> getVisiteCliente(int idCliente) {
-        if(idCliente <= 0)
+        if (idCliente <= 0)
             throw new IllegalArgumentException("Illegal id for the Customer.");
-        for(Cliente cliente : this.dbms.getVisiteCliente().keySet()){
-            if(cliente.getIdCliente() == idCliente){
+        for (Cliente cliente : this.dbms.getVisiteCliente().keySet()) {
+            if (cliente.getIdCliente() == idCliente) {
                 return this.dbms.getVisiteCliente().get(cliente);
             }
         }
@@ -150,15 +156,16 @@ public class HandlerCliente {
      * This method allows you to take all the
      * Rewards received from a particular Customer if exists,
      * to be identified by his id.
+     *
      * @param idCliente the id about the Customer.
      * @return a list of rewards received froma  particular Customer.
      * @throws IllegalArgumentException if the idCliente is not correct.
      */
     public Set<Premio> getPremiCliente(int idCliente) {
-        if(idCliente <= 0)
+        if (idCliente <= 0)
             throw new IllegalArgumentException("Illegal id for the Customer.");
-        for(Cliente cliente : this.dbms.getPremiCliente().keySet()){
-            if(cliente.getIdCliente() == idCliente){
+        for (Cliente cliente : this.dbms.getPremiCliente().keySet()) {
+            if (cliente.getIdCliente() == idCliente) {
                 return this.dbms.getPremiCliente().get(cliente);
             }
         }
@@ -169,15 +176,16 @@ public class HandlerCliente {
      * This method allows you to take all the avaible
      * Coupons received from a specific Customer, if exists,
      * identified by id.
+     *
      * @param idCliente the id about the Customer.
      * @return a list of Coupons held by the Costumer, if any exists.
      * @throws IllegalArgumentException if the idCliente is not correct.
      */
     public Set<Coupon> getCouponCliente(int idCliente) {
-        if(idCliente <= 0)
+        if (idCliente <= 0)
             throw new IllegalArgumentException("Illegal id for the Customer");
-        for(Cliente cliente : this.dbms.getCouponCliente().keySet()){
-            if(cliente.getIdCliente() == idCliente){
+        for (Cliente cliente : this.dbms.getCouponCliente().keySet()) {
+            if (cliente.getIdCliente() == idCliente) {
                 return this.dbms.getCouponCliente().get(cliente);
             }
         }
@@ -188,27 +196,63 @@ public class HandlerCliente {
      * This method allows you to validate a Purchase of a
      * particular Customer registered on the Platform and on the
      * company's, current, loyalty program.
-     * @param nome the name about the Customer.
+     *
+     * @param nome    the name about the Customer.
      * @param cognome the surname about the Customer.
      * @throws IllegalArgumentException if the Name or Surname about Customer is not correct.
      */
-    public void convalidaAcquisto(String nome, String cognome) {
-        if(Objects.equals(nome, "") || Objects.equals(cognome, ""))
+    public int convalidaAcquisto(int idAzienda, String nome, String cognome, double importoSpeso, Coupon coupon) {
+        double importo = 0;
+        if (Objects.equals(nome, "") || Objects.equals(cognome, ""))
             throw new IllegalArgumentException("Illegal Name or Surname for the Customer.");
-        //Todo implementare
+        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
+            if (azienda.getIdAzienda() == idAzienda) {
+                Cliente identificato = this.identificaCliente(nome, cognome);
+                Tessera tesseraCliente = this.getTesseraCliente(identificato.getIdCliente());
+                if (tesseraCliente != null) {
+                    if (coupon != null) {
+                        if (importoSpeso >= coupon.getValoreSconto()) {
+                            importo = importoSpeso - coupon.getValoreSconto();
+                            //Todo richiama HandlerTessera passando l'importo.
+                            //Todo richiama HandlerPremi per togliere il Coupon del Cliente al DB.
+                            return 1;
+                        }else {
+                            importo = importoSpeso;
+                            //Todo richiama HandlerTessera passando l'importo.
+                            //Todo richiama HandlerPremi per togliere il Coupon del Cliente al DB.
+                            return 1;
+                        }
+                    }else {
+                        importo = importoSpeso;
+                        //Todo richiama HandlerTessera passando l'importo.
+                        //Todo richiama HandlerPremi per togliere il Coupon del Cliente al DB.
+                        return 1;
+                    }
+                } return 0;
+            }
+        }
+        return -1;
     }
 
     /**
      * This method allows you to validate a Purchase of a
      * particular Customer registered on the Platform and on the
      * company's, current, loyalty program.
+     *
      * @param idTessera the name about the Customer.
      * @throws IllegalArgumentException if the idTessera is not correct.
      */
-    public void convalidaAcquisto(int idTessera) {
-        if(idTessera <= 0)
+    public void convalidaAcquisto(int idAzienda, int idTessera, double importoSpeso, Coupon coupon) {
+        if (idTessera <= 0)
             throw new IllegalArgumentException("Illegal number of Customer card.");
-        //Todo implementare
-
+        for (Tessera tessera : this.dbms.getTessereClienti()) {
+            if (tessera.getIdTessera() == idTessera) {
+                for (Cliente cliente : this.dbms.getClientiIscritti()) {
+                    if (tessera.getIdCliente() == cliente.getIdCliente()) {
+                        convalidaAcquisto(idAzienda, cliente.getNome(), cliente.getCognome(), importoSpeso, coupon);
+                    }
+                }
+            }
+        }
     }
 }
