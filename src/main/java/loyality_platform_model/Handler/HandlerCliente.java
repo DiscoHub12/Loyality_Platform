@@ -23,7 +23,7 @@ public class HandlerCliente {
     private final DBMS dbms;
 
     /**
-     * Costructor who creates a Client manager.
+     * Constructor who creates a Client manager.
      * Recall the Db instance to retrieve permanent data.
      */
     public HandlerCliente() {
