@@ -20,7 +20,7 @@ public class ProgrammaLivelli implements ProgrammaFedelta {
 
     private String nome;
 
-    private Date dataAttivazione= null;
+    private Date dataAttivazione;
 
     private int massimoLivelli, livelloVip;
 
@@ -30,7 +30,7 @@ public class ProgrammaLivelli implements ProgrammaFedelta {
 
     private double importoSpesa;
 
-    private CatalogoPremi catalogoPremi = null;
+    private CatalogoPremi catalogoPremi;
 
     private final Tipo tipoProgramma = Tipo.PROGRAMMALIVELLI;
 
@@ -42,6 +42,8 @@ public class ProgrammaLivelli implements ProgrammaFedelta {
         this.setPuntiSpesa(puntiSpesa);
         this.setImportoSpesa(importoSpesa);
         this.policyLivelli = policyLivelli ;
+        this.dataAttivazione = null;
+        this.catalogoPremi= null;
     }
 
     /**
@@ -99,6 +101,24 @@ public class ProgrammaLivelli implements ProgrammaFedelta {
     @Override
     public Tipo getTipoProgramma() {
         return tipoProgramma;
+    }
+
+    /**
+     * This method return null because this is a levels program.
+     * @return null.
+     */
+    @Override
+    public ProgrammaPunti getProgrammaPunti() {
+        return null;
+    }
+
+    /**
+     * This method returns this program.
+     * @return this program.
+     */
+    @Override
+    public ProgrammaLivelli getProgrammaLivelli() {
+        return this;
     }
 
 
