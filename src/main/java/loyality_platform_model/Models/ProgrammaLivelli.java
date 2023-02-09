@@ -24,7 +24,7 @@ public class ProgrammaLivelli implements ProgrammaFedelta {
 
     private int massimoLivelli, livelloVip;
 
-    private final Map<Integer, Integer> policyLivelli; //Manca la gestione di questa, quindi add remove e modifica
+    private final Map<Integer, Integer> policyLivelli;
 
     private int puntiSpesa;
 
@@ -155,6 +155,8 @@ public class ProgrammaLivelli implements ProgrammaFedelta {
         if(punti < 1)
             throw new IllegalArgumentException("Invalid points.");
         appoggio += this.getPolicyLivelli().size();
+        if(appoggio > this.getMassimoLivelli())
+            throw new IllegalArgumentException("Invalid level.");
         this.getPolicyLivelli().put(appoggio, punti);
     }
 
@@ -255,12 +257,22 @@ public class ProgrammaLivelli implements ProgrammaFedelta {
 
     @Override
     public String toString() {
-        return "\t-DETAILS PROGRAMMA LIVELLI-" +
-                "\nNome: " + nome +
-                "\nData Attivazione: " + dataAttivazione +
-                "\nMassimo Livelli: " + massimoLivelli +
-                "\nLivello Vip: " + livelloVip +
-                "\nPunti Per Livello: " + policyLivelli +
-                "\nCatalogo Premi: " + catalogoPremi;
+        return "\t-ProgrammaLivelli-" +
+                "\nnome: " + nome +
+                "\ndataAttivazione: " + dataAttivazione +
+                "\nmassimoLivelli: " + massimoLivelli +
+                "\nlivelloVip: " + livelloVip +
+                "\npolicyLivelli: " + policyLivelli +
+                "\npuntiSpesa: " + puntiSpesa +
+                "\nimportoSpesa: " + importoSpesa +
+                "\ntipoProgramma: " + tipoProgramma+
+                "\nCatalogo Premi: " + toStringCatalogo();
+    }
+
+    private String toStringCatalogo(){
+        if(catalogoPremi != null){
+            return catalogoPremi.toString();
+        }
+        return null;
     }
 }
