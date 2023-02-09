@@ -18,11 +18,11 @@ public class ProgrammaPunti implements ProgrammaFedelta {
 
     private String nome;
 
-    private Date dataAttivazione = null;
+    private Date dataAttivazione;
 
-    private boolean maxPunti = false;
+    private boolean maxPunti;
 
-    private int numeroPuntiMassimi = 0;
+    private int numeroPuntiMassimi;
 
     private int puntiVIP;
 
@@ -30,7 +30,7 @@ public class ProgrammaPunti implements ProgrammaFedelta {
 
     private double importoSpesa;
 
-    private CatalogoPremi catalogoPremi = null;
+    private CatalogoPremi catalogoPremi;
 
     private final Tipo tipoProgramma = Tipo.PROGRAMMAPUNTI;
 
@@ -46,6 +46,10 @@ public class ProgrammaPunti implements ProgrammaFedelta {
         this.setPuntiVIP(puntiVIP);
         this.setPuntiSpesa(puntiSpesa);
         this.setImportoSpesa(importoSpesa);
+        this.maxPunti = false;
+        this.numeroPuntiMassimi = 0;
+        this.catalogoPremi= null;
+        this.dataAttivazione = null;
     }
 
     /**
@@ -62,6 +66,9 @@ public class ProgrammaPunti implements ProgrammaFedelta {
         this.setPuntiSpesa(puntiSpesa);
         this.setImportoSpesa(importoSpesa);
         this.maxPunti = true;
+        this.numeroPuntiMassimi=0;
+        this.catalogoPremi = null;
+        this.dataAttivazione = null;
     }
 
     /**
@@ -119,6 +126,25 @@ public class ProgrammaPunti implements ProgrammaFedelta {
     public Tipo getTipoProgramma() {
         return tipoProgramma;
     }
+
+    /**
+     * This method returns this program.
+     * @return this program.
+     */
+    @Override
+    public ProgrammaPunti getProgrammaPunti() {
+        return this;
+    }
+
+    /**
+     * This method return null because this is a points program.
+     * @return null.
+     */
+    @Override
+    public ProgrammaLivelli getProgrammaLivelli() {
+        return null;
+    }
+
 
     /**
      * This method returns <code>true</code> if the manager wants to put a maximum of points,
@@ -195,6 +221,10 @@ public class ProgrammaPunti implements ProgrammaFedelta {
     public void setPuntiSpesa(int puntiSpesa) {
         if (puntiSpesa < 1)
             throw new IllegalArgumentException("Illegal number of points.");
+        if(this.isMaxPunti()){
+            if(puntiSpesa > this.getNumeroPuntiMassimi())
+                throw new IllegalArgumentException("Illegal number of points");
+        }
         this.puntiSpesa = puntiSpesa;
     }
 
