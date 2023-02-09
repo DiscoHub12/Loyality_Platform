@@ -42,6 +42,7 @@ public class ProgrammaPunti implements ProgrammaFedelta {
      */
     public ProgrammaPunti(String nome, int puntiVIP, int puntiSpesa, double importoSpesa) {
         idProgramma++;
+        this.setNome(nome);
         this.setPuntiVIP(puntiVIP);
         this.setPuntiSpesa(puntiSpesa);
         this.setImportoSpesa(importoSpesa);
@@ -169,8 +170,12 @@ public class ProgrammaPunti implements ProgrammaFedelta {
      * @param puntiVIP new number of points to become VIP.
      */
     public void setPuntiVIP(int puntiVIP) {
-        if (puntiVIP < 1 || puntiVIP > numeroPuntiMassimi)
-            throw new IllegalArgumentException("Illegal number for VIP level.");
+        if (puntiVIP < 1)
+            throw new IllegalArgumentException("Illegal number for VIP point.");
+        if(this.isMaxPunti()){
+            if(puntiVIP > this.getNumeroPuntiMassimi())
+                throw new IllegalArgumentException("Illegal number of points");
+        }
         this.puntiVIP = puntiVIP;
     }
 
@@ -256,7 +261,14 @@ public class ProgrammaPunti implements ProgrammaFedelta {
                 "\nPunti VIP: " + puntiVIP +
                 "\nPunti Spesa: " + puntiSpesa +
                 "\nImporto Spesa: " + importoSpesa +
-                "\nCatalogo Premi: " + catalogoPremi +
-                "\nTipo Programma: " + tipoProgramma;
+                "\nTipo Programma: " + tipoProgramma +
+                "\nCatalogo Premi: " + toStringCatalogo();
+    }
+
+    private String toStringCatalogo(){
+        if(catalogoPremi != null){
+            return catalogoPremi.toString();
+        }
+        return null;
     }
 }
