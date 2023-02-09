@@ -1,6 +1,8 @@
 package loyality_platform_model.Models;
 
 
+import java.util.Objects;
+
 /**
  * Class that rapresents the concept of Award.
  * A Reward can be redeemed by a particular Costumer (member)
@@ -49,9 +51,9 @@ public class Premio {
     public Premio(String nome, boolean isPoints, int number) {
         this.nome = nome;
         if (isPoints) {
-            this.setPunti(punti);
+            this.setPunti(number);
         } else {
-            this.setLivelli(livelli);
+            this.setLivelli(number);
         }
     }
 
@@ -77,17 +79,29 @@ public class Premio {
         return this.punti;
     }
 
+    public int getLivelli() {
+        return this.livelli;
+    }
+
     public void setLivelli(int numeroLivelli) {
         if (numeroLivelli <= 0)
             throw new IllegalArgumentException("Illegal number of level.");
         this.livelli = numeroLivelli;
     }
 
-    public int getLivelli() {
-        return this.livelli;
-    }
-
+    /**
+     * This method allows you to update the prize
+     *
+     * @param nome     the new name for this Prize.
+     * @param isPoints indicates whether the reward is for a tiered or points program
+     * @param number   the number of points if points are needed to redeem the prize, otherwise levels
+     * @throws IllegalArgumentException if the Name of prize or number is not correct.
+     */
     public void updatePremio(String nome, boolean isPoints, int number) {
+        if (Objects.equals(nome, ""))
+            throw new IllegalArgumentException("Illegal Name for prize.");
+        if (number <= 0)
+            throw new IllegalArgumentException("Illegal number.");
         this.setNome(nome);
         if (isPoints) {
             this.setPunti(number);
