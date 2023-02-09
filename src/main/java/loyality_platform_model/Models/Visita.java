@@ -11,12 +11,12 @@ import java.util.Objects;
  * much other information.
  */
 public class Visita {
-
+    private static int contatoreVisita=0;
     /**
      * This attribute rapresents the unique
      * id of this Visit.
      */
-    private static int idVisita;
+    private int idVisita;
 
     /**
      * This attribute rapresents the
@@ -44,7 +44,7 @@ public class Visita {
      * @param data  the Date of this Visit.
      */
     public Visita(String luogo, Date data) {
-        idVisita++;
+        this.idVisita=++contatoreVisita;
         this.setData(data);
         this.setLuogo(luogo);
         this.completata = false;

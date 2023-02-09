@@ -10,7 +10,8 @@ public class Abbonamento {
     /**
      * attribute representing the id of the subscription
      */
-    private static int idAbbonamento;
+    private static int contatoreAbbonamento=0;
+    private int idAbbonamento;
     /**
      * attribute of type Date,
      * indicating the start date of the subscription
@@ -33,7 +34,7 @@ public class Abbonamento {
      * @param prezzo price of subscription
      */
     public Abbonamento(Date dataInizio, Date dataFine, double prezzo) {
-        idAbbonamento++;
+        this.idAbbonamento=++contatoreAbbonamento;
         this.dataInizio = dataInizio;
         this.dataFine = dataFine;
         this.setPrezzo(prezzo);
@@ -43,7 +44,7 @@ public class Abbonamento {
      * This method returns the subscription id.
      * @return the subscription id.
      */
-    public static int getIdAbbonamento() {
+    public int getIdAbbonamento() {
         return idAbbonamento;
     }
 

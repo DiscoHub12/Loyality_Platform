@@ -7,7 +7,8 @@ import java.util.Objects;
  * This class represents an SMS that may or may not have a predefined configuration.
  */
 public class SMS {
-    private static int idSMS;
+    private static int contatoreSMS=0;
+    private int idSMS;
     private String testo;
 
     private Date dataInvio;
@@ -17,7 +18,7 @@ public class SMS {
     public SMS(String testo, Date dataInvio) {
         if (Objects.equals(testo, "")){
             throw new IllegalArgumentException("Illegal text for sms.");}
-        idSMS++;
+        this.idSMS=++contatoreSMS;
         this.testo = testo;
         this.dataInvio = dataInvio;
 
