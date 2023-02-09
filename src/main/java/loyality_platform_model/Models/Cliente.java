@@ -45,7 +45,7 @@ public class Cliente {
     /**
      * This attribute contains the customer card
      */
-    private final Tessera tessera;
+    private Tessera tessera;
 
     /**
      * constructor allows you to create a new Client within the platform.
@@ -117,9 +117,27 @@ public class Cliente {
         return this.tessera;
     }
 
+    /**
+     * This method allows you to associate a new
+     * Card to the Customer, if he does not have one.
+     *
+     * @param tessera the new Card required by the Customer.
+     * @throws NullPointerException     if tessera is null.
+     * @throws IllegalArgumentException if the Customer already have Card.
+     */
+    public void setTessera(Tessera tessera) {
+        Objects.requireNonNull(tessera);
+        if (this.tessera != null)
+            throw new IllegalArgumentException("Customer already have a Card.");
+        this.tessera = tessera;
+    }
+
     private String getIdTessera() {
-        //Todo ricordarsi il metodo getIdTessera della tessera.
-        return "\nId Tessera : ";
+        String tmp = "";
+        if (this.tessera != null) {
+            tmp = String.valueOf("\nID CARD : " + this.tessera.getIdTessera());
+        } else tmp = "Customer don't have Card.";
+        return tmp;
     }
 
     /**
@@ -149,6 +167,5 @@ public class Cliente {
                 "\nEmail : " + this.getEmail() +
                 "\nTelefono : " + this.getTelefono() +
                 getIdTessera();
-        //Todo mettere in questo campo l'id della tessera con il metodo
     }
 }
