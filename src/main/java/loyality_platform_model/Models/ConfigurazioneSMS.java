@@ -6,7 +6,8 @@ import java.util.Date;
  * Class that represents the structure of an SMS
  */
 public class ConfigurazioneSMS {
-    private static int idConfigurazione;
+    private static int contatoreConfigurazione=0;
+    private int idConfigurazione;
     /**
      * attribute representing the text written in an SMS
      */
@@ -16,7 +17,7 @@ public class ConfigurazioneSMS {
      * @param testoConfigurato text configuration
      */
     public ConfigurazioneSMS(String testoConfigurato){
-        idConfigurazione++;
+        this.idConfigurazione=++contatoreConfigurazione;
         this.testoConfigurato=testoConfigurato;
 
     }

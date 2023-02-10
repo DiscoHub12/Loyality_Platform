@@ -4,11 +4,6 @@ import java.util.Date;
 import java.util.Objects;
 
 /**
- * IMPLEMENTED BY : Alessio Giacché.
- */
-
-
-/**
  * Class that rapresent the concept of a Visit.
  * A Visit can be booked by a specific Costumer , or by
  * an Employee once the Costumer has been identified.
@@ -16,12 +11,12 @@ import java.util.Objects;
  * much other information.
  */
 public class Visita {
-
+    private static int contatoreVisita=0;
     /**
      * This attribute rapresents the unique
      * id of this Visit.
      */
-    private static int idVisita;
+    private int idVisita;
 
     /**
      * This attribute rapresents the
@@ -34,13 +29,6 @@ public class Visita {
      * Place of this Visit.
      */
     private String luogo;
-
-    /**
-     * This attribute rapresents the
-     * Hour duration of this Visit.
-     */
-    private String ora;
-
     /**
      * This attribute rapresents the status
      * of the visit, so whther it was completed
@@ -54,63 +42,66 @@ public class Visita {
      *
      * @param luogo the Place of this Visit.
      * @param data  the Date of this Visit.
-     * @param ora   the Hour of this Visit.
      */
-    public Visita(String luogo, Date data, String ora) {
-        idVisita++;
+    public Visita(String luogo, Date data) {
+        this.idVisita=++contatoreVisita;
         this.setData(data);
         this.setLuogo(luogo);
-        this.setOra(ora);
         this.completata = false;
     }
-
+    /**
+     * method that returns the id of the visit
+     */
     public int getIdVisita() {
         return idVisita;
     }
-
+    /**
+     * method that returns the date of the visit
+     */
     public Date getData() {
         return data;
     }
-
+    /**
+     * method that update the date of the visit
+     */
     public void setData(Date data) {
         Objects.requireNonNull(data);
         this.data = data;
     }
-
+    /**
+     * method that returns the place of the visit
+     */
     public String getLuogo() {
         return luogo;
     }
-
+    /**
+     * method that update the place of the visit
+     */
     public void setLuogo(String luogo) {
         if (Objects.equals(luogo, ""))
             throw new IllegalArgumentException("Invalid Place");
         this.luogo = luogo;
     }
-
-    public String getOra() {
-        return ora;
-    }
-
-    public void setOra(String ora) {
-        if (Objects.equals(ora, ""))
-            throw new IllegalArgumentException("Invalid hour.");
-        this.ora = ora;
-    }
-
+    /**
+     * method that returns whether the visit is completed or not
+     * @return true if it's completed
+     * @return false if it it's not completed
+     */
     public boolean isCompletata() {
         return completata;
     }
-
+    /**
+     * method that set true or false on the boolean attribute
+     * indicating whether a visit is completed or not
+     */
     public void setCompletata(boolean completata) {
         this.completata = completata;
     }
 
-
     public String toString() {
-        return "\n\t VISIT DETAILS : " +
+        return "\n\t Visit details : " +
                 "\n Place : " + this.luogo +
                 "\n Date : " + this.data.toString() +
-                "\n Hour : " + this.ora +
                 "\n Complete : " + this.completata;
     }
 }

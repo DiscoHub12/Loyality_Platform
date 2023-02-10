@@ -8,7 +8,8 @@ public class PacchettoSMS {
     /**
      * attribute indicating the package id
      */
-    private static int idPacchettoSMS;
+    private static int contatorePacchettoSMS=0;
+    private int idPacchettoSMS;
     /**
      * attribute indicating the price of the package
      */
@@ -26,7 +27,7 @@ public class PacchettoSMS {
      */
 
     public PacchettoSMS(double prezzo, int numeroMessaggi) {
-        idPacchettoSMS++;
+        this.idPacchettoSMS=++contatorePacchettoSMS;
         this.prezzo = prezzo;
         this.numeroMessaggi = numeroMessaggi;
     }

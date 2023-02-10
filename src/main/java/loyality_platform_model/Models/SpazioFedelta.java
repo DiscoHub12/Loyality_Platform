@@ -17,12 +17,12 @@ import java.util.Objects;
  * much other information.
  */
 public class SpazioFedelta {
-
+    private static int contatoreSpazioFedelta=0;
     /**
      * This attribute rapresents the
      * unique Id for this Loyality Space.
      */
-    private static int idSpazioFedelta;
+    private int idSpazioFedelta;
 
     /**
      * This attribute rapresents the
@@ -66,7 +66,7 @@ public class SpazioFedelta {
      *                                  wrong.
      */
     public SpazioFedelta(String nome, String indirizzo, String numeroTelefono, String email) {
-        idSpazioFedelta++;
+        this.idSpazioFedelta=++contatoreSpazioFedelta;
         if (Objects.equals(nome, ""))
             throw new IllegalArgumentException("Illegal name for Loyalty space.");
         this.nome = nome;
