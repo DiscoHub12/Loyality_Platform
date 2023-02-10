@@ -14,7 +14,9 @@ import java.util.Set;
 
 public class Tessera {
 
-    private int idTessera;
+    private final int idTessera;
+
+    private static int contatoreTessera = 0;
 
     private final int idCliente;
     private final Set<ProgrammaFedelta> programmiFedelta;
@@ -28,7 +30,7 @@ public class Tessera {
     private  boolean isVipLivelli;
 
     public Tessera(int idCliente) {
-        idTessera++;
+        this.idTessera = contatoreTessera++;
         this.idCliente = idCliente;
         this.programmiFedelta = new HashSet<>();
         this.punti = 0;

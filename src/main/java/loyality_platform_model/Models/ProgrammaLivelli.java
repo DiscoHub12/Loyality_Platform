@@ -16,7 +16,9 @@ import java.util.Objects;
  */
 public class ProgrammaLivelli implements ProgrammaFedelta {
 
-    private static int idProgramma;
+    private final int idProgramma;
+
+    private static int contatorePL = 0;
 
     private String nome;
 
@@ -34,14 +36,14 @@ public class ProgrammaLivelli implements ProgrammaFedelta {
 
     private final Tipo tipoProgramma = Tipo.PROGRAMMALIVELLI;
 
-    public ProgrammaLivelli(String nome, int massimoLivelli, int livelloVip, Map<Integer, Integer> policyLivelli, int puntiSpesa, double importoSpesa) {
-        idProgramma++;
+    public ProgrammaLivelli(String nome, int massimoLivelli, int livelloVip, Map<Integer, Integer> policy, int puntiSpesa, double importoSpesa) {
+        this.idProgramma = contatorePL++;
         this.setNome(nome);
         this.setMassimoLivelli(massimoLivelli);
         this.setLivelloVip(livelloVip);
         this.setPuntiSpesa(puntiSpesa);
         this.setImportoSpesa(importoSpesa);
-        this.policyLivelli = policyLivelli ;
+        this.policyLivelli = policy ;
         this.dataAttivazione = null;
         this.catalogoPremi= null;
     }
@@ -263,17 +265,25 @@ public class ProgrammaLivelli implements ProgrammaFedelta {
      * by checking the id, and the name.
      * Returns true if the object is equal, false otherwise.
      *
-     * @param object the Object to compare.
+     * @param o the Object to compare.
      * @return true if is equals, false otherwise.
      */
-    public boolean equals(Object object) {
-        if (object == null)
-            return false;
-        if (object instanceof ProgrammaPunti tmp) {
-            return this.getIdProgramma() == tmp.getIdProgramma() && Objects.equals(this.getNome(), tmp.getNome());
-        }
-        return false;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProgrammaLivelli that = (ProgrammaLivelli) o;
+        return massimoLivelli == that.massimoLivelli &&
+                livelloVip == that.livelloVip &&
+                puntiSpesa == that.puntiSpesa &&
+                Double.compare(that.importoSpesa, importoSpesa) == 0 &&
+                Objects.equals(nome, that.nome) &&
+                Objects.equals(dataAttivazione, that.dataAttivazione) &&
+                Objects.equals(policyLivelli, that.policyLivelli) &&
+                tipoProgramma == that.tipoProgramma &&
+                Objects.equals(catalogoPremi, that.catalogoPremi);
     }
+
 
     @Override
     public String toString() {
