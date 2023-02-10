@@ -24,7 +24,7 @@ public class SMS {
 
     }
     public SMS(ConfigurazioneSMS configurazione, Date dataInvio){
-        idSMS++;
+        this.idSMS=++contatoreSMS;
         this.testo= configurazione.getTestoConfigurato();
         this.dataInvio=dataInvio;
     }
