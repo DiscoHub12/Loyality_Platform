@@ -1,7 +1,8 @@
 package loyality_platform_model.Models;
 
+import java.util.Objects;
+
 /**
- * IMPLEMENTED BY : Sofia Scattolini.
  *
  * Class representing the manager of a company.
  * The manager of the company is able to run a series
@@ -11,14 +12,16 @@ package loyality_platform_model.Models;
  */
 public class GestorePuntoVendita {
 
-    private static int idGestorePuntoVendita;
+    private static int contatoreGestorePV = 0;
+
+    private final int idGestorePuntoVendita;
 
     private final String nome, cognome;
 
     private String email;
 
     public GestorePuntoVendita(String nome, String cognome, String email) {
-        idGestorePuntoVendita++;
+        this.idGestorePuntoVendita = contatoreGestorePV++;
         this.nome = nome;
         this.cognome = cognome;
         this.setEmail(email);
@@ -28,7 +31,7 @@ public class GestorePuntoVendita {
      * This method returns the manager id
      * @return the manager id.
      */
-    public static int getIdGestorePuntoVendita() {
+    public int getIdGestorePuntoVendita() {
         return idGestorePuntoVendita;
     }
 
@@ -61,15 +64,16 @@ public class GestorePuntoVendita {
      * @param email new mail.
      */
     public void setEmail(String email) {
+        if (Objects.equals(email, ""))
+            throw new IllegalArgumentException("Email not valid.");
         this.email = email;
     }
 
     @Override
     public String toString() {
-        return "GestorePuntoVendita{" +
-                "nome='" + nome + '\'' +
-                ", cognome='" + cognome + '\'' +
-                ", email='" + email + '\'' +
-                '}';
+        return "\t-DETAILS GESTORE PUNTO VENDITA-" +
+                "\nnome: " + nome +
+                "\ncognome: " + cognome +
+                "\nemail: " + email;
     }
 }
