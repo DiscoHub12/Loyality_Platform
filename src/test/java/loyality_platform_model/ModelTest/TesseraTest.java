@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.HashSet;
 import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 
 class TesseraTest {
@@ -16,8 +17,12 @@ class TesseraTest {
     @Test
     public void testClass() {
         Tessera tessera = new Tessera(cliente.getIdCliente());
+        Tessera tessera1 = new Tessera(cliente.getIdCliente());
+        System.out.println("Id tessera " + tessera.getIdTessera() + "Id tessera1 " + tessera1.getIdTessera());
         assertEquals(tessera.getIdCliente(), cliente.getIdCliente());
         assertEquals(0, tessera.getPunti());
+        assertFalse(tessera.isVipLivelli());
+        assertFalse(tessera.isVipPunti());
         System.out.println("Numero punti " + tessera.getPunti());
         ProgrammaFedelta programmaFedelta = new ProgrammaPunti("Prova", 100, 80, 1, 10);
         tessera.addPogrammaFedelta(programmaFedelta);

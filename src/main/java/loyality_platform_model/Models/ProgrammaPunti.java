@@ -14,7 +14,9 @@ import java.util.*;
  */
 public class ProgrammaPunti implements ProgrammaFedelta {
 
-    private static int idProgramma;
+    private final int idProgramma;
+
+    private static int contatorePP = 0;
 
     private String nome;
 
@@ -41,7 +43,7 @@ public class ProgrammaPunti implements ProgrammaFedelta {
      * and invokes set methods which contain controls within them.
      */
     public ProgrammaPunti(String nome, int puntiVIP, int puntiSpesa, double importoSpesa) {
-        idProgramma++;
+        this.idProgramma = contatorePP++;
         this.setNome(nome);
         this.setPuntiVIP(puntiVIP);
         this.setPuntiSpesa(puntiSpesa);
@@ -59,14 +61,13 @@ public class ProgrammaPunti implements ProgrammaFedelta {
      * and invokes set methods which contain controls within them.
      */
     public ProgrammaPunti(String nome, int numeroPuntiMassimi, int puntiVIP, int puntiSpesa, double importoSpesa) {
-        idProgramma++;
+        this.idProgramma = contatorePP++;
         this.setNome(nome);
         this.setNumeroPuntiMassimi(numeroPuntiMassimi);
         this.setPuntiVIP(puntiVIP);
         this.setPuntiSpesa(puntiSpesa);
         this.setImportoSpesa(importoSpesa);
         this.maxPunti = true;
-        this.numeroPuntiMassimi=0;
         this.catalogoPremi = null;
         this.dataAttivazione = null;
     }
