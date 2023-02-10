@@ -5,11 +5,6 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * IMPLEMENTED BY : Alessio Giacché.
- */
-
-
-/**
  * Class that rapresent the concept of Loyalty Space.
  * This Loyality Space is an Object that is container
  * within any Company, in fact it contains Company
@@ -23,13 +18,11 @@ public class SpazioFedelta {
      * unique Id for this Loyality Space.
      */
     private int idSpazioFedelta;
-
     /**
      * This attribute rapresents the
      * Name for this Loyality Space.
      */
     private  String nome;
-
     /**
      * This attribute rapresents the
      * address for this Loyality Space.
@@ -47,12 +40,6 @@ public class SpazioFedelta {
      * address for this Loyality Space.
      */
     private String email;
-
-    /**
-     * This attribute rapresents the list
-     * about external link for this Loyality Space.
-     */
-    private final List<String> linkEsterni;
 
     /**
      * Constructor that allow to create a Loyality
@@ -73,10 +60,9 @@ public class SpazioFedelta {
         this.setIndirizzo(indirizzo);
         this.setNumeroTelefono(numeroTelefono);
         this.setEmail(email);
-        this.linkEsterni = new ArrayList<>();
     }
 
-    public int getId() {
+    public int getIdSpazioFedelta() {
         return idSpazioFedelta;
     }
 
@@ -118,41 +104,12 @@ public class SpazioFedelta {
         this.email = email;
     }
 
-    public List<String> getLinkEsterni() {
-        return this.linkEsterni;
-    }
-
-    public void aggiungiLinkEsterno(String link) {
-        if (Objects.equals(link, ""))
-            throw new IllegalArgumentException("Invalid link.");
-        if (linkEsterni.contains(link))
-            throw new IllegalArgumentException("Link already exist.");
-        linkEsterni.add(link);
-    }
-
-    public void rimuoviLinkEsterno(String link) {
-        if (Objects.equals(link, ""))
-            throw new IllegalArgumentException("Invalid link.");
-        if (!linkEsterni.contains(link))
-            throw new IllegalArgumentException("This link isn't present to the list.");
-        linkEsterni.remove(link);
-    }
-
-    private String toStringLinkEsterni() {
-        StringBuilder tmp = new StringBuilder();
-        for (String s : this.linkEsterni) {
-            tmp.append("\n-").append(s);
-        }
-        return tmp.toString();
-    }
-
     public String toString() {
         return "\n\tLOYALITY SPACE :" +
                 "\n Name : " + this.nome +
                 "\n Address : " + this.indirizzo +
                 "\n Telephone Number : " + this.numeroTelefono +
                 "\n Email : " + this.email +
-                "\n External Links : " +
-                "\n" + toStringLinkEsterni();
+                "\n External Links : ";
     }
 }
