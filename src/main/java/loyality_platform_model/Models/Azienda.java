@@ -12,6 +12,7 @@ import java.util.Set;
 
 public class Azienda {
 
+
     private static int contatoreAzienda = 0;
 
     /**

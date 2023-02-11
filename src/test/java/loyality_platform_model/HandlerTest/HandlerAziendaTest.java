@@ -46,6 +46,7 @@ public class HandlerAziendaTest {
     /**
      * PROGRAMMI FEDELTA PER TEST
      */
+
     private final Map<Integer, Integer> policy= new HashMap<>();
     private final ProgrammaFedelta programmaFedeltaPunti = new ProgrammaPunti("ProgrammaUno", 100, 2, 10);
     private final ProgrammaFedelta programmaFedeltaPunti1 = new ProgrammaPunti("ProgrammaUno", 100, 2, 10);

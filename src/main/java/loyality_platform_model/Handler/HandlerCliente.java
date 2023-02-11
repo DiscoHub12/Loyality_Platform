@@ -17,6 +17,7 @@ import java.util.Set;
  */
 public class HandlerCliente {
 
+
     /**
      * This attribute represents the DataBase.
      */

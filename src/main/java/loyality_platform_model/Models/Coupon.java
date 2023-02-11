@@ -11,6 +11,7 @@ import java.util.Objects;
  */
 public class Coupon {
 
+
     /**
      * This attribute rapresents the
      * unique id of this Coupon.

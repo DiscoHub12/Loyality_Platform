@@ -16,6 +16,7 @@ import java.util.Objects;
  */
 public class Dipendente {
 
+
     /**
      * This attribute represent the id for
      * this Employee.

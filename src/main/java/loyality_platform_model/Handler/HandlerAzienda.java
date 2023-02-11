@@ -12,6 +12,7 @@ import java.util.Set;
  */
 public class HandlerAzienda {
 
+
     /**
      * This attribute represents the DataBase.
      */

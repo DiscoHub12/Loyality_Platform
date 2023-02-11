@@ -12,6 +12,7 @@ import java.util.Objects;
  */
 public class Cliente {
 
+
     /**
      * This attribute rapresents the
      * unique id for this customer.

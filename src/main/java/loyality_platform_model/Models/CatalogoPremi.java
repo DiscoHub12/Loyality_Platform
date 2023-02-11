@@ -14,6 +14,7 @@ import java.util.Set;
  */
 public class CatalogoPremi {
 
+
     /**
      * This attribute represents the
      * unique id of this Reward Catalogue.
