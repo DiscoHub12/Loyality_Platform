@@ -15,11 +15,6 @@ public class DBMS {
      */
     private static DBMS instance;
 
-    /**
-     * This attribute rapresent the name of this DataBase.
-     */
-    private final String nameDb;
-
     private final Set<Azienda> aziendeIscritte;
 
     private final Map<Azienda, Set<Dipendente>> dipendentiAzienda;
@@ -53,8 +48,7 @@ public class DBMS {
 
 
 
-    public DBMS(String nameDb) {
-        this.nameDb = nameDb;
+    private DBMS() {
         this.aziendeIscritte = new HashSet<>();
         this.dipendentiAzienda = new HashMap<>();
         this.programmiAzienda = new HashMap<>();
@@ -72,13 +66,9 @@ public class DBMS {
 
     public static DBMS getInstance() {
         if (instance == null) {
-            instance = new DBMS(getInstance().nameDb);
+            instance = new DBMS();
         }
         return instance;
-    }
-
-    public String getNameDb() {
-        return nameDb;
     }
 
     public Set<Azienda> getAziendeIscritte() {
