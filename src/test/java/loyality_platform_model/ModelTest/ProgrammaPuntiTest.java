@@ -14,18 +14,18 @@ public class ProgrammaPuntiTest {
 
     @Test
     public void testClass() {
-        ProgrammaPunti programmaPunti = new ProgrammaPunti("Programma0", 80, 5, 20);
+        ProgrammaPunti programmaPunti = new ProgrammaPunti("Programma0", 100,80, 5, 20);
         assertEquals("Programma0", programmaPunti.getNome());
         assertEquals(0, programmaPunti.getIdProgramma());
         assertEquals(Tipo.PROGRAMMAPUNTI, programmaPunti.getTipoProgramma());
-        assertFalse(programmaPunti.isMaxPunti());
+        assertTrue(programmaPunti.isMaxPunti());
         assertNull(programmaPunti.getDataAttivazione());
         System.out.println(programmaPunti.getIdProgramma());
         System.out.println(programmaPunti);
         programmaPunti.setNome("Programma0.0");
         assertEquals("Programma0.0", programmaPunti.getNome());
         System.out.println(programmaPunti);
-        assertEquals(0, programmaPunti.getNumeroPuntiMassimi());
+        assertEquals(100, programmaPunti.getNumeroPuntiMassimi());
         assertEquals(80, programmaPunti.getPuntiVIP());
         assertEquals(5, programmaPunti.getPuntiSpesa());
         assertEquals(20, programmaPunti.getImportoSpesa());
@@ -35,8 +35,6 @@ public class ProgrammaPuntiTest {
         assertEquals(2, programmaPunti.getPuntiSpesa());
         programmaPunti.setImportoSpesa(10);
         assertEquals(10, programmaPunti.getImportoSpesa());
-        programmaPunti.setMaxPunti(true);
-        programmaPunti.setNumeroPuntiMassimi(100);
         assertNull(programmaPunti.getCatalogoPremi());
         assertEquals(programmaPunti, programmaPunti.getProgrammaPunti());
         assertNull(programmaPunti.getProgrammaLivelli());
@@ -65,14 +63,24 @@ public class ProgrammaPuntiTest {
         }
 
 
-        ProgrammaPunti programmaPunti1 = new ProgrammaPunti("Programma1", 100, 80, 5, 10);
+        ProgrammaPunti programmaPunti1 = new ProgrammaPunti("Programma1", 0, 80, 5, 10);
         assertEquals(programmaPunti1, programmaPunti1.getProgrammaPunti());
         assertNull(programmaPunti1.getProgrammaLivelli());
-        assertTrue(programmaPunti1.isMaxPunti());
-        assertEquals(100, programmaPunti1.getNumeroPuntiMassimi());
+        assertFalse(programmaPunti1.isMaxPunti());
+        assertEquals(0, programmaPunti1.getNumeroPuntiMassimi());
         assertEquals(1, programmaPunti1.getIdProgramma());
         System.out.println(programmaPunti1);
         System.out.println(programmaPunti1.getIdProgramma());
+        programmaPunti1.setNumeroPuntiMassimi(200);
+        assertTrue(programmaPunti1.isMaxPunti());
+        assertEquals(200, programmaPunti1.getNumeroPuntiMassimi());
+        System.out.println(programmaPunti1);
+
+        try{
+            programmaPunti1.setNumeroPuntiMassimi(-1);
+        }catch (IllegalArgumentException e){
+            System.out.println(e.getMessage());
+        }
 
 
     }
