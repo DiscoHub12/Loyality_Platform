@@ -38,11 +38,14 @@ public class HandlerMessaggi {
      * @return new sms.
      */
     public SMS creaSMS(String testo, String oraInvio) {
-        if (Objects.equals(testo, ""))
-            throw new IllegalArgumentException("Illegal text for sms.");
-        if (Objects.equals(oraInvio, ""))
-            throw new IllegalArgumentException("Illegal ora for sms.");
-        return new SMS(testo, oraInvio);
+        /**
+         if (Objects.equals(testo, ""))
+         throw new IllegalArgumentException("Illegal text for sms.");
+         if (Objects.equals(oraInvio, ""))
+         throw new IllegalArgumentException("Illegal ora for sms.");
+         return new SMS(testo, oraInvio);
+         */
+        return null;
     }
 
     /**
@@ -52,10 +55,12 @@ public class HandlerMessaggi {
      * @param cliente customer who must receive the SMS.
      */
     public void inviaSMS(SMS sms, Cliente cliente) {
-        Objects.requireNonNull(sms);
-        Objects.requireNonNull(cliente);
-        SMS sms1 = creaSMS(sms.getTesto(), sms.getOraInvio());
-        HandlerCliente.getInstance(cliente).getSMSCliente().add(sms1);
+        /**
+         Objects.requireNonNull(sms);
+         Objects.requireNonNull(cliente);
+         SMS sms1 = creaSMS(sms.getTesto(), sms.getOraInvio());
+         HandlerCliente.getInstance(cliente).getSMSCliente().add(sms1);
+         */
     }
 
     /**
@@ -66,12 +71,14 @@ public class HandlerMessaggi {
      */
 
     public void inviaSmsGenerale(SMS sms, Set<Cliente> clienti) {
-        Objects.requireNonNull(sms);
-        Objects.requireNonNull(clienti);
-        SMS sms1 = creaSMS(sms.getTesto(), sms.getOraInvio());
-        for (Cliente cliente : clienti) {
-            HandlerCliente.getInstance(cliente).getSMSCliente().add(sms1);
-        }
+        /**
+         Objects.requireNonNull(sms);
+         Objects.requireNonNull(clienti);
+         SMS sms1 = creaSMS(sms.getTesto(), sms.getOraInvio());
+         for (Cliente cliente : clienti) {
+         HandlerCliente.getInstance(cliente).getSMSCliente().add(sms1);
+         }
+         */
     }
 
     /**
@@ -83,13 +90,15 @@ public class HandlerMessaggi {
      */
 
     public void inviaSMSConfigurato(SMS sms, ConfigurazioneSMS configurazioneSMS, Cliente cliente) {
-        Objects.requireNonNull(sms);
-        Objects.requireNonNull(configurazioneSMS);
-        Objects.requireNonNull(cliente);
-        sms.setConfigurato(true);
-        sms.setMessaggioConfigurato(configurazioneSMS);
-        SMS sms1 = creaSMS(sms.getTesto(), sms.getOraInvio());
-        HandlerCliente.getInstance(cliente).getSMSCliente().add(sms1);
+        /**
+         *  Objects.requireNonNull(sms);
+         *         Objects.requireNonNull(configurazioneSMS);
+         *         Objects.requireNonNull(cliente);
+         *         sms.setConfigurato(true);
+         *         sms.setMessaggioConfigurato(configurazioneSMS);
+         *         SMS sms1 = creaSMS(sms.getTesto(), sms.getOraInvio());
+         *         HandlerCliente.getInstance(cliente).getSMSCliente().add(sms1);
+         */
     }
 
     /**
@@ -101,6 +110,7 @@ public class HandlerMessaggi {
      */
 
     public void inviaSMSGeneraleConfigurato(SMS sms, ConfigurazioneSMS configurazioneSMS, Set<Cliente> clienti) {
+        /**
         Objects.requireNonNull(sms);
         Objects.requireNonNull(clienti);
         Objects.requireNonNull(configurazioneSMS);
@@ -110,7 +120,6 @@ public class HandlerMessaggi {
         for (Cliente cliente : clienti) {
             HandlerCliente.getInstance(cliente).getSMSCliente().add(sms1);
         }
+         */
     }
 }
-    }
-            }

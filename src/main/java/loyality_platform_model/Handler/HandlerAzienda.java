@@ -1,13 +1,10 @@
 package loyality_platform_model.Handler;
 
 import loyality_platform_model.DBMS.DBMS;
-import loyality_platform_model.Models.Azienda;
+import loyality_platform_model.Models.*;
 
 import java.util.Objects;
 import java.util.Set;
-
-import loyality_platform_model.Models.*;
-
 
 /**
  * Classes that represent capable a company manager
@@ -15,11 +12,16 @@ import loyality_platform_model.Models.*;
  */
 public class HandlerAzienda {
 
+    /**
+     * This attribute represents the DataBase.
+     */
     private final DBMS dbms;
 
 
-    public HandlerAzienda(Azienda azienda) {
-        Objects.requireNonNull(azienda);
+    /**
+     * Constructor that create manager for Company (Azienda)
+     */
+    public HandlerAzienda() {
         this.dbms = DBMS.getInstance();
     }
 
@@ -39,6 +41,21 @@ public class HandlerAzienda {
         return gestore;
     }
 
+    /**
+     * This method returns the list of employees of the
+     * company passed as parameters with the id, if it is
+     * registered on the Platform.
+     *
+     * @param idAzienda the id of Company (Azienda).
+     * @return a list of Employee of the Company (Azienda).
+     */
+    public Set<Dipendente> getDipendentiAzienda(int idAzienda) {
+        Azienda azienda = getAziendaById(idAzienda);
+        if (azienda != null) {
+            return this.dbms.getDipendentiAzienda().get(azienda);
+        }
+        return null;
+    }
 
     /**
      * This method allows you to create a new employee
@@ -225,4 +242,5 @@ public class HandlerAzienda {
         }
         return company;
     }
+
 }
