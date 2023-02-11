@@ -12,7 +12,6 @@ import java.util.Set;
  */
 public class HandlerAzienda {
 
-
     /**
      * This attribute represents the DataBase.
      */
@@ -53,7 +52,8 @@ public class HandlerAzienda {
     public Set<Dipendente> getDipendentiAzienda(int idAzienda) {
         Azienda azienda = getAziendaById(idAzienda);
         if (azienda != null) {
-            return this.dbms.getDipendentiAzienda().get(azienda);
+            if (!this.dbms.getDipendentiAzienda().get(azienda).isEmpty())
+                return this.dbms.getDipendentiAzienda().get(azienda);
         }
         return null;
     }
@@ -186,7 +186,8 @@ public class HandlerAzienda {
         Set<ProgrammaFedelta> programmi = null;
         Azienda azienda = getAziendaById(idAzienda);
         if (azienda != null)
-            programmi = this.dbms.getProgrammiAzienda().get(azienda);
+            if (!this.dbms.getProgrammiAzienda().get(azienda).isEmpty())
+                programmi = this.dbms.getProgrammiAzienda().get(azienda);
         return programmi;
     }
 
@@ -217,7 +218,11 @@ public class HandlerAzienda {
      */
     public Set<Cliente> getClientiAzienda(int idAzienda, Coalizione coalizione) {
         Objects.requireNonNull(coalizione);
-        //Todo implementare, manca coalizione.
+        Azienda azienda = getAziendaById(idAzienda);
+        if (azienda != null) {
+            if (coalizione.getClientiIscritti().get(azienda).isEmpty())
+                return coalizione.getClientiIscritti().get(azienda);
+        }
         return null;
     }
 
