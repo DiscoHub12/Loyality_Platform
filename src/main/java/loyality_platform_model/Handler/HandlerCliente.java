@@ -1,6 +1,5 @@
 package loyality_platform_model.Handler;
 
-import ch.qos.logback.core.net.server.Client;
 import loyality_platform_model.DBMS.DBMS;
 import loyality_platform_model.Models.*;
 
@@ -16,7 +15,6 @@ import java.util.Set;
  * that can be done within the customer's profile.
  */
 public class HandlerCliente {
-
 
     /**
      * This attribute represents the DataBase.
@@ -58,20 +56,9 @@ public class HandlerCliente {
      *
      * @param idTessera the card code about the Costumer to identify.
      * @return a Costumer object if exists, null otherwise.
-     * @throws IllegalArgumentException if the idTessera is not correct
      */
     public Cliente identificaClienteTessera(int idTessera) {
-        if (idTessera <= 0)
-            throw new IllegalArgumentException("Illegal number of Costumer's Card.");
-        for (Tessera tessera : this.dbms.getTessereClienti()) {
-            if (tessera.getIdTessera() == idTessera) {
-                for (Cliente cliente : this.dbms.getClientiIscritti()) {
-                    if (cliente.getIdCliente() == tessera.getIdCliente())
-                        return cliente;
-                }
-            }
-        }
-        return null;
+        return getClienteByCardId(idTessera);
     }
 
     /**
@@ -80,17 +67,9 @@ public class HandlerCliente {
      *
      * @param idCliente the id about the Costumer to identify;
      * @return a Costumer object if exists, null otherwise.
-     * @throws IllegalArgumentException if the idCliente is not correct.
      */
     public Cliente identificaClienteCodice(int idCliente) {
-        if (idCliente <= 0)
-            throw new IllegalArgumentException("Illegal id for the Costumer.");
-        for (Cliente cliente : this.dbms.getClientiIscritti()) {
-            if (cliente.getIdCliente() == idCliente) {
-                return cliente;
-            }
-        }
-        return null;
+        return getClienteById(idCliente);
     }
 
     /**
@@ -100,7 +79,6 @@ public class HandlerCliente {
      *
      * @param idCliente the id about the Costumer.
      * @return the Card if the Costumer has one, null otherwise.
-     * @throws IllegalArgumentException if the idCliente is not correct.
      */
     public Tessera getTesseraCliente(int idCliente) {
         if (idCliente <= 0)
@@ -119,15 +97,12 @@ public class HandlerCliente {
      *
      * @param idCliente the id about the Costumer.
      * @return a list of SMS received from Costumer.
-     * @throws IllegalArgumentException if the idCliente is not correct.
      */
     public Set<SMS> getSMSCliente(int idCliente) {
-        if (idCliente <= 0)
-            throw new IllegalArgumentException("Illegal id for the Customer.");
-        for (Cliente cliente : this.dbms.getSMSCliente().keySet()) {
-            if (cliente.getIdCliente() == idCliente) {
+        Cliente cliente = getClienteById(idCliente);
+        if (cliente != null) {
+            if (!this.dbms.getSMSCliente().get(cliente).isEmpty())
                 return this.dbms.getSMSCliente().get(cliente);
-            }
         }
         return null;
     }
@@ -139,15 +114,12 @@ public class HandlerCliente {
      *
      * @param idCliente the id about the Costumer.
      * @return a list of Visits about the Costumer.
-     * @throws IllegalArgumentException if the idCliente is not correct.
      */
     public Set<Visita> getVisiteCliente(int idCliente) {
-        if (idCliente <= 0)
-            throw new IllegalArgumentException("Illegal id for the Customer.");
-        for (Cliente cliente : this.dbms.getVisiteCliente().keySet()) {
-            if (cliente.getIdCliente() == idCliente) {
+        Cliente cliente = getClienteById(idCliente);
+        if (cliente != null) {
+            if (!this.dbms.getVisiteCliente().get(cliente).isEmpty())
                 return this.dbms.getVisiteCliente().get(cliente);
-            }
         }
         return null;
     }
@@ -160,15 +132,12 @@ public class HandlerCliente {
      *
      * @param idCliente the id about the Customer.
      * @return a list of rewards received froma  particular Customer.
-     * @throws IllegalArgumentException if the idCliente is not correct.
      */
     public Set<Premio> getPremiCliente(int idCliente) {
-        if (idCliente <= 0)
-            throw new IllegalArgumentException("Illegal id for the Customer.");
-        for (Cliente cliente : this.dbms.getPremiCliente().keySet()) {
-            if (cliente.getIdCliente() == idCliente) {
+        Cliente cliente = getClienteById(idCliente);
+        if (cliente != null) {
+            if (!this.dbms.getPremiCliente().get(cliente).isEmpty())
                 return this.dbms.getPremiCliente().get(cliente);
-            }
         }
         return null;
     }
@@ -180,15 +149,12 @@ public class HandlerCliente {
      *
      * @param idCliente the id about the Customer.
      * @return a list of Coupons held by the Costumer, if any exists.
-     * @throws IllegalArgumentException if the idCliente is not correct.
      */
     public Set<Coupon> getCouponCliente(int idCliente) {
-        if (idCliente <= 0)
-            throw new IllegalArgumentException("Illegal id for the Customer");
-        for (Cliente cliente : this.dbms.getCouponCliente().keySet()) {
-            if (cliente.getIdCliente() == idCliente) {
+        Cliente cliente = getClienteById(idCliente);
+        if (cliente != null) {
+            if (!this.dbms.getCouponCliente().get(cliente).isEmpty())
                 return this.dbms.getCouponCliente().get(cliente);
-            }
         }
         return null;
     }
@@ -214,22 +180,24 @@ public class HandlerCliente {
                     if (coupon != null) {
                         if (importoSpeso >= coupon.getValoreSconto()) {
                             importo = importoSpeso - coupon.getValoreSconto();
+
                             //Todo richiama HandlerTessera passando l'importo.
                             //Todo richiama HandlerPremi per togliere il Coupon del Cliente al DB.
                             return 1;
-                        }else {
+                        } else {
                             importo = importoSpeso;
                             //Todo richiama HandlerTessera passando l'importo.
                             //Todo richiama HandlerPremi per togliere il Coupon del Cliente al DB.
                             return 1;
                         }
-                    }else {
+                    } else {
                         importo = importoSpeso;
                         //Todo richiama HandlerTessera passando l'importo.
                         //Todo richiama HandlerPremi per togliere il Coupon del Cliente al DB.
                         return 1;
                     }
-                } return 0;
+                }
+                return 0;
             }
         }
         return -1;
@@ -255,5 +223,47 @@ public class HandlerCliente {
                 }
             }
         }
+    }
+
+    /**
+     * This private method allows to simplify the code,
+     * and avoid duplicate code. It has the purpose of contacting the
+     * DataBase to identify a certain Client from its unique ID.
+     * If the customer is identified, the Customer is returned, otherwise a null value is returned.
+     *
+     * @param idCliente the id unique for the Customer to identify.
+     * @return the Customer if exist and if it registered into the platform, null value otherwise.
+     */
+    private Cliente getClienteById(int idCliente) {
+        if (idCliente <= 0)
+            throw new IllegalArgumentException("Illegal id for the Customer.");
+        for (Cliente cliente : this.dbms.getClientiIscritti()) {
+            if (cliente.getIdCliente() == idCliente)
+                return cliente;
+        }
+        return null;
+    }
+
+    /**
+     * This private method allows to simplify the code,
+     * and avoid duplicate code. It has the purpose of contacting the
+     * DataBase to identify a certain Client from its unique id Card, if exist and if it possesses.
+     * If the customer is identified, the Customer is returned, otherwise a null value is returned.
+     *
+     * @param idTessera the id unique for the Customer to identify.
+     * @return the Customer if exist and if it registered into the platform, null value otherwise.
+     */
+    private Cliente getClienteByCardId(int idTessera) {
+        if (idTessera <= 0)
+            throw new IllegalArgumentException("Illegal id Card for identify the Customer.");
+        for (Tessera tessera : this.dbms.getTessereClienti()) {
+            if (tessera.getIdTessera() == idTessera) {
+                for (Cliente cliente : this.dbms.getClientiIscritti()) {
+                    if (tessera.getIdCliente() == cliente.getIdCliente())
+                        return cliente;
+                }
+            }
+        }
+        return null;
     }
 }
