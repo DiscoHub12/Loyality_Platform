@@ -58,7 +58,7 @@ public class HandlerVisite {
      * @param visita  the Visit.
      * @throws NullPointerException     if the <cliente> or <visita> is null.
      * @throws IllegalArgumentException if the Visit is already present into the Costumer's profile.
-     */
+
     public void aggiungiVisita(Cliente cliente, Visita visita) {
         Objects.requireNonNull(cliente);
         Objects.requireNonNull(visita);
@@ -79,7 +79,7 @@ public class HandlerVisite {
      * @param ora     the new hour (time) of the Visit.
      * @throws NullPointerException     if the <cliente> or <visita> or <data> is null.
      * @throws IllegalArgumentException if the location or time is incorrect or the visit don't exist.
-     */
+
     public void modificaVisita(Cliente cliente, Visita visita, String luogo, Date data, String ora) {
         Objects.requireNonNull(cliente);
         Objects.requireNonNull(visita);
@@ -103,7 +103,7 @@ public class HandlerVisite {
      * @param visita  the Visit to remove.
      * @throws NullPointerException     if the <cliente> or <visita> is null.
      * @throws IllegalArgumentException if the Costumers don't have this Visit.
-     */
+
     public void rimuoviVisita(Cliente cliente, Visita visita) {
         Objects.requireNonNull(cliente);
         Objects.requireNonNull(visita);
@@ -119,7 +119,7 @@ public class HandlerVisite {
      * @param cliente         the Costumer to send the SMS.
      * @param sms             the SMS.
      * @throws NullPointerException if the <gestoreMessaggi> or <cliente> or <sms > is null.
-     */
+
     public void inviaSMS(HandlerMessaggi gestoreMessaggi, Cliente cliente, SMS sms) {
         Objects.requireNonNull(gestoreMessaggi);
         Objects.requireNonNull(cliente);
@@ -127,4 +127,7 @@ public class HandlerVisite {
         gestoreMessaggi.inviaSMS(sms, cliente);
     }
 
+}
+
+     */
 }

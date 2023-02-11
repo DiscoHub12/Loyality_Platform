@@ -13,6 +13,7 @@ import java.util.Set;
  * Classes representing a capable message manager
  * to send text messages to a single customer or to a group of customers.
  */
+
 public class HandlerMessaggi {
 
     //TODO rivedere
@@ -33,7 +34,7 @@ public class HandlerMessaggi {
      * @param testo sms text.
      * @param oraInvio sms ora.
      * @return new sms.
-     */
+
     public SMS creaSMS(String testo, String oraInvio){
         if (Objects.equals(testo, ""))
             throw new IllegalArgumentException("Illegal text for sms.");
@@ -46,7 +47,7 @@ public class HandlerMessaggi {
      * This method allows you to send a text message to a customer.
      * @param sms sms to send.
      * @param cliente customer who must receive the SMS.
-     */
+
     public void inviaSMS(SMS sms, Cliente cliente){
         Objects.requireNonNull(sms);
         Objects.requireNonNull(cliente);
@@ -58,7 +59,7 @@ public class HandlerMessaggi {
      * This method allows you to send a text message to a set of customers.
      * @param sms sms to send.
      * @param clienti set of customers who must receive the SMS.
-     */
+
     public void inviaSmsGenerale(SMS sms, Set<Cliente> clienti){
         Objects.requireNonNull(sms);
         Objects.requireNonNull(clienti);
@@ -73,7 +74,7 @@ public class HandlerMessaggi {
      * @param sms sms to send.
      * @param configurazioneSMS configured text message.
      * @param cliente customer who must receive the SMS.
-     */
+
     public void inviaSMSConfigurato(SMS sms, ConfigurazioneSMS configurazioneSMS, Cliente cliente){
         Objects.requireNonNull(sms);
         Objects.requireNonNull(configurazioneSMS);
@@ -89,7 +90,7 @@ public class HandlerMessaggi {
      * @param sms sms to send.
      * @param configurazioneSMS configured text message.
      * @param clienti set of customers who must receive the SMS.
-     */
+
     public void inviaSMSGeneraleConfigurato(SMS sms, ConfigurazioneSMS configurazioneSMS, Set<Cliente> clienti){
         Objects.requireNonNull(sms);
         Objects.requireNonNull(clienti);
@@ -101,4 +102,7 @@ public class HandlerMessaggi {
             HandlerCliente.getInstance(cliente).getSMSCliente().add(sms1);
         }
     }
+}
+    }
+    }*/
 }
