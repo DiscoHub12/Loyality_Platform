@@ -7,16 +7,34 @@ import java.util.Date;
  * purchased by companies that want to join the platform.
  */
 public class Abbonamento {
-    private static int idAbbonamento;
-
+    /**
+     * attribute representing the id of the subscription
+     */
+    private static int contatoreAbbonamento=0;
+    private int idAbbonamento;
+    /**
+     * attribute of type Date,
+     * indicating the start date of the subscription
+     */
     private final Date dataInizio;
-
+    /**
+     * attribute of type Date,
+     * indicating the end date of the subscription
+     */
     private Date dataFine;
-
+    /**
+     * attribute indicating the price of the subscription
+     */
     private double prezzo;
-
+    /**
+     * constructor that instantiates a new object for the Subscription class,
+     * where to be created, it needs the following parameters.
+     * @param dataInizio day on which the subscription starts
+     * @param dataFine day on which the subscription end
+     * @param prezzo price of subscription
+     */
     public Abbonamento(Date dataInizio, Date dataFine, double prezzo) {
-        idAbbonamento++;
+        this.idAbbonamento=++contatoreAbbonamento;
         this.dataInizio = dataInizio;
         this.dataFine = dataFine;
         this.setPrezzo(prezzo);
@@ -26,7 +44,7 @@ public class Abbonamento {
      * This method returns the subscription id.
      * @return the subscription id.
      */
-    public static int getId() {
+    public int getIdAbbonamento() {
         return idAbbonamento;
     }
 
@@ -45,6 +63,13 @@ public class Abbonamento {
     public Date getDataFine() {
         return this.dataFine;
     }
+    /**
+     * This method edit the attribute of the Date attribute
+     * @param df new date type
+     */
+    public void setDataFine(Date df){
+        this.dataFine=df;
+    }
 
     /**
      * This method returns me the subscription price.
@@ -60,14 +85,6 @@ public class Abbonamento {
      */
     public void setPrezzo(double prezzo) {
         this.prezzo = prezzo;
-    }
-
-    /**
-     * This method renews my subscription end date.
-     * @param dataFine new end date
-     */
-    public void rinnovaAbbonamento(Date dataFine){
-        this.dataFine = dataFine;
     }
 
     @Override

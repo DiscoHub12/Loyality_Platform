@@ -16,32 +16,36 @@ import java.util.Objects;
  */
 public class ProgrammaLivelli implements ProgrammaFedelta {
 
-    private static int idProgramma;
+    private final int idProgramma;
+
+    private static int contatorePL = 0;
 
     private String nome;
 
-    private Date dataAttivazione= null;
+    private Date dataAttivazione;
 
     private int massimoLivelli, livelloVip;
 
-    private final Map<Integer, Integer> policyLivelli; //Manca la gestione di questa, quindi add remove e modifica
+    private final Map<Integer, Integer> policyLivelli;
 
     private int puntiSpesa;
 
     private double importoSpesa;
 
-    private CatalogoPremi catalogoPremi = null;
+    private CatalogoPremi catalogoPremi;
 
     private final Tipo tipoProgramma = Tipo.PROGRAMMALIVELLI;
 
-    public ProgrammaLivelli(String nome, int massimoLivelli, int livelloVip, Map<Integer, Integer> policyLivelli, int puntiSpesa, double importoSpesa) {
-        idProgramma++;
+    public ProgrammaLivelli(String nome, int massimoLivelli, int livelloVip, Map<Integer, Integer> policy, int puntiSpesa, double importoSpesa) {
+        this.idProgramma = contatorePL++;
         this.setNome(nome);
         this.setMassimoLivelli(massimoLivelli);
         this.setLivelloVip(livelloVip);
         this.setPuntiSpesa(puntiSpesa);
         this.setImportoSpesa(importoSpesa);
-        this.policyLivelli = policyLivelli ;
+        this.policyLivelli = policy ;
+        this.dataAttivazione = null;
+        this.catalogoPremi= null;
     }
 
     /**
@@ -101,6 +105,24 @@ public class ProgrammaLivelli implements ProgrammaFedelta {
         return tipoProgramma;
     }
 
+    /**
+     * This method return null because this is a levels program.
+     * @return null.
+     */
+    @Override
+    public ProgrammaPunti getProgrammaPunti() {
+        return null;
+    }
+
+    /**
+     * This method returns this program.
+     * @return this program.
+     */
+    @Override
+    public ProgrammaLivelli getProgrammaLivelli() {
+        return this;
+    }
+
 
     /**
      * This method returns the maximum number of levels.
@@ -155,6 +177,8 @@ public class ProgrammaLivelli implements ProgrammaFedelta {
         if(punti < 1)
             throw new IllegalArgumentException("Invalid points.");
         appoggio += this.getPolicyLivelli().size();
+        if(appoggio > this.getMassimoLivelli())
+            throw new IllegalArgumentException("Invalid level.");
         this.getPolicyLivelli().put(appoggio, punti);
     }
 
@@ -241,26 +265,44 @@ public class ProgrammaLivelli implements ProgrammaFedelta {
      * by checking the id, and the name.
      * Returns true if the object is equal, false otherwise.
      *
-     * @param object the Object to compare.
+     * @param o the Object to compare.
      * @return true if is equals, false otherwise.
      */
-    public boolean equals(Object object) {
-        if (object == null)
-            return false;
-        if (object instanceof ProgrammaPunti tmp) {
-            return this.getIdProgramma() == tmp.getIdProgramma() && Objects.equals(this.getNome(), tmp.getNome());
-        }
-        return false;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProgrammaLivelli that = (ProgrammaLivelli) o;
+        return massimoLivelli == that.massimoLivelli &&
+                livelloVip == that.livelloVip &&
+                puntiSpesa == that.puntiSpesa &&
+                Double.compare(that.importoSpesa, importoSpesa) == 0 &&
+                Objects.equals(nome, that.nome) &&
+                Objects.equals(dataAttivazione, that.dataAttivazione) &&
+                Objects.equals(policyLivelli, that.policyLivelli) &&
+                tipoProgramma == that.tipoProgramma &&
+                Objects.equals(catalogoPremi, that.catalogoPremi);
     }
+
 
     @Override
     public String toString() {
-        return "\t-DETAILS PROGRAMMA LIVELLI-" +
-                "\nNome: " + nome +
-                "\nData Attivazione: " + dataAttivazione +
-                "\nMassimo Livelli: " + massimoLivelli +
-                "\nLivello Vip: " + livelloVip +
-                "\nPunti Per Livello: " + policyLivelli +
-                "\nCatalogo Premi: " + catalogoPremi;
+        return "\t-ProgrammaLivelli-" +
+                "\nnome: " + nome +
+                "\ndataAttivazione: " + dataAttivazione +
+                "\nmassimoLivelli: " + massimoLivelli +
+                "\nlivelloVip: " + livelloVip +
+                "\npolicyLivelli: " + policyLivelli +
+                "\npuntiSpesa: " + puntiSpesa +
+                "\nimportoSpesa: " + importoSpesa +
+                "\ntipoProgramma: " + tipoProgramma+
+                "\nCatalogo Premi: " + toStringCatalogo();
+    }
+
+    private String toStringCatalogo(){
+        if(catalogoPremi != null){
+            return catalogoPremi.toString();
+        }
+        return null;
     }
 }

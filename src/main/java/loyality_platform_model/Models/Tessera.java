@@ -14,17 +14,29 @@ import java.util.Set;
 
 public class Tessera {
 
-    private static int idTessera;
+    private final int idTessera;
+
+    private static int contatoreTessera = 0;
 
     private final int idCliente;
     private final Set<ProgrammaFedelta> programmiFedelta;
 
-    private int punti = 0;
+    private int punti;
+
+    private int livelli;
+
+    private boolean isVipPunti;
+
+    private  boolean isVipLivelli;
 
     public Tessera(int idCliente) {
-        idTessera++;
+        this.idTessera = contatoreTessera++;
         this.idCliente = idCliente;
         this.programmiFedelta = new HashSet<>();
+        this.punti = 0;
+        this.livelli = 0;
+        this.isVipPunti = false;
+        this.isVipLivelli = false;
     }
 
     /**
@@ -61,6 +73,77 @@ public class Tessera {
     }
 
     /**
+     * This method adds a certain number of points.
+     * @param punti number of points to add.
+     */
+    public void addPunti(int punti){
+        if(punti < 1)
+            throw new IllegalArgumentException("Invalid points.");
+        this.punti += punti;
+    }
+
+    /**
+     * This method removes a certain number of points.
+     * @param punti number of points to remove.
+     */
+    public void deletePunti (int punti){
+        if(punti < 1 || punti > this.getPunti())
+            throw new IllegalArgumentException("Invalid points.");
+        this.punti -= punti;
+    }
+
+    /**
+     * This method returns <code>true</code> if in the points program they are vip customers,
+     * <code>false</code> otherwise.
+     * @return <code>true</code> if in the points program they are vip customers,
+     *   <code>false</code> otherwise.
+     */
+    public boolean isVipPunti() {
+        return isVipPunti;
+    }
+
+    /**
+     * This method sets whether you are a vip customer in the points program.
+     * @param vipPunti <code>true</code> if you are a vip costumer, <code>false</code> otherwise.
+     */
+    public void setVipPunti(boolean vipPunti) {
+        isVipPunti = vipPunti;
+    }
+
+    /**
+     * This method returns the number of the level reached.
+     * @return the number of the level reached.
+     */
+    public int getLivelli() {
+        return livelli;
+    }
+
+    /**
+     * This method increments the number of the level reached.
+     */
+    public void incrementLivello(){
+        this.livelli++;
+    }
+
+    /**
+     * This method returns <code>true</code> if in the levels program they are vip customers,
+     * <code>false</code> otherwise.
+     * @return <code>true</code> if in the levels program they are vip customers,
+     *   <code>false</code> otherwise.
+     */
+    public boolean isVipLivelli() {
+        return isVipLivelli;
+    }
+
+    /**
+     * This method sets whether you are a vip customer in the levels program.
+     * @param vipLivelli <code>true</code> if you are a vip costumer, <code>false</code> otherwise.
+     */
+    public void setVipLivelli(boolean vipLivelli) {
+        isVipLivelli = vipLivelli;
+    }
+
+    /**
      * This method adds a new loyalty program.
      * @param programmaFedelta new loyalty program.
      */
@@ -81,26 +164,6 @@ public class Tessera {
            throw new IllegalArgumentException("Program not exists.");
        this.getProgrammiFedelta().remove(programmaFedelta);
 
-   }
-
-    /**
-     * This method adds a certain number of points.
-     * @param punti number of points to add.
-     */
-   public void addPunti(int punti){
-        if(punti < 1)
-            throw new IllegalArgumentException("Invalid points.");
-        this.punti += punti;
-   }
-
-    /**
-     * This method removes a certain number of points.
-     * @param punti number of points to remove.
-     */
-   public void deletePunti (int punti){
-       if(punti < 1 || punti > this.getPunti())
-           throw new IllegalArgumentException("Invalid points.");
-       this.punti -= punti;
    }
 
     /**

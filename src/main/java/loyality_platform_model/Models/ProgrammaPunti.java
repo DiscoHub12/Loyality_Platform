@@ -14,15 +14,17 @@ import java.util.*;
  */
 public class ProgrammaPunti implements ProgrammaFedelta {
 
-    private static int idProgramma;
+    private final int idProgramma;
+
+    private static int contatorePP = 0;
 
     private String nome;
 
-    private Date dataAttivazione = null;
+    private Date dataAttivazione;
 
-    private boolean maxPunti = false;
+    private boolean maxPunti;
 
-    private int numeroPuntiMassimi = 0;
+    private int numeroPuntiMassimi;
 
     private int puntiVIP;
 
@@ -30,7 +32,7 @@ public class ProgrammaPunti implements ProgrammaFedelta {
 
     private double importoSpesa;
 
-    private CatalogoPremi catalogoPremi = null;
+    private CatalogoPremi catalogoPremi;
 
     private final Tipo tipoProgramma = Tipo.PROGRAMMAPUNTI;
 
@@ -41,10 +43,15 @@ public class ProgrammaPunti implements ProgrammaFedelta {
      * and invokes set methods which contain controls within them.
      */
     public ProgrammaPunti(String nome, int puntiVIP, int puntiSpesa, double importoSpesa) {
-        idProgramma++;
+        this.idProgramma = contatorePP++;
+        this.setNome(nome);
         this.setPuntiVIP(puntiVIP);
         this.setPuntiSpesa(puntiSpesa);
         this.setImportoSpesa(importoSpesa);
+        this.maxPunti = false;
+        this.numeroPuntiMassimi = 0;
+        this.catalogoPremi= null;
+        this.dataAttivazione = null;
     }
 
     /**
@@ -54,13 +61,15 @@ public class ProgrammaPunti implements ProgrammaFedelta {
      * and invokes set methods which contain controls within them.
      */
     public ProgrammaPunti(String nome, int numeroPuntiMassimi, int puntiVIP, int puntiSpesa, double importoSpesa) {
-        idProgramma++;
+        this.idProgramma = contatorePP++;
         this.setNome(nome);
         this.setNumeroPuntiMassimi(numeroPuntiMassimi);
         this.setPuntiVIP(puntiVIP);
         this.setPuntiSpesa(puntiSpesa);
         this.setImportoSpesa(importoSpesa);
         this.maxPunti = true;
+        this.catalogoPremi = null;
+        this.dataAttivazione = null;
     }
 
     /**
@@ -120,6 +129,25 @@ public class ProgrammaPunti implements ProgrammaFedelta {
     }
 
     /**
+     * This method returns this program.
+     * @return this program.
+     */
+    @Override
+    public ProgrammaPunti getProgrammaPunti() {
+        return this;
+    }
+
+    /**
+     * This method return null because this is a points program.
+     * @return null.
+     */
+    @Override
+    public ProgrammaLivelli getProgrammaLivelli() {
+        return null;
+    }
+
+
+    /**
      * This method returns <code>true</code> if the manager wants to put a maximum of points,
      * <code>false</code> otherwise.
      * @return <code>true</code> if the manager wants to put a maximum of points,
@@ -169,8 +197,12 @@ public class ProgrammaPunti implements ProgrammaFedelta {
      * @param puntiVIP new number of points to become VIP.
      */
     public void setPuntiVIP(int puntiVIP) {
-        if (puntiVIP < 1 || puntiVIP > numeroPuntiMassimi)
-            throw new IllegalArgumentException("Illegal number for VIP level.");
+        if (puntiVIP < 1)
+            throw new IllegalArgumentException("Illegal number for VIP point.");
+        if(this.isMaxPunti()){
+            if(puntiVIP > this.getNumeroPuntiMassimi())
+                throw new IllegalArgumentException("Illegal number of points");
+        }
         this.puntiVIP = puntiVIP;
     }
 
@@ -190,6 +222,10 @@ public class ProgrammaPunti implements ProgrammaFedelta {
     public void setPuntiSpesa(int puntiSpesa) {
         if (puntiSpesa < 1)
             throw new IllegalArgumentException("Illegal number of points.");
+        if(this.isMaxPunti()){
+            if(puntiSpesa > this.getNumeroPuntiMassimi())
+                throw new IllegalArgumentException("Illegal number of points");
+        }
         this.puntiSpesa = puntiSpesa;
     }
 
@@ -256,7 +292,14 @@ public class ProgrammaPunti implements ProgrammaFedelta {
                 "\nPunti VIP: " + puntiVIP +
                 "\nPunti Spesa: " + puntiSpesa +
                 "\nImporto Spesa: " + importoSpesa +
-                "\nCatalogo Premi: " + catalogoPremi +
-                "\nTipo Programma: " + tipoProgramma;
+                "\nTipo Programma: " + tipoProgramma +
+                "\nCatalogo Premi: " + toStringCatalogo();
+    }
+
+    private String toStringCatalogo(){
+        if(catalogoPremi != null){
+            return catalogoPremi.toString();
+        }
+        return null;
     }
 }
