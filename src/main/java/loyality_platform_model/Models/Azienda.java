@@ -12,11 +12,13 @@ import java.util.Set;
 
 public class Azienda {
 
+    private static int contatoreAzienda = 0;
+
     /**
      * This attribute represents the unique id
      * of this Company (Azienda).
      */
-    private static int idAzienda;
+    private final int idAzienda;
 
     /**
      * This attribute represents the Loyalty Space
@@ -45,7 +47,7 @@ public class Azienda {
      * @param spazioFedelta the Loyality Space for this Company (Azienda)
      */
     public Azienda(GestorePuntoVendita titolare, SpazioFedelta spazioFedelta) {
-        idAzienda++;
+        this.idAzienda  = ++contatoreAzienda;
         this.setTitolare(titolare);
         this.spazioFedelta = spazioFedelta;
         this.catalogoPremi = new HashSet<>();
