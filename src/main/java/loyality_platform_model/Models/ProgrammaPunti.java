@@ -42,34 +42,21 @@ public class ProgrammaPunti implements ProgrammaFedelta {
      * maximum number of points. It requests the fundamental attributes for creation,
      * and invokes set methods which contain controls within them.
      */
-    public ProgrammaPunti(String nome, int puntiVIP, int puntiSpesa, double importoSpesa) {
-        this.idProgramma = contatorePP++;
-        this.setNome(nome);
-        this.setPuntiVIP(puntiVIP);
-        this.setPuntiSpesa(puntiSpesa);
-        this.setImportoSpesa(importoSpesa);
-        this.maxPunti = false;
-        this.numeroPuntiMassimi = 0;
-        this.catalogoPremi= null;
-        this.dataAttivazione = null;
-    }
-
-    /**
-     * Constructor who creates a Loyalty Program of the Points Program type.
-     * This constructor is called if this Points Program have a
-     * maximum number of points. It requests the fundamental attributes for creation,
-     * and invokes set methods which contain controls within them.
-     */
     public ProgrammaPunti(String nome, int numeroPuntiMassimi, int puntiVIP, int puntiSpesa, double importoSpesa) {
         this.idProgramma = contatorePP++;
         this.setNome(nome);
-        this.setNumeroPuntiMassimi(numeroPuntiMassimi);
         this.setPuntiVIP(puntiVIP);
         this.setPuntiSpesa(puntiSpesa);
         this.setImportoSpesa(importoSpesa);
-        this.maxPunti = true;
-        this.catalogoPremi = null;
+        this.catalogoPremi= null;
         this.dataAttivazione = null;
+        if(numeroPuntiMassimi > 0 ){
+            this.setNumeroPuntiMassimi(numeroPuntiMassimi);
+            this.setMaxPunti(true);
+        }else {
+            this.setMaxPunti(false);
+            this.setNumeroPuntiMassimi(0);
+        }
     }
 
     /**
@@ -179,8 +166,10 @@ public class ProgrammaPunti implements ProgrammaFedelta {
      * @param numeroPuntiMassimi new maximum number of points.
      */
     public void setNumeroPuntiMassimi(int numeroPuntiMassimi) {
-        if (numeroPuntiMassimi < 1)
+        if (numeroPuntiMassimi < 0)
             throw new IllegalArgumentException("Illegal max number of points.");
+        if(!this.isMaxPunti())
+            this.setMaxPunti(true);
         this.numeroPuntiMassimi = numeroPuntiMassimi;
     }
 
