@@ -14,12 +14,13 @@ import java.util.Set;
  */
 public class CatalogoPremi {
 
+    private static int contatoreCatalogo = 0;
 
     /**
      * This attribute represents the
      * unique id of this Reward Catalogue.
      */
-    private static int idCatalogoPremi;
+    private int idCatalogoPremi;
 
     /**
      * This attribute represents the list
@@ -40,7 +41,7 @@ public class CatalogoPremi {
      */
     public CatalogoPremi(Set<Premio> premiCatalogo) {
         Objects.requireNonNull(premiCatalogo);
-        idCatalogoPremi++;
+        this.idCatalogoPremi = ++contatoreCatalogo;
         this.setPremiCatalogo(premiCatalogo);
 
     }
@@ -110,10 +111,10 @@ public class CatalogoPremi {
     }
 
     private String toStringPremi() {
-        if(this.premiCatalogo.isEmpty())
+        if (this.premiCatalogo.isEmpty())
             return "There are not prize in this Reward Catalog.";
         String tmp = "";
-        for(int i=0; i < this.premiCatalogo.size(); i++){
+        for (int i = 0; i < this.premiCatalogo.size(); i++) {
             tmp += i + ") PREMIO : " + this.premiCatalogo.toArray()[i].toString();
         }
         return tmp;
@@ -129,10 +130,10 @@ public class CatalogoPremi {
      * @return true if is equals, false otherwise.
      */
     public boolean equals(Object object) {
-        if(object == null)
+        if (object == null)
             return false;
-        if(object instanceof CatalogoPremi tmp){
-            if(this.getIdCatalogoPremi() == tmp.getIdCatalogoPremi() && this.getPremiCatalogo() == tmp.getPremiCatalogo())
+        if (object instanceof CatalogoPremi tmp) {
+            if (this.getIdCatalogoPremi() == tmp.getIdCatalogoPremi() && this.getPremiCatalogo() == tmp.getPremiCatalogo())
                 return true;
         }
         return false;

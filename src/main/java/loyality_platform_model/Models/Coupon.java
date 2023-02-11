@@ -1,4 +1,5 @@
 package loyality_platform_model.Models;
+
 import java.util.Date;
 import java.util.Objects;
 
@@ -11,12 +12,13 @@ import java.util.Objects;
  */
 public class Coupon {
 
+    private static int contatoreCoupon = 0;
 
     /**
      * This attribute rapresents the
      * unique id of this Coupon.
      */
-    private static int idCoupon;
+    private int idCoupon;
 
     /**
      * This attribute rapresents the discount
@@ -46,7 +48,7 @@ public class Coupon {
      * @param dataScadenza expiration date of this Coupon.
      */
     private Coupon(int valoreSconto, Date dataScadenza) {
-        idCoupon++;
+        this.idCoupon = ++contatoreCoupon;
         this.setValoreSconto(valoreSconto);
         this.setDataScadenza(dataScadenza);
     }

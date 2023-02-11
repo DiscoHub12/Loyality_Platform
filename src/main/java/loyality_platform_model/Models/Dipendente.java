@@ -1,4 +1,5 @@
 package loyality_platform_model.Models;
+
 import java.util.Objects;
 
 
@@ -16,12 +17,13 @@ import java.util.Objects;
  */
 public class Dipendente {
 
+    private static int contatoreDipendente = 0;
 
     /**
      * This attribute represent the id for
      * this Employee.
      */
-    private static int idDipendente;
+    private int idDipendente;
 
     /**
      * This attribute represent the Name
@@ -59,7 +61,7 @@ public class Dipendente {
      * @param restrizioni the restrictions for the Employee.
      */
     public Dipendente(String nome, String cognome, String email, boolean restrizioni) {
-        idDipendente++;
+        this.idDipendente = ++contatoreDipendente;
         if (Objects.equals(nome, "") || Objects.equals(cognome, "") || Objects.equals(email, ""))
             throw new IllegalArgumentException("Illegal value for nome, cognome or email");
         this.nome = nome;

@@ -12,7 +12,6 @@ import java.util.Set;
 
 public class Azienda {
 
-
     private static int contatoreAzienda = 0;
 
     /**
@@ -48,7 +47,7 @@ public class Azienda {
      * @param spazioFedelta the Loyality Space for this Company (Azienda)
      */
     public Azienda(GestorePuntoVendita titolare, SpazioFedelta spazioFedelta) {
-        this.idAzienda  = ++contatoreAzienda;
+        this.idAzienda = ++contatoreAzienda;
         this.setTitolare(titolare);
         this.spazioFedelta = spazioFedelta;
         this.catalogoPremi = new HashSet<>();
@@ -116,7 +115,7 @@ public class Azienda {
             throw new IllegalArgumentException("Illegal id for the Reward Catalog.");
         for (CatalogoPremi catalogoPremi : this.catalogoPremi) {
             if (catalogoPremi.getIdCatalogoPremi() == idCatalogoPremi) {
-                catalogoPremi = newCatalogoPremi;
+                catalogoPremi.setPremiCatalogo(newCatalogoPremi.getPremiCatalogo());
             } else throw new IllegalArgumentException("The Reward Catalog with this id not exists.");
         }
     }
@@ -144,20 +143,20 @@ public class Azienda {
      * @return true if are equals, false otherwise.
      */
     public boolean equals(Object object) {
-        if(object == null)
+        if (object == null)
             return false;
-        if(object instanceof Azienda tmp){
-            if(this.getIdAzienda() == tmp.getIdAzienda() && this.getSpazioFedelta() == tmp.getSpazioFedelta())
+        if (object instanceof Azienda tmp) {
+            if (this.getIdAzienda() == tmp.getIdAzienda() && this.getSpazioFedelta() == tmp.getSpazioFedelta())
                 return true;
         }
         return false;
     }
 
-    private String catalogoPremiIfExist(){
+    private String catalogoPremiIfExist() {
         String tmp = "";
-        if(this.catalogoPremi.isEmpty())
+        if (this.catalogoPremi.isEmpty())
             tmp = "There is no active Rewards Catalogue.";
-        for(int i=0; i < this.catalogoPremi.size(); i++){
+        for (int i = 0; i < this.catalogoPremi.size(); i++) {
             tmp += i + ")" + this.catalogoPremi.toArray()[i].toString();
         }
         return tmp;

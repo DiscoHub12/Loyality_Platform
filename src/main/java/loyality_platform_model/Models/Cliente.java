@@ -12,12 +12,13 @@ import java.util.Objects;
  */
 public class Cliente {
 
+    private static int contatoreClienti = 0;
 
     /**
      * This attribute rapresents the
      * unique id for this customer.
      */
-    private static int idCliente;
+    private int idCliente;
 
     /**
      * This attribute rapresents the
@@ -60,7 +61,7 @@ public class Cliente {
     public Cliente(String nome, String cognome, String telefono, String email) {
         if (Objects.equals(nome, "") || Objects.equals(cognome, ""))
             throw new IllegalArgumentException("Illegal name or surname about this Employee.");
-        idCliente++;
+        this.idCliente = ++contatoreClienti;
         this.nome = nome;
         this.cognome = cognome;
         this.setTelefono(telefono);

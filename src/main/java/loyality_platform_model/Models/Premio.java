@@ -10,12 +10,13 @@ import java.util.Objects;
  */
 public class Premio {
 
+    private static int contatorePremio = 0;
 
     /**
      * This attribute represents the
      * unique id of this award.
      */
-    private static int idPremio;
+    private int idPremio;
 
     /**
      * This attribute represents the name
@@ -51,6 +52,7 @@ public class Premio {
      */
     public Premio(String nome, boolean isPoints, int number) {
         this.nome = nome;
+        this.idPremio = ++contatorePremio;
         if (isPoints) {
             this.setPunti(number);
         } else {
