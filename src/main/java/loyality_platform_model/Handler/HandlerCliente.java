@@ -132,16 +132,6 @@ public class HandlerCliente {
         return null;
     }
 
-    /**
-     if(idCliente <= 0)
-     throw new IllegalArgumentException("Invalid id for the Customer.");
-     for(Cliente cliente : this.dbms.getClientiIscritti()){
-     if(cliente.getIdCliente() == idCliente) {
-
-     }
-     }
-     */
-
 
     /**
      * This method allows you to take all the
@@ -210,23 +200,20 @@ public class HandlerCliente {
                             //Todo richiama HandlerTessera passando l'importo.
                             //Todo richiama HandlerPremi per togliere il Coupon del Cliente al DB.
                             return 1;
-                        } else {
+                        }else {
                             importo = importoSpeso;
                             //Todo richiama HandlerTessera passando l'importo.
-                            //Todo richiama HandlerPremi per togliere il Coupon del Cliente al DB.
                             return 1;
                         }
                     } else {
                         importo = importoSpeso;
                         //Todo richiama HandlerTessera passando l'importo.
-                        //Todo richiama HandlerPremi per togliere il Coupon del Cliente al DB.
                         return 1;
                     }
-                }
-                return 0;
+                }return 0; //Cliente non possiede tessera
             }
         }
-        return -1;
+        return -2;
     }
 
     /**

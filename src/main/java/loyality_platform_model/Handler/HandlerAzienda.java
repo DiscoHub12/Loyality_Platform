@@ -128,9 +128,8 @@ public class HandlerAzienda {
         for (Azienda azienda : this.dbms.getAziendeIscritte()) {
             if (azienda.getIdAzienda() == idAzienda) {
                 for (Dipendente dipendente : this.dbms.getDipendentiAzienda().get(azienda)) {
-                    if (dipendente.getIdDipendente() == idAzienda) {
-                        dipendente.setEmail(email);
-                        dipendente.setRestrizioni(gestore, restrizioni);
+                    if (dipendente.getIdDipendente() == idDipendente) {
+                        this.dbms.updateDipendente(azienda, idDipendente, email, restrizioni);
                         return true;
                     }
                 }
