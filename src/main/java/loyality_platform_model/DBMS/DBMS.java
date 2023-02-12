@@ -97,15 +97,20 @@ public class DBMS {
     }
 
     public void addDipendente(Azienda azienda, Dipendente dipendente){
-        //TODO implementare
+        this.getDipendentiAzienda().get(azienda).add(dipendente);
     }
 
-    public void updateDipendente(Azienda azienda, Dipendente dipendenteOld, Dipendente dipendenteNew){
-        //TODO implementare
+    public void updateDipendente(Azienda azienda, int idDipendente, String email, boolean restrizioni){
+        for(Dipendente dipendente : this.getDipendentiAzienda().get(azienda)){
+            if(dipendente.getIdDipendente() == idDipendente) {
+                dipendente.setEmail(email);
+                dipendente.setRestrizioni(restrizioni);
+            }
+        }
     }
 
     public void removeDipendente(Azienda azienda, Dipendente dipendente){
-        //TODO implementare
+        this.dipendentiAzienda.get(azienda).remove(dipendente);
     }
 
     public Map<Azienda, Set<ProgrammaFedelta>> getProgrammiAzienda() {
@@ -129,15 +134,20 @@ public class DBMS {
     }
 
     public void addCouponPreconfiguratoAzienda(Azienda azienda, Coupon couponPreconfigurato){
-        //Todo implementare
+        this.couponPreconfiguratiAzienda.get(azienda).add(couponPreconfigurato);
     }
 
-    public void updateCouponPreconfiguratoAzienda(Azienda azienda, Coupon coupon){
-        //Todo implementare.
+    public void updateCouponPreconfiguratoAzienda(Azienda azienda, int idCoupon, int valoreSconto, Date dataScadenza){
+        for(Coupon coupon : this.couponPreconfiguratiAzienda.get(azienda)){
+            if(coupon.getIdCoupon() == idCoupon){
+                coupon.setValoreSconto(valoreSconto);
+                coupon.setDataScadenza(dataScadenza);
+            }
+        }
     }
 
     public void removeCouponPreconfiguratoAzienda(Azienda azienda, Coupon coupon){
-        //Todo implementare.
+        this.couponPreconfiguratiAzienda.get(azienda).remove(coupon);
     }
 
     public Set<Cliente> getClientiIscritti() {
@@ -167,7 +177,11 @@ public class DBMS {
     public Map<Cliente, Set<Coupon>> getCouponCliente(){return this.couponCliente;}
 
     public void addCoupon(Cliente cliente, Coupon coupon){
-        //Todo implementare
+        if(!this.couponCliente.containsKey(cliente)){
+            Set<Coupon> newCoupon = new HashSet<>();
+            newCoupon.add(coupon);
+            this.couponCliente.put(cliente, newCoupon);
+        }else this.couponCliente.get(cliente).add(coupon);
     }
 
     public void updateCoupon(Cliente cliente, Coupon oldCoupon, Coupon newCoupon){
@@ -175,7 +189,7 @@ public class DBMS {
     }
 
     public void removeCoupon(Cliente cliente, Coupon coupon){
-        //Todo implementare
+        this.couponCliente.get(cliente).remove(coupon);
     }
 
 
@@ -184,7 +198,11 @@ public class DBMS {
     }
 
     public void addPremioCliente(Premio premio, Cliente cliente){
-        //TODO implementare
+        if(!this.premiCliente.containsKey(cliente)){
+            Set<Premio> newPremi = new HashSet<>();
+            newPremi.add(premio);
+            this.premiCliente.put(cliente, newPremi);
+        }else this.premiCliente.get(cliente).add(premio);
     }
 
     public void updatePremioCliente(Cliente cliente, Premio premioOld, Premio premioNew){
@@ -192,7 +210,7 @@ public class DBMS {
     }
 
     public void removePremioCliente(Cliente cliente, Premio premio){
-        //TODO implementare
+        this.premiCliente.get(cliente).remove(premio);
     }
 
     public Map<Cliente, Set<Visita>> getVisiteCliente() {
