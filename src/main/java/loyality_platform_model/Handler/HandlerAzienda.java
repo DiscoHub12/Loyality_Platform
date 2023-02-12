@@ -32,13 +32,17 @@ public class HandlerAzienda {
      *
      * @param idAzienda the id of Company.
      * @return the Owner (GestorePuntoVendita).
+     * @throws IllegalArgumentException if the idAzienda is not valid.
      */
     public GestorePuntoVendita getTitolareAzienda(int idAzienda) {
-        GestorePuntoVendita gestore = null;
-        Azienda azienda = getAziendaById(idAzienda);
-        if (azienda != null)
-            gestore = azienda.getTitolare();
-        return gestore;
+        if (idAzienda <= 0)
+            throw new IllegalArgumentException("Invalid id for the Company.");
+        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
+            if (azienda.getIdAzienda() == idAzienda) {
+                return azienda.getTitolare();
+            }
+        }
+        return null;
     }
 
     /**
@@ -48,12 +52,17 @@ public class HandlerAzienda {
      *
      * @param idAzienda the id of Company (Azienda).
      * @return a list of Employee of the Company (Azienda).
+     * @throws IllegalArgumentException if the idAzienda is not valid.
      */
     public Set<Dipendente> getDipendentiAzienda(int idAzienda) {
-        Azienda azienda = getAziendaById(idAzienda);
-        if (azienda != null) {
-            if (!this.dbms.getDipendentiAzienda().get(azienda).isEmpty())
-                return this.dbms.getDipendentiAzienda().get(azienda);
+        if (idAzienda <= 0)
+            throw new IllegalArgumentException("Invalid id for the Company.");
+        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
+            if (azienda.getIdAzienda() == idAzienda) {
+                if (!this.dbms.getDipendentiAzienda().get(azienda).isEmpty()) {
+                    return this.dbms.getDipendentiAzienda().get(azienda);
+                }
+            }
         }
         return null;
     }
@@ -81,18 +90,23 @@ public class HandlerAzienda {
      * @param nome      the name for the Employee to add.
      * @param cognome   the Surname for the Employee to add.
      * @param email     the email for the Employee to add.
-     * @throws IllegalArgumentException if the Name, Surname or email is not valid.
+     * @throws IllegalArgumentException if the idAzienda is not valid.
      */
-    public void aggiungiDipendente(int idAzienda, String nome, String cognome, String email, boolean restrizioni) {
-        Dipendente created = creaDipendente(nome, cognome, email, restrizioni);
-        Azienda azienda = getAziendaById(idAzienda);
-        if (azienda != null) {
-            for (Dipendente dipendente : this.dbms.getDipendentiAzienda().get(azienda)) {
-                if (!dipendente.equals(created)) {
-                    this.dbms.addDipendente(azienda, created);
-                } else throw new IllegalArgumentException("Invalid operation, the Employee already exist.");
+    public boolean aggiungiDipendente(int idAzienda, String nome, String cognome, String email, boolean restrizioni) {
+        if (idAzienda <= 0)
+            throw new IllegalArgumentException("Invalid id for the Company.");
+        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
+            if (azienda.getIdAzienda() == idAzienda) {
+                Dipendente created = creaDipendente(nome, cognome, email, restrizioni);
+                for (Dipendente dipendente : this.dbms.getDipendentiAzienda().get(azienda)) {
+                    if (!(Objects.equals(dipendente.getEmail(), created.getEmail()) && Objects.equals(dipendente.getNome(), created.getNome()))) {
+                        this.dbms.addDipendente(azienda, created);
+                        return true;
+                    }
+                }
             }
         }
+        return false;
     }
 
     /**
@@ -102,20 +116,23 @@ public class HandlerAzienda {
      * @param idAzienda    the Company (Azienda) id.
      * @param idDipendente the id for Employee to update.
      * @param email        the email for the Employee.
-     * @throws IllegalArgumentException if the new Name, Surname or email is not valid.
+     * @throws NullPointerException     if the gestore is null.
+     * @throws IllegalArgumentException if the idAzienda or idDipendente is not valid || email is not valid.
      */
     public boolean modificaDipendente(int idAzienda, int idDipendente, GestorePuntoVendita gestore, String email, boolean restrizioni) {
-        if (idDipendente <= 0)
-            throw new IllegalArgumentException("Illegal id for the Employee.");
+        Objects.requireNonNull(gestore);
+        if (idAzienda <= 0 || idDipendente <= 0)
+            throw new IllegalArgumentException("Illegal id for the fields.");
         if (Objects.equals(email, ""))
             throw new IllegalArgumentException("Illegal fields for update the Employee.");
-        Azienda azienda = getAziendaById(idAzienda);
-        if (azienda != null) {
-            for (Dipendente dipendente : this.dbms.getDipendentiAzienda().get(azienda)) {
-                if (dipendente.getIdDipendente() == idAzienda) {
-                    dipendente.setEmail(email);
-                    dipendente.setRestrizioni(gestore, restrizioni);
-                    return true;
+        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
+            if (azienda.getIdAzienda() == idAzienda) {
+                for (Dipendente dipendente : this.dbms.getDipendentiAzienda().get(azienda)) {
+                    if (dipendente.getIdDipendente() == idAzienda) {
+                        dipendente.setEmail(email);
+                        dipendente.setRestrizioni(gestore, restrizioni);
+                        return true;
+                    }
                 }
             }
         }
@@ -128,16 +145,18 @@ public class HandlerAzienda {
      *
      * @param idAzienda    the Company (Azienda) id.
      * @param idDipendente the Employee id to remove.
+     * @throws IllegalArgumentException if the idAzienda or idDipendente is not valid.
      */
     public boolean rimuoviDipendente(int idAzienda, int idDipendente) {
-        if (idDipendente <= 0)
+        if (idAzienda <= 0 || idDipendente <= 0)
             throw new IllegalArgumentException("Illegal id for Employee to remove.");
-        Azienda azienda = getAziendaById(idAzienda);
-        if (azienda != null) {
-            for (Dipendente dipendente : this.dbms.getDipendentiAzienda().get(azienda)) {
-                if (dipendente.getIdDipendente() == idAzienda) {
-                    this.dbms.removeDipendente(azienda, dipendente);
-                    return true;
+        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
+            if (azienda.getIdAzienda() == idAzienda) {
+                for (Dipendente dipendente : this.dbms.getDipendentiAzienda().get(azienda)) {
+                    if (dipendente.getIdDipendente() == idAzienda) {
+                        this.dbms.removeDipendente(azienda, dipendente);
+                        return true;
+                    }
                 }
             }
         }
@@ -150,11 +169,16 @@ public class HandlerAzienda {
      *
      * @param idAzienda the Company (Azienda) id.
      * @return the Loyalty Space of the Company.
+     * @throws IllegalArgumentException if the idAzienda is not valid.
      */
     public SpazioFedelta getSpazioFedeltaAzienda(int idAzienda) {
-        Azienda azienda = getAziendaById(idAzienda);
-        if (azienda != null)
-            return azienda.getSpazioFedelta();
+        if (idAzienda <= 0)
+            throw new IllegalArgumentException("Invalid id for the Company.");
+        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
+            if (azienda.getIdAzienda() == idAzienda) {
+                return azienda.getSpazioFedelta();
+            }
+        }
         return null;
     }
 
@@ -164,14 +188,20 @@ public class HandlerAzienda {
      *
      * @param idAzienda        the Company (Azienda) id.
      * @param spazioFedeltaNew Loyality space edited.
-     * @throws NullPointerException if the spazioFedeltaNew is null.
+     * @throws NullPointerException     if the spazioFedeltaNew is null.
+     * @throws IllegalArgumentException if the idAzienda is not valid.
      */
-    public void modificaSpazioFedelta(int idAzienda, SpazioFedelta spazioFedeltaNew) {
+    public boolean modificaSpazioFedelta(int idAzienda, SpazioFedelta spazioFedeltaNew) {
         Objects.requireNonNull(spazioFedeltaNew);
-        Azienda azienda = getAziendaById(idAzienda);
-        if (azienda != null) {
-            azienda.setSpazioFedelta(spazioFedeltaNew);
+        if (idAzienda <= 0)
+            throw new IllegalArgumentException("Invalid id for the Company.");
+        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
+            if (azienda.getIdAzienda() == idAzienda) {
+                azienda.setSpazioFedelta(spazioFedeltaNew);
+                return true;
+            }
         }
+        return false;
     }
 
     /**
@@ -181,14 +211,17 @@ public class HandlerAzienda {
      *
      * @param idAzienda the Company (Azienda) id.
      * @return a list of Loyality Programs active of a given Company.
+     * @throws IllegalArgumentException if the idAzienda is not valid.
      */
     public Set<ProgrammaFedelta> getProgrammiFedeltaAzienda(int idAzienda) {
-        Set<ProgrammaFedelta> programmi = null;
-        Azienda azienda = getAziendaById(idAzienda);
-        if (azienda != null)
-            if (!this.dbms.getProgrammiAzienda().get(azienda).isEmpty())
-                programmi = this.dbms.getProgrammiAzienda().get(azienda);
-        return programmi;
+        if (idAzienda <= 0)
+            throw new IllegalArgumentException("Invalid if for the Company");
+        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
+            if (azienda.getIdAzienda() == idAzienda) {
+                return this.dbms.getProgrammiAzienda().get(azienda);
+            }
+        }
+        return null;
     }
 
     /**
@@ -197,11 +230,15 @@ public class HandlerAzienda {
      *
      * @param idAzienda the Company (Azienda) id.
      * @return list of Reward Catalogs of a given Company, if it has.
+     * @throws IllegalArgumentException if the idAzienda is not correct.
      */
     public Set<CatalogoPremi> getCatalogoPremiAzienda(int idAzienda) {
-        Azienda azienda = getAziendaById(idAzienda);
-        if (azienda != null) {
-            return azienda.getCatalogoPremi();
+        if (idAzienda <= 0)
+            throw new IllegalArgumentException("Invalid id for the Company.");
+        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
+            if (azienda.getIdAzienda() == idAzienda) {
+                return azienda.getCatalogoPremi();
+            }
         }
         return null;
     }
@@ -215,38 +252,19 @@ public class HandlerAzienda {
      * @param coalizione the Coalition.
      * @return the list of all Customers.
      * @throws NullPointerException if coalizione is null.
+     * @throws IllegalArgumentException if the idAzienda is not valid.
      */
     public Set<Cliente> getClientiAzienda(int idAzienda, Coalizione coalizione) {
         Objects.requireNonNull(coalizione);
-        Azienda azienda = getAziendaById(idAzienda);
-        if (azienda != null) {
-            if (coalizione.getClientiIscritti().get(azienda).isEmpty())
-                return coalizione.getClientiIscritti().get(azienda);
+        if (idAzienda <= 0)
+            throw new IllegalArgumentException("Invalid id for the Company");
+        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
+            if (azienda.getIdAzienda() == idAzienda) {
+                //Todo controllare coalizione.
+                if (coalizione.getClientiIscritti().get(azienda).isEmpty())
+                    return coalizione.getClientiIscritti().get(azienda);
+            }
         }
         return null;
     }
-
-    /**
-     * Private method that allows to reduce all the duplicated code,
-     * since in most of the methods, the same requests are made to the Database,
-     * taking the ID of the Company.
-     * This method returns the interested company that you want to take,
-     * if it is registered and the id is valid otherwise it returns null.
-     *
-     * @param idAzienda the id of the Company to be taken in the Database.
-     * @return Company (Azienda) if exists, null otherwise.
-     * @throws IllegalArgumentException if the idAzienda is not valid or if the Company(Azienda)
-     *                                  is not registered inside the Platform.
-     */
-    private Azienda getAziendaById(int idAzienda) {
-        Azienda company = null;
-        if (idAzienda <= 0)
-            throw new IllegalArgumentException("Illegal id for the Company");
-        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
-            if (azienda.getIdAzienda() == idAzienda)
-                company = azienda;
-        }
-        return company;
-    }
-
 }
