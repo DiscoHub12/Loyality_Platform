@@ -110,15 +110,15 @@ public class DBMS {
     }
 
     public void addProgrammaAzienda(Azienda azienda, ProgrammaFedelta programmaFedelta){
-        //TODO implementare
+        this.getProgrammiAzienda().get(azienda).add(programmaFedelta);
     }
 
     public void updateProgrammaAzienda(Azienda azienda, ProgrammaFedelta programmaFedelta){
         //TODO implementare
     }
 
-    public void removeProgrammaAzienda(Azienda azienda, Cliente cliente){
-        //TODO implementare
+    public void removeProgrammaAzienda(Azienda azienda, ProgrammaFedelta programmaFedelta){
+        this.getProgrammiAzienda().get(azienda).remove(programmaFedelta);
     }
 
     public Set<Cliente> getClientiIscritti() {
