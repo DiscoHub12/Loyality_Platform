@@ -96,8 +96,7 @@ public class Dipendente {
         return this.restrizioni;
     }
 
-    public void setRestrizioni(GestorePuntoVendita gestorePuntoVendita, boolean restrizioni) {
-        Objects.requireNonNull(gestorePuntoVendita);
+    public void setRestrizioni(boolean restrizioni) {
         this.restrizioni = restrizioni;
     }
 
