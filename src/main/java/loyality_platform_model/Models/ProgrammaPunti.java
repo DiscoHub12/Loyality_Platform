@@ -240,6 +240,7 @@ public class ProgrammaPunti implements ProgrammaFedelta {
      * This method returns the rewards catalog of this loyalty program.
      * @return the rewards catalog of this loyalty program.
      */
+    @Override
     public CatalogoPremi getCatalogoPremi() {
         return catalogoPremi;
     }
@@ -248,6 +249,7 @@ public class ProgrammaPunti implements ProgrammaFedelta {
      * This method sets up the rewards catalog of this loyalty program.
      * @param catalogoPremi catalog of this loyalty program.
      */
+    @Override
     public void setCatalogoPremi(CatalogoPremi catalogoPremi) {
         Objects.requireNonNull(catalogoPremi);
         this.catalogoPremi = catalogoPremi;

@@ -57,4 +57,17 @@ public interface ProgrammaFedelta {
      */
     ProgrammaLivelli getProgrammaLivelli();
 
+    /**
+     * This method returns the rewards catalog of this loyalty program.
+     * @return the rewards catalog of this loyalty program.
+     */
+    CatalogoPremi getCatalogoPremi();
+
+    /**
+     * This method sets up the rewards catalog of this loyalty program.
+     * @param catalogoPremi catalog of this loyalty program.
+     */
+    void setCatalogoPremi(CatalogoPremi catalogoPremi);
+
+
 }
