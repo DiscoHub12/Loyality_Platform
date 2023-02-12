@@ -47,7 +47,7 @@ public class Coupon {
      * @param valoreSconto the discount value of this Coupon.
      * @param dataScadenza expiration date of this Coupon.
      */
-    private Coupon(int valoreSconto, Date dataScadenza) {
+    public Coupon(int valoreSconto, Date dataScadenza) {
         this.idCoupon = ++contatoreCoupon;
         this.setValoreSconto(valoreSconto);
         this.setDataScadenza(dataScadenza);

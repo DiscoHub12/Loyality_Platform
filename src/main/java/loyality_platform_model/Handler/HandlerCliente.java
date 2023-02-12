@@ -97,12 +97,16 @@ public class HandlerCliente {
      *
      * @param idCliente the id about the Costumer.
      * @return a list of SMS received from Costumer.
+     * @throws IllegalArgumentException if the id for Customer is not valid.
      */
     public Set<SMS> getSMSCliente(int idCliente) {
-        Cliente cliente = getClienteById(idCliente);
-        if (cliente != null) {
-            if (!this.dbms.getSMSCliente().get(cliente).isEmpty())
-                return this.dbms.getSMSCliente().get(cliente);
+        if (idCliente <= 0)
+            throw new IllegalArgumentException("Invalid id for the Customer.");
+        for (Cliente cliente : this.dbms.getClientiIscritti()) {
+            if (cliente.getIdCliente() == idCliente) {
+                if (!this.dbms.getSMSCliente().get(cliente).isEmpty())
+                    return this.dbms.getSMSCliente().get(cliente);
+            }
         }
         return null;
     }
@@ -114,15 +118,29 @@ public class HandlerCliente {
      *
      * @param idCliente the id about the Costumer.
      * @return a list of Visits about the Costumer.
+     * @throws IllegalArgumentException if the idCliente is not valid.
      */
     public Set<Visita> getVisiteCliente(int idCliente) {
-        Cliente cliente = getClienteById(idCliente);
-        if (cliente != null) {
-            if (!this.dbms.getVisiteCliente().get(cliente).isEmpty())
-                return this.dbms.getVisiteCliente().get(cliente);
+        if (idCliente <= 0)
+            throw new IllegalArgumentException("Invalid id for the Customer.");
+        for (Cliente cliente : this.dbms.getClientiIscritti()) {
+            if (cliente.getIdCliente() == idCliente) {
+                if (!this.dbms.getVisiteCliente().get(cliente).isEmpty())
+                    return this.dbms.getVisiteCliente().get(cliente);
+            }
         }
         return null;
     }
+
+    /**
+     if(idCliente <= 0)
+     throw new IllegalArgumentException("Invalid id for the Customer.");
+     for(Cliente cliente : this.dbms.getClientiIscritti()){
+     if(cliente.getIdCliente() == idCliente) {
+
+     }
+     }
+     */
 
 
     /**
@@ -132,12 +150,16 @@ public class HandlerCliente {
      *
      * @param idCliente the id about the Customer.
      * @return a list of rewards received froma  particular Customer.
+     * @throws IllegalArgumentException if the idCliente is not valid.
      */
     public Set<Premio> getPremiCliente(int idCliente) {
-        Cliente cliente = getClienteById(idCliente);
-        if (cliente != null) {
-            if (!this.dbms.getPremiCliente().get(cliente).isEmpty())
-                return this.dbms.getPremiCliente().get(cliente);
+        if (idCliente <= 0)
+            throw new IllegalArgumentException("Invalid id for the Customer.");
+        for (Cliente cliente : this.dbms.getClientiIscritti()) {
+            if (cliente.getIdCliente() == idCliente) {
+                if (!this.dbms.getPremiCliente().get(cliente).isEmpty())
+                    return this.dbms.getPremiCliente().get(cliente);
+            }
         }
         return null;
     }
@@ -149,12 +171,16 @@ public class HandlerCliente {
      *
      * @param idCliente the id about the Customer.
      * @return a list of Coupons held by the Costumer, if any exists.
+     * @throws IllegalArgumentException if the idCliente is not valid.
      */
     public Set<Coupon> getCouponCliente(int idCliente) {
-        Cliente cliente = getClienteById(idCliente);
-        if (cliente != null) {
-            if (!this.dbms.getCouponCliente().get(cliente).isEmpty())
-                return this.dbms.getCouponCliente().get(cliente);
+        if (idCliente <= 0)
+            throw new IllegalArgumentException("Invalid id for the Customer.");
+        for (Cliente cliente : this.dbms.getClientiIscritti()) {
+            if (cliente.getIdCliente() == idCliente) {
+                if (!this.dbms.getCouponCliente().get(cliente).isEmpty())
+                    return this.dbms.getCouponCliente().get(cliente);
+            }
         }
         return null;
     }

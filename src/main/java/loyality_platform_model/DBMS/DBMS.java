@@ -22,13 +22,15 @@ public class DBMS {
 
     private final Map<Azienda, Set<ProgrammaFedelta>> programmiAzienda;
 
+    private final Map<Azienda, Set<Coupon>> couponPreconfiguratiAzienda;
+
     private final Set<Cliente> clientiIscritti;
 
 
     private final Map<Cliente, Set<SMS>>  SMSCliente;
 
 
-    private Map<Cliente, Set<Coupon>>  couponCliente;
+    private final Map<Cliente, Set<Coupon>>  couponCliente;
 
 
     private final Map<Cliente, Set<Premio>> premiCliente;
@@ -53,6 +55,7 @@ public class DBMS {
         this.aziendeIscritte = new HashSet<>();
         this.dipendentiAzienda = new HashMap<>();
         this.programmiAzienda = new HashMap<>();
+        this.couponPreconfiguratiAzienda = new HashMap<>();
         this.clientiIscritti = new HashSet<>();
         this.SMSCliente = new HashMap<>();
         this.couponCliente = new HashMap<>();
@@ -119,6 +122,22 @@ public class DBMS {
 
     public void removeProgrammaAzienda(Azienda azienda, ProgrammaFedelta programmaFedelta){
         this.getProgrammiAzienda().get(azienda).remove(programmaFedelta);
+    }
+
+    public Map<Azienda, Set<Coupon>> getCouponPreconfiguratiAzienda(){
+        return this.couponPreconfiguratiAzienda;
+    }
+
+    public void addCouponPreconfiguratoAzienda(Azienda azienda, Coupon couponPreconfigurato){
+        //Todo implementare
+    }
+
+    public void updateCouponPreconfiguratoAzienda(Azienda azienda, Coupon coupon){
+        //Todo implementare.
+    }
+
+    public void removeCouponPreconfiguratoAzienda(Azienda azienda, Coupon coupon){
+        //Todo implementare.
     }
 
     public Set<Cliente> getClientiIscritti() {
