@@ -1,6 +1,5 @@
 package loyality_platform_model.Handler;
 
-import ch.qos.logback.core.net.server.Client;
 import loyality_platform_model.DBMS.DBMS;
 import loyality_platform_model.Models.*;
 
@@ -357,7 +356,7 @@ public class HandlerPremi {
         for (Azienda azienda : this.dbms.getAziendeIscritte()) {
             for (Coupon coupon : this.dbms.getCouponPreconfiguratiAzienda().get(azienda)) {
                 if (coupon.getIdCoupon() == idCoupon) {
-                    this.dbms.updateCouponPreconfiguratoAzienda(azienda, coupon);
+                    this.dbms.updateCouponPreconfiguratoAzienda(azienda, idCoupon, valoreSconto, dataScadenza);
                     return true;
                 }
             }
