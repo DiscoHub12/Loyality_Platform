@@ -90,7 +90,7 @@ public class CatalogoPremi {
             throw new IllegalArgumentException("Prize not exist in this Reward Catalog.");
         for (Premio premio : this.premiCatalogo) {
             if (premio.equals(premioOld)) {
-                premio = premioNew;
+                premio.setNome(premioNew.getNome());
             }
         }
     }

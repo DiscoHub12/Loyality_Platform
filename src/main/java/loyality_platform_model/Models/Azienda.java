@@ -1,5 +1,6 @@
 package loyality_platform_model.Models;
 
+import javax.print.attribute.standard.JobKOctets;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
