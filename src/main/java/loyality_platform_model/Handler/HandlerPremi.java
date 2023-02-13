@@ -265,7 +265,7 @@ public class HandlerPremi {
 
     /**
      * This method allows you to add a new Reward Catalog,
-     * to an existing loyalty program of a specific company,
+     * to an existing Loyalty Program Points of a specific company,
      * if it is existing and active.
      *
      * @param idAzienda          the id for the Company.
@@ -273,7 +273,7 @@ public class HandlerPremi {
      * @param premiCatalogo      the Prize for the new Catalog.
      * @throws IllegalArgumentException if the idAzienda or idProgrammaFedeltà is not correct.
      */
-    public void aggiungiCatalogoAProgramma(int idAzienda, int idProgrammaFedelta, Set<Premio> premiCatalogo) {
+    public void aggiungiCatalogoAProgrammaPunti(int idAzienda, int idProgrammaFedelta, Set<Premio> premiCatalogo) {
         Objects.requireNonNull(premiCatalogo);
         if (idAzienda <= 0 || idProgrammaFedelta <= 0)
             throw new IllegalArgumentException("Invalid id for the fileds.");
@@ -282,11 +282,26 @@ public class HandlerPremi {
             if (azienda.getIdAzienda() == idAzienda) {
                 for (ProgrammaFedelta programmaFedelta : this.dbms.getProgrammiAzienda().get(azienda)) {
                     if (programmaFedelta.getIdProgramma() == idProgrammaFedelta) {
-                        //Todo implementare, manca getCatalogoPremi() su ProgrammaFedeltà, è presente su P.Punti e Livelli ma non posso accedere
+                        if(programmaFedelta.getCatalogoPremi() != null){
+                            //Todo implementare, manca getCatalogoPremi() su ProgrammaFedeltà, è presente su P.Punti e Livelli ma non posso accedere
+                        }
                     }
                 }
             }
         }
+    }
+
+    /**
+     * This method allows you to add a new Reward Catalog,
+     * to an existing Loyalty Program Level of a specific company,
+     * if it is existing and active.
+     * @param idAzienda the id for the Company.
+     * @param idProgrammaFedelta the id for the Loyalty Program to add the new Catalog, if not exists.
+     * @param premiCatalogo the prizes for the new Reward Catalog.
+     */
+    public void aggiungiCatalogoProgrammaLivelli(int idAzienda, int idProgrammaFedelta, Set<Premio> premiCatalogo){
+        Objects.requireNonNull(premiCatalogo);
+        //Todo implementare, manca getCatalogoPremi() su ProgrammaFedeltà, è presente su P.Punti e Livelli ma non posso accedere
     }
 
     /**
@@ -306,9 +321,10 @@ public class HandlerPremi {
             if (azienda.getIdAzienda() == idAzienda) {
                 for (ProgrammaFedelta programmaFedelta : this.dbms.getProgrammiAzienda().get(azienda)) {
                     if (programmaFedelta.getIdProgramma() == idProgrammaFedelta) {
-
+                        if(programmaFedelta.getCatalogoPremi().getIdCatalogoPremi() == idCatalogoPremi){
+                            programmaFedelta.setCatalogoPremi(null); //Todo controllare il null.
+                        }
                     }
-                    //Todo implementare, manca getCatalogoPremi() su ProgrammaFedeltà, è presente su P.Punti e Livelli ma non posso accedere
                 }
             }
         }
@@ -533,5 +549,15 @@ public class HandlerPremi {
                 company = azienda;
         }
         return company;
+    }
+
+    private boolean isCatalogoPerPunti(CatalogoPremi catalogoPremi){
+        int count = 0;
+        for(Premio premio : catalogoPremi.getPremiCatalogo()){
+            if(premio.getPunti() != 0){
+                count++;
+            }
+        }
+        return count == catalogoPremi.getPremiCatalogo().size();
     }
 }
