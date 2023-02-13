@@ -68,6 +68,16 @@ public class HandlerAzienda {
     }
 
     /**
+     *
+     * @param idDipendente
+     * @return
+     */
+    public Dipendente getDetailsDipendente(int idDipendente){
+        //Todo implementare
+        return null;
+    }
+
+    /**
      * This method allows you to create a new employee
      * with access to the platform of a specific Company.
      *
