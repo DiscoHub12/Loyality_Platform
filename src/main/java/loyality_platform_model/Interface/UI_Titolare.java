@@ -38,16 +38,17 @@ public class UI_Titolare {
     /**
      * Constructor that create an Interface prototype
      * for the Backoffice (Owner)
+     *
      * @param titolare the Owner (GestorePuntoVendita)
      */
-    public UI_Titolare(Azienda azienda, GestorePuntoVendita titolare, Coalizione coalizione){
+    public UI_Titolare(Azienda azienda, GestorePuntoVendita titolare, Coalizione coalizione) {
         this.azienda = azienda;
         this.titolare = titolare;
         this.coalizione = coalizione;
         this.sc = new Scanner(System.in);
     }
 
-    public void homeBackoffice(){
+    public void homeBackoffice() {
         int choice;
         System.out.println("""
                 BENVENUTO
@@ -55,16 +56,16 @@ public class UI_Titolare {
                 1. Backoffice
                 2. Logout
                 Inserisci il numero corrispettivo
-                
+                                
                 """);
         choice = sc.nextInt();
-        if(choice == 1){
+        if (choice == 1) {
             sezioneBackOffice();
-        }else exit(0);
+        } else exit(0);
     }
 
     //SEZIONE BACKOFFICE PRINCIPALE
-    public void sezioneBackOffice(){
+    public void sezioneBackOffice() {
         int choice = 0;
         System.out.println("""
                 SEZIONE BACKOFFICE
@@ -77,10 +78,10 @@ public class UI_Titolare {
                 6. Sezione Clienti iscritti
                 7. Logout
                 Inserisci il numero corrispettivo
-                
+                                
                 """);
         choice = sc.nextInt();
-        switch (choice){
+        switch (choice) {
             case 1 -> sezioneSpazioFedelta();
             case 2 -> sezioneProgrammiFedelta();
             case 3 -> sezioneCatalogoPremi();
@@ -92,7 +93,7 @@ public class UI_Titolare {
     }
 
     //SOTTO-SEZIONE SPAZIO FEDELTA (DI BACKOFFICE)
-    public void sezioneSpazioFedelta(){
+    public void sezioneSpazioFedelta() {
         int choice;
         System.out.println("\nSEZIONE SPAZIO FEDELTA'." +
                 "\nEcco i dettalgi del tuo spazio fedelta" +
@@ -102,39 +103,39 @@ public class UI_Titolare {
                 1. Modifica Spazio Fedeltà
                 2. Ritorna alla home
                 Inserisci il numero corrispettivo
-                
+                                
                 """);
         choice = sc.nextInt();
-        switch (choice){
+        switch (choice) {
             case 1 -> sezioneSpazioFedelta();
             case 2 -> sezioneBackOffice();
         }
     }
 
     //SOTTO-SEZIONE PROGRAMMA FEDELTA (DI BACKOFFICE)
-    public void sezioneProgrammiFedelta(){
+    public void sezioneProgrammiFedelta() {
         int choice;
         System.out.println("""
                 """);
         choice = sc.nextInt();
-        switch (choice){
+        switch (choice) {
 
         }
     }
 
     //SOTTO-SEZIONE CATALOGO PREMI (DI BACKOFFICE)
-    public void sezioneCatalogoPremi(){
+    public void sezioneCatalogoPremi() {
         int choice;
         System.out.println("""
                 """);
         choice = sc.nextInt();
-        switch (choice){
+        switch (choice) {
 
         }
     }
 
     //SOTTO-SEZIONE CONFIGURAZIONI (DI BACKOFFICE)
-    public void sezioneConfigurazioni(){
+    public void sezioneConfigurazioni() {
         int choice;
         System.out.println("""
                 Elenco le attività disponibili nella sezione Configurazioni : 
@@ -142,17 +143,17 @@ public class UI_Titolare {
                 2.Configurazioni SMS
                 3.Ritorna alla home
                 Inserisci il numero corrispettivo
-                
+                                
                 """);
         choice = sc.nextInt();
-        switch (choice){
+        switch (choice) {
             case 1 -> sezioneConfigurazioneCoupon();
             case 2 -> sezioneConfigurazioneSMS();
             case 3 -> sezioneBackOffice();
         }
     }
 
-    public void sezioneConfigurazioneCoupon(){
+    public void sezioneConfigurazioneCoupon() {
         int choice;
         System.out.println("\nSEZIONE CONFIGURAZIONE COUPON. " +
                 "\nElenco tutti i Coupon creati precedentemente : " +
@@ -162,21 +163,21 @@ public class UI_Titolare {
                 1. Aggiungi Coupon
                 2. Ritorna alla Home
                 Inserisci il numero corrispettivo 
-                
+                                
                 """);
         choice = sc.nextInt();
-        switch (choice){
+        switch (choice) {
             case 1 -> aggiungiCoupon();
             case 2 -> sezioneBackOffice();
         }
     }
 
-    public void sezioneConfigurazioneSMS(){
+    public void sezioneConfigurazioneSMS() {
 
     }
 
     //SOTTP-SEZIONE UTENTI (DI BACKOFFICE)
-    public void sezioneUtenti(){
+    public void sezioneUtenti() {
         int choice;
         System.out.println("\nSEZIONE ACCOUNT DIPENDENTI" +
                 "\nElenco gli Account di tutti i Dipendenti della tua piattaforma" +
@@ -184,35 +185,40 @@ public class UI_Titolare {
         System.out.println("""
                 Elenco le possibili operazioni : 
                 1. Crea un nuovo utente
-                2. Vedi i dettagli di un Dipendente
+                2. Gestisci Dipendente
                 3. Ritorna alla home
-                
+                Inserisci il numero corrispettivo
+                                
                 """);
         choice = sc.nextInt();
-        switch (choice){
+        switch (choice) {
             case 1 -> creaNuovoDipendente();
-            case 2 -> identificaDipendente();
+            case 2 -> gestisciDipendente();
             case 3 -> sezioneBackOffice();
         }
     }
 
     //SOTTO-SEZIONE CLIENTI ISCRITTI (DI BACKOFFICE)
-    public void sezioneClientiIscritti(){
+    public void sezioneClientiIscritti() {
         int choice;
         System.out.println("\nEcco la lista di tutti i tuoi clienti: " +
                 this.gestoreAzienda.getClientiAzienda(this.azienda.getIdAzienda(), this.coalizione));
-        System.out.println("\n Inserisci : " +
-                "\n1. Identifica un Cliente" +
-                "\n2. Ritorna alla Home.");
+        System.out.println("""
+                Elenco le possibili operazioni :
+                1. Identifica un Cliente
+                2. Ritorna alla Home.
+                Inserisci il numero corrispettivo
+                                
+                """);
         choice = sc.nextInt();
-        switch (choice){
+        switch (choice) {
             case 1 -> identificaCliente();
             case 2 -> sezioneBackOffice();
         }
     }
 
     //SOTTO-SEZIONE LOGOUT
-    public void sezioneLogout(){
+    public void sezioneLogout() {
         int choice;
         System.out.println("""
                 Premi 1 per confermare il Logout.
@@ -223,8 +229,9 @@ public class UI_Titolare {
         }
     }
 
-    //METODI PRIVATI INTERNI DI INPUT :
-    public void modificaSpazioFedelta(){
+
+    //---------------------METODI PRIVATI INTERNI DI INPUT--------------------------
+    public void modificaSpazioFedelta() {
         String nome = "";
         String indirizzo = "";
         String numeroTelefono = "";
@@ -238,93 +245,185 @@ public class UI_Titolare {
         System.out.println("\nInserisci la nuova email per lo spazio fedeltà : \n");
         email = sc.nextLine();
         SpazioFedelta spazioFedelta = new SpazioFedelta(nome, indirizzo, numeroTelefono, email);
-        if(Objects.equals(nome, "")){
+        if (Objects.equals(nome, "")) {
             spazioFedelta.setNome(this.azienda.getSpazioFedelta().getNome());
-        };
-        if(Objects.equals(indirizzo, "")){
+        }
+        ;
+        if (Objects.equals(indirizzo, "")) {
             spazioFedelta.setIndirizzo(this.azienda.getSpazioFedelta().getIndirizzo());
         }
-        if(Objects.equals(numeroTelefono, "")){
+        if (Objects.equals(numeroTelefono, "")) {
             spazioFedelta.setNumeroTelefono(this.azienda.getSpazioFedelta().getNumeroTelefono());
         }
-        if(Objects.equals(numeroTelefono, "")){
+        if (Objects.equals(numeroTelefono, "")) {
             spazioFedelta.setEmail(this.azienda.getSpazioFedelta().getEmail());
         }
         this.gestoreAzienda.modificaSpazioFedelta(this.azienda.getSpazioFedelta().getIdSpazioFedelta(), spazioFedelta);
     }
 
-    public void identificaCliente(){
+    public void identificaCliente() {
         int choice;
         System.out.println("\nInserisci l'id del Cliente per prendere i dettagli : \n");
         choice = sc.nextInt();
-        while (choice == 0){
+        while (choice == 0) {
             System.out.println("\nId non valid. Reinserisci l'id del Cliente da identificare : \n");
             choice = sc.nextInt();
         }
         Cliente identificato = this.gestoreCliente.identificaClienteCodice(choice);
-        System.out.println("\nEcco le informazioni del cliente selezionato : " +
-                "\n" + identificato.toString());
-        System.out.println("""
-                Elenco le possibili operazioni :\s
-                1. Torna indietro
-                2. Torna alla Home del Backoffice
-                3. Logout.""");
-        choice = sc.nextInt();
-        switch (choice){
-            case 1 -> sezioneClientiIscritti();
-            case 2 -> sezioneBackOffice();
-            case 3 -> exit(0);
+        if (identificato != null) {
+            System.out.println("\nEcco le informazioni del cliente selezionato : " +
+                    "\n" + identificato.toString());
+            System.out.println("""
+                    Elenco le possibili operazioni :\s
+                    1. Torna indietro
+                    2. Torna alla Home del Backoffice
+                    3. Logout.
+                    Inserisci il numero corrispettivo
+                                    
+                    """);
+            choice = sc.nextInt();
+            switch (choice) {
+                case 1 -> sezioneClientiIscritti();
+                case 2 -> sezioneBackOffice();
+                case 3 -> exit(0);
+            }
+        } else {
+            System.out.println("Non è possibile identificare il Cliente.\n Ritorno alla schermata principale.");
+            sezioneClientiIscritti();
         }
-    }
-
-    public void identificaDipendente(){
 
     }
 
-    public void creaNuovoDipendente(){
+    public void gestisciDipendente() {
+        int choice;
+        int idDipendente;
+        System.out.println("\nInserisci l'id del Dipendente che vuoi gestire : \n");
+        idDipendente = sc.nextInt();
+        while (idDipendente == 0) {
+            System.out.println("Id non valido. Reinserisci l'id del Dipendente : \n");
+            idDipendente = sc.nextInt();
+        }
+        Dipendente identificato = this.gestoreAzienda.getDetailsDipendente(idDipendente);
+        if (identificato != null) {
+            System.out.println("\nEcco le informazioni del Dipendente selezionato : " +
+                    "\n" + identificato.toString());
+            System.out.println("""
+                    Elenco le possibili operazioni :
+                    1. Rimuovi Account Dipendente.
+                    2. Modifica informazioni Dipendente.
+                    3. Ritorna alla schermata precedente.
+                              
+                    Inserisci il numero corrispettivo
+                                        
+                    """);
+            choice = sc.nextInt();
+            while (choice == 0) {
+                System.out.println("Scelta non valida. Reinserisci il numero corrispettivo : ");
+                choice = sc.nextInt();
+            }
+            switch (choice) {
+                case 1 -> {
+                    System.out.println("""
+                            Sei sicuro di voler eliminare l'account ?\s
+                            Inserisci :
+                            1. Per rimuoverlo definitivamente. 
+                            2. Torna indietro.
+                                                    
+                            """);
+                    choice = sc.nextInt();
+                    if (choice == 1) {
+                        this.gestoreAzienda.rimuoviDipendente(this.azienda.getIdAzienda(), idDipendente);
+                    } else gestisciDipendente();
+                }
+                case 2 -> {
+                    int restrizioni;
+                    boolean restr;
+                    String email = "";
+                    System.out.println("""
+                            Puoi cambiare solamente l'email e le restriozioni.\s
+                            Inserisci le restrizioni (0 per acccesso completo, 1 per ristretto) 
+                                                        
+                            """);
+                    restrizioni = sc.nextInt();
+                    if (restrizioni == 0) {
+                        restr = false;
+                    } else restr = true;
+                    System.out.println("\nVuoi cambiare l'email del Dipendente ? " +
+                            "Inserisci : " +
+                            "1. Per cambiare email ");
+                    choice = sc.nextInt();
+                    if (choice == 1) {
+                        System.out.println("\nInserisci la nuova email del Dipendente.\n");
+                        email = sc.nextLine();
+                    }
+                    System.out.println("""
+                            Inserisci :
+                            1. Conferma Creazione.
+                            2. Annulla Creazione.
+                            3. Ritorna alla home
+                                            
+                            """);
+                    choice = sc.nextInt();
+                    if(choice == 1){
+                        this.gestoreAzienda.modificaDipendente(this.azienda.getIdAzienda(), idDipendente, this.titolare, email, restr);
+                        System.out.println("""
+                                Modifiche avvenute con successo.
+                                Ritorno alla schermata precedente con la lista aggiornata.
+                                
+                                """);
+                        sezioneUtenti();
+                    }
+                }
+                case 3 -> sezioneUtenti();
+            }
+        }
+
+    }
+
+    public void creaNuovoDipendente() {
         int choice;
         System.out.println("""
                 Creazione di un nuovo Account per un dipendente.
                 Inserisci il nome del Dipendente :
-                
+                                
                 """);
         String nome = sc.nextLine();
-        while(Objects.equals(nome, "") || nome == null){
+        while (Objects.equals(nome, "") || nome == null) {
             System.out.println("Nome non valido. Reinserisci il nome del Dipendente : \n");
             nome = sc.nextLine();
         }
         System.out.println("Inserisci il cognome del Dipendente : ");
         String cognome = sc.nextLine();
-        while (Objects.equals(cognome, "") || cognome == null){
+        while (Objects.equals(cognome, "") || cognome == null) {
             System.out.println("Cognome non valido. Reinserisci il cognome del Dipendente : \n");
             cognome = sc.nextLine();
         }
         System.out.println("Inserisci la email del Dipendente : ");
         String email = sc.nextLine();
-        while(Objects.equals(email, "") || email == null){
+        while (Objects.equals(email, "") || email == null) {
             System.out.println("Email non valida. Reinserisci l'email del Dipendente : \n");
             email = sc.nextLine();
         }
         System.out.println("Inserisci 0 per l'accesso a tutta la piattaforma, 1 se ha accesso ristretto");
         int restrizioni = sc.nextInt();
         boolean restr;
-        while(restrizioni < 0 || restrizioni > 1){
+        while (restrizioni < 0 || restrizioni > 1) {
             System.out.println("Restrizioni non valide. Reinserisci la restrizione,deve essere un numero 0 o 1 : \n");
             restrizioni = sc.nextInt();
         }
-        if(restrizioni == 0){
+        if (restrizioni == 0) {
             restr = false;
-        }else restr = true;
+        } else restr = true;
 
         System.out.println("""
                 Premi :
                 1. Conferma Creazione.
                 2. Annulla Creazione.
                 3. Ritorna alla home
-                
+                                
                 """);
         choice = sc.nextInt();
-        switch (choice){
+        switch (choice) {
             case 1 -> {
                 this.gestoreAzienda.aggiungiDipendente(this.azienda.getIdAzienda(), nome, cognome, email, restr);
                 System.out.println("\nAccount per il dipendente creato correttamente.\nRitorno alla schermata principale.");
@@ -335,7 +434,7 @@ public class UI_Titolare {
         }
     }
 
-    public void aggiungiCoupon(){
+    public void aggiungiCoupon() {
         int importoCoupon;
         String dataAttivazione;
         String dataScadenza;
@@ -348,14 +447,14 @@ public class UI_Titolare {
         System.out.println("\nInserisci la data di scadenza del Coupon : \n");
         dataScadenza = sc.nextLine();
         System.out.println("""
-                Premi :
+                Inserisci :
                 1. Conferma Creazione.
                 2. Annulla Creazione.
                 3. Ritorna alla home
-                
+                                
                 """);
         choice = sc.nextInt();
-        switch (choice){
+        switch (choice) {
             case 1 -> {
                 this.gestorePremi.aggiungiCouponPreconfigurato(this.azienda.getIdAzienda(), importoCoupon, new Date(dataScadenza));
                 System.out.println("\nCoupon creato correttamente. Ritorno alla schermata principale.\n");
