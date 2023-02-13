@@ -102,6 +102,11 @@ public class DBMS {
     }
 
     public void addDipendente(Azienda azienda, Dipendente dipendente){
+        if(this.getDipendentiAzienda().get(azienda) == null){
+            Set<Dipendente> dipendentiAzienda = new HashSet<>();
+            dipendentiAzienda.add(dipendente);
+            this.getDipendentiAzienda().put(azienda, dipendentiAzienda);
+        }
         this.getDipendentiAzienda().get(azienda).add(dipendente);
     }
 
