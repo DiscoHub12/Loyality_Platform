@@ -15,18 +15,16 @@ public class SMS {
 
     private ConfigurazioneSMS configurazione;
 
-    public SMS(String testo, Date dataInvio) {
+    public SMS(String testo) {
         if (Objects.equals(testo, "")){
             throw new IllegalArgumentException("Illegal text for sms.");}
         this.idSMS=++contatoreSMS;
         this.testo = testo;
-        this.dataInvio = dataInvio;
-
+        //this.dataInvio=
     }
-    public SMS(ConfigurazioneSMS configurazione, Date dataInvio){
+    public SMS(ConfigurazioneSMS configurazione){
         this.idSMS=++contatoreSMS;
         this.testo= configurazione.getTestoConfigurato();
-        this.dataInvio=dataInvio;
     }
     public int getIdSMS(){
         return this.idSMS;
