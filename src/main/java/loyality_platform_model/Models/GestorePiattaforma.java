@@ -1,8 +1,8 @@
 package loyality_platform_model.Models;
 
+import java.util.Objects;
+
 /**
- * IMPLEMENTED BY : Sofia Scattolini.
- *
  * Class representing the manager of this platform.
  * The manager is able to run a series
  * of activities, such as the creation of loyalty programs,
@@ -30,6 +30,8 @@ public class GestorePiattaforma {
      * @param email email of platform manager
      */
     public GestorePiattaforma(String nome, String cognome, String email) {
+        if (Objects.equals(nome, "") || Objects.equals(cognome, ""))
+            throw new IllegalArgumentException("Illegal name or surname about this manager.");
         this.idGestorePiattaforma=++contatoreGestorePiattaforma;
         this.nome = nome;
         this.cognome = cognome;
