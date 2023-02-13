@@ -30,7 +30,7 @@ public class DBMS {
 
 
     private final Map<Cliente, Set<SMS>>  SMSCliente;
-
+    private final Map<Azienda, Set<SMS>>  SMSPreconfiguratiAzienda;
 
     private Map<Cliente, Set<Coupon>>  couponCliente;
 
@@ -50,6 +50,8 @@ public class DBMS {
 
 
     private final Set<Abbonamento> abbonamenti;
+    private final Set<Visita> visite;
+    private final Set<SMS> messaggi;
 
 
 
@@ -67,6 +69,9 @@ public class DBMS {
         this.programmiDisponibili = new HashSet<>();
         this.pacchettiSMS = new HashSet<>();
         this.abbonamenti = new HashSet<>();
+        this.SMSPreconfiguratiAzienda=new HashMap<>();
+        this.visite = new HashSet<>();
+        this.messaggi = new HashSet<>();
 
     }
 
@@ -190,15 +195,20 @@ public class DBMS {
     }
 
     public void addVisita(Cliente cliente, Visita visita){
-        //TODO implementare
+        this.visiteCliente.get(cliente).add(visita);
     }
 
-    public void updateVisita(Visita visitaOld, Visita visitaNew, Cliente cliente){
-        //TODO implementare
+    public void updateVisita(int idCliente,int idVisita,String luogo, Date data){
+        for(Visita visita : this.visiteCliente.get(idCliente)){
+            if(visita.getIdVisita()==idVisita){
+                visita.setLuogo(luogo);
+                visita.setData(data);
+            }
+        }
     }
 
-    public void removeVisita(Visita visita, Cliente cliente){
-        //TODO implementare
+    public void removeVisita(Visita visita, int idCliente){
+        this.visiteCliente.get(idCliente).remove(visita);
     }
 
     public Set<Tessera> getTessereClienti() {
@@ -229,4 +239,15 @@ public class DBMS {
     public Set<Abbonamento> getAbbonamenti() {
         return abbonamenti;
     }
+    public Map<Azienda, Set<SMS>> getSMSPreconfiguratiAzienda() {
+        return SMSPreconfiguratiAzienda;
+    }
+
+    public Set<Visita> getVisite() {
+        return visite;
+    }
+    public Set<SMS> getMessaggi(){
+        return messaggi;
+    }
 }
+
