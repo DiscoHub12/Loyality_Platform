@@ -1,62 +1,55 @@
 package loyality_platform_model.ModelTest;
 
-import loyality_platform_model.Models.Reminder;
 import loyality_platform_model.Models.Visita;
 import org.junit.jupiter.api.Test;
 import java.util.Calendar;
 import java.util.Date;
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * IMPLEMENTED BY : Alessio Giacché.
- */
-
-
 public class VisitaTest {
 
     private String luogo = "Camerino";
     private Date data = new Date(2023, Calendar.JANUARY, 21);
-    String ora = "14:00";
 
     @Test
     public void testCostructor(){
-        assertThrows(NullPointerException.class, () -> new Visita("", null, ""));
-        assertThrows(NullPointerException.class, () -> new Visita(luogo, null, ora));
-        Visita visita = new Visita(luogo, data, ora);
+        assertThrows(NullPointerException.class, () -> new Visita("", null));
+        assertThrows(NullPointerException.class, () -> new Visita(luogo, null));
+        Visita visita = new Visita(luogo, data);
     }
 
     @Test
     public void testGetIdVisita(){
-        Visita visita = new Visita(luogo, data, ora);
+        Visita visita = new Visita(luogo, data);
         assertEquals(1, visita.getIdVisita());
-        Visita visita2 = new Visita(luogo, data, ora);
+        Visita visita2 = new Visita(luogo, data);
         assertEquals(2, visita2.getIdVisita());
-        Visita visita3 = new Visita(luogo, data, ora);
+        Visita visita3 = new Visita(luogo, data);
         assertEquals(3, visita3.getIdVisita());
-        Visita visita4 = new Visita(luogo, data, ora);
+        Visita visita4 = new Visita(luogo, data);
         assertEquals(4, visita4.getIdVisita());
-        Visita visita5 = new Visita(luogo, data, ora);
+        Visita visita5 = new Visita(luogo, data);
         assertEquals(5, visita5.getIdVisita());
     }
 
     @Test
     public void testGetData(){
-        Visita visita = new Visita(luogo, data, ora);
+        Visita visita = new Visita(luogo, data);
         assertEquals(data, visita.getData());
         Date uno = new Date(2023, Calendar.JANUARY, 21);
-        Visita visita2 = new Visita(luogo, uno, ora);
+        Visita visita2 = new Visita(luogo, uno);
         assertEquals(uno, visita2.getData());
         Date due = new Date(2023, Calendar.JANUARY, 22);
-        Visita visita3 = new Visita(luogo, due, ora);
+        Visita visita3 = new Visita(luogo, due);
         assertEquals(due, visita3.getData());
         Date tre = new Date(2023, Calendar.JANUARY, 23);
-        Visita visita4 = new Visita(luogo, tre, ora);
+        Visita visita4 = new Visita(luogo, tre);
         assertEquals(tre, visita4.getData());
     }
 
     @Test
     public void testSetData(){
-        Visita visita = new Visita(luogo, data, ora);
+        Visita visita = new Visita(luogo, data);
         assertEquals(data, visita.getData());
         Date uno = new Date(2023, Calendar.JANUARY, 21);
         visita.setData(uno);
@@ -71,19 +64,19 @@ public class VisitaTest {
 
     @Test
     public void testGetLuogo(){
-        Visita visita = new Visita(luogo, data, ora);
+        Visita visita = new Visita(luogo, data);
         assertEquals(luogo, visita.getLuogo());
-        Visita visita2 = new Visita("Luogo1", data, ora);
+        Visita visita2 = new Visita("Luogo1", data);
         assertEquals("Luogo1", visita2.getLuogo());
-        Visita visita3 = new Visita("Luogo2", data, ora);
+        Visita visita3 = new Visita("Luogo2", data);
         assertEquals("Luogo2", visita3.getLuogo());
-        Visita visita4 = new Visita("Luogo3", data, ora);
+        Visita visita4 = new Visita("Luogo3", data);
         assertEquals("Luogo3", visita4.getLuogo());
     }
 
     @Test
     public void testSetLuogo(){
-        Visita visita = new Visita(luogo, data, ora);
+        Visita visita = new Visita(luogo, data);
         assertEquals(luogo, visita.getLuogo());
         visita.setLuogo("Luogo1");
         assertEquals("Luogo1", visita.getLuogo());
@@ -96,38 +89,8 @@ public class VisitaTest {
     }
 
     @Test
-    public void testGetOra() {
-        Visita visita = new Visita(luogo, data, ora);
-        assertEquals(ora, visita.getOra());
-        Visita visita2 = new Visita(luogo, data, "13:00");
-        assertEquals("13:00", visita2.getOra());
-        Visita visita3 = new Visita(luogo, data, "15:00");
-        assertEquals("15:00", visita3.getOra());
-        Visita visita4 = new Visita(luogo, data, "16:00");
-        assertEquals("16:00", visita4.getOra());
-        Visita visita5 = new Visita(luogo, data, "17:00");
-        assertEquals("17:00", visita5.getOra());
-    }
-
-    @Test
-    public void testSetOra(){
-        Visita visita = new Visita(luogo, data, ora);
-        assertEquals(ora, visita.getOra());
-        visita.setOra("13:00");
-        assertEquals("13:00", visita.getOra());
-        visita.setOra("15:00");
-        assertEquals("15:00", visita.getOra());
-        visita.setOra("16:00");
-        assertEquals("16:00", visita.getOra());
-        visita.setOra("17:00");
-        assertEquals("17:00", visita.getOra());
-        visita.setOra("18:00");
-        assertEquals("18:00", visita.getOra());
-    }
-
-    @Test
     public void testGetSetCompletata(){
-        Visita visita = new Visita(luogo, data, ora);
+        Visita visita = new Visita(luogo, data);
         assertFalse(visita.isCompletata());
         visita.setCompletata(true);
         assertTrue(visita.isCompletata());
@@ -135,11 +98,4 @@ public class VisitaTest {
         assertFalse(visita.isCompletata());
     }
 
-    @Test
-    public void testCreaReminder(){
-        Visita visita = new Visita(luogo, data, ora);
-        Reminder uno = visita.creaReminder("Reminder", data);
-        Reminder due = visita.creaReminder("Reminder Uno", data);
-        Reminder tre = visita.creaReminder("Reminder Tre", data);
-    }
 }
