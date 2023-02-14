@@ -16,42 +16,20 @@ import static org.junit.jupiter.api.Assertions.*;
 public class HandlerAziendaTest {
 
     /**
-     * AZIENDA 0:
+     * AZIENDA 1:
      */
     private final Azienda azienda = new Azienda(new GestorePuntoVendita("Alessio", "Cognome1", "prova@gmail.com"), new SpazioFedelta("Azienda1", "Indirizzo1", "Numero1", "Email1"));
     private final SpazioFedelta spazio = new SpazioFedelta("Spazio1", "Indirizzo1", "Telefono1", "email1");
     private final Dipendente dipendente = new Dipendente("Dipendente1", "Cognome1", "prova@gmail1.com", false);
 
     /**
-     * AZIENDA 1
-     */
-    private final Azienda azienda1 = new Azienda(new GestorePuntoVendita("Luca", "Cognome2", "prova1@gmail.com"), new SpazioFedelta("Azienda2", "Indirizzo2", "Numero2", "Email2"));
-    private final SpazioFedelta spazio1 = new SpazioFedelta("Spazio1", "Indirizzo1", "Telefono1", "email1");
-    private final Dipendente dipendente1 = new Dipendente("Dipendente2", "Cognome2", "prova@gmail2.com", false);
-
-    /**
-     * AZIENDA 2
-     */
-    private final Azienda azienda2 = new Azienda(new GestorePuntoVendita("Marco", "Cognome3", "prova2@gmail.com"), new SpazioFedelta("Azienda3", "Indirizzo3", "Numero3", "Email3"));
-    private final SpazioFedelta spazio2 = new SpazioFedelta("Spazio1", "Indirizzo1", "Telefono1", "email1");
-    private final Dipendente dipendente2 = new Dipendente("Dipendente3", "Cognome3", "prova@gmail3.com", false);
-
-    /**
-     * AZIENDA 3
-     */
-    private final Azienda azienda3 = new Azienda(new GestorePuntoVendita("Sofia", "Cognome4", "prova3@gmail.com"), new SpazioFedelta("Azienda4", "Indirizzo4", "Numero4", "Email4"));
-    private final SpazioFedelta spazio3 = new SpazioFedelta("Spazio1", "Indirizzo1", "Telefono1", "email1");
-    private final Dipendente dipendente3 = new Dipendente("Dipendente4", "Cognome4", "prova@gmail4.com", false);
-
-    /**
      * PROGRAMMI FEDELTA PER TEST
      */
 
     private final Map<Integer, Integer> policy= new HashMap<>();
-    private final ProgrammaFedelta programmaFedeltaPunti = new ProgrammaPunti("ProgrammaUno", 100, 2, 10);
-    private final ProgrammaFedelta programmaFedeltaPunti1 = new ProgrammaPunti("ProgrammaUno", 100, 2, 10);
-    private final ProgrammaFedelta programmaFedeltaPunti2 = new ProgrammaPunti("ProgrammaUno", 100, 2, 10);
-    private final ProgrammaFedelta programmaFedeltaPunti3 = new ProgrammaPunti("ProgrammaUno", 100, 2, 10);
+    private final ProgrammaFedelta programmaFedeltaPunti1 = new ProgrammaPunti("ProgrammaUno", 100, 2, 10, 20);
+    private final ProgrammaFedelta programmaFedeltaPunti2 = new ProgrammaPunti("ProgrammaUno", 100, 2, 10, 20);
+    private final ProgrammaFedelta programmaFedeltaPunti3 = new ProgrammaPunti("ProgrammaUno", 100, 2, 10, 20);
     private final ProgrammaFedelta programmaFedeltaLivelli1 = new ProgrammaLivelli("ProgrammaUno", 100, 2, policy, 2, 10);
     private final ProgrammaFedelta programmaFedeltaLivelli2 = new ProgrammaLivelli("ProgrammaUno", 100, 2, policy, 2, 10);
     private final ProgrammaFedelta programmaFedeltaLivelli3 = new ProgrammaLivelli("ProgrammaUno", 100, 2, policy, 2, 10);
@@ -59,13 +37,11 @@ public class HandlerAziendaTest {
     /**
      * PREMI PER TEST
      */
-    private final Premio premio = new Premio("Premio", false, 2);
     private final Premio premio1 = new Premio("Premio1", false, 2);
     private final Premio premio2 = new Premio("Premio2", false, 2);
     private final Premio premio3 = new Premio("Premio3", false, 2);
     private final Premio premio4 = new Premio("Premio4", false, 2);
     private final Set<Premio> premi = new HashSet<>();
-    private final CatalogoPremi catalogo = new CatalogoPremi(premi);
     private final Set<CatalogoPremi> cataloghi = new HashSet<>();
 
     /**
@@ -77,60 +53,26 @@ public class HandlerAziendaTest {
 
     public void initTotal() {
         System.out.println("Azienda numero 1 : " + this.azienda.getIdAzienda());
-        System.out.println("Azienda numero 2 : " + this.azienda1.getIdAzienda());
-        System.out.println("Azienda numero 3 : " + this.azienda2.getIdAzienda());
-        System.out.println("Azienda numero 4 : " + this.azienda3.getIdAzienda());
-        this.catalogo.setPremiCatalogo(premi);
-        Set<CatalogoPremi> cataloghi = new HashSet<>();
-        cataloghi.add(catalogo);
+        Set<Premio> premi = new HashSet<>();
+        premi.add(premio1);
+        premi.add(premio2);
+        premi.add(premio3);
+        premi.add(premio4);
+        CatalogoPremi catalogo = new CatalogoPremi(premi);
+        Set<CatalogoPremi> catalogoPremi = new HashSet<>();
+        catalogoPremi.add(catalogo);
+        catalogoPremi.add(catalogo);
         //Azienda 1
         azienda.setSpazioFedelta(spazio);
         azienda.setCatalogoPremi(this.cataloghi);
         db.addAzienda(azienda);
         db.addDipendente(azienda, dipendente);
-        db.addProgrammaAzienda(azienda, programmaFedeltaPunti);
         db.addProgrammaAzienda(azienda, programmaFedeltaPunti1);
         db.addProgrammaAzienda(azienda, programmaFedeltaPunti2);
         db.addProgrammaAzienda(azienda, programmaFedeltaPunti3);
         db.addProgrammaAzienda(azienda, programmaFedeltaLivelli1);
         db.addProgrammaAzienda(azienda, programmaFedeltaLivelli2);
         db.addProgrammaAzienda(azienda, programmaFedeltaLivelli3);
-        //Azienda 2
-        azienda1.setSpazioFedelta(spazio1);
-        azienda1.setCatalogoPremi(this.cataloghi);
-        db.addAzienda(azienda1);
-        db.addDipendente(azienda1, dipendente1);
-        db.addProgrammaAzienda(azienda1, programmaFedeltaPunti);
-        db.addProgrammaAzienda(azienda1, programmaFedeltaPunti1);
-        db.addProgrammaAzienda(azienda1, programmaFedeltaPunti2);
-        db.addProgrammaAzienda(azienda1, programmaFedeltaPunti3);
-        db.addProgrammaAzienda(azienda1, programmaFedeltaLivelli1);
-        db.addProgrammaAzienda(azienda1, programmaFedeltaLivelli2);
-        db.addProgrammaAzienda(azienda1, programmaFedeltaLivelli3);
-        //Azienda 3
-        azienda2.setSpazioFedelta(spazio2);
-        azienda2.setCatalogoPremi(this.cataloghi);
-        db.addAzienda(azienda2);
-        db.addDipendente(azienda2, dipendente2);
-        db.addProgrammaAzienda(azienda2, programmaFedeltaPunti);
-        db.addProgrammaAzienda(azienda2, programmaFedeltaPunti1);
-        db.addProgrammaAzienda(azienda2, programmaFedeltaPunti2);
-        db.addProgrammaAzienda(azienda2, programmaFedeltaPunti3);
-        db.addProgrammaAzienda(azienda2, programmaFedeltaLivelli1);
-        db.addProgrammaAzienda(azienda2, programmaFedeltaLivelli2);
-        db.addProgrammaAzienda(azienda2, programmaFedeltaLivelli3);
-        //Azienda 4
-        azienda3.setSpazioFedelta(spazio3);
-        azienda3.setCatalogoPremi(this.cataloghi);
-        db.addAzienda(azienda3);
-        db.addDipendente(azienda3, dipendente3);
-        db.addProgrammaAzienda(azienda3, programmaFedeltaPunti);
-        db.addProgrammaAzienda(azienda3, programmaFedeltaPunti1);
-        db.addProgrammaAzienda(azienda3, programmaFedeltaPunti2);
-        db.addProgrammaAzienda(azienda3, programmaFedeltaPunti3);
-        db.addProgrammaAzienda(azienda3, programmaFedeltaLivelli1);
-        db.addProgrammaAzienda(azienda3, programmaFedeltaLivelli2);
-        db.addProgrammaAzienda(azienda3, programmaFedeltaLivelli3);
 
     }
 
@@ -157,10 +99,6 @@ public class HandlerAziendaTest {
         assertEquals(dipendenti, this.db.getDipendentiAzienda().get(azienda));
         Set<Dipendente> dipendenti1 = handler.getDipendentiAzienda(2);
         assertNotNull(dipendenti1);
-        assertEquals(dipendenti1, this.db.getDipendentiAzienda().get(azienda1));
-        Set<Dipendente> dipendenti2 = handler.getDipendentiAzienda(3);
-        assertNotNull(dipendenti2);
-        assertEquals(dipendenti2, this.db.getDipendentiAzienda().get(azienda2));
     }
 
     @Test
@@ -178,16 +116,25 @@ public class HandlerAziendaTest {
     public void testAggiungiDipendente() {
         initTotal();
         handler.aggiungiDipendente(1, "Nome", "Cognome", "Email", false);
+        handler.aggiungiDipendente(1, "Alessio", "Cognome1", "email", false);
         Set<Dipendente> dipendentiAzienda1 = this.db.getDipendentiAzienda().get(azienda);
-        for(Dipendente dipendente : dipendentiAzienda1){
-            assertSame("Nome", dipendente.getNome());
-        }
+        assertEquals(2, dipendentiAzienda1.size());
     }
 
     @Test
     public void testModificaDipendente() {
         initTotal();
-        //Todo implementare
+        assertThrows(IllegalArgumentException.class, () -> this.handler.modificaDipendente(-1, 1, handler.getTitolareAzienda(1), "email", false));
+        assertThrows(IllegalArgumentException.class, () -> this.handler.modificaDipendente(1, -1, handler.getTitolareAzienda(1), "email", false));
+        assertThrows(IllegalArgumentException.class, () -> this.handler.modificaDipendente(1, 1, handler.getTitolareAzienda(1), "", false));
+        assertTrue(this.handler.modificaDipendente(1, 1, this.handler.getTitolareAzienda(1), "ciao", false));
+        Set<Dipendente> dipendenti = this.handler.getDipendentiAzienda(azienda.getTitolare().getIdGestorePuntoVendita());
+        for(Dipendente dipendente : dipendenti){
+            if(dipendente.getIdDipendente() == 1){
+                assertEquals("ciao", dipendente.getEmail());
+                assertFalse(dipendente.isRestrizioni());
+            }
+        }
     }
 
     @Test

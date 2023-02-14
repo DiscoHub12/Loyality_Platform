@@ -159,10 +159,10 @@ public class UI_Titolare {
                 "\nElenco tutti i Coupon creati precedentemente : " +
                 "\n" + this.gestorePremi.getCouponPreconfiguratiAzienda(this.azienda.getIdAzienda()));
         System.out.println("""
-                Elenco le possibili operazioni : 
+                Elenco le possibili operazioni :
                 1. Aggiungi Coupon
                 2. Ritorna alla Home
-                Inserisci il numero corrispettivo 
+                Inserisci il numero corrispettivo
                                 
                 """);
         choice = sc.nextInt();
