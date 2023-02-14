@@ -32,9 +32,6 @@ public class HandlerVisite {
     /**
      * method that returns the details of the visit
      */
-    public void getDetailsVisita() {
-        //TODO implemntare
-    }
 
     public DBMS getDbms() {
         return dbms;
@@ -128,22 +125,20 @@ public class HandlerVisite {
 
     /**
      * Method that allows you to remove a specific Visit for a specific Costumers.
-     *
-     * @param visita  the Visit to remove.
      * @throws NullPointerException     if the <cliente> or <visita> is null.
      * @throws IllegalArgumentException if the Costumers don't have this Visit.
      */
 
-    public void rimuoviVisita(int idCliente, Visita visita) {
-        Objects.requireNonNull(visita);
-        if (idCliente < 1)
-            throw new IllegalArgumentException("Customer Id not correct");
+    public void rimuoviVisita(int idVisita, int idCliente) {
+        if (idCliente < 1 || idVisita<1)
+            throw new IllegalArgumentException("Customer Id or visit id are not correct");
         for (Cliente cliente : this.getDbms().getClientiIscritti()) {
             if (cliente.getIdCliente() == idCliente) {
-                for (Visita visita1 : this.dbms.getVisiteCliente().get(cliente)) {
-                    if (visita.equals(visita1)) {
-                        this.dbms.removeVisita(visita, idCliente);
-                    }
+                for (Visita visita : this.dbms.getVisiteCliente().get(cliente)) {
+                    if (visita.getIdVisita()==idVisita) {
+                        this.dbms.removeVisita(idVisita, idCliente);
+                    }else
+                        throw new IllegalArgumentException("visit don't exist or already deleted.");
                 }
             }
         }

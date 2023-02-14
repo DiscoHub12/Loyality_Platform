@@ -240,9 +240,15 @@ public class DBMS {
         }
     }
 
-    public void removeVisita(Visita visita, int idCliente){
-        this.visiteCliente.get(idCliente).remove(visita);
+    public void removeVisita(int idVisita, int idCliente) {
+        for (Visita visita : this.visiteCliente.get(idCliente)) {
+            if (visita.getIdVisita() == idVisita) {
+                this.visiteCliente.get(idCliente).remove(visita);
+            }
+        }
     }
+
+
 
     public Set<Tessera> getTessereClienti() {
         return tessereClienti;
