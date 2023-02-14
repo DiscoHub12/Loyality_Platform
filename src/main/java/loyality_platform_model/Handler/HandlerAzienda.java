@@ -68,11 +68,10 @@ public class HandlerAzienda {
     }
 
     /**
-     *
      * @param idDipendente
      * @return
      */
-    public Dipendente getDetailsDipendente(int idDipendente){
+    public Dipendente getDetailsDipendente(int idDipendente) {
         //Todo implementare
         return null;
     }
@@ -139,8 +138,8 @@ public class HandlerAzienda {
             if (azienda.getIdAzienda() == idAzienda) {
                 for (Dipendente dipendente : this.dbms.getDipendentiAzienda().get(azienda)) {
                     if (dipendente.getIdDipendente() == idDipendente) {
-                        this.dbms.updateDipendente(azienda, idDipendente, email, restrizioni);
-                        return true;
+                        if (this.dbms.updateDipendente(azienda, idDipendente, email, restrizioni))
+                            return true;
                     }
                 }
             }
@@ -163,8 +162,8 @@ public class HandlerAzienda {
             if (azienda.getIdAzienda() == idAzienda) {
                 for (Dipendente dipendente : this.dbms.getDipendentiAzienda().get(azienda)) {
                     if (dipendente.getIdDipendente() == idAzienda) {
-                        this.dbms.removeDipendente(azienda, dipendente);
-                        return true;
+                        if (this.dbms.removeDipendente(azienda, dipendente))
+                            return true;
                     }
                 }
             }
@@ -260,7 +259,7 @@ public class HandlerAzienda {
      * @param idAzienda  the Company (Azienda) id.
      * @param coalizione the Coalition.
      * @return the list of all Customers.
-     * @throws NullPointerException if coalizione is null.
+     * @throws NullPointerException     if coalizione is null.
      * @throws IllegalArgumentException if the idAzienda is not valid.
      */
     public Set<Cliente> getClientiAzienda(int idAzienda, Coalizione coalizione) {
