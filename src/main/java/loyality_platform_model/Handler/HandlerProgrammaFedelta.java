@@ -358,6 +358,17 @@ public class HandlerProgrammaFedelta {
             pl.setImportoSpesa(importoSpesa);
     }
 
+    /**
+     * This method allows you to go and change the policies on the levels of a specific levels program.
+     * @param programmaFedelta selected loyalty program.
+     * @param addLevel <code>true</code> if you want to add a new level, <code>false</code> otherwise.
+     * @param pointsNewLevel number of points for the new level.
+     * @param removeLevel <code>true</code> if you want to remove a level, <code>false</code> otherwise.
+     * @param levelToRemove  number of levels to remove.
+     * @param updatePointsLevel <code>true</code> if you want to change points of a level, <code>false</code> otherwise.
+     * @param levelToUpdate  number of levels to update.
+     * @param newPoints number of points for the level selected.
+     */
     private void updatePolicyPL(ProgrammaFedelta programmaFedelta, boolean addLevel, int pointsNewLevel, boolean removeLevel, int levelToRemove, boolean updatePointsLevel, int levelToUpdate, int newPoints){
         ProgrammaLivelli pl = programmaFedelta.getProgrammaLivelli();
         if(addLevel){
@@ -368,5 +379,4 @@ public class HandlerProgrammaFedelta {
             pl.updatePuntiLivello(levelToUpdate, newPoints);
         }
     }
-
 }
