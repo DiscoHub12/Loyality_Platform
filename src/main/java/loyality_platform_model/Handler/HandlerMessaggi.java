@@ -35,7 +35,7 @@ public class HandlerMessaggi {
     public ConfigurazioneSMS getSMSPreconfigurato(int idAzienda,int idSMS){
         if (idAzienda<=0 || idSMS<=0)
             throw new IllegalArgumentException("Illegal id for the company and sms.");
-        return this.dbms.getSMSPreconfigurato(idAzienda,int idSMS);
+        return this.dbms.getSMSPreconfigurato(idAzienda,idSMS);
     }
 
     /**
@@ -87,11 +87,11 @@ public class HandlerMessaggi {
      * @param sms
      * @param clienti
      */
-    public void inviaSmsGenerale(SMS sms, Set<Cliente> clienti){
+    public void inviaSmsGenerale(String sms, Set<Cliente> clienti){
         if(Objects.isNull(sms))
             throw new IllegalArgumentException("Error in sms");
         for(Cliente cliente : clienti){
-            inviaSMS(cliente.getIdCliente(),sms);
+            this.dbms.addSMS(cliente.getIdCliente(),creaSMS(sms));
         }
     }
 
@@ -105,8 +105,8 @@ public class HandlerMessaggi {
         if(idCliente<1)
             throw new IllegalArgumentException("Customer id not correct");
         SMS messaggio = creaSMSPreconfigurato(smsConfigurato);
-                this.dbms.addSMS(idCliente,messaggio);
-            }
+        this.dbms.addSMS(idCliente,messaggio);
+    }
 
 
 
@@ -119,7 +119,7 @@ public class HandlerMessaggi {
             throw new IllegalArgumentException("Error in sms");
         for(Cliente cliente : clienti){
             SMS messaggio= creaSMSPreconfigurato(smsConfigurato);
-            this.dbms.addSMS(cliente.,messaggio);
+            this.dbms.addSMS(cliente.getIdCliente(),messaggio);
         }
     }
 }
