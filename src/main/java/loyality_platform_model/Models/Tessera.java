@@ -30,7 +30,7 @@ public class Tessera {
     private  boolean isVipLivelli;
 
     public Tessera(int idCliente) {
-        this.idTessera = contatoreTessera++;
+        this.idTessera = ++contatoreTessera;
         this.idCliente = idCliente;
         this.programmiFedelta = new HashSet<>();
         this.punti = 0;
