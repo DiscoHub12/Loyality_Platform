@@ -1,6 +1,6 @@
 package loyality_platform_model.DBMS;
 
-import ch.qos.logback.core.net.server.Client;
+
 import loyality_platform_model.Models.*;
 
 import java.util.*;
@@ -71,45 +71,48 @@ public class DBMS {
         return instance;
     }
 
+    public Set<ProgrammaFedelta> getProgrammiDisponibili() {
+        return this.programmiDisponibili;
+    }
+
+    public Set<PacchettoSMS> getPacchettiSMS() {
+        return this.pacchettiSMS;
+    }
+
+    public Set<Abbonamento> getAbbonamenti() {
+        return this.abbonamenti;
+    }
+
     public Set<Azienda> getAziendeIscritte() {
         return this.aziendeIscritte;
     }
 
-    public boolean addAzienda(Azienda azienda) {
-        this.aziendeIscritte.add(azienda);
-        return true;
+
+    public Set<Cliente> getClientiIscritti() {
+        return this.clientiIscritti;
     }
 
-    public boolean updateAzienda(int idAzienda, Azienda aziendaNew) {
-        for (Azienda azienda : this.aziendeIscritte) {
-            if (azienda.getIdAzienda() == idAzienda) {
-                azienda.setTitolare(aziendaNew.getTitolare());
-                azienda.setSpazioFedelta(aziendaNew.getSpazioFedelta());
-                azienda.setCatalogoPremi(aziendaNew.getCatalogoPremi());
-                return true;
-            }
-        }
-        return false;
+    public Set<Tessera> getTessereClienti() {
+        return this.tessereClienti;
     }
 
-    public boolean removeAzienda(Azienda azienda) {
-        for (Azienda azienda1 : this.aziendeIscritte) {
-            if (azienda1.equals(azienda)) {
-                this.aziendeIscritte.remove(azienda);
-                return true;
-            }
-        }
-        return false;
-    }
+
+    //--OPERAZIONI AZIENDA--
 
     public GestorePuntoVendita getTitolareAzienda(int idAzienda) {
-        for (Azienda azienda : this.aziendeIscritte) {
+        for (Azienda azienda : this.getAziendeIscritte()) {
             if (azienda.getIdAzienda() == idAzienda) {
                 return azienda.getTitolare();
             }
         }
         return null;
     }
+
+
+    public Map<Azienda, Set<Dipendente>> getDipendentiAzienda() {
+        return this.dipendentiAzienda;
+    }
+
 
     public Set<Dipendente> getDipendentiAziendaById(int idAzienda) {
         for (Azienda azienda : this.getDipendentiAzienda().keySet()) {
@@ -119,6 +122,7 @@ public class DBMS {
         }
         return null;
     }
+
 
     public Dipendente getDipendenteById(int idAzienda, int idDipendente) {
         for (Azienda azienda : this.getDipendentiAzienda().keySet()) {
@@ -134,7 +138,7 @@ public class DBMS {
     }
 
     public SpazioFedelta getSpazioFedeltaAzienda(int idAzienda) {
-        for (Azienda azienda : this.aziendeIscritte) {
+        for (Azienda azienda : this.getAziendeIscritte()) {
             if (azienda.getIdAzienda() == idAzienda) {
                 return azienda.getSpazioFedelta();
             }
@@ -142,113 +146,9 @@ public class DBMS {
         return null;
     }
 
-    public boolean modificaSpazioFedeltà(int idAzienda, SpazioFedelta spazioFedeltaNew) {
-        for (Azienda azienda : this.aziendeIscritte) {
-            if (azienda.getIdAzienda() == idAzienda) {
-                azienda.getSpazioFedelta().setNome(spazioFedeltaNew.getNome());
-                azienda.getSpazioFedelta().setEmail(spazioFedeltaNew.getEmail());
-                azienda.getSpazioFedelta().setNumeroTelefono(spazioFedeltaNew.getNumeroTelefono());
-                azienda.getSpazioFedelta().setIndirizzo(spazioFedeltaNew.getIndirizzo());
-                return true;
-            }
-        }
-        return false;
-    }
 
-    public Set<ProgrammaFedelta> getProgrammiFedeltaAzienda(int idAzienda) {
-        for (Azienda azienda : this.programmiAzienda.keySet()) {
-            if (azienda.getIdAzienda() == idAzienda) {
-                return this.programmiAzienda.get(azienda);
-            }
-        }
-        return null;
-    }
-
-    public Set<CatalogoPremi> getCatalogoPremiAzienda(int idAzienda) {
-        for (Azienda azienda : this.aziendeIscritte) {
-            if (azienda.getIdAzienda() == idAzienda) {
-                return azienda.getCatalogoPremi();
-            }
-        }
-        return null;
-    }
-
-    public Set<Cliente> getClientiAzienda(int idAzienda) {
-        //Tood implementare
-        return null;
-    }
-
-    public Cliente identificaCliente(String nome, String cognome) {
-        for (Cliente cliente : this.clientiIscritti) {
-            if (Objects.equals(cliente.getNome(), nome) && Objects.equals(cliente.getCognome(), cognome)) {
-                return cliente;
-            }
-        }
-        return null;
-    }
-
-    public Cliente identificaClienteTessera(int idTessera) {
-        for (Cliente cliente : this.clientiIscritti) {
-            if (cliente.getTessera().getIdTessera() == idTessera) {
-                return cliente;
-            }
-        }
-        return null;
-    }
-
-    public Cliente identificaClienteCodice(int idCliente) {
-        for (Cliente cliente : this.clientiIscritti) {
-            if (cliente.getIdCliente() == idCliente) {
-                return cliente;
-            }
-        }
-        return null;
-    }
-
-
-    public Tessera getTesseraCliente(int idCliente) {
-        for (Cliente cliente : this.clientiIscritti) {
-            if (cliente.getIdCliente() == idCliente) {
-                return cliente.getTessera();
-            }
-        }
-        return null;
-    }
-
-    public Set<SMS> getSMSClienteById(int idCliente) {
-        for (Cliente cliente : this.getSMSCliente().keySet()) {
-            if (cliente.getIdCliente() == idCliente) {
-                return this.getSMSCliente().get(cliente);
-            }
-        }
-        return null;
-    }
-
-    public Set<Visita> getVisiteClienteById(int idCliente) {
-        for (Cliente cliente : this.getVisiteCliente().keySet()) {
-            if (cliente.getIdCliente() == idCliente) {
-                return this.getVisiteCliente().get(cliente);
-            }
-        }
-        return null;
-    }
-
-    public Set<Premio> getPremiClienteById(int idCliente) {
-        for (Cliente cliente : this.premiCliente.keySet()) {
-            if (cliente.getIdCliente() == idCliente) {
-                return this.premiCliente.get(cliente);
-            }
-        }
-        return null;
-    }
-
-    public Set<Coupon> getCouponClienteById(int idCliente) {
-        for (Cliente cliente : this.getCouponCliente().keySet()) {
-            if (cliente.getIdCliente() == idCliente) {
-                return this.couponCliente.get(cliente);
-            }
-        }
-        return null;
+    public Map<Azienda, Set<SMS>> getSMSPreconfiguratiAzienda() {
+        return this.SMSPreconfiguratiAzienda;
     }
 
     public Set<SMS> getSMSPreconfigurati(int idAzienda) {
@@ -260,52 +160,115 @@ public class DBMS {
         return null;
     }
 
-    public ConfigurazioneSMS getSMSPreconfigurato(int idAzienda, int idSMS) {
-        for (Azienda azienda : this.getSMSPreconfiguratiAzienda().keySet()) {
+    public Set<CatalogoPremi> getCatalogoPremiAzienda(int idAzienda) {
+        for (Azienda azienda : this.getAziendeIscritte()) {
             if (azienda.getIdAzienda() == idAzienda) {
-                for (SMS sms : this.getSMSPreconfiguratiAzienda().get(azienda)) {
-                    if (sms.getIdSMS() == idSMS) {
-                        return sms.getConfigurazione();
-                    }
-                }
+                return azienda.getCatalogoPremi();
+            }
+        }
+        return null;
+    }
+
+    public Set<Cliente> getClientiAzienda(int idAzienda) {
+        //TODO implementare
+        return null;
+    }
+
+    public Map<Azienda, Set<Coupon>> getCouponPreconfiguratiAzienda() {
+        return this.couponPreconfiguratiAzienda;
+    }
+
+    public Set<Coupon> getCouponPreconfiguratiAzienda(int idAzienda) {
+        for (Azienda azienda : this.getCouponPreconfiguratiAzienda().keySet()) {
+            if (azienda.getIdAzienda() == idAzienda) {
+                return this.getCouponPreconfiguratiAzienda().get(azienda);
             }
         }
         return null;
     }
 
 
-    public Map<Azienda, Set<Dipendente>> getDipendentiAzienda() {
-        return this.dipendentiAzienda;
+    public Map<Azienda, Set<ProgrammaFedelta>> getProgrammiAzienda() {
+        return this.programmiAzienda;
+    }
+
+
+    public Set<ProgrammaFedelta> getProgrammiFedeltaAzienda(int idAzienda) {
+        for (Azienda azienda : this.getProgrammiAzienda().keySet()) {
+            if (azienda.getIdAzienda() == idAzienda) {
+                return this.getProgrammiAzienda().get(azienda);
+            }
+        }
+        return null;
+    }
+
+
+    public boolean addAzienda(Azienda azienda) {
+       return this.getAziendeIscritte().add(azienda);
+    }
+
+
+    public boolean updateAzienda(int idAzienda, Azienda aziendaNew) {
+        for (Azienda azienda : this.getAziendeIscritte()) {
+            if (azienda.getIdAzienda() == idAzienda) {
+                azienda.setTitolare(aziendaNew.getTitolare());
+                azienda.setSpazioFedelta(aziendaNew.getSpazioFedelta());
+                azienda.setCatalogoPremi(aziendaNew.getCatalogoPremi());
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean removeAzienda(int idAzienda) {
+        for (Azienda azienda1 : this.getAziendeIscritte()) {
+            if (azienda1.getIdAzienda() == idAzienda) {
+               return this.getAziendeIscritte().remove(azienda1);
+            }
+        }
+        return false;
+    }
+
+
+    public boolean modificaSpazioFedelta(int idAzienda, SpazioFedelta spazioFedeltaNew) {
+        for (Azienda azienda : this.getAziendeIscritte()) {
+            if (azienda.getIdAzienda() == idAzienda) {
+                azienda.getSpazioFedelta().setNome(spazioFedeltaNew.getNome());
+                azienda.getSpazioFedelta().setEmail(spazioFedeltaNew.getEmail());
+                azienda.getSpazioFedelta().setNumeroTelefono(spazioFedeltaNew.getNumeroTelefono());
+                azienda.getSpazioFedelta().setIndirizzo(spazioFedeltaNew.getIndirizzo());
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean addDipendente(int idAzienda, Dipendente dipendente) {
-        for (Azienda azienda : this.aziendeIscritte) {
+        for (Azienda azienda : this.getAziendeIscritte()) {
             if (azienda.getIdAzienda() == idAzienda) {
-                if (this.dipendentiAzienda.containsKey(azienda)) {
-                    if (this.dipendentiAzienda.get(azienda) == null) {
+                if (this.getDipendentiAzienda().containsKey(azienda)) {
+                    if (this.getDipendentiAzienda().get(azienda) == null) {
                         Set<Dipendente> dipendentiAzienda = new HashSet<>();
                         dipendentiAzienda.add(dipendente);
-                        this.dipendentiAzienda.put(azienda, dipendentiAzienda);
-                        return true;
+                        this.getDipendentiAzienda().put(azienda, dipendentiAzienda);
                     } else {
-                        this.dipendentiAzienda.get(azienda).add(dipendente);
-                        return true;
+                        return this.getDipendentiAzienda().get(azienda).add(dipendente);
                     }
                 } else {
                     Set<Dipendente> dipendentiAzienda = new HashSet<>();
                     dipendentiAzienda.add(dipendente);
-                    this.dipendentiAzienda.put(azienda, dipendentiAzienda);
-                    return true;
+                    this.getDipendentiAzienda().put(azienda, dipendentiAzienda);
                 }
+                return true;
             }
         }
         return false;
     }
 
     public boolean updateDipendente(int idAzienda, int idDipendente, String email, boolean restrizioni) {
-        for (Azienda azienda : this.dipendentiAzienda.keySet()) {
+        for (Azienda azienda : this.getDipendentiAzienda().keySet()) {
             if (azienda.getIdAzienda() == idAzienda) {
-                for (Dipendente dipendente : this.dipendentiAzienda.get(azienda)) {
+                for (Dipendente dipendente : this.getDipendentiAzienda().get(azienda)) {
                     if (dipendente.getIdDipendente() == idDipendente) {
                         dipendente.setEmail(email);
                         dipendente.setRestrizioni(restrizioni);
@@ -318,12 +281,11 @@ public class DBMS {
     }
 
     public boolean removeDipendente(int idAzienda, int idDipendente) {
-        for (Azienda azienda : this.dipendentiAzienda.keySet()) {
+        for (Azienda azienda : this.getDipendentiAzienda().keySet()) {
             if (azienda.getIdAzienda() == idAzienda) {
-                for (Dipendente dipendente1 : this.dipendentiAzienda.get(azienda)) {
+                for (Dipendente dipendente1 : this.getDipendentiAzienda().get(azienda)) {
                     if (dipendente1.getIdDipendente() == idDipendente) {
-                        this.dipendentiAzienda.get(azienda).remove(dipendente1);
-                        return true;
+                       return this.getDipendentiAzienda().get(azienda).remove(dipendente1);
                     }
                 }
             }
@@ -332,46 +294,45 @@ public class DBMS {
         return false;
     }
 
-    public Set<Coupon> getCouponPreconfiguratiAzienda(int idAzienda) {
-        for (Azienda azienda : this.couponPreconfiguratiAzienda.keySet()) {
-            if (azienda.getIdAzienda() == idAzienda) {
-                return this.couponPreconfiguratiAzienda.get(azienda);
-            }
-        }
-        return null;
-    }
-
-
-    public Map<Azienda, Set<ProgrammaFedelta>> getProgrammiAzienda() {
-        return this.programmiAzienda;
-    }
 
     public boolean addProgrammaAzienda(int idAzienda, ProgrammaFedelta programmaFedelta) {
         for (Azienda azienda : this.getAziendeIscritte()) {
             if (azienda.getIdAzienda() == idAzienda) {
-                if (this.programmiAzienda.containsKey(azienda)) {
-                    this.programmiAzienda.get(azienda).add(programmaFedelta);
+                if (this.getProgrammiAzienda().containsKey(azienda)) {
+                    if (this.getProgrammiAzienda().get(azienda) == null) {
+                        Set<ProgrammaFedelta> programmiAzienda = new HashSet<>();
+                        programmiAzienda.add(programmaFedelta);
+                        this.getProgrammiAzienda().put(azienda, programmiAzienda);
+                        return true;
+                    } else {
+                        for (ProgrammaFedelta programmaFedelta1 : this.getProgrammiAzienda().get(azienda)) {
+                            if (programmaFedelta1.equals(programmaFedelta))
+                                return false;
+                            return this.getProgrammiAzienda().get(azienda).add(programmaFedelta);
+                        }
+                    }
                 } else {
                     Set<ProgrammaFedelta> programmiAzienda = new HashSet<>();
                     programmiAzienda.add(programmaFedelta);
-                    this.programmiAzienda.put(azienda, programmiAzienda);
+                    this.getProgrammiAzienda().put(azienda, programmiAzienda);
+                    return true;
                 }
-                return true;
             }
         }
         return false;
     }
 
     public boolean updateProgrammaAzienda(int idAzienda, int idProgrammaFedelta, ProgrammaFedelta programmaFedeltaUpdated) {
-        for (Azienda azienda : this.programmiAzienda.keySet()) {
+        for (Azienda azienda : this.getProgrammiAzienda().keySet()) {
             if (azienda.getIdAzienda() == idAzienda) {
-                for (ProgrammaFedelta programmaFedelta : this.programmiAzienda.get(azienda)) {
+                for (ProgrammaFedelta programmaFedelta : this.getProgrammiAzienda().get(azienda)) {
                     if (programmaFedelta.getIdProgramma() == idProgrammaFedelta) {
                         if (programmaFedelta.getProgrammaPunti() != null) {
                             updateProgrammaPunti(programmaFedelta, programmaFedeltaUpdated);
                             return true;
                         } else if (programmaFedelta.getProgrammaLivelli() != null) {
                             updateProgrammaLivelli(programmaFedelta, programmaFedeltaUpdated);
+                            return true;
                         }
                     }
                 }
@@ -380,17 +341,16 @@ public class DBMS {
         return false;
     }
 
-    private boolean updateProgrammaPunti(ProgrammaFedelta programmaFedelta, ProgrammaFedelta programmaFedeltaUpdated) {
+    private void updateProgrammaPunti(ProgrammaFedelta programmaFedelta, ProgrammaFedelta programmaFedeltaUpdated) {
         programmaFedelta.getProgrammaPunti().setNome(programmaFedeltaUpdated.getProgrammaPunti().getNome());
         programmaFedelta.getProgrammaPunti().setDataAttivazione(programmaFedeltaUpdated.getProgrammaPunti().getDataAttivazione());
         programmaFedelta.getProgrammaPunti().setNumeroPuntiMassimi(programmaFedeltaUpdated.getProgrammaPunti().getNumeroPuntiMassimi());
         programmaFedelta.getProgrammaPunti().setPuntiVIP(programmaFedeltaUpdated.getProgrammaPunti().getPuntiVIP());
         programmaFedelta.getProgrammaPunti().setPuntiSpesa(programmaFedeltaUpdated.getProgrammaPunti().getPuntiSpesa());
         programmaFedelta.getProgrammaPunti().setImportoSpesa(programmaFedeltaUpdated.getProgrammaPunti().getImportoSpesa());
-        return true;
     }
 
-    private boolean updateProgrammaLivelli(ProgrammaFedelta programmaFedelta, ProgrammaFedelta programmaFedeltaUpdated) {
+    private void updateProgrammaLivelli(ProgrammaFedelta programmaFedelta, ProgrammaFedelta programmaFedeltaUpdated) {
         programmaFedelta.getProgrammaLivelli().setNome(programmaFedeltaUpdated.getProgrammaLivelli().getNome());
         programmaFedelta.getProgrammaLivelli().setDataAttivazione(programmaFedeltaUpdated.getProgrammaLivelli().getDataAttivazione());
         programmaFedelta.getProgrammaLivelli().setMassimoLivelli(programmaFedeltaUpdated.getProgrammaLivelli().getMassimoLivelli());
@@ -398,7 +358,6 @@ public class DBMS {
         programmaFedelta.getProgrammaLivelli().setPolicyLivelli(programmaFedeltaUpdated.getProgrammaLivelli().getPolicyLivelli());
         programmaFedelta.getProgrammaLivelli().setPuntiSpesa(programmaFedeltaUpdated.getProgrammaLivelli().getPuntiSpesa());
         programmaFedelta.getProgrammaLivelli().setImportoSpesa(programmaFedeltaUpdated.getProgrammaLivelli().getImportoSpesa());
-        return true;
     }
 
     public boolean removeProgrammaAzienda(int idAzienda, int idProgrammaFedelta) {
@@ -406,8 +365,7 @@ public class DBMS {
             if (azienda.getIdAzienda() == idAzienda) {
                 for (ProgrammaFedelta programmaFedelta1 : this.getProgrammiAzienda().get(azienda)) {
                     if (programmaFedelta1.getIdProgramma() == idProgrammaFedelta) {
-                        this.getProgrammiAzienda().get(azienda).remove(programmaFedelta1);
-                        return true;
+                        return this.getProgrammiAzienda().get(azienda).remove(programmaFedelta1);
                     }
 
                 }
@@ -419,7 +377,7 @@ public class DBMS {
     public ProgrammaFedelta getProgrammaFedeltaById(int idAzienda, int idProgramma) {
         for (Azienda azienda : this.getProgrammiAzienda().keySet()) {
             if (azienda.getIdAzienda() == idAzienda) {
-                for (ProgrammaFedelta programmaFedelta : this.programmiAzienda.get(azienda)) {
+                for (ProgrammaFedelta programmaFedelta : this.getProgrammiAzienda().get(azienda)) {
                     if (programmaFedelta.getIdProgramma() == idProgramma) {
                         return programmaFedelta;
                     }
@@ -429,27 +387,22 @@ public class DBMS {
         return null;
     }
 
-    public Map<Azienda, Set<Coupon>> getCouponPreconfiguratiAzienda() {
-        return this.couponPreconfiguratiAzienda;
-    }
-
     public boolean addCouponPreconfiguratoAzienda(int idAzienda, Coupon couponPreconfigurato) {
-        for (Azienda azienda : this.aziendeIscritte) {
+        for (Azienda azienda : this.getAziendeIscritte()) {
             if (azienda.getIdAzienda() == idAzienda) {
-                if (this.couponPreconfiguratiAzienda.containsKey(azienda)) {
-                    if (this.couponPreconfiguratiAzienda.get(azienda) == null) {
+                if (this.getCouponPreconfiguratiAzienda().containsKey(azienda)) {
+                    if (this.getCouponPreconfiguratiAzienda().get(azienda) == null) {
                         Set<Coupon> couponAzienda = new HashSet<>();
                         couponAzienda.add(couponPreconfigurato);
-                        this.couponPreconfiguratiAzienda.put(azienda, couponAzienda);
+                        this.getCouponPreconfiguratiAzienda().put(azienda, couponAzienda);
                         return true;
                     } else {
-                        this.couponPreconfiguratiAzienda.get(azienda).add(couponPreconfigurato);
-                        return true;
+                       return this.getCouponPreconfiguratiAzienda().get(azienda).add(couponPreconfigurato);
                     }
                 } else {
                     Set<Coupon> couponAzienda = new HashSet<>();
                     couponAzienda.add(couponPreconfigurato);
-                    this.couponPreconfiguratiAzienda.put(azienda, couponAzienda);
+                    this.getCouponPreconfiguratiAzienda().put(azienda, couponAzienda);
                     return true;
                 }
             }
@@ -459,9 +412,9 @@ public class DBMS {
 
 
     public boolean updateCouponPreconfiguratoAzienda(int idAzienda, int idCoupon, Coupon coupondUpdated) {
-        for (Azienda azienda : this.aziendeIscritte) {
+        for (Azienda azienda : this.getCouponPreconfiguratiAzienda().keySet()) {
             if (azienda.getIdAzienda() == idAzienda) {
-                for (Coupon coupon : this.couponPreconfiguratiAzienda.get(azienda)) {
+                for (Coupon coupon : this.getCouponPreconfiguratiAzienda().get(azienda)) {
                     if (coupon.getIdCoupon() == idCoupon) {
                         coupon.setValoreSconto(coupondUpdated.getValoreSconto());
                         coupon.setDataAttivazione(coupondUpdated.getDataAttivazione());
@@ -471,17 +424,15 @@ public class DBMS {
                 }
             }
         }
-
         return false;
     }
 
     public boolean removeCouponPreconfiguratoAzienda(int idAzienda, int idCoupon) {
         for (Azienda azienda : this.getCouponPreconfiguratiAzienda().keySet()) {
             if (azienda.getIdAzienda() == idAzienda) {
-                for (Coupon coupon : this.couponPreconfiguratiAzienda.get(azienda)) {
+                for (Coupon coupon : this.getCouponPreconfiguratiAzienda().get(azienda)) {
                     if (coupon.getIdCoupon() == idCoupon) {
-                        this.couponPreconfiguratiAzienda.get(azienda).remove(coupon);
-                        return true;
+                       return this.getCouponPreconfiguratiAzienda().get(azienda).remove(coupon);
                     }
                 }
             }
@@ -489,17 +440,16 @@ public class DBMS {
         return false;
     }
 
-    public Set<Cliente> getClientiIscritti() {
-        return this.clientiIscritti;
-    }
+
+
+    //--OPERAZIONI CLIENTE--
 
     public boolean addCliente(Cliente cliente) {
-        this.clientiIscritti.add(cliente);
-        return true;
+       return this.getClientiIscritti().add(cliente);
     }
 
     public boolean updateCliente(int idCliente, Cliente clienteUpdated) {
-        for (Cliente cliente : this.clientiIscritti) {
+        for (Cliente cliente : this.getClientiIscritti()) {
             if (cliente.getIdCliente() == idCliente) {
                 cliente.setEmail(clienteUpdated.getEmail());
                 cliente.setTelefono(clienteUpdated.getTelefono());
@@ -511,36 +461,122 @@ public class DBMS {
     }
 
     public boolean removeCliente(Cliente cliente) {
-        for (Cliente cliente1 : this.clientiIscritti) {
+        for (Cliente cliente1 : this.getClientiIscritti()) {
             if (cliente1.getIdCliente() == cliente.getIdCliente()) {
-                this.clientiIscritti.remove(cliente1);
-                return true;
+               return this.getClientiIscritti().remove(cliente1);
             }
         }
         return false;
+    }
+
+    public Cliente identificaCliente(String nome, String cognome) {
+        for (Cliente cliente : this.getClientiIscritti()) {
+            if (Objects.equals(cliente.getNome(), nome) && Objects.equals(cliente.getCognome(), cognome)) {
+                return cliente;
+            }
+        }
+        return null;
+    }
+
+    public Cliente identificaClienteTessera(int idTessera) {
+        for (Cliente cliente : this.getClientiIscritti()) {
+            if (cliente.getTessera().getIdTessera() == idTessera) {
+                return cliente;
+            }
+        }
+        return null;
+    }
+
+    public Cliente identificaClienteCodice(int idCliente) {
+        for (Cliente cliente : this.getClientiIscritti()) {
+            if (cliente.getIdCliente() == idCliente) {
+                return cliente;
+            }
+        }
+        return null;
+    }
+
+    public Tessera getTesseraCliente(int idCliente) {
+        for (Cliente cliente : this.getClientiIscritti()) {
+            if (cliente.getIdCliente() == idCliente) {
+                return cliente.getTessera();
+            }
+        }
+        return null;
     }
 
     public Map<Cliente, Set<SMS>> getSMSCliente() {
         return this.SMSCliente;
     }
 
-    public boolean addSMS(int idCliente, SMS sms) {
-        for (Cliente cliente : this.clientiIscritti) {
+
+    public Set<SMS> getSMSClienteById(int idCliente) {
+        for (Cliente cliente : this.getSMSCliente().keySet()) {
             if (cliente.getIdCliente() == idCliente) {
-                if (this.SMSCliente.containsKey(cliente)) {
-                    if (this.SMSCliente.get(cliente) == null) {
+                return this.getSMSCliente().get(cliente);
+            }
+        }
+        return null;
+    }
+
+    public Map<Cliente, Set<Visita>> getVisiteCliente() {
+        return this.visiteCliente;
+    }
+
+    public Set<Visita> getVisiteClienteById(int idCliente) {
+        for (Cliente cliente : this.getVisiteCliente().keySet()) {
+            if (cliente.getIdCliente() == idCliente) {
+                return this.getVisiteCliente().get(cliente);
+            }
+        }
+        return null;
+    }
+
+    public Map<Cliente, Set<Premio>> getPremiCliente() {
+        return this.premiCliente;
+    }
+
+
+    public Set<Premio> getPremiClienteById(int idCliente) {
+        for (Cliente cliente : this.getPremiCliente().keySet()) {
+            if (cliente.getIdCliente() == idCliente) {
+                return this.getPremiCliente().get(cliente);
+            }
+        }
+        return null;
+    }
+
+    public Map<Cliente, Set<Coupon>> getCouponCliente() {
+        return this.couponCliente;
+    }
+
+
+    public Set<Coupon> getCouponClienteById(int idCliente) {
+        for (Cliente cliente : this.getCouponCliente().keySet()) {
+            if (cliente.getIdCliente() == idCliente) {
+                return this.getCouponCliente().get(cliente);
+            }
+        }
+        return null;
+    }
+
+
+    public boolean addSMS(int idCliente, SMS sms) {
+        for (Cliente cliente : this.getClientiIscritti()) {
+            if (cliente.getIdCliente() == idCliente) {
+                if (this.getSMSCliente().containsKey(cliente)) {
+                    if (this.getSMSCliente().get(cliente) == null) {
                         Set<SMS> smsCliente = new HashSet<>();
                         smsCliente.add(sms);
-                        this.SMSCliente.put(cliente, smsCliente);
+                        this.getSMSCliente().put(cliente, smsCliente);
                         return true;
                     } else {
-                        this.SMSCliente.get(cliente).add(sms);
-                        return true;
+                       return this.getSMSCliente().get(cliente).add(sms);
                     }
                 } else {
                     Set<SMS> smsCliente = new HashSet<>();
                     smsCliente.add(sms);
-                    this.SMSCliente.put(cliente, smsCliente);
+                    this.getSMSCliente().put(cliente, smsCliente);
                     return true;
                 }
             }
@@ -549,29 +585,26 @@ public class DBMS {
     }
 
 
-    public Map<Cliente, Set<Coupon>> getCouponCliente() {
-        return this.couponCliente;
-    }
 
     public boolean addCoupon(int idAzienda, int idCliente, int idCoupon) {
-        for (Azienda azienda : this.aziendeIscritte) {
+        for (Azienda azienda : this.getAziendeIscritte()) {
             if (azienda.getIdAzienda() == idAzienda) {
-                for (Cliente cliente : this.clientiIscritti) {
+                for (Cliente cliente : this.getClientiIscritti()) {
                     if (cliente.getIdCliente() == idCliente) {
-                        for (Coupon coupon : this.couponPreconfiguratiAzienda.get(azienda)) {
+                        for (Coupon coupon : this.getCouponPreconfiguratiAzienda().get(azienda)) {
                             if (coupon.getIdCoupon() == idCoupon) {
-                                if (this.couponCliente.containsKey(cliente)) {
-                                    if (this.couponCliente.get(cliente) == null) {
+                                if (this.getCouponCliente().containsKey(cliente)) {
+                                    if (this.getCouponCliente().get(cliente) == null) {
                                         Set<Coupon> couponCliente = new HashSet<>();
                                         couponCliente.add(coupon);
-                                        this.couponCliente.put(cliente, couponCliente);
+                                        this.getCouponCliente().put(cliente, couponCliente);
                                     } else {
-                                        this.couponCliente.get(cliente).add(coupon);
+                                        return this.getCouponCliente().get(cliente).add(coupon);
                                     }
                                 } else {
                                     Set<Coupon> couponCliente = new HashSet<>();
                                     couponCliente.add(coupon);
-                                    this.couponCliente.put(cliente, couponCliente);
+                                    this.getCouponCliente().put(cliente, couponCliente);
                                 }
                                 return true;
                             }
@@ -584,23 +617,26 @@ public class DBMS {
     }
 
     public boolean updateCoupon(Cliente cliente, int idCoupon, Coupon couponUpdated) {
-        for (Coupon coupon : this.couponCliente.get(cliente)) {
-            if (coupon.getIdCoupon() == idCoupon) {
-                coupon.setValoreSconto(couponUpdated.getValoreSconto());
-                coupon.setDataScadenza(couponUpdated.getDataScadenza());
-                return true;
+        for(Cliente cliente1 : this.getCouponCliente().keySet()) {
+            if (cliente1.equals(cliente)) {
+                for (Coupon coupon : this.getCouponCliente().get(cliente)) {
+                    if (coupon.getIdCoupon() == idCoupon) {
+                        coupon.setValoreSconto(couponUpdated.getValoreSconto());
+                        coupon.setDataScadenza(couponUpdated.getDataScadenza());
+                        return true;
+                    }
+                }
             }
         }
         return false;
     }
 
     public boolean removeCoupon(int idCliente, int idCoupon) {
-        for (Cliente cliente : this.couponCliente.keySet()) {
+        for (Cliente cliente : this.getCouponCliente().keySet()) {
             if (cliente.getIdCliente() == idCliente) {
-                for (Coupon coupon : this.couponCliente.get(cliente)) {
+                for (Coupon coupon : this.getCouponCliente().get(cliente)) {
                     if (coupon.getIdCoupon() == idCoupon) {
-                        this.couponCliente.get(cliente).remove(coupon);
-                        return true;
+                        return this.getCouponCliente().get(cliente).remove(coupon);
                     }
                 }
             }
@@ -609,33 +645,33 @@ public class DBMS {
     }
 
 
-    public Map<Cliente, Set<Premio>> getPremiCliente() {
-        return premiCliente;
-    }
-
     public boolean addPremioCliente(int idAzienda, int idCliente, int idPremio) {
+        //TODO implementare
         return false;
     }
 
     public boolean updatePremioCliente(Cliente cliente, int idPremio, Premio premioUpdated) {
-        for (Premio premio : this.premiCliente.get(cliente)) {
-            if (premio.getIdPremio() == idPremio) {
-                premio.setNome(premioUpdated.getNome());
-                premio.setLivelli(premioUpdated.getLivelli());
-                premio.setPunti(premioUpdated.getPunti());
-                return true;
+        for(Cliente cliente1 : this.getPremiCliente().keySet()) {
+            if (cliente.equals(cliente1)) {
+                for (Premio premio : this.getPremiCliente().get(cliente)) {
+                    if (premio.getIdPremio() == idPremio) {
+                        premio.setNome(premioUpdated.getNome());
+                        premio.setLivelli(premioUpdated.getLivelli());
+                        premio.setPunti(premioUpdated.getPunti());
+                        return true;
+                    }
+                }
             }
         }
         return false;
     }
 
     public boolean removePremioCliente(int idCliente, int idPremio) {
-        for (Cliente cliente : this.premiCliente.keySet()) {
+        for (Cliente cliente : this.getPremiCliente().keySet()) {
             if (cliente.getIdCliente() == idCliente) {
-                for (Premio premio : this.premiCliente.get(cliente)) {
+                for (Premio premio : this.getPremiCliente().get(cliente)) {
                     if (premio.getIdPremio() == idPremio) {
-                        this.premiCliente.get(cliente).remove(premio);
-                        return true;
+                        return this.getPremiCliente().get(cliente).remove(premio);
                     }
                 }
             }
@@ -643,35 +679,33 @@ public class DBMS {
         return false;
     }
 
-
-    public Map<Cliente, Set<Visita>> getVisiteCliente() {
-        return visiteCliente;
-    }
-
-    public void addVisita(int idCliente, Visita visita) {
-        for (Cliente cliente : this.visiteCliente.keySet()) {
+    public boolean addVisita(int idCliente, Visita visita) {
+        for (Cliente cliente : this.getVisiteCliente().keySet()) {
             if (cliente.getIdCliente() == idCliente) {
-                if (this.visiteCliente.containsKey(cliente)) {
-                    if (this.visiteCliente.get(cliente) == null) {
+                if (this.getVisiteCliente().containsKey(cliente)) {
+                    if (this.getVisiteCliente().get(cliente) == null) {
                         Set<Visita> visiteCliente = new HashSet<>();
                         visiteCliente.add(visita);
-                        this.visiteCliente.put(cliente, visiteCliente);
+                        this.getVisiteCliente().put(cliente, visiteCliente);
+                        return true;
                     } else {
-                        this.visiteCliente.get(cliente).add(visita);
+                        return this.getVisiteCliente().get(cliente).add(visita);
                     }
                 } else {
                     Set<Visita> visiteCliente = new HashSet<>();
                     visiteCliente.add(visita);
-                    this.visiteCliente.put(cliente, visiteCliente);
+                    this.getVisiteCliente().put(cliente, visiteCliente);
+                    return true;
                 }
             }
         }
+        return false;
     }
 
     public boolean updateVisita(int idCliente, int idVisita, Visita visitaUpdated) {
-        for (Cliente cliente : this.visiteCliente.keySet()) {
+        for (Cliente cliente : this.getVisiteCliente().keySet()) {
             if (cliente.getIdCliente() == idCliente) {
-                for (Visita visita : this.visiteCliente.get(cliente)) {
+                for (Visita visita : this.getVisiteCliente().get(cliente)) {
                     if (visita.getIdVisita() == idVisita) {
                         visita.setLuogo(visitaUpdated.getLuogo());
                         visita.setData(visitaUpdated.getData());
@@ -685,12 +719,11 @@ public class DBMS {
     }
 
     public boolean removeVisita(int idCliente, int idVisita) {
-        for (Cliente cliente : this.visiteCliente.keySet()) {
+        for (Cliente cliente : this.getVisiteCliente().keySet()) {
             if (cliente.getIdCliente() == idCliente) {
-                for (Visita visita : this.visiteCliente.get(cliente)) {
+                for (Visita visita : this.getVisiteCliente().get(cliente)) {
                     if (visita.getIdVisita() == idVisita) {
-                        this.visiteCliente.get(cliente).remove(visita);
-                        return true;
+                       return this.getVisiteCliente().get(cliente).remove(visita);
                     }
                 }
             }
@@ -698,16 +731,12 @@ public class DBMS {
         return false;
     }
 
-    public Set<Tessera> getTessereClienti() {
-        return tessereClienti;
-    }
-
     public void addTessera(Tessera tessera) {
-        this.tessereClienti.add(tessera);
+        this.getTessereClienti().add(tessera);
     }
 
     public boolean updateTessera(int idTessera, Tessera tesseraUpdated) {
-        for (Tessera tessera : this.tessereClienti) {
+        for (Tessera tessera : this.getTessereClienti()) {
             if (tessera.getIdTessera() == idTessera) {
 
                 return true;
@@ -717,24 +746,20 @@ public class DBMS {
     }
 
 
-    public Set<ProgrammaFedelta> getProgrammiDisponibili() {
-        return programmiDisponibili;
+
+
+    //TODO rivedere, per me non serve
+    public ConfigurazioneSMS getSMSPreconfigurato(int idAzienda, int idSMS) {
+        for (Azienda azienda : this.getSMSPreconfiguratiAzienda().keySet()) {
+            if (azienda.getIdAzienda() == idAzienda) {
+                for (SMS sms : this.getSMSPreconfiguratiAzienda().get(azienda)) {
+                    if (sms.getIdSMS() == idSMS) {
+                        return sms.getConfigurazione();
+                    }
+                }
+            }
+        }
+        return null;
     }
-
-
-    public Set<PacchettoSMS> getPacchettiSMS() {
-        return this.pacchettiSMS;
-    }
-
-    public Set<Abbonamento> getAbbonamenti() {
-        return this.abbonamenti;
-    }
-
-    public Map<Azienda, Set<SMS>> getSMSPreconfiguratiAzienda() {
-        return this.SMSPreconfiguratiAzienda;
-    }
-
-
-    //HANDLER PROGRAMMA FEDELTA:
 }
 
