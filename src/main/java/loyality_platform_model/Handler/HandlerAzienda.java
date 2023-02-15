@@ -2,7 +2,6 @@ package loyality_platform_model.Handler;
 
 import loyality_platform_model.DBMS.DBMS;
 import loyality_platform_model.Models.*;
-
 import java.util.Objects;
 import java.util.Set;
 
@@ -37,12 +36,7 @@ public class HandlerAzienda {
     public GestorePuntoVendita getTitolareAzienda(int idAzienda) {
         if (idAzienda <= 0)
             throw new IllegalArgumentException("Invalid id for the Company.");
-        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
-            if (azienda.getIdAzienda() == idAzienda) {
-                return azienda.getTitolare();
-            }
-        }
-        return null;
+        return this.dbms.getTitolareAzienda(idAzienda);
     }
 
     /**
@@ -57,14 +51,7 @@ public class HandlerAzienda {
     public Set<Dipendente> getDipendentiAzienda(int idAzienda) {
         if (idAzienda <= 0)
             throw new IllegalArgumentException("Invalid id for the Company.");
-        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
-            if (azienda.getIdAzienda() == idAzienda) {
-                if (!this.dbms.getDipendentiAzienda().get(azienda).isEmpty()) {
-                    return this.dbms.getDipendentiAzienda().get(azienda);
-                }
-            }
-        }
-        return null;
+        return this.dbms.getDipendentiAziendaById(idAzienda);
     }
 
     /**
@@ -76,23 +63,14 @@ public class HandlerAzienda {
     public Dipendente getDipendenteById(int idAzienda, int idDipendente){
         if(idAzienda <= 0 || idDipendente <= 0)
             throw new IllegalArgumentException("Invalid id for Company or Employee.");
-        for(Azienda azienda : this.dbms.getAziendeIscritte()){
-            if(azienda.getIdAzienda() == idAzienda){
-                for(Dipendente dipendente : this.dbms.getDipendentiAzienda().get(azienda)){
-                    if(dipendente.getIdDipendente() == idDipendente){
-                        return dipendente;
-                    }
-                }
-            }
-        }
-        return null;
+       return this.dbms.getDipendenteById(idAzienda, idDipendente);
     }
 
     /**
      * @param idDipendente
      * @return
      */
-    public Dipendente getDetailsDipendente(int idDipendente) {
+    public String getDetailsDipendente(int idDipendente) {
         //Todo implementare
         return null;
     }
@@ -125,23 +103,8 @@ public class HandlerAzienda {
     public boolean aggiungiDipendente(int idAzienda, String nome, String cognome, String email, boolean restrizioni) {
         if (idAzienda <= 0)
             throw new IllegalArgumentException("Invalid id for the Company.");
-        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
-            if (azienda.getIdAzienda() == idAzienda) {
-                Dipendente created = creaDipendente(nome, cognome, email, restrizioni);
-                if(this.dbms.getDipendentiAzienda().get(azienda).isEmpty()){
-                    this.dbms.addDipendente(azienda, created);
-                }else {
-                    for (Dipendente dipendente : this.dbms.getDipendentiAzienda().get(azienda)) {
-                        if (!(Objects.equals(dipendente.getEmail(), created.getEmail()) && Objects.equals(dipendente.getNome(), created.getNome()))) {
-                            this.dbms.addDipendente(azienda, created);
-                            return true;
-                        }
-                    }
-                }
-
-            }
-        }
-        return false;
+        Dipendente created = creaDipendente(nome, cognome, email, restrizioni);
+        return this.dbms.addDipendente(idAzienda, created);
     }
 
     /**
@@ -154,23 +117,12 @@ public class HandlerAzienda {
      * @throws NullPointerException     if the gestore is null.
      * @throws IllegalArgumentException if the idAzienda or idDipendente is not valid || email is not valid.
      */
-    public boolean modificaDipendente(int idAzienda, int idDipendente, GestorePuntoVendita gestore, String email, boolean restrizioni) {
-        Objects.requireNonNull(gestore);
+    public boolean modificaDipendente(int idAzienda, int idDipendente, String email, boolean restrizioni) {
         if (idAzienda <= 0 || idDipendente <= 0)
             throw new IllegalArgumentException("Illegal id for the fields.");
         if (Objects.equals(email, ""))
             throw new IllegalArgumentException("Illegal fields for update the Employee.");
-        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
-            if (azienda.getIdAzienda() == idAzienda) {
-                for (Dipendente dipendente : this.dbms.getDipendentiAzienda().get(azienda)) {
-                    if (dipendente.getIdDipendente() == idDipendente) {
-                        if (this.dbms.updateDipendente(azienda, idDipendente, email, restrizioni))
-                            return true;
-                    }
-                }
-            }
-        }
-        return false;
+        return this.dbms.updateDipendente(idAzienda, idDipendente, email, restrizioni);
     }
 
     /**
@@ -184,17 +136,7 @@ public class HandlerAzienda {
     public boolean rimuoviDipendente(int idAzienda, int idDipendente) {
         if (idAzienda <= 0 || idDipendente <= 0)
             throw new IllegalArgumentException("Illegal id for Employee to remove.");
-        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
-            if (azienda.getIdAzienda() == idAzienda) {
-                for (Dipendente dipendente : this.dbms.getDipendentiAzienda().get(azienda)) {
-                    if (dipendente.getIdDipendente() == idDipendente) {
-                        if (this.dbms.removeDipendente(azienda, dipendente))
-                            return true;
-                    }
-                }
-            }
-        }
-        return false;
+        return this.dbms.removeDipendente(idAzienda, idDipendente);
     }
 
     /**
@@ -208,12 +150,7 @@ public class HandlerAzienda {
     public SpazioFedelta getSpazioFedeltaAzienda(int idAzienda) {
         if (idAzienda <= 0)
             throw new IllegalArgumentException("Invalid id for the Company.");
-        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
-            if (azienda.getIdAzienda() == idAzienda) {
-                return azienda.getSpazioFedelta();
-            }
-        }
-        return null;
+        return this.dbms.getSpazioFedeltaAzienda(idAzienda);
     }
 
     /**
@@ -221,21 +158,14 @@ public class HandlerAzienda {
      * a registered Company (Azienda) taken through its id.
      *
      * @param idAzienda        the Company (Azienda) id.
-     * @param spazioFedeltaNew Loyality space edited.
      * @throws NullPointerException     if the spazioFedeltaNew is null.
      * @throws IllegalArgumentException if the idAzienda is not valid.
      */
-    public boolean modificaSpazioFedelta(int idAzienda, SpazioFedelta spazioFedeltaNew) {
-        Objects.requireNonNull(spazioFedeltaNew);
+    public boolean modificaSpazioFedelta(int idAzienda, String nome, String indirizzo, String numeroTelefono, String email) {
         if (idAzienda <= 0)
             throw new IllegalArgumentException("Invalid id for the Company.");
-        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
-            if (azienda.getIdAzienda() == idAzienda) {
-                azienda.setSpazioFedelta(spazioFedeltaNew);
-                return true;
-            }
-        }
-        return false;
+        SpazioFedelta newSpazioFedelta = new SpazioFedelta(nome, indirizzo, numeroTelefono, email);
+        return this.dbms.modificaSpazioFedelta(idAzienda, newSpazioFedelta);
     }
 
     /**
@@ -250,12 +180,7 @@ public class HandlerAzienda {
     public Set<ProgrammaFedelta> getProgrammiFedeltaAzienda(int idAzienda) {
         if (idAzienda <= 0)
             throw new IllegalArgumentException("Invalid if for the Company");
-        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
-            if (azienda.getIdAzienda() == idAzienda) {
-                return this.dbms.getProgrammiAzienda().get(azienda);
-            }
-        }
-        return null;
+        return this.dbms.getProgrammiFedeltaAzienda(idAzienda);
     }
 
     /**
@@ -269,12 +194,7 @@ public class HandlerAzienda {
     public Set<CatalogoPremi> getCatalogoPremiAzienda(int idAzienda) {
         if (idAzienda <= 0)
             throw new IllegalArgumentException("Invalid id for the Company.");
-        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
-            if (azienda.getIdAzienda() == idAzienda) {
-                return azienda.getCatalogoPremi();
-            }
-        }
-        return null;
+        return this.dbms.getCatalogoPremiAzienda(idAzienda);
     }
 
     /**
@@ -292,13 +212,7 @@ public class HandlerAzienda {
         Objects.requireNonNull(coalizione);
         if (idAzienda <= 0)
             throw new IllegalArgumentException("Invalid id for the Company");
-        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
-            if (azienda.getIdAzienda() == idAzienda) {
-                //Todo controllare coalizione.
-                if (coalizione.getClientiIscritti().get(azienda).isEmpty())
-                    return coalizione.getClientiIscritti().get(azienda);
-            }
-        }
+       //TODO implementare
         return null;
     }
 }

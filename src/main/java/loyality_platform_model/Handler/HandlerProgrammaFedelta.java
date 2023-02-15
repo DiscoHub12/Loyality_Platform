@@ -93,18 +93,8 @@ public class HandlerProgrammaFedelta {
     public boolean modificaProgrammaPunti(int idAzienda, int idProgramma, String nome, String dataAttivazione, int numeroPuntiMax, int puntiVip, int puntiSpesa, double importoSpesa) {
         if (idProgramma < 1 || idAzienda < 1)
             throw new IllegalArgumentException("Id not correct");
-        for(Azienda azienda : this.getDbms().getAziendeIscritte()){
-            if(azienda.getIdAzienda() == idAzienda){
-                for (ProgrammaFedelta programmaFedelta : this.getDbms().getProgrammiAzienda().get(azienda)) {
-                    if (programmaFedelta.getIdProgramma() == idProgramma) {
-                        ProgrammaPunti pp = new ProgrammaPunti(nome, dataAttivazione, numeroPuntiMax, puntiVip, puntiSpesa, importoSpesa);
-                        this.getDbms().updateProgrammaAzienda(azienda, idProgramma, pp);
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
+        ProgrammaPunti pp = new ProgrammaPunti(nome, dataAttivazione, numeroPuntiMax, puntiVip, puntiSpesa, importoSpesa);
+        return this.getDbms().updateProgrammaAzienda(idAzienda, idProgramma, pp);
     }
 
     /**
@@ -121,19 +111,9 @@ public class HandlerProgrammaFedelta {
                                             boolean addLevel, int pointsNewLevel, boolean removeLevel, int levelToRemove, boolean updatePointsLevel, int levelToUpdate, int newPoints) {
         if (idProgramma < 1 || idAzienda < 1)
             throw new IllegalArgumentException("Id not correct");
-        for(Azienda azienda: this.getDbms().getAziendeIscritte()){
-            if(azienda.getIdAzienda() == idAzienda){
-                for(ProgrammaFedelta programmaFedelta : this.getDbms().getProgrammiAzienda().get(azienda)){
-                    if(programmaFedelta.getIdProgramma() == idProgramma){
-                        Map<Integer, Integer> newMap = updatePolicyPL(programmaFedelta, addLevel, pointsNewLevel, removeLevel, levelToRemove, updatePointsLevel, levelToUpdate, newPoints);
-                       ProgrammaLivelli pl = new ProgrammaLivelli(nome, dataAttivazione, massimoLivelli, livelloVip, newMap, puntiSpesa, importoSpesa);
-                        if(this.getDbms().updateProgrammaAzienda(azienda, idProgramma, pl))
-                            return true;
-                    }
-                }
-            }
-        }
-        return false;
+        Map<Integer, Integer> newMap = updatePolicyPL(programmaFedelta, addLevel, pointsNewLevel, removeLevel, levelToRemove, updatePointsLevel, levelToUpdate, newPoints);
+        ProgrammaLivelli pl = new ProgrammaLivelli(nome, dataAttivazione, massimoLivelli, livelloVip, newMap, puntiSpesa, importoSpesa);
+        return this.getDbms().updateProgrammaAzienda(idAzienda, idProgramma, pl);
     }
 
 
@@ -143,11 +123,10 @@ public class HandlerProgrammaFedelta {
      * @param idAzienda        considered company.
      * @param programmaFedelta loyalty program to be removed.
      */
-    public boolean rimuoviProgrammaFedelta(int idAzienda, ProgrammaFedelta programmaFedelta) {
-        Objects.requireNonNull(programmaFedelta);
+    public boolean rimuoviProgrammaFedelta(int idAzienda, int idProgramma) {
         if (idAzienda < 1)
             throw new IllegalArgumentException("Id not correct");
-        return this.getDbms().removeProgrammaAzienda(idAzienda, programmaFedelta);
+        return this.getDbms().removeProgrammaAzienda(idAzienda, idProgramma);
     }
 
     /**
