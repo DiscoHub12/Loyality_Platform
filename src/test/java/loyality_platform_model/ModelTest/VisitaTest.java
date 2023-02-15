@@ -9,12 +9,13 @@ import static org.junit.jupiter.api.Assertions.*;
 public class VisitaTest {
 
     private String luogo = "Camerino";
-    private Date data = new Date(2023, Calendar.JANUARY, 21);
+    private String data="20/01/2023";
 
     @Test
     public void testCostructor(){
-        assertThrows(NullPointerException.class, () -> new Visita("", null));
-        assertThrows(NullPointerException.class, () -> new Visita(luogo, null));
+        assertThrows(NullPointerException.class, () -> new Visita("", ""));
+        assertThrows(NullPointerException.class, () -> new Visita(luogo , null));
+        assertThrows(NullPointerException.class, () -> new Visita("", data));
         Visita visita = new Visita(luogo, data);
     }
 
@@ -36,30 +37,30 @@ public class VisitaTest {
     public void testGetData(){
         Visita visita = new Visita(luogo, data);
         assertEquals(data, visita.getData());
-        Date uno = new Date(2023, Calendar.JANUARY, 21);
-        Visita visita2 = new Visita(luogo, uno);
-        assertEquals(uno, visita2.getData());
-        Date due = new Date(2023, Calendar.JANUARY, 22);
-        Visita visita3 = new Visita(luogo, due);
-        assertEquals(due, visita3.getData());
-        Date tre = new Date(2023, Calendar.JANUARY, 23);
-        Visita visita4 = new Visita(luogo, tre);
-        assertEquals(tre, visita4.getData());
+        String data1= "21/01/2023";
+        Visita visita2 = new Visita(luogo, data1);
+        assertEquals(data1, visita2.getData());
+        String data2= "22/01/2023";
+        Visita visita3 = new Visita(luogo, data2);
+        assertEquals(data2, visita3.getData());
+        String data3="23/01/2023";
+        Visita visita4 = new Visita(luogo, data3);
+        assertEquals(data3, visita4.getData());
     }
 
     @Test
     public void testSetData(){
         Visita visita = new Visita(luogo, data);
         assertEquals(data, visita.getData());
-        Date uno = new Date(2023, Calendar.JANUARY, 21);
-        visita.setData(uno);
-        assertEquals(uno, visita.getData());
-        Date due = new Date(2023, Calendar.JANUARY, 22);
-        visita.setData(due);
-        assertEquals(due, visita.getData());
-        Date tre = new Date(2023, Calendar.JANUARY, 23);
-        visita.setData(tre);
-        assertEquals(tre, visita.getData());
+        String data1= "21/01/2023";
+        visita.setData(data1);
+        assertEquals(data1, visita.getData());
+        String data2= "22/01/2023";
+        visita.setData(data2);
+        assertEquals(data2, visita.getData());
+        String data3="23/01/2023";
+        visita.setData(data3);
+        assertEquals(data3, visita.getData());
     }
 
     @Test
