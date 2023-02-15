@@ -15,14 +15,15 @@ public class HandlerClienteTest {
 
     private final Tessera tesseraCliente = new Tessera(this.cliente.getIdCliente());
 
-
     private final HandlerCliente handler = new HandlerCliente();
 
     private final DBMS dbms = DBMS.getInstance();
 
     void initDb(){
+        this.cliente.setTessera(tesseraCliente);
         this.dbms.addCliente(cliente);
         this.dbms.addTessera(tesseraCliente);
+        System.out.println(this.cliente.getIdCliente());
         //SMS CLIENTE :
         Set<SMS> smsCliente = new HashSet<>();
         SMS sms0 = new SMS("sms0");
@@ -36,10 +37,10 @@ public class HandlerClienteTest {
         this.dbms.getSMSCliente().put(cliente, smsCliente);
         //VISITE CLIENTE :
         Set<Visita> visiteCliente = new HashSet<>();
-        Visita visita0 = new Visita("visita0", new Date());
-        Visita visita1 = new Visita("visita1", new Date());
-        Visita visita2 = new Visita("visita2", new Date());
-        Visita visita3 = new Visita("visita3", new Date());
+        Visita visita0 = new Visita("visita0", "22-2-2022");
+        Visita visita1 = new Visita("visita1", "22-2-2022");
+        Visita visita2 = new Visita("visita2", "22-2-2022");
+        Visita visita3 = new Visita("visita3", "22-2-2022");
         visiteCliente.add(visita0);
         visiteCliente.add(visita1);
         visiteCliente.add(visita2);
@@ -58,10 +59,10 @@ public class HandlerClienteTest {
         this.dbms.getPremiCliente().put(cliente, premiCliente);
         //COUPON CLIENTE :
         Set<Coupon> couponCliente = new HashSet<>();
-        Coupon coupon0 = new Coupon(5, new Date());
-        Coupon coupon1 = new Coupon(5, new Date());
-        Coupon coupon2 = new Coupon(5, new Date());
-        Coupon coupon3 = new Coupon(5, new Date());
+        Coupon coupon0 = new Coupon(5, "10-2-2022");
+        Coupon coupon1 = new Coupon(5, "10-2-2022");
+        Coupon coupon2 = new Coupon(5, "10-2-2022");
+        Coupon coupon3 = new Coupon(5, "10-2-2022");
         couponCliente.add(coupon0);
         couponCliente.add(coupon1);
         couponCliente.add(coupon2);
@@ -82,7 +83,6 @@ public class HandlerClienteTest {
 
     @Test
     public void testIdentificaClienteTessera(){
-        initDb();
         Cliente cliente = this.handler.identificaClienteTessera(this.tesseraCliente.getIdTessera());
         assertNotNull(cliente);
         assertEquals(this.cliente.getIdCliente(), cliente.getIdCliente());
@@ -92,7 +92,6 @@ public class HandlerClienteTest {
 
     @Test
     public void testIdrntificaClienteCodice(){
-        initDb();
         Cliente cliente = this.handler.identificaClienteCodice(this.cliente.getIdCliente());
         assertNotNull(cliente);
         assertEquals(this.cliente.getIdCliente(), cliente.getIdCliente());
@@ -102,7 +101,6 @@ public class HandlerClienteTest {
 
     @Test
     public void testGetTesseraCliente(){
-        initDb();
         Tessera tessera = this.handler.getTesseraCliente(this.cliente.getIdCliente());
         assertNotNull(tessera);
         assertEquals(1, tessera.getIdTessera());
@@ -111,7 +109,6 @@ public class HandlerClienteTest {
 
     @Test
     public void testGetSMSCliente(){
-        initDb();
         Set<SMS> smsCliente = this.handler.getSMSCliente(this.cliente.getIdCliente());
         assertNotNull(smsCliente);
         assertEquals(smsCliente, this.handler.getSMSCliente(this.cliente.getIdCliente()));
@@ -119,32 +116,27 @@ public class HandlerClienteTest {
 
     @Test
     public void testGetVisiteCliente(){
-        initDb();
         Set<Visita> visiteCliente = this.handler.getVisiteCliente(this.cliente.getIdCliente());
         assertNotNull(visiteCliente);
     }
 
     @Test
     public void testGetPremiCliente(){
-        initDb();
         //Todo implementare.
     }
 
     @Test
     public void testGetCouponCliente(){
-        initDb();
         //Todo implementare
     }
 
     @Test
     public void testConvalidaAcquisto(){
-        initDb();
         //Todo implementare
     }
 
     @Test
     public void testConvalidaAcquistoTwo(){
-        initDb();
         //Todo implementar
     }
 }

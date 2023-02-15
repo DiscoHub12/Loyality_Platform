@@ -18,8 +18,9 @@ public class HandlerAziendaTest {
     /**
      * AZIENDA 1:
      */
-    private final Azienda azienda = new Azienda(new GestorePuntoVendita("Alessio", "Cognome1", "prova@gmail.com"), new SpazioFedelta("Azienda1", "Indirizzo1", "Numero1", "Email1"));
+    private final GestorePuntoVendita gestore = new GestorePuntoVendita("Alessio", "Cognome1", "prova@gmail.com");
     private final SpazioFedelta spazio = new SpazioFedelta("Spazio1", "Indirizzo1", "Telefono1", "email1");
+    private final Azienda azienda = new Azienda(gestore, spazio);
     private final Dipendente dipendente = new Dipendente("Dipendente1", "Cognome1", "prova@gmail1.com", false);
 
     /**
@@ -52,7 +53,9 @@ public class HandlerAziendaTest {
 
 
     public void initTotal() {
-        System.out.println("Azienda numero 1 : " + this.azienda.getIdAzienda());
+        System.out.println("Id Azienda : " + this.azienda.getIdAzienda());
+        System.out.println("Id Spazio Fedeltà azienda : " + this.spazio.getIdSpazioFedelta());
+        System.out.println("Id Dipendente azienda : " + this.dipendente.getIdDipendente());
         Set<Premio> premi = new HashSet<>();
         premi.add(premio1);
         premi.add(premio2);
@@ -63,8 +66,6 @@ public class HandlerAziendaTest {
         catalogoPremi.add(catalogo);
         catalogoPremi.add(catalogo);
         //Azienda 1
-        azienda.setSpazioFedelta(spazio);
-        azienda.setCatalogoPremi(this.cataloghi);
         db.addAzienda(azienda);
         db.addDipendente(azienda, dipendente);
         db.addProgrammaAzienda(azienda, programmaFedeltaPunti1);
@@ -79,10 +80,9 @@ public class HandlerAziendaTest {
     @Test
     public void testGetTitolareAzienda() {
         initTotal();
-        GestorePuntoVendita gestore1 = this.handler.getTitolareAzienda(1);
-        assertNotNull(gestore1);
-        assertEquals(gestore1, this.handler.getTitolareAzienda(1));
-        assertEquals(1, gestore1.getIdGestorePuntoVendita());
+        assertNotNull(this.handler.getTitolareAzienda(1));
+        assertEquals(1, this.handler.getTitolareAzienda(1).getIdGestorePuntoVendita());
+        assertEquals("Alessio", this.handler.getTitolareAzienda(1).getNome());
     }
 
     @Test
