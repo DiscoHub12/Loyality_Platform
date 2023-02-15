@@ -68,6 +68,27 @@ public class HandlerAzienda {
     }
 
     /**
+     *
+     * @param idAzienda
+     * @param idDipendente
+     * @return
+     */
+    public Dipendente getDipendenteById(int idAzienda, int idDipendente){
+        if(idAzienda <= 0 || idDipendente <= 0)
+            throw new IllegalArgumentException("Invalid id for Company or Employee.");
+        for(Azienda azienda : this.dbms.getAziendeIscritte()){
+            if(azienda.getIdAzienda() == idAzienda){
+                for(Dipendente dipendente : this.dbms.getDipendentiAzienda().get(azienda)){
+                    if(dipendente.getIdDipendente() == idDipendente){
+                        return dipendente;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
      * @param idDipendente
      * @return
      */

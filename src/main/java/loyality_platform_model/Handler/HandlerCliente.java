@@ -180,58 +180,34 @@ public class HandlerCliente {
      * particular Customer registered on the Platform and on the
      * company's, current, loyalty program.
      *
-     * @param nome    the name about the Customer.
-     * @param cognome the surname about the Customer.
-     * @throws IllegalArgumentException if the Name or Surname about Customer is not correct.
+     * @param idAzienda    the name about the Customer.
+     * @param idTessera the surname about the Customer.
+     * @param importoSpeso
+     * @param coupon
+     * @param gestoreTessera
+     * @param gestorePremi
+     * @throws IllegalArgumentException if the idTessera is not valid.
      */
-    public int convalidaAcquisto(int idAzienda, String nome, String cognome, double importoSpeso, Coupon coupon) {
-        double importo = 0;
-        if (Objects.equals(nome, "") || Objects.equals(cognome, ""))
-            throw new IllegalArgumentException("Illegal Name or Surname for the Customer.");
-        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
-            if (azienda.getIdAzienda() == idAzienda) {
-                Cliente identificato = this.identificaCliente(nome, cognome);
-                Tessera tesseraCliente = this.getTesseraCliente(identificato.getIdCliente());
-                if (tesseraCliente != null) {
-                    if (coupon != null) {
-                        if (importoSpeso >= coupon.getValoreSconto()) {
-                            importo = importoSpeso - coupon.getValoreSconto();
-
-                            //Todo richiama HandlerTessera passando l'importo.
-                            //Todo richiama HandlerPremi per togliere il Coupon del Cliente al DB.
-                            return 1;
-                        }else {
-                            importo = importoSpeso;
-                            //Todo richiama HandlerTessera passando l'importo.
-                            return 1;
-                        }
-                    } else {
-                        importo = importoSpeso;
-                        //Todo richiama HandlerTessera passando l'importo.
-                        return 1;
-                    }
-                }return 0; //Cliente non possiede tessera
-            }
-        }
-        return -2;
-    }
-
-    /**
-     * This method allows you to validate a Purchase of a
-     * particular Customer registered on the Platform and on the
-     * company's, current, loyalty program.
-     *
-     * @param idTessera the name about the Customer.
-     * @throws IllegalArgumentException if the idTessera is not correct.
-     */
-    public void convalidaAcquisto(int idAzienda, int idTessera, double importoSpeso, Coupon coupon) {
+    public void convalidaAcquisto(int idAzienda, int idTessera, double importoSpeso, Coupon coupon, HandlerTessera gestoreTessera, HandlerPremi gestorePremi) {
         if (idTessera <= 0)
             throw new IllegalArgumentException("Illegal number of Customer card.");
-        for (Tessera tessera : this.dbms.getTessereClienti()) {
-            if (tessera.getIdTessera() == idTessera) {
-                for (Cliente cliente : this.dbms.getClientiIscritti()) {
-                    if (tessera.getIdCliente() == cliente.getIdCliente()) {
-                        convalidaAcquisto(idAzienda, cliente.getNome(), cliente.getCognome(), importoSpeso, coupon);
+        for(Azienda azienda : this.dbms.getAziendeIscritte()){
+            if(azienda.getIdAzienda() == idAzienda){
+                for (Tessera tessera : this.dbms.getTessereClienti()) {
+                    if (tessera.getIdTessera() == idTessera) {
+                        for (Cliente cliente : this.dbms.getClientiIscritti()) {
+                            if (tessera.getIdCliente() == cliente.getIdCliente()) {
+                                if(coupon == null){
+                                    gestoreTessera.addPuntiAcquisto(importoSpeso, tessera, azienda);
+                                }else {
+                                    if(importoSpeso >= coupon.getValoreSconto()){
+                                        gestorePremi.deleteCouponCliente(cliente.getIdCliente(), coupon.getIdCoupon());
+                                        importoSpeso -= coupon.getValoreSconto();
+                                    }
+                                    gestoreTessera.addPuntiAcquisto(importoSpeso, tessera, azienda);
+                                }
+                            }
+                        }
                     }
                 }
             }

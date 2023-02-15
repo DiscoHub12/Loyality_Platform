@@ -122,7 +122,7 @@ public class HandlerPremi {
      * @throws NullPointerException     if dataScadenza is null.
      * @throws IllegalArgumentException if valoreSconto value is not valid.
      */
-    public Coupon creaCoupon(int valoreSconto, Date dataScadenza) {
+    public Coupon creaCoupon(int valoreSconto, String dataScadenza) {
         Objects.requireNonNull(dataScadenza);
         if (valoreSconto <= 0)
             throw new IllegalArgumentException("Illegal value for the discount value.");
@@ -341,7 +341,7 @@ public class HandlerPremi {
      * @throws NullPointerException     if the dataScadenza is null.
      * @throws IllegalArgumentException if the idAzienda or valoreSconto is not correct.
      */
-    public void aggiungiCouponPreconfigurato(int idAzienda, int valoreSconto, Date dataScadenza) {
+    public void aggiungiCouponPreconfigurato(int idAzienda, int valoreSconto, String dataScadenza) {
         Objects.requireNonNull(dataScadenza);
         if (idAzienda <= 0 || valoreSconto <= 1)
             throw new IllegalArgumentException("Invalid id for the fields.");
@@ -365,14 +365,15 @@ public class HandlerPremi {
      * @throws NullPointerException     if the dataScadenza is null.
      * @throws IllegalArgumentException if the idAzienda or idCoupon is not correct or valoreSconto is invalid.
      */
-    public boolean modificaCouponPreconfigurato(int idAzienda, int idCoupon, int valoreSconto, Date dataScadenza) {
+    public boolean modificaCouponPreconfigurato(int idAzienda, int idCoupon, int valoreSconto, String dataScadenza) {
         Objects.requireNonNull(dataScadenza);
         if (idAzienda <= 0 || idCoupon <= 0 || valoreSconto <= 1)
             throw new IllegalArgumentException("Invalid id for the filed.");
         for (Azienda azienda : this.dbms.getAziendeIscritte()) {
             for (Coupon coupon : this.dbms.getCouponPreconfiguratiAzienda().get(azienda)) {
                 if (coupon.getIdCoupon() == idCoupon) {
-                    this.dbms.updateCouponPreconfiguratoAzienda(azienda, idCoupon, valoreSconto, dataScadenza);
+                    Coupon coupon1 = new Coupon(valoreSconto, dataScadenza);
+                    this.dbms.updateCouponPreconfiguratoAzienda(azienda, idCoupon, coupon1);
                     return true;
                 }
             }
@@ -422,7 +423,7 @@ public class HandlerPremi {
                         if (premio.getIdPremio() == idPremio) {
                             for (Cliente cliente : this.dbms.getClientiIscritti()) {
                                 if (cliente.getIdCliente() == idCliente) {
-                                    this.dbms.addPremioCliente(premio, cliente);
+                                    this.dbms.addPremioCliente(cliente, premio);
                                 }
                             }
                         }
@@ -549,15 +550,5 @@ public class HandlerPremi {
                 company = azienda;
         }
         return company;
-    }
-
-    private boolean isCatalogoPerPunti(CatalogoPremi catalogoPremi){
-        int count = 0;
-        for(Premio premio : catalogoPremi.getPremiCatalogo()){
-            if(premio.getPunti() != 0){
-                count++;
-            }
-        }
-        return count == catalogoPremi.getPremiCatalogo().size();
     }
 }
