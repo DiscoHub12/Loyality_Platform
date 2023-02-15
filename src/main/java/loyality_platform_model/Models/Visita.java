@@ -22,7 +22,7 @@ public class Visita {
      * This attribute rapresents the
      * Date of this Visit.
      */
-    private Date data;
+    private String data;
 
     /**
      * This attribute rapresents the
@@ -43,9 +43,9 @@ public class Visita {
      * @param luogo the Place of this Visit.
      * @param data  the Date of this Visit.
      */
-    public Visita(String luogo, Date data) {
+    public Visita(String luogo, String data) {
         this.idVisita=++contatoreVisita;
-        this.setData(data);
+        this.data=data;
         this.setLuogo(luogo);
         this.completata = false;
     }
@@ -58,14 +58,13 @@ public class Visita {
     /**
      * method that returns the date of the visit
      */
-    public Date getData() {
-        return data;
+    public String getData() {
+        return this.data;
     }
     /**
      * method that update the date of the visit
      */
-    public void setData(Date data) {
-        Objects.requireNonNull(data);
+    public void setData(String data) {
         this.data = data;
     }
     /**
@@ -101,7 +100,7 @@ public class Visita {
     public String toString() {
         return "\n\t Visit details : " +
                 "\n Place : " + this.luogo +
-                "\n Date : " + this.data.toString() +
+                "\n Date : " + this.data+
                 "\n Complete : " + this.completata;
     }
 }
