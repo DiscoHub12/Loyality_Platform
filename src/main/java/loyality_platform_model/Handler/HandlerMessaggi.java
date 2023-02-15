@@ -63,10 +63,15 @@ public class HandlerMessaggi {
             throw new IllegalArgumentException("Illegal text for sms.");
         return new SMS(testo);
     }
-    public void creaConfigurazioneSMS(String testo){
+    public SMS creaSMSPreconfigurato(ConfigurazioneSMS sms){
+        if(Objects.isNull(sms))
+            throw new IllegalArgumentException(("Empty message"));
+        return new SMS(sms);
+    }
+    public ConfigurazioneSMS creaConfigurazioneSMS(String testo){
         if (Objects.equals(testo, ""))
             throw new IllegalArgumentException("Illegal text for sms.");
-        new ConfigurazioneSMS(testo);
+        return new ConfigurazioneSMS(testo);
     }
 
     /**
@@ -76,8 +81,17 @@ public class HandlerMessaggi {
      * @param idCliente customer who must receive the SMS.
      */
     public void inviaSMS(int idCliente, String sms) {
-        //TODO da progettare
-    }
+        if(Objects.equals(sms,""))
+            throw new IllegalArgumentException("no message written");
+        if(idCliente<1)
+            throw new IllegalArgumentException("Customer id not correct");
+        for(Cliente cliente : this.dbms.getClientiIscritti()){
+            if(cliente.getIdCliente() == idCliente){
+                SMS messaggio= creaSMS(sms);
+                this.dbms.addSMS(cliente,messaggio);
+                }
+            }
+        }
 
     /**
      * This method allows you to send a text message to a set of customers.
@@ -93,22 +107,40 @@ public class HandlerMessaggi {
      * @param clienti
      */
     public void inviaSmsGenerale(SMS sms, Set<Cliente> clienti){
-        //TODO implementare
+        if(Objects.isNull(sms))
+            throw new IllegalArgumentException("Error in sms");
+        for(Cliente cliente : this.dbms.getSMSCliente().keySet()){
+            this.dbms.addSMS(cliente,sms);
+        }
     }
 
     /**
      * This method allows you to send a configured text message to a customer.
      *
      */
-    public void inviaSMSPreConfigurato(){
-        //TODO implementare
+    public void inviaSMSPreConfigurato(int idCliente, ConfigurazioneSMS smsConfigurato){
+        if(Objects.isNull(smsConfigurato))
+            throw new IllegalArgumentException("unable to send empty messages");
+        if(idCliente<1)
+            throw new IllegalArgumentException("Customer id not correct");
+        for(Cliente cliente : this.dbms.getClientiIscritti()){
+            if(cliente.getIdCliente() == idCliente){
+                SMS messaggio= creaSMSPreconfigurato(smsConfigurato);
+                this.dbms.addSMS(cliente,messaggio);
+            }
+        }
     }
 
     /**
      * This method allows you to send a configured text message to a set of customers.
      *
      */
-    public void inviaSMSPreconfiguratoGenerale(){
-        //TODO implementare
+    public void inviaSMSPreconfiguratoGenerale(Set<Cliente> clienti,ConfigurazioneSMS smsConfigurato){
+        if(Objects.isNull(smsConfigurato))
+            throw new IllegalArgumentException("Error in sms");
+        for(Cliente cliente : this.dbms.getSMSCliente().keySet()){
+            SMS messaggio= creaSMSPreconfigurato(smsConfigurato);
+            this.dbms.addSMS(cliente,messaggio);
+        }
     }
 }
