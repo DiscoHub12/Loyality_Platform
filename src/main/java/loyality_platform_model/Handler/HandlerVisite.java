@@ -38,15 +38,19 @@ public class HandlerVisite {
     /**
      * method that returns the details of the visit
      */
-    public String getDetailsVisita(int idCliente,int idVisita){
+    public String getDetailsVisita(int idCliente,int idVisita) {
         if (idVisita < 1)
             throw new IllegalArgumentException("Id not correct");
-        for(Cliente cliente : this.getDbms().getClientiIscritti()){
-            if(cliente.getIdCliente()==idCliente){
-            for (Visita visita : this.getDbms().getVisiteCliente().get(cliente)) {
-                if (visita.getIdVisita() == idVisita) {
-                    return visita.toString();
-
+        for (Cliente cliente : this.getDbms().getClientiIscritti()) {
+            if (cliente.getIdCliente() == idCliente) {
+                for (Visita visita : this.getDbms().getVisiteCliente().get(cliente)) {
+                    if (visita.getIdVisita() == idVisita) {
+                        return visita.toString();
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     /**
@@ -82,18 +86,16 @@ public class HandlerVisite {
         if  (idCliente < 1)
             throw new IllegalArgumentException("Id not correct");
                 Visita visita = creaVisita(luogo, data);
-                this.dbms.addVisita(cliente, visita);
+                this.dbms.addVisita(idCliente, visita);
                 return true;
     }
 
     public void aggiungiVisitaGenerale(Set<Cliente> clienti, String data, String luogo){
         if(Objects.equals(luogo, "") || (Objects.equals(data,"")))
             throw new IllegalArgumentException("place or data are empty");
-        if  (idCliente < 1)
-            throw new IllegalArgumentException("Id not correct");
         for(Cliente cliente: clienti) {
             Visita visita = creaVisita(luogo, data);
-            aggiungiVisita(cliente.getIdCliente(),visita);
+            this.dbms.addVisita(cliente.getIdCliente(),visita);
         }
     }
 
@@ -112,7 +114,7 @@ public class HandlerVisite {
             throw new IllegalArgumentException("Custormer id or visit id are not correct");
         Visita visitaUpdated=new Visita(luogo,data);
         visitaUpdated.setCompletata(completata);
-        this.dbms.updateVisita(cliente.getIdCliente(), idVisita, visitaUpdated);
+        this.dbms.updateVisita(idCliente, idVisita, visitaUpdated);
 
     }
 
@@ -125,11 +127,15 @@ public class HandlerVisite {
     public void rimuoviVisita(int idVisita, int idCliente) {
         if (idCliente < 1 || idVisita<1)
             throw new IllegalArgumentException("Customer Id or visit id are not correct");
-        this.dbms.removeVisita(idCliente, visita);
-
+        this.dbms.removeVisita(idCliente, idVisita);
     }
 
-    public void rimuoviVisitaGenerale() {
-        //TODO implementare
+    public void rimuoviVisitaGenerale(Set<Cliente> clienti, Visita visita) {
+        if(Objects.isNull(visita))
+            throw new IllegalArgumentException("null visit");
+        for(Cliente cliente : clienti){
+            this.dbms.removeVisita(cliente.getIdCliente(),visita.getIdVisita());
+        }
+
     }
 }
