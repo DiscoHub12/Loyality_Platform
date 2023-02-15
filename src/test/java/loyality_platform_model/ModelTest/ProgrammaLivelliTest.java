@@ -18,10 +18,10 @@ public class ProgrammaLivelliTest {
         policy.put(2, 10);
         policy.put(3, 20);
         policy.put(4, 30);
-        ProgrammaLivelli programmaLivelli = new ProgrammaLivelli("ProgrammaL", 4,3, policy, 5, 10);
+        ProgrammaLivelli programmaLivelli = new ProgrammaLivelli("ProgrammaL", "12-02-2023",4,3, policy, 5, 10);
         System.out.println(programmaLivelli.getIdProgramma());
         assertEquals(0, programmaLivelli.getIdProgramma());
-        ProgrammaLivelli programmaLivelli1 = new ProgrammaLivelli("ProvaL", 6, 4, policy, 3, 6);
+        ProgrammaLivelli programmaLivelli1 = new ProgrammaLivelli("ProvaL","12-02-2023", 6, 4, policy, 3, 6);
         System.out.println(programmaLivelli1.getIdProgramma());
         assertEquals(1, programmaLivelli1.getIdProgramma());
         ProgrammaLivelli returnedProgrammaLivelli = programmaLivelli.getProgrammaLivelli();
@@ -37,7 +37,6 @@ public class ProgrammaLivelliTest {
         programmaLivelli.setNome("Programmaa");
         assertEquals("Programmaa", programmaLivelli.getNome());
         System.out.println("Nome nuovo" + programmaLivelli.getNome());
-        assertNull(programmaLivelli.getDataAttivazione());
         assertEquals(Tipo.PROGRAMMALIVELLI, programmaLivelli.getTipoProgramma());
         assertEquals(4, programmaLivelli.getMassimoLivelli());
         assertEquals(3, programmaLivelli.getLivelloVip());
@@ -45,8 +44,6 @@ public class ProgrammaLivelliTest {
         assertEquals(5, programmaLivelli.getPuntiSpesa());
         assertEquals(10, programmaLivelli.getImportoSpesa());
         assertNull(programmaLivelli.getCatalogoPremi());
-        programmaLivelli.setDataAttivazione(new Date());
-        System.out.println("Data attivazione" + programmaLivelli.getDataAttivazione());
         programmaLivelli.setLivelloVip(4);
         assertEquals(4,programmaLivelli.getLivelloVip());
         programmaLivelli.setPuntiSpesa(10);

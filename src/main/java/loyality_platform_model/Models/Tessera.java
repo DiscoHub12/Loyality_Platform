@@ -25,9 +25,6 @@ public class Tessera {
 
     private int livelli;
 
-    private boolean isVipPunti;
-
-    private  boolean isVipLivelli;
 
     public Tessera(int idCliente) {
         this.idTessera = contatoreTessera++;
@@ -35,8 +32,6 @@ public class Tessera {
         this.programmiFedelta = new HashSet<>();
         this.punti = 0;
         this.livelli = 0;
-        this.isVipPunti = false;
-        this.isVipLivelli = false;
     }
 
     /**
@@ -92,23 +87,6 @@ public class Tessera {
         this.punti -= punti;
     }
 
-    /**
-     * This method returns <code>true</code> if in the points program they are vip customers,
-     * <code>false</code> otherwise.
-     * @return <code>true</code> if in the points program they are vip customers,
-     *   <code>false</code> otherwise.
-     */
-    public boolean isVipPunti() {
-        return isVipPunti;
-    }
-
-    /**
-     * This method sets whether you are a vip customer in the points program.
-     * @param vipPunti <code>true</code> if you are a vip costumer, <code>false</code> otherwise.
-     */
-    public void setVipPunti(boolean vipPunti) {
-        isVipPunti = vipPunti;
-    }
 
     /**
      * This method returns the number of the level reached.
@@ -125,23 +103,6 @@ public class Tessera {
         this.livelli++;
     }
 
-    /**
-     * This method returns <code>true</code> if in the levels program they are vip customers,
-     * <code>false</code> otherwise.
-     * @return <code>true</code> if in the levels program they are vip customers,
-     *   <code>false</code> otherwise.
-     */
-    public boolean isVipLivelli() {
-        return isVipLivelli;
-    }
-
-    /**
-     * This method sets whether you are a vip customer in the levels program.
-     * @param vipLivelli <code>true</code> if you are a vip costumer, <code>false</code> otherwise.
-     */
-    public void setVipLivelli(boolean vipLivelli) {
-        isVipLivelli = vipLivelli;
-    }
 
     /**
      * This method adds a new loyalty program.
