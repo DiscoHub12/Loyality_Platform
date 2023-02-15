@@ -128,12 +128,17 @@ public class HandlerAzienda {
         for (Azienda azienda : this.dbms.getAziendeIscritte()) {
             if (azienda.getIdAzienda() == idAzienda) {
                 Dipendente created = creaDipendente(nome, cognome, email, restrizioni);
-                for (Dipendente dipendente : this.dbms.getDipendentiAzienda().get(azienda)) {
-                    if (!(Objects.equals(dipendente.getEmail(), created.getEmail()) && Objects.equals(dipendente.getNome(), created.getNome()))) {
-                        this.dbms.addDipendente(azienda, created);
-                        return true;
+                if(this.dbms.getDipendentiAzienda().get(azienda).isEmpty()){
+                    this.dbms.addDipendente(azienda, created);
+                }else {
+                    for (Dipendente dipendente : this.dbms.getDipendentiAzienda().get(azienda)) {
+                        if (!(Objects.equals(dipendente.getEmail(), created.getEmail()) && Objects.equals(dipendente.getNome(), created.getNome()))) {
+                            this.dbms.addDipendente(azienda, created);
+                            return true;
+                        }
                     }
                 }
+
             }
         }
         return false;
@@ -182,7 +187,7 @@ public class HandlerAzienda {
         for (Azienda azienda : this.dbms.getAziendeIscritte()) {
             if (azienda.getIdAzienda() == idAzienda) {
                 for (Dipendente dipendente : this.dbms.getDipendentiAzienda().get(azienda)) {
-                    if (dipendente.getIdDipendente() == idAzienda) {
+                    if (dipendente.getIdDipendente() == idDipendente) {
                         if (this.dbms.removeDipendente(azienda, dipendente))
                             return true;
                     }

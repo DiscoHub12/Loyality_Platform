@@ -21,7 +21,7 @@ public class GestorePuntoVendita {
     private String email;
 
     public GestorePuntoVendita(String nome, String cognome, String email) {
-        this.idGestorePuntoVendita = contatoreGestorePV++;
+        this.idGestorePuntoVendita = ++contatoreGestorePV;
         this.nome = nome;
         this.cognome = cognome;
         this.setEmail(email);

@@ -456,7 +456,7 @@ public class UI_Titolare {
         choice = sc.nextInt();
         switch (choice) {
             case 1 -> {
-                this.gestorePremi.aggiungiCouponPreconfigurato(this.azienda.getIdAzienda(), importoCoupon, new Date(dataScadenza));
+                this.gestorePremi.aggiungiCouponPreconfigurato(this.azienda.getIdAzienda(), importoCoupon, "10-2-2022");
                 System.out.println("\nCoupon creato correttamente. Ritorno alla schermata principale.\n");
                 sezioneConfigurazioneCoupon();
             }
