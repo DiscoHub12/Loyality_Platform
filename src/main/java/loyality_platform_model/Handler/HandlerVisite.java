@@ -5,7 +5,6 @@ import loyality_platform_model.Models.Cliente;
 import loyality_platform_model.Models.SMS;
 import loyality_platform_model.Models.Visita;
 
-import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
 
@@ -39,14 +38,19 @@ public class HandlerVisite {
     /**
      * method that returns the details of the visit
      */
-    public String getDetailsVisita(int idVisita){
+    public String getDetailsVisita(int idCliente,int idVisita){
         if (idVisita < 1)
             throw new IllegalArgumentException("Id not correct");
-        for (Visita visita : this.getDbms().getVisite()) {
-            if (visita.getIdVisita() == idVisita) {
-                return visita.toString();
+        for(Cliente cliente : this.getDbms().getClientiIscritti()){
+            if(cliente.getIdCliente()==idCliente){
+            for (Visita visita : this.getDbms().getVisiteCliente().get(cliente)) {
+                if (visita.getIdVisita() == idVisita) {
+                    return visita.toString();
+                }
+                throw new IllegalArgumentException("visit not exists.");
             }
-            throw new IllegalArgumentException("visit not exists.");
+            }
+            throw new IllegalArgumentException("customer not exists.");
         }
         return null;
     }
@@ -62,7 +66,7 @@ public class HandlerVisite {
      * @throws IllegalArgumentException if the location or time is incorrect.
      */
 
-    public Visita creaVisita(String luogo, Date data) {
+    public Visita creaVisita(String luogo, String data) {
         Objects.requireNonNull(data);
         if (Objects.equals(luogo, ""))
             throw new IllegalArgumentException("Illegal place or hour for the Visit.");
@@ -78,10 +82,11 @@ public class HandlerVisite {
      * @throws IllegalArgumentException if the Visit is already present into the Costumer's profile.
      */
 
-    public void aggiungiVisita(int idCliente, Date data, String luogo) {
-        Objects.requireNonNull(data);
-        if (Objects.equals(luogo, "") || idCliente < 1)
-            throw new IllegalArgumentException("Id or place are not correct");
+    public void aggiungiVisita(int idCliente, String data, String luogo) {
+       if(Objects.equals(luogo, "") || (Objects.equals(data,"")))
+           throw new IllegalArgumentException("place or data are empty");
+        if  (idCliente < 1)
+            throw new IllegalArgumentException("Id not correct");
         for(Cliente cliente : this.getDbms().getClientiIscritti()){
             if(cliente.getIdCliente()==idCliente){
                 Visita visita = creaVisita(luogo, data);
@@ -92,10 +97,11 @@ public class HandlerVisite {
                         this.dbms.addVisita(cliente, visita);
                 }
             }
+            throw new IllegalArgumentException("customer not exists.");
         }
     }
 
-    public void aggiungiVisitaGenerale(Set<Integer> idClienti, Date data, String luogo){
+    public void aggiungiVisitaGenerale(Set<Integer> idClienti, String data, String luogo){
         //TODO implementare
     }
 
@@ -107,19 +113,23 @@ public class HandlerVisite {
      * @throws IllegalArgumentException if the location or time is incorrect or the visit don't exist.
      *                                  <<<<<<< HEAD
      */
-    public void modificaVisita(int idCliente, int idVisita,Date data, String luogo) {
-        Objects.requireNonNull(data);
-        if (Objects.equals(luogo, "") || idCliente < 1 || idVisita < 1)
-            throw new IllegalArgumentException("Custormer id, visit id or place are not correct");
+    public void modificaVisita(int idCliente, int idVisita,String data, String luogo,boolean completata) {
+        if((Objects.equals(luogo, "") || (Objects.equals(data,""))))
+            throw new IllegalArgumentException("place or data are empty");
+        if (idCliente < 1 || idVisita < 1)
+            throw new IllegalArgumentException("Custormer id or visit id are not correct");
+        Visita visitaUpdated=new Visita(luogo,data);
+        visitaUpdated.setCompletata(completata);
         for (Cliente cliente : this.getDbms().getClientiIscritti()) {
             if (cliente.getIdCliente() == idCliente) {
                 for (Visita visita : this.getDbms().getVisiteCliente().get(cliente)) {
                     if(visita.getIdVisita()==idVisita)
-                        this.dbms.updateVisita(idCliente, idVisita, luogo, data);
+                        this.dbms.updateVisita(cliente, idVisita, visitaUpdated);
                     else
                         throw new IllegalArgumentException("visit don't exist.");
                 }
             }
+            throw new IllegalArgumentException("customer not exists.");
         }
     }
 
@@ -136,7 +146,7 @@ public class HandlerVisite {
             if (cliente.getIdCliente() == idCliente) {
                 for (Visita visita : this.dbms.getVisiteCliente().get(cliente)) {
                     if (visita.getIdVisita()==idVisita) {
-                        this.dbms.removeVisita(idVisita, idCliente);
+                        this.dbms.removeVisita(cliente, visita);
                     }else
                         throw new IllegalArgumentException("visit don't exist or already deleted.");
                 }
@@ -147,21 +157,4 @@ public class HandlerVisite {
     public void rimuoviVisitaGenerale() {
         //TODO implementare
     }
-
-    /**
-     * Method that allow to send a particular SMS to a specific Costumer.
-     *
-     * @param gestoreMessaggi the class that is responsible for sending SMS to a Costumers.
-     * @param cliente         the Costumer to send the SMS.
-     * @param sms             the SMS.
-     * @throws NullPointerException if the <gestoreMessaggi> or <cliente> or <sms > is null.
-     */
-
-    public void inviaSMS(HandlerMessaggi gestoreMessaggi, Cliente cliente, SMS sms) {
-        Objects.requireNonNull(gestoreMessaggi);
-        Objects.requireNonNull(cliente);
-        Objects.requireNonNull(sms);
-        //gestoreMessaggi.inviaSMS(sms, cliente);
-    }
-
 }
