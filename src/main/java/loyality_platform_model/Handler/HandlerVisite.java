@@ -46,13 +46,7 @@ public class HandlerVisite {
             for (Visita visita : this.getDbms().getVisiteCliente().get(cliente)) {
                 if (visita.getIdVisita() == idVisita) {
                     return visita.toString();
-                }
-                throw new IllegalArgumentException("visit not exists.");
-            }
-            }
-            throw new IllegalArgumentException("customer not exists.");
-        }
-        return null;
+
     }
 
     /**
@@ -82,27 +76,25 @@ public class HandlerVisite {
      * @throws IllegalArgumentException if the Visit is already present into the Costumer's profile.
      */
 
-    public void aggiungiVisita(int idCliente, String data, String luogo) {
+    public boolean aggiungiVisita(int idCliente, String data, String luogo) {
        if(Objects.equals(luogo, "") || (Objects.equals(data,"")))
            throw new IllegalArgumentException("place or data are empty");
         if  (idCliente < 1)
             throw new IllegalArgumentException("Id not correct");
-        for(Cliente cliente : this.getDbms().getClientiIscritti()){
-            if(cliente.getIdCliente()==idCliente){
                 Visita visita = creaVisita(luogo, data);
-                for (Visita visitaCliente : this.getDbms().getVisiteCliente().get(cliente)) {
-                    if (visitaCliente.equals(visita))
-                        throw new IllegalArgumentException("Visit already presents in Costumers profile.");
-                    else
-                        this.dbms.addVisita(cliente, visita);
-                }
-            }
-            throw new IllegalArgumentException("customer not exists.");
-        }
+                this.dbms.addVisita(cliente, visita);
+                return true;
     }
 
-    public void aggiungiVisitaGenerale(Set<Integer> idClienti, String data, String luogo){
-        //TODO implementare
+    public void aggiungiVisitaGenerale(Set<Cliente> clienti, String data, String luogo){
+        if(Objects.equals(luogo, "") || (Objects.equals(data,"")))
+            throw new IllegalArgumentException("place or data are empty");
+        if  (idCliente < 1)
+            throw new IllegalArgumentException("Id not correct");
+        for(Cliente cliente: clienti) {
+            Visita visita = creaVisita(luogo, data);
+            aggiungiVisita(cliente.getIdCliente(),visita);
+        }
     }
 
     /**
@@ -120,17 +112,8 @@ public class HandlerVisite {
             throw new IllegalArgumentException("Custormer id or visit id are not correct");
         Visita visitaUpdated=new Visita(luogo,data);
         visitaUpdated.setCompletata(completata);
-        for (Cliente cliente : this.getDbms().getClientiIscritti()) {
-            if (cliente.getIdCliente() == idCliente) {
-                for (Visita visita : this.getDbms().getVisiteCliente().get(cliente)) {
-                    if(visita.getIdVisita()==idVisita)
-                        this.dbms.updateVisita(cliente, idVisita, visitaUpdated);
-                    else
-                        throw new IllegalArgumentException("visit don't exist.");
-                }
-            }
-            throw new IllegalArgumentException("customer not exists.");
-        }
+        this.dbms.updateVisita(cliente.getIdCliente(), idVisita, visitaUpdated);
+
     }
 
     /**
@@ -142,16 +125,8 @@ public class HandlerVisite {
     public void rimuoviVisita(int idVisita, int idCliente) {
         if (idCliente < 1 || idVisita<1)
             throw new IllegalArgumentException("Customer Id or visit id are not correct");
-        for (Cliente cliente : this.getDbms().getClientiIscritti()) {
-            if (cliente.getIdCliente() == idCliente) {
-                for (Visita visita : this.dbms.getVisiteCliente().get(cliente)) {
-                    if (visita.getIdVisita()==idVisita) {
-                        this.dbms.removeVisita(cliente, visita);
-                    }else
-                        throw new IllegalArgumentException("visit don't exist or already deleted.");
-                }
-            }
-        }
+        this.dbms.removeVisita(idCliente, visita);
+
     }
 
     public void rimuoviVisitaGenerale() {

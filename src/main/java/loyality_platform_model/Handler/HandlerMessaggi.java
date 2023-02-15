@@ -28,28 +28,14 @@ public class HandlerMessaggi {
     public Set<SMS> getSMSPreconfigurati(int idAzienda){
         if (idAzienda<=0)
             throw new IllegalArgumentException("Illegal id for the company.");
-        for (Azienda azienda : this.dbms.getSMSPreconfiguratiAzienda().keySet()) {
-            if (azienda.getIdAzienda() == idAzienda) {
-                if (!this.dbms.getSMSCliente().get(azienda).isEmpty())
-                    return this.dbms.getSMSPreconfiguratiAzienda().get(azienda);
+        return this.dbms.getSMSPreconfigurati(idAzienda);
             }
-        }
-        return null;
-    }
+
 
     public ConfigurazioneSMS getSMSPreconfigurato(int idAzienda,int idSMS){
         if (idAzienda<=0 || idSMS<=0)
             throw new IllegalArgumentException("Illegal id for the company and sms.");
-        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
-            if (azienda.getIdAzienda() == idAzienda) {
-                for(SMS sms : this.dbms.getSMSPreconfiguratiAzienda().get(azienda)){
-                    if(sms.getIdSMS()==idSMS){
-                        return sms.getConfigurazione();
-                    }
-                }
-            }
-        }
-        return null;
+        return this.dbms.getSMSPreconfigurato(idAzienda,int idSMS);
     }
 
     /**
@@ -85,13 +71,8 @@ public class HandlerMessaggi {
             throw new IllegalArgumentException("no message written");
         if(idCliente<1)
             throw new IllegalArgumentException("Customer id not correct");
-        for(Cliente cliente : this.dbms.getClientiIscritti()){
-            if(cliente.getIdCliente() == idCliente){
-                SMS messaggio= creaSMS(sms);
-                this.dbms.addSMS(cliente,messaggio);
+                this.dbms.addSMS(idCliente,creaSMS(sms));
                 }
-            }
-        }
 
     /**
      * This method allows you to send a text message to a set of customers.
@@ -109,8 +90,8 @@ public class HandlerMessaggi {
     public void inviaSmsGenerale(SMS sms, Set<Cliente> clienti){
         if(Objects.isNull(sms))
             throw new IllegalArgumentException("Error in sms");
-        for(Cliente cliente : this.dbms.getSMSCliente().keySet()){
-            this.dbms.addSMS(cliente,sms);
+        for(Cliente cliente : clienti){
+            inviaSMS(cliente.getIdCliente(),sms);
         }
     }
 
@@ -123,13 +104,11 @@ public class HandlerMessaggi {
             throw new IllegalArgumentException("unable to send empty messages");
         if(idCliente<1)
             throw new IllegalArgumentException("Customer id not correct");
-        for(Cliente cliente : this.dbms.getClientiIscritti()){
-            if(cliente.getIdCliente() == idCliente){
-                SMS messaggio= creaSMSPreconfigurato(smsConfigurato);
-                this.dbms.addSMS(cliente,messaggio);
+        SMS messaggio = creaSMSPreconfigurato(smsConfigurato);
+                this.dbms.addSMS(idCliente,messaggio);
             }
-        }
-    }
+
+
 
     /**
      * This method allows you to send a configured text message to a set of customers.
@@ -138,9 +117,9 @@ public class HandlerMessaggi {
     public void inviaSMSPreconfiguratoGenerale(Set<Cliente> clienti,ConfigurazioneSMS smsConfigurato){
         if(Objects.isNull(smsConfigurato))
             throw new IllegalArgumentException("Error in sms");
-        for(Cliente cliente : this.dbms.getSMSCliente().keySet()){
+        for(Cliente cliente : clienti){
             SMS messaggio= creaSMSPreconfigurato(smsConfigurato);
-            this.dbms.addSMS(cliente,messaggio);
+            this.dbms.addSMS(cliente.,messaggio);
         }
     }
 }

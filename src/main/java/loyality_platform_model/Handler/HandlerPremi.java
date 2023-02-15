@@ -26,14 +26,8 @@ public class HandlerPremi {
      * @param idAzienda the id for the Company (Azienda).
      * @return a list of preconfigured Coupons if exists, null otherwise.
      */
-    public Set<Coupon> getCouponPreconfiguratiAzienda(int idAzienda) {
-        Azienda azienda = getAziendaById(idAzienda);
-        if (azienda != null) {
-            if (!this.dbms.getCouponPreconfiguratiAzienda().get(azienda).isEmpty()) {
-                return this.dbms.getCouponPreconfiguratiAzienda().get(azienda);
-            }
-        }
-        return null;
+    public Set<Coupon> getCouponPreconfiguratiAzienda() {
+            return this.dbms.getCouponPreconfiguratiAzienda();
     }
 
     /**
@@ -47,17 +41,8 @@ public class HandlerPremi {
      * @throws IllegalArgumentException if the idCoupon is not valid.
      */
     public Coupon getCouponPreconfiguratoAzienda(int idAzienda, int idCoupon) {
-        Azienda azienda = getAziendaById(idAzienda);
-        if (idCoupon <= 0)
-            throw new IllegalArgumentException("Illegal id for the Coupon");
-        if (azienda != null) {
-            for (Coupon coupon : this.dbms.getCouponPreconfiguratiAzienda().get(azienda)) {
-                if (coupon.getIdCoupon() == idCoupon) {
-                    return coupon;
-                }
-            }
-        }
-        return null;
+        this.dbms.getCouponPreconfiguratoAzienda();
+
     }
 
     /**
@@ -146,15 +131,7 @@ public class HandlerPremi {
         if (Objects.equals(nome, "") || number <= 0)
             throw new IllegalArgumentException("Illegal value for name or number.");
         Premio premio = creaPremio(nome, isPoints, number);
-        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
-            if (azienda.getIdAzienda() == idAzienda) {
-                for (CatalogoPremi catalogoPremi : azienda.getCatalogoPremi()) {
-                    if (catalogoPremi.getIdCatalogoPremi() == idCatalogoPremi) {
-                        catalogoPremi.aggiungiPremio(premio);
-                    } else throw new IllegalArgumentException("Reward Catalog not exists. ");
-                }
-            }
-        }
+        this.dbms.aggiungiPremio(premio);
     }
 
     /**
@@ -172,21 +149,8 @@ public class HandlerPremi {
     public boolean modificaPremio(int idAzienda, int idCatalogoPremi, int idPremio, String nome, boolean isPoints, int number) {
         if (idCatalogoPremi <= 0 || idPremio <= 0 || Objects.equals(nome, "") || number <= 0)
             throw new IllegalArgumentException("Incorrect value.");
-        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
-            if (azienda.getIdAzienda() == idAzienda) {
-                for (CatalogoPremi catalogoPremi : azienda.getCatalogoPremi()) {
-                    if (catalogoPremi.getIdCatalogoPremi() == idCatalogoPremi) {
-                        for (Premio premio : catalogoPremi.getPremiCatalogo()) {
-                            if (premio.getIdPremio() == idCatalogoPremi) {
-                                premio.updatePremio(nome, isPoints, number);
-                                return true;
-                            } //else throw new IllegalArgumentException("The Prize with this id don't exist.");
-                        }
-                    } //else throw new IllegalArgumentException("The Reward Catalog with this id don't exist.");
-                }
-            }
-        }
-        return false;
+        this.dbms.updatePremio(nome, isPoints, number);
+
     }
 
     /**
@@ -201,21 +165,8 @@ public class HandlerPremi {
     public boolean rimuoviPremio(int idAzienda, int idCatalogoPremi, int idPremio) {
         if (idPremio <= 0 || idAzienda <= 0 || idCatalogoPremi <= 0)
             throw new IllegalArgumentException("Invalid id for the fields.");
-        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
-            if (azienda.getIdAzienda() == idAzienda) {
-                for (CatalogoPremi catalogoPremi : azienda.getCatalogoPremi()) {
-                    if (catalogoPremi.getIdCatalogoPremi() == idCatalogoPremi) {
-                        for (Premio premio : catalogoPremi.getPremiCatalogo()) {
-                            if (premio.getIdPremio() == idPremio) {
-                                catalogoPremi.rimuoviPremio(premio);
-                                return true;
-                            } //else throw new IllegalArgumentException("The Prize with this id don't exist.");
-                        }
-                    } //else throw new IllegalArgumentException("The Reward Catalog with this id don't exist.");
-                }
-            }
-        }
-        return false;
+        this.dbms.rimuoviPremio(premio);
+        return true;
     }
 
     /**
@@ -231,10 +182,8 @@ public class HandlerPremi {
         Objects.requireNonNull(premiCatalogo);
         if (idAzienda <= 0)
             throw new IllegalArgumentException("Illegal id for the Company.");
-        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
-            if (azienda.getIdAzienda() == idAzienda) {
                 CatalogoPremi newCatalogo = creaCatalogo(premiCatalogo);
-                azienda.addCatalogoPremi(newCatalogo);
+                this.dbms.addCatalogoPremi(newCatalogo);
             }
         }
     }
@@ -345,12 +294,8 @@ public class HandlerPremi {
         Objects.requireNonNull(dataScadenza);
         if (idAzienda <= 0 || valoreSconto <= 1)
             throw new IllegalArgumentException("Invalid id for the fields.");
-        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
-            if (azienda.getIdAzienda() == idAzienda) {
-                Coupon newCoupon = creaCoupon(valoreSconto, dataScadenza);
-                this.dbms.addCouponPreconfiguratoAzienda(azienda, newCoupon);
-            }
-        }
+        Coupon newCoupon = creaCoupon(valoreSconto, dataScadenza);
+        this.dbms.addCouponPreconfiguratoAzienda(azienda, newCoupon);
     }
 
     /**
@@ -369,16 +314,9 @@ public class HandlerPremi {
         Objects.requireNonNull(dataScadenza);
         if (idAzienda <= 0 || idCoupon <= 0 || valoreSconto <= 1)
             throw new IllegalArgumentException("Invalid id for the filed.");
-        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
-            for (Coupon coupon : this.dbms.getCouponPreconfiguratiAzienda().get(azienda)) {
-                if (coupon.getIdCoupon() == idCoupon) {
                     Coupon coupon1 = new Coupon(valoreSconto, dataScadenza);
                     this.dbms.updateCouponPreconfiguratoAzienda(azienda, idCoupon, coupon1);
                     return true;
-                }
-            }
-        }
-        return false;
     }
 
     /**
@@ -393,17 +331,8 @@ public class HandlerPremi {
     public boolean rimuoviCouponPreconfigurato(int idAzienda, int idCoupon) {
         if (idAzienda <= 0 || idCoupon <= 0)
             throw new IllegalArgumentException("Invalid id for the fields.");
-        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
-            if (azienda.getIdAzienda() == idAzienda) {
-                for (Coupon coupon : this.dbms.getCouponPreconfiguratiAzienda().get(azienda)) {
-                    if (coupon.getIdCoupon() == idCoupon) {
-                        this.dbms.removeCouponPreconfiguratoAzienda(azienda, coupon);
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
+        this.dbms.removeCouponPreconfiguratoAzienda(azienda, coupon);
+        return true;
     }
 
     /**
@@ -416,21 +345,7 @@ public class HandlerPremi {
     public void aggiungiPremioClienteCatalogoGenerale(int idAzienda, int idCliente, int idPremio) {
         if (idCliente <= 0 || idPremio <= 0)
             throw new IllegalArgumentException("Invalid id for the fields.");
-        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
-            if (azienda.getIdAzienda() == idAzienda) {
-                for (CatalogoPremi catalogoPremi : azienda.getCatalogoPremi()) {
-                    for (Premio premio : catalogoPremi.getPremiCatalogo()) {
-                        if (premio.getIdPremio() == idPremio) {
-                            for (Cliente cliente : this.dbms.getClientiIscritti()) {
-                                if (cliente.getIdCliente() == idCliente) {
-                                    this.dbms.addPremioCliente(cliente, premio);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        this.dbms.addPremioCliente(cliente, premio);
     }
 
     /**
@@ -446,15 +361,8 @@ public class HandlerPremi {
     public void aggiungiPremioClienteCatalogoProgramma(int idAzienda, int idProgrammaFedelta, int idCliente, int idPremio) {
         if (idAzienda <= 0 || idProgrammaFedelta <= 0 || idCliente <= 0 || idPremio <= 0)
             throw new IllegalArgumentException("Invalid id for the fields.");
-        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
-            if (azienda.getIdAzienda() == idAzienda) {
-                for (ProgrammaFedelta programmaFedelta : this.dbms.getProgrammiAzienda().get(azienda)) {
-                    if (programmaFedelta.getIdProgramma() == idProgrammaFedelta) {
-                        //Todo implementare, manca getCatalogoPremi() su ProgrammaFedeltà, è presente su P.Punti e Livelli ma non posso accedere
-                    }
-                }
-            }
-        }
+        //Todo implementare, manca getCatalogoPremi() su ProgrammaFedeltà, è presente su P.Punti e Livelli ma non posso accedere
+
     }
 
     /**
@@ -469,15 +377,8 @@ public class HandlerPremi {
     public boolean deletePremioCliente(int idCliente, int idPremio) {
         if (idCliente <= 0 || idPremio <= 0)
             throw new IllegalArgumentException("Invalid id for the fields.");
-        for (Cliente cliente : this.dbms.getClientiIscritti()) {
-            for (Premio premio : this.dbms.getPremiCliente().get(cliente)) {
-                if (premio.getIdPremio() == idPremio) {
-                    this.dbms.removePremioCliente(cliente, premio);
-                    return true;
-                }
-            }
-        }
-        return false;
+        this.dbms.removePremioCliente(cliente, premio);
+        return true;
     }
 
     /**
@@ -491,17 +392,8 @@ public class HandlerPremi {
     public boolean aggiungiCouponCliente(int idCliente, int idCoupon) {
         if(idCliente <= 0 || idCoupon <= 0)
             throw new IllegalArgumentException("Invalid id for the fields.");
-        for(Cliente cliente : this.dbms.getClientiIscritti()){
-            if(cliente.getIdCliente() == idCliente){
-                for(Coupon coupon : this.dbms.getCouponCliente().get(cliente)){
-                    if(coupon.getIdCoupon() == idCoupon){
-                        this.dbms.addCoupon(cliente, coupon);
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
+        this.dbms.addCoupon(cliente, coupon);
+        return true;
     }
 
     /**
@@ -515,17 +407,8 @@ public class HandlerPremi {
     public boolean deleteCouponCliente(int idCliente, int idCoupon) {
         if(idCliente <= 0 || idCoupon <= 0)
             throw new IllegalArgumentException("Invalid id for the fields.");
-        for(Cliente cliente : this.dbms.getClientiIscritti()){
-            if(cliente.getIdCliente() == idCliente){
-                for(Coupon coupon : this.dbms.getCouponCliente().get(cliente)){
-                    if(coupon.getIdCoupon() == idCoupon){
-                        this.dbms.removeCoupon(cliente, coupon);
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
+        this.dbms.removeCoupon(cliente, coupon);
+        return true;
     }
 
 
