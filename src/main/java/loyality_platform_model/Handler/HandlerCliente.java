@@ -41,12 +41,7 @@ public class HandlerCliente {
     public Cliente identificaCliente(String nome, String cognome) {
         if (Objects.equals(nome, "") || Objects.equals(cognome, ""))
             throw new IllegalArgumentException("Illegal name or surname for identified Costumer.");
-        for (Cliente cliente : this.dbms.getClientiIscritti()) {
-            if (Objects.equals(cliente.getNome(), nome) && Objects.equals(cliente.getCognome(), cognome)) {
-                return cliente;
-            }
-        }
-        return null;
+        return this.dbms.identificaCliente(nome, cognome);
     }
 
     /**
@@ -58,7 +53,7 @@ public class HandlerCliente {
      * @return a Costumer object if exists, null otherwise.
      */
     public Cliente identificaClienteTessera(int idTessera) {
-        return getClienteByCardId(idTessera);
+        return this.dbms.identificaClienteTessera(idTessera);
     }
 
     /**
@@ -69,7 +64,7 @@ public class HandlerCliente {
      * @return a Costumer object if exists, null otherwise.
      */
     public Cliente identificaClienteCodice(int idCliente) {
-        return getClienteById(idCliente);
+        return this.dbms.identificaClienteCodice(idCliente);
     }
 
     /**
@@ -83,12 +78,7 @@ public class HandlerCliente {
     public Tessera getTesseraCliente(int idCliente) {
         if (idCliente <= 0)
             throw new IllegalArgumentException("Illegal id for the Customer.");
-        for (Tessera tessera : this.dbms.getTessereClienti()) {
-            if (tessera.getIdCliente() == idCliente) {
-                return tessera;
-            }
-        }
-        return null;
+        return this.dbms.getTesseraCliente(idCliente);
     }
 
     /**
@@ -102,13 +92,7 @@ public class HandlerCliente {
     public Set<SMS> getSMSCliente(int idCliente) {
         if (idCliente <= 0)
             throw new IllegalArgumentException("Invalid id for the Customer.");
-        for (Cliente cliente : this.dbms.getClientiIscritti()) {
-            if (cliente.getIdCliente() == idCliente) {
-                if (!this.dbms.getSMSCliente().get(cliente).isEmpty())
-                    return this.dbms.getSMSCliente().get(cliente);
-            }
-        }
-        return null;
+        return this.dbms.getSMSClienteById(idCliente);
     }
 
     /**
@@ -123,13 +107,7 @@ public class HandlerCliente {
     public Set<Visita> getVisiteCliente(int idCliente) {
         if (idCliente <= 0)
             throw new IllegalArgumentException("Invalid id for the Customer.");
-        for (Cliente cliente : this.dbms.getClientiIscritti()) {
-            if (cliente.getIdCliente() == idCliente) {
-                if (!this.dbms.getVisiteCliente().get(cliente).isEmpty())
-                    return this.dbms.getVisiteCliente().get(cliente);
-            }
-        }
-        return null;
+        return this.dbms.getVisiteClienteById(idCliente);
     }
 
 
@@ -145,13 +123,7 @@ public class HandlerCliente {
     public Set<Premio> getPremiCliente(int idCliente) {
         if (idCliente <= 0)
             throw new IllegalArgumentException("Invalid id for the Customer.");
-        for (Cliente cliente : this.dbms.getClientiIscritti()) {
-            if (cliente.getIdCliente() == idCliente) {
-                if (!this.dbms.getPremiCliente().get(cliente).isEmpty())
-                    return this.dbms.getPremiCliente().get(cliente);
-            }
-        }
-        return null;
+        return this.dbms.getPremiClienteById(idCliente);
     }
 
     /**
@@ -166,13 +138,7 @@ public class HandlerCliente {
     public Set<Coupon> getCouponCliente(int idCliente) {
         if (idCliente <= 0)
             throw new IllegalArgumentException("Invalid id for the Customer.");
-        for (Cliente cliente : this.dbms.getClientiIscritti()) {
-            if (cliente.getIdCliente() == idCliente) {
-                if (!this.dbms.getCouponCliente().get(cliente).isEmpty())
-                    return this.dbms.getCouponCliente().get(cliente);
-            }
-        }
-        return null;
+        return this.dbms.getCouponClienteById(idCliente);
     }
 
     /**
@@ -212,47 +178,5 @@ public class HandlerCliente {
                 }
             }
         }
-    }
-
-    /**
-     * This private method allows to simplify the code,
-     * and avoid duplicate code. It has the purpose of contacting the
-     * DataBase to identify a certain Client from its unique ID.
-     * If the customer is identified, the Customer is returned, otherwise a null value is returned.
-     *
-     * @param idCliente the id unique for the Customer to identify.
-     * @return the Customer if exist and if it registered into the platform, null value otherwise.
-     */
-    private Cliente getClienteById(int idCliente) {
-        if (idCliente <= 0)
-            throw new IllegalArgumentException("Illegal id for the Customer.");
-        for (Cliente cliente : this.dbms.getClientiIscritti()) {
-            if (cliente.getIdCliente() == idCliente)
-                return cliente;
-        }
-        return null;
-    }
-
-    /**
-     * This private method allows to simplify the code,
-     * and avoid duplicate code. It has the purpose of contacting the
-     * DataBase to identify a certain Client from its unique id Card, if exist and if it possesses.
-     * If the customer is identified, the Customer is returned, otherwise a null value is returned.
-     *
-     * @param idTessera the id unique for the Customer to identify.
-     * @return the Customer if exist and if it registered into the platform, null value otherwise.
-     */
-    private Cliente getClienteByCardId(int idTessera) {
-        if (idTessera <= 0)
-            throw new IllegalArgumentException("Illegal id Card for identify the Customer.");
-        for (Tessera tessera : this.dbms.getTessereClienti()) {
-            if (tessera.getIdTessera() == idTessera) {
-                for (Cliente cliente : this.dbms.getClientiIscritti()) {
-                    if (tessera.getIdCliente() == cliente.getIdCliente())
-                        return cliente;
-                }
-            }
-        }
-        return null;
     }
 }
