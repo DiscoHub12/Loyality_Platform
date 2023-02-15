@@ -82,13 +82,7 @@ public class HandlerAziendaTest {
         GestorePuntoVendita gestore1 = this.handler.getTitolareAzienda(1);
         assertNotNull(gestore1);
         assertEquals(gestore1, this.handler.getTitolareAzienda(1));
-        GestorePuntoVendita gestore2 = this.handler.getTitolareAzienda(2);
-        assertNotNull(gestore2);
-        assertEquals(gestore2, this.handler.getTitolareAzienda(2));
-        GestorePuntoVendita gestore3 = this.handler.getTitolareAzienda(3);
-        assertNotNull(gestore3);
-        assertEquals(gestore3, this.handler.getTitolareAzienda(3));
-        assertThrows(IllegalArgumentException.class, () -> this.handler.getTitolareAzienda(0));
+        assertEquals(1, gestore1.getIdGestorePuntoVendita());
     }
 
     @Test
@@ -97,8 +91,10 @@ public class HandlerAziendaTest {
         Set<Dipendente> dipendenti = handler.getDipendentiAzienda(1);
         assertNotNull(dipendenti);
         assertEquals(dipendenti, this.db.getDipendentiAzienda().get(azienda));
-        Set<Dipendente> dipendenti1 = handler.getDipendentiAzienda(2);
+        this.handler.aggiungiDipendente(1, "alessio", "giacche", "email", true);
+        Set<Dipendente> dipendenti1 = handler.getDipendentiAzienda(1);
         assertNotNull(dipendenti1);
+        assertEquals(dipendenti1, this.db.getDipendentiAzienda().get(azienda));
     }
 
     @Test
@@ -110,15 +106,23 @@ public class HandlerAziendaTest {
         assertEquals("Nome", dipendente.getNome());
         assertEquals("Cognome", dipendente.getCognome());
         assertEquals("Email", dipendente.getEmail());
+        Dipendente dipendente1 = this.handler.creaDipendente("Alessio", "Giacche", "email", true);
+        assertNotNull(dipendente1);
+        assertEquals("Alessio", dipendente1.getNome());
+        assertEquals("Giacche", dipendente1.getCognome());
+        assertEquals("email", dipendente1.getEmail());
     }
 
     @Test
     public void testAggiungiDipendente() {
         initTotal();
-        handler.aggiungiDipendente(1, "Nome", "Cognome", "Email", false);
-        handler.aggiungiDipendente(1, "Alessio", "Cognome1", "email", false);
+        this.handler.aggiungiDipendente(1, "Nome", "Cognome", "Email", false);
+        this.handler.aggiungiDipendente(1, "Alessio", "Cognome1", "email", false);
         Set<Dipendente> dipendentiAzienda1 = this.db.getDipendentiAzienda().get(azienda);
-        assertEquals(2, dipendentiAzienda1.size());
+        assertEquals(dipendentiAzienda1, this.handler.getDipendentiAzienda(this.azienda.getIdAzienda()));
+        this.handler.aggiungiDipendente(this.azienda.getIdAzienda(), "sofia", "scattolini", "email", true);
+        Set<Dipendente> dipendentiAzienda2= this.db.getDipendentiAzienda().get(azienda);
+        assertEquals(dipendentiAzienda2, this.handler.getDipendentiAzienda(this.azienda.getIdAzienda()));
     }
 
     @Test
@@ -128,49 +132,69 @@ public class HandlerAziendaTest {
         assertThrows(IllegalArgumentException.class, () -> this.handler.modificaDipendente(1, -1, handler.getTitolareAzienda(1), "email", false));
         assertThrows(IllegalArgumentException.class, () -> this.handler.modificaDipendente(1, 1, handler.getTitolareAzienda(1), "", false));
         assertTrue(this.handler.modificaDipendente(1, 1, this.handler.getTitolareAzienda(1), "ciao", false));
-        Set<Dipendente> dipendenti = this.handler.getDipendentiAzienda(azienda.getTitolare().getIdGestorePuntoVendita());
-        for(Dipendente dipendente : dipendenti){
-            if(dipendente.getIdDipendente() == 1){
-                assertEquals("ciao", dipendente.getEmail());
-                assertFalse(dipendente.isRestrizioni());
-            }
-        }
+        Dipendente dipendente1 = this.handler.getDipendenteById(this.azienda.getIdAzienda(), 1);
+        assertEquals("ciao", dipendente1.getEmail());
+        assertFalse(dipendente1.isRestrizioni());
+        assertTrue(this.handler.modificaDipendente(1, 1, this.handler.getTitolareAzienda(1), "email", true));
+        Dipendente dipendente2 = this.handler.getDipendenteById(this.azienda.getIdAzienda(), 1);
+        assertEquals("email", dipendente2.getEmail());
+        assertTrue(dipendente2.isRestrizioni());
     }
 
     @Test
     public void testRimuoviDpendente() {
         initTotal();
-        //Todo implementare
+        assertThrows(IllegalArgumentException.class, () -> this.handler.rimuoviDipendente(-1, 1));
+        assertThrows(IllegalArgumentException.class, () -> this.handler.rimuoviDipendente(1, -1));
+        Dipendente dipendente1 = this.handler.getDipendenteById(this.azienda.getIdAzienda(), 1);
+        Set<Dipendente> dipendenti = this.handler.getDipendentiAzienda(this.azienda.getIdAzienda());
+        assertTrue(this.handler.rimuoviDipendente(this.azienda.getIdAzienda(), 1));
+        assertFalse(dipendenti.contains(dipendente1));
+        this.handler.aggiungiDipendente(this.azienda.getIdAzienda(), "test", "test", "email", false);
+        Dipendente dipendente2 = this.handler.getDipendenteById(this.azienda.getIdAzienda(), 2);
+        Set<Dipendente> dipendenti2= this.handler.getDipendentiAzienda(this.azienda.getIdAzienda());
+        assertTrue(this.handler.rimuoviDipendente(this.azienda.getIdAzienda(), 2));
+        assertFalse(dipendenti2.contains(dipendente2));
     }
 
     @Test
     public void testGetSpazioFedeta() {
         initTotal();
-        //Todo implementare
+        SpazioFedelta spazioFedelta = this.handler.getSpazioFedeltaAzienda(this.azienda.getIdAzienda());
+        assertNotNull(spazioFedelta);
+        assertEquals(spazioFedelta, this.azienda.getSpazioFedelta());
     }
 
     @Test
     public void testModificaSpazioFedelta() {
         initTotal();
-        //Todo implementare
+        assertThrows(NullPointerException.class, () -> this.handler.modificaSpazioFedelta(1, null));
+        assertThrows(IllegalArgumentException.class, () -> this.handler.modificaSpazioFedelta(-1, new SpazioFedelta("nome", "indirizzo", "numeroTelefono", "email")));
+        SpazioFedelta spazioFedeltaUpdated = new SpazioFedelta("nome", "indirizzo", "numerotelefono", "email");
+        assertTrue(this.handler.modificaSpazioFedelta(this.azienda.getIdAzienda(), spazioFedeltaUpdated));
+        assertEquals(spazioFedeltaUpdated, this.handler.getSpazioFedeltaAzienda(this.azienda.getIdAzienda()));
     }
 
     @Test
     public void testGetProgrammiFedeltaAzienda() {
         initTotal();
-        //Todo implementare
+        assertThrows(IllegalArgumentException.class, () -> this.handler.getProgrammiFedeltaAzienda(-1));
+        Set<ProgrammaFedelta> programmiFedeltà = this.handler.getProgrammiFedeltaAzienda(this.azienda.getIdAzienda());
+        assertEquals(programmiFedeltà, this.handler.getProgrammiFedeltaAzienda(this.azienda.getIdAzienda()));
     }
 
     @Test
     public void testGetCatalogoPremiAzienda() {
         initTotal();
-        //Todo implementare
+        assertThrows(IllegalArgumentException.class, () -> this.handler.getCatalogoPremiAzienda(-1));
+        Set<CatalogoPremi> catalogoPremi = this.handler.getCatalogoPremiAzienda(this.azienda.getIdAzienda());
+        assertNotNull(catalogoPremi);
+        assertEquals(catalogoPremi, this.handler.getCatalogoPremiAzienda(this.azienda.getIdAzienda()));
     }
 
     @Test
     public void testGetClientiAzienda() {
         initTotal();
-        //Todo implementare
     }
 
 }
