@@ -126,7 +126,7 @@ public class HandlerProgrammaFedelta {
                             setPuntiVipPP(puntiVip, programmaFedelta);
                             setPuntiSpesaPP(puntiSpesa, programmaFedelta);
                             setImportoSpesaPP(importoSpesa, programmaFedelta);
-                            this.getDbms().updateProgrammaAzienda(azienda, programmaFedelta);
+                            this.getDbms().updateProgrammaAzienda(azienda, idProgramma, programmaFedelta);
                     }
                     throw new IllegalArgumentException("Program not exists.");
                 }
@@ -162,7 +162,7 @@ public class HandlerProgrammaFedelta {
                         if(updatePolicyLivelli){
                             updatePolicyPL(programmaFedelta, addLevel, pointsNewLevel, removeLevel, levelToRemove, updatePointsLevel, levelToUpdate, newPoints);
                         }
-                        this.getDbms().updateProgrammaAzienda(azienda, programmaFedelta);
+                        this.getDbms().updateProgrammaAzienda(azienda, idProgramma, programmaFedelta);
                     }
                     throw new IllegalArgumentException("Program not exists.");
                 }
