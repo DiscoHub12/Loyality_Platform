@@ -21,10 +21,8 @@ class TesseraTest {
         System.out.println("Id tessera " + tessera.getIdTessera() + "Id tessera1 " + tessera1.getIdTessera());
         assertEquals(tessera.getIdCliente(), cliente.getIdCliente());
         assertEquals(0, tessera.getPunti());
-        assertFalse(tessera.isVipLivelli());
-        assertFalse(tessera.isVipPunti());
         System.out.println("Numero punti " + tessera.getPunti());
-        ProgrammaFedelta programmaFedelta = new ProgrammaPunti("Prova", 100, 80, 1, 10);
+        ProgrammaFedelta programmaFedelta = new ProgrammaPunti("Prova", "12-02-2023",100, 80, 1, 10);
         tessera.addPogrammaFedelta(programmaFedelta);
         Set<ProgrammaFedelta> programmaFedeltaSet = new HashSet<>();
         programmaFedeltaSet.add(programmaFedelta);

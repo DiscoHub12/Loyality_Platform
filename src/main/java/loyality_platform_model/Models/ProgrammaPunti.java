@@ -20,7 +20,7 @@ public class ProgrammaPunti implements ProgrammaFedelta {
 
     private String nome;
 
-    private Date dataAttivazione;
+    private String dataAttivazione;
 
     private boolean maxPunti;
 
@@ -42,14 +42,14 @@ public class ProgrammaPunti implements ProgrammaFedelta {
      * maximum number of points. It requests the fundamental attributes for creation,
      * and invokes set methods which contain controls within them.
      */
-    public ProgrammaPunti(String nome, int numeroPuntiMassimi, int puntiVIP, int puntiSpesa, double importoSpesa) {
+    public ProgrammaPunti(String nome, String dataAttivazione, int numeroPuntiMassimi, int puntiVIP, int puntiSpesa, double importoSpesa) {
         this.idProgramma = contatorePP++;
         this.setNome(nome);
         this.setPuntiVIP(puntiVIP);
         this.setPuntiSpesa(puntiSpesa);
         this.setImportoSpesa(importoSpesa);
+        this.setDataAttivazione(dataAttivazione);
         this.catalogoPremi= null;
-        this.dataAttivazione = null;
         if(numeroPuntiMassimi > 0 ){
             this.setNumeroPuntiMassimi(numeroPuntiMassimi);
             this.setMaxPunti(true);
@@ -92,7 +92,7 @@ public class ProgrammaPunti implements ProgrammaFedelta {
      * @return the activation date of the program.
      */
     @Override
-    public Date getDataAttivazione() {
+    public String getDataAttivazione() {
         return dataAttivazione;
     }
 
@@ -101,8 +101,9 @@ public class ProgrammaPunti implements ProgrammaFedelta {
      * @param dataAttivazione the activation date of the program.
      */
     @Override
-    public void setDataAttivazione(Date dataAttivazione) {
-        Objects.requireNonNull(dataAttivazione);
+    public void setDataAttivazione(String dataAttivazione) {
+        if (Objects.equals(dataAttivazione, ""))
+            throw new IllegalArgumentException("Date not valid.");
         this.dataAttivazione = dataAttivazione;
     }
 

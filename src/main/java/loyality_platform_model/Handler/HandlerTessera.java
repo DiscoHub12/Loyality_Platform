@@ -94,7 +94,6 @@ public class HandlerTessera {
         for (Tessera tessera : this.getDbms().getTessereClienti()) {
             if (tessera.getIdTessera() == idTessera) {
                 tessera.addPunti(numeroPunti);
-                //isPuntiVip(tessera.getPunti(), pf.getProgrammaPunti(), tessera);
             }
             throw new IllegalArgumentException("Card not exists.");
         }
@@ -116,7 +115,6 @@ public class HandlerTessera {
             for(Tessera tessera : this.getDbms().getTessereClienti()){
                 if(tessera.getIdTessera() == toScroll){
                     tessera.addPunti(numeroPunti);
-                    //Cliente vip
                 }
                 throw new IllegalArgumentException("Card not exists.");
             }
@@ -136,7 +134,6 @@ public class HandlerTessera {
         for(Tessera tessera : this.getDbms().getTessereClienti()){
             if(tessera.getIdTessera() == idTessera){
                 tessera.deletePunti(numeroPunti);
-                //Controlla cliente vip
             }
             throw new IllegalArgumentException("Card not exists.");
         }
@@ -228,19 +225,6 @@ public class HandlerTessera {
         int puntiDaAggiungere = 0;
         puntiDaAggiungere += (importoSpeso * pp.getPuntiSpesa() / pp.getImportoSpesa());
         tessera.addPunti(puntiDaAggiungere);
-        int puntiAccumulati = tessera.getPunti();
-        isPuntiVip(puntiAccumulati, pp, tessera);
-    }
-
-    /**
-     * Based on the number of points accumulated, this method checks whether the customer is a VIP customer for that points program.
-     * @param puntiTotali points accumulated.
-     * @param pp points program considered.
-     * @param tessera customer card.
-     */
-    private void isPuntiVip(int puntiTotali, ProgrammaPunti pp, Tessera tessera) {
-        if (puntiTotali >= pp.getPuntiVIP())
-            tessera.setVipPunti(true);
     }
 
     /**
@@ -249,11 +233,10 @@ public class HandlerTessera {
      * @param tessera customer card.
      */
     private void addLivelloPL(ProgrammaLivelli pl, Tessera tessera) {
-        //TODO implementare
         Objects.requireNonNull(tessera);
         Objects.requireNonNull(pl);
-        int livelloAttuale = tessera.getLivelli();
-        int puntiAttuali = tessera.getPunti();
+        //TODO implementare
+        tessera.incrementLivello();
     }
 
 }

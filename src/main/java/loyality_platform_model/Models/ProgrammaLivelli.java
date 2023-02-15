@@ -1,6 +1,5 @@
 package loyality_platform_model.Models;
 
-import java.util.Date;
 import java.util.Map;
 import java.util.Objects;
 
@@ -22,11 +21,11 @@ public class ProgrammaLivelli implements ProgrammaFedelta {
 
     private String nome;
 
-    private Date dataAttivazione;
+    private String dataAttivazione;
 
     private int massimoLivelli, livelloVip;
 
-    private final Map<Integer, Integer> policyLivelli;
+    private Map<Integer, Integer> policyLivelli;
 
     private int puntiSpesa;
 
@@ -36,15 +35,15 @@ public class ProgrammaLivelli implements ProgrammaFedelta {
 
     private final Tipo tipoProgramma = Tipo.PROGRAMMALIVELLI;
 
-    public ProgrammaLivelli(String nome, int massimoLivelli, int livelloVip, Map<Integer, Integer> policy, int puntiSpesa, double importoSpesa) {
+    public ProgrammaLivelli(String nome, String dataAttivazione, int massimoLivelli, int livelloVip, Map<Integer, Integer> policy, int puntiSpesa, double importoSpesa) {
         this.idProgramma = contatorePL++;
         this.setNome(nome);
+        this.setDataAttivazione(dataAttivazione);
         this.setMassimoLivelli(massimoLivelli);
         this.setLivelloVip(livelloVip);
         this.setPuntiSpesa(puntiSpesa);
         this.setImportoSpesa(importoSpesa);
         this.policyLivelli = policy ;
-        this.dataAttivazione = null;
         this.catalogoPremi= null;
     }
 
@@ -82,8 +81,9 @@ public class ProgrammaLivelli implements ProgrammaFedelta {
      * @param dataAttivazione the activation date of the program.
      */
     @Override
-    public void setDataAttivazione(Date dataAttivazione) {
-        Objects.requireNonNull(dataAttivazione);
+    public void setDataAttivazione(String dataAttivazione) {
+        if (Objects.equals(dataAttivazione, ""))
+            throw new IllegalArgumentException("Name not valid.");
         this.dataAttivazione = dataAttivazione;
     }
 
@@ -92,7 +92,7 @@ public class ProgrammaLivelli implements ProgrammaFedelta {
      * @return the activation date of the program.
      */
     @Override
-    public Date getDataAttivazione() {
+    public String getDataAttivazione() {
         return dataAttivazione;
     }
 
@@ -166,6 +166,14 @@ public class ProgrammaLivelli implements ProgrammaFedelta {
      */
     public Map<Integer, Integer> getPolicyLivelli() {
         return policyLivelli;
+    }
+
+    /**
+     * This method sets the level policy.
+     * @param policyLivelli new policy.
+     */
+    public void setPolicyLivelli(Map<Integer, Integer> policyLivelli) {
+        this.policyLivelli = policyLivelli;
     }
 
     /**

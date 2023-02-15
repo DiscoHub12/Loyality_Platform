@@ -31,13 +31,13 @@ public interface ProgrammaFedelta {
      * This method returns the date of activation of the program.
      * @return the date of activation of the program.
      */
-    Date getDataAttivazione();
+    String getDataAttivazione();
 
     /**
      * This method sets the date of activation of the program.
      * @param dataAttivazione the date of activation of the program.
      */
-    void setDataAttivazione(Date dataAttivazione);
+    void setDataAttivazione(String dataAttivazione);
 
     /**
      * This method returns the type of the program.
