@@ -146,39 +146,64 @@ public class DBMS {
         return this.programmiAzienda;
     }
 
-    public void addProgrammaAzienda(Azienda azienda, ProgrammaFedelta programmaFedelta) {
-        if (this.programmiAzienda.containsKey(azienda)) {
-            if (this.programmiAzienda.get(azienda) == null) {
-                Set<ProgrammaFedelta> programmiAzienda = new HashSet<>();
-                programmiAzienda.add(programmaFedelta);
-                this.programmiAzienda.put(azienda, programmiAzienda);
-            } else {
-                this.programmiAzienda.get(azienda).add(programmaFedelta);
+    public boolean addProgrammaAzienda(int idAzienda, ProgrammaFedelta programmaFedelta) {
+        for(Azienda azienda : this.getAziendeIscritte()){
+            if(azienda.getIdAzienda() == idAzienda){
+                if (this.programmiAzienda.containsKey(azienda)) {
+                    this.programmiAzienda.get(azienda).add(programmaFedelta);
+                } else {
+                    Set<ProgrammaFedelta> programmiAzienda = new HashSet<>();
+                    programmiAzienda.add(programmaFedelta);
+                    this.programmiAzienda.put(azienda, programmiAzienda);
+                }
+                return true;
             }
-        } else {
-            Set<ProgrammaFedelta> programmiAzienda = new HashSet<>();
-            programmiAzienda.add(programmaFedelta);
-            this.programmiAzienda.put(azienda, programmiAzienda);
         }
+       return false;
     }
 
     public boolean updateProgrammaAzienda(Azienda azienda, int idProgrammaFedelta, ProgrammaFedelta programmaFedeltaUpdated) {
         for (ProgrammaFedelta programmaFedelta : this.programmiAzienda.get(azienda)) {
             if (programmaFedelta.getIdProgramma() == idProgrammaFedelta) {
-                programmaFedelta.setNome(programmaFedeltaUpdated.getNome());
-                programmaFedelta.setCatalogoPremi(programmaFedeltaUpdated.getCatalogoPremi());
-                programmaFedelta.setDataAttivazione(programmaFedeltaUpdated.getDataAttivazione());
-                return true;
+                if(programmaFedelta.getProgrammaPunti() != null){
+                   updateProgrammaPunti(programmaFedelta, programmaFedeltaUpdated);
+                   return true;
+                } else if (programmaFedelta.getProgrammaLivelli()!= null){
+                    updateProgrammaLivelli(programmaFedelta, programmaFedeltaUpdated);
+                }
             }
         }
         return false;
     }
 
-    public boolean removeProgrammaAzienda(Azienda azienda, ProgrammaFedelta programmaFedelta) {
-        for (ProgrammaFedelta programmaFedelta1 : this.programmiAzienda.get(azienda)) {
-            if (programmaFedelta1.getIdProgramma() == programmaFedelta.getIdProgramma()) {
-                this.programmiAzienda.get(azienda).remove(programmaFedelta);
-                return true;
+    private void updateProgrammaPunti(ProgrammaFedelta programmaFedelta,  ProgrammaFedelta programmaFedeltaUpdated){
+        programmaFedelta.getProgrammaPunti().setNome(programmaFedeltaUpdated.getProgrammaPunti().getNome());
+        programmaFedelta.getProgrammaPunti().setDataAttivazione(programmaFedeltaUpdated.getProgrammaPunti().getDataAttivazione());
+        programmaFedelta.getProgrammaPunti().setNumeroPuntiMassimi(programmaFedeltaUpdated.getProgrammaPunti().getNumeroPuntiMassimi());
+        programmaFedelta.getProgrammaPunti().setPuntiVIP(programmaFedeltaUpdated.getProgrammaPunti().getPuntiVIP());
+        programmaFedelta.getProgrammaPunti().setPuntiSpesa(programmaFedeltaUpdated.getProgrammaPunti().getPuntiSpesa());
+        programmaFedelta.getProgrammaPunti().setImportoSpesa(programmaFedeltaUpdated.getProgrammaPunti().getImportoSpesa());
+    }
+
+    private void updateProgrammaLivelli(ProgrammaFedelta programmaFedelta, ProgrammaFedelta programmaFedeltaUpdated){
+        programmaFedelta.getProgrammaLivelli().setNome(programmaFedeltaUpdated.getProgrammaLivelli().getNome());
+        programmaFedelta.getProgrammaLivelli().setDataAttivazione(programmaFedeltaUpdated.getProgrammaLivelli().getDataAttivazione());
+        programmaFedelta.getProgrammaLivelli().setMassimoLivelli(programmaFedeltaUpdated.getProgrammaLivelli().getMassimoLivelli());
+        programmaFedelta.getProgrammaLivelli().setLivelloVip(programmaFedeltaUpdated.getProgrammaLivelli().getLivelloVip());
+        programmaFedelta.getProgrammaLivelli().setPolicyLivelli(programmaFedeltaUpdated.getProgrammaLivelli().getPolicyLivelli());
+        programmaFedelta.getProgrammaLivelli().setPuntiSpesa(programmaFedeltaUpdated.getProgrammaLivelli().getPuntiSpesa());
+        programmaFedelta.getProgrammaLivelli().setImportoSpesa(programmaFedeltaUpdated.getProgrammaLivelli().getImportoSpesa());
+    }
+
+    public boolean removeProgrammaAzienda(int idAzienda, ProgrammaFedelta programmaFedelta) {
+        for(Azienda azienda : this.getAziendeIscritte()){
+            if(azienda.getIdAzienda() == idAzienda){
+                for(ProgrammaFedelta programmaFedelta1: this.getProgrammiAzienda().get(azienda)){
+                    if(programmaFedelta.equals(programmaFedelta1)){
+                        this.getProgrammiAzienda().get(azienda).remove(programmaFedelta);
+                        return true;
+                    }
+                }
             }
         }
         return false;
@@ -413,8 +438,7 @@ public class DBMS {
     public boolean updateTessera(int idTessera, Tessera tesseraUpdated) {
         for(Tessera tessera : this.tessereClienti){
             if(tessera.getIdTessera() == idTessera){
-                tessera.setVipLivelli(tesseraUpdated.isVipLivelli());
-                tessera.setVipPunti(tesseraUpdated.isVipPunti());
+
                 return true;
             }
         }
