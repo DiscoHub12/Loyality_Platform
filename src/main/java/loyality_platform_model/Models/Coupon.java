@@ -36,7 +36,7 @@ public class Coupon {
      * This attribute rapresents the expiration
      * date of this Coupon.
      */
-    private Date dataScadenza;
+    private String dataScadenza;
 
     /**
      * Constructor that allows you to create a new Coupon,
@@ -47,7 +47,7 @@ public class Coupon {
      * @param valoreSconto the discount value of this Coupon.
      * @param dataScadenza expiration date of this Coupon.
      */
-    public Coupon(int valoreSconto, Date dataScadenza) {
+    public Coupon(int valoreSconto, String dataScadenza) {
         this.idCoupon = ++contatoreCoupon;
         this.setValoreSconto(valoreSconto);
         this.setDataScadenza(dataScadenza);
@@ -82,8 +82,8 @@ public class Coupon {
         this.dataAttivazione = dataAttivazione;
     }
 
-    public Date getDataScadenza() {
-        return dataScadenza;
+    public String getDataScadenza() {
+        return this.dataScadenza;
     }
 
     /**
@@ -92,8 +92,9 @@ public class Coupon {
      * @param dataScadenza the expiration date.
      * @throws NullPointerException if the dataScadenza is null.
      */
-    public void setDataScadenza(Date dataScadenza) {
-        Objects.requireNonNull(dataScadenza);
+    public void setDataScadenza(String dataScadenza) {
+        if(Objects.equals(dataScadenza, ""))
+            throw new IllegalArgumentException("Illegal expiration date.");
         this.dataScadenza = dataScadenza;
     }
 
