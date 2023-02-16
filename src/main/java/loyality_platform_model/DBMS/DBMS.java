@@ -146,6 +146,41 @@ public class DBMS {
 
     //--OPERAZIONI AZIENDA--
 
+    public Azienda getAziendaById(int idAzienda){
+        for(Azienda azienda : this.aziendeIscritte){
+            if(azienda.getIdAzienda() == idAzienda){
+                return azienda;
+            }
+        }
+        return null;
+    }
+
+    public boolean addAzienda(Azienda azienda) {
+        return this.getAziendeIscritte().add(azienda);
+    }
+
+
+    public boolean updateAzienda(int idAzienda, Azienda aziendaNew) {
+        for (Azienda azienda : this.getAziendeIscritte()) {
+            if (azienda.getIdAzienda() == idAzienda) {
+                azienda.setTitolare(aziendaNew.getTitolare());
+                azienda.setSpazioFedelta(aziendaNew.getSpazioFedelta());
+                azienda.setCatalogoPremi(aziendaNew.getCatalogoPremi());
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean removeAzienda(int idAzienda) {
+        for (Azienda azienda1 : this.getAziendeIscritte()) {
+            if (azienda1.getIdAzienda() == idAzienda) {
+                return this.getAziendeIscritte().remove(azienda1);
+            }
+        }
+        return false;
+    }
+
     public GestorePuntoVendita getTitolareAzienda(int idAzienda) {
         for (Azienda azienda : this.getAziendeIscritte()) {
             if (azienda.getIdAzienda() == idAzienda) {
@@ -216,6 +251,44 @@ public class DBMS {
         return null;
     }
 
+    public boolean addCatalogoPremiAzienda(int idAzienda, CatalogoPremi catalogoPremi){
+        for(Azienda azienda : this.aziendeIscritte){
+            if(azienda.getIdAzienda() == idAzienda){
+                azienda.addCatalogoPremi(catalogoPremi);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean updateCatalogoPremiAzienda(int idAzienda, int idCatalogoPremi, CatalogoPremi catalogoPremiUpdated){
+        for(Azienda azienda : this.aziendeIscritte){
+            if(azienda.getIdAzienda() == idAzienda){
+                for(CatalogoPremi catalogoPremi : azienda.getCatalogoPremi()){
+                    if(catalogoPremi.getIdCatalogoPremi() == idCatalogoPremi){
+                        catalogoPremi.setPremiCatalogo(catalogoPremiUpdated.getPremiCatalogo());
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean removeCatalogoPremiAzienda(int idAzienda, int idCatalogoPremi){
+        for(Azienda azienda : this.aziendeIscritte){
+            if(azienda.getIdAzienda() == idAzienda){
+                for(CatalogoPremi catalogoPremi : azienda.getCatalogoPremi()){
+                    if(catalogoPremi.getIdCatalogoPremi() == idCatalogoPremi){
+                        azienda.removeCatalogoPremi(catalogoPremi);
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     public Set<Cliente> getClientiAzienda(int idAzienda) {
         //TODO implementare
         return null;
@@ -247,33 +320,6 @@ public class DBMS {
             }
         }
         return null;
-    }
-
-
-    public boolean addAzienda(Azienda azienda) {
-        return this.getAziendeIscritte().add(azienda);
-    }
-
-
-    public boolean updateAzienda(int idAzienda, Azienda aziendaNew) {
-        for (Azienda azienda : this.getAziendeIscritte()) {
-            if (azienda.getIdAzienda() == idAzienda) {
-                azienda.setTitolare(aziendaNew.getTitolare());
-                azienda.setSpazioFedelta(aziendaNew.getSpazioFedelta());
-                azienda.setCatalogoPremi(aziendaNew.getCatalogoPremi());
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean removeAzienda(int idAzienda) {
-        for (Azienda azienda1 : this.getAziendeIscritte()) {
-            if (azienda1.getIdAzienda() == idAzienda) {
-                return this.getAziendeIscritte().remove(azienda1);
-            }
-        }
-        return false;
     }
 
 
@@ -690,8 +736,20 @@ public class DBMS {
     }
 
 
-    public boolean addPremioCliente(int idAzienda, int idCliente, int idPremio) {
-        //TODO implementare
+    public boolean addPremioCliente(int idCliente, Premio premio) {
+        for(Cliente cliente : this.clientiIscritti) {
+            if(cliente.getIdCliente() == idCliente){
+                if(!premiCliente.containsKey(cliente)){
+                    Set<Premio> premiCliente = new HashSet<>();
+                    premiCliente.add(premio);
+                    this.premiCliente.put(cliente, premiCliente);
+                    return true;
+                }else {
+                    this.premiCliente.get(cliente).add(premio);
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -716,7 +774,8 @@ public class DBMS {
             if (cliente.getIdCliente() == idCliente) {
                 for (Premio premio : this.getPremiCliente().get(cliente)) {
                     if (premio.getIdPremio() == idPremio) {
-                        return this.getPremiCliente().get(cliente).remove(premio);
+                        this.getPremiCliente().get(cliente).remove(premio);
+                        return true;
                     }
                 }
             }
