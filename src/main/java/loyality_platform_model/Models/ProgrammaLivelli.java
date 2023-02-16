@@ -21,7 +21,7 @@ public class ProgrammaLivelli implements ProgrammaFedelta {
 
     private String nome;
 
-    private String dataAttivazione;
+    private final String dataAttivazione;
 
     private int massimoLivelli, livelloVip;
 
@@ -36,9 +36,9 @@ public class ProgrammaLivelli implements ProgrammaFedelta {
     private final Tipo tipoProgramma = Tipo.PROGRAMMALIVELLI;
 
     public ProgrammaLivelli(String nome, String dataAttivazione, int massimoLivelli, int livelloVip, Map<Integer, Integer> policy, int puntiSpesa, double importoSpesa) {
-        this.idProgramma = contatorePL++;
+        this.idProgramma = ++contatorePL;
+        this.dataAttivazione = dataAttivazione;
         this.setNome(nome);
-        this.setDataAttivazione(dataAttivazione);
         this.setMassimoLivelli(massimoLivelli);
         this.setLivelloVip(livelloVip);
         this.setPuntiSpesa(puntiSpesa);
@@ -74,17 +74,6 @@ public class ProgrammaLivelli implements ProgrammaFedelta {
         if (Objects.equals(nome, ""))
             throw new IllegalArgumentException("Name not valid.");
         this.nome = nome;
-    }
-
-    /**
-     * This method sets the activation date of the program.
-     * @param dataAttivazione the activation date of the program.
-     */
-    @Override
-    public void setDataAttivazione(String dataAttivazione) {
-        if (Objects.equals(dataAttivazione, ""))
-            throw new IllegalArgumentException("Name not valid.");
-        this.dataAttivazione = dataAttivazione;
     }
 
     /**

@@ -5,8 +5,6 @@ package loyality_platform_model.Models;
  * an activation date and a type.
  */
 
-import java.util.Date;
-
 public interface ProgrammaFedelta {
 
     /**
@@ -32,12 +30,6 @@ public interface ProgrammaFedelta {
      * @return the date of activation of the program.
      */
     String getDataAttivazione();
-
-    /**
-     * This method sets the date of activation of the program.
-     * @param dataAttivazione the date of activation of the program.
-     */
-    void setDataAttivazione(String dataAttivazione);
 
     /**
      * This method returns the type of the program.

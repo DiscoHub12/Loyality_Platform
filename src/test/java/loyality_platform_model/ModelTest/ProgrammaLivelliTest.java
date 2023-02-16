@@ -6,7 +6,6 @@ import loyality_platform_model.Models.ProgrammaLivelli;
 import loyality_platform_model.Models.Tipo;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.*;
 
 public class ProgrammaLivelliTest {
@@ -20,10 +19,10 @@ public class ProgrammaLivelliTest {
         policy.put(4, 30);
         ProgrammaLivelli programmaLivelli = new ProgrammaLivelli("ProgrammaL", "12-02-2023",4,3, policy, 5, 10);
         System.out.println(programmaLivelli.getIdProgramma());
-        assertEquals(0, programmaLivelli.getIdProgramma());
+        assertEquals(1, programmaLivelli.getIdProgramma());
         ProgrammaLivelli programmaLivelli1 = new ProgrammaLivelli("ProvaL","12-02-2023", 6, 4, policy, 3, 6);
         System.out.println(programmaLivelli1.getIdProgramma());
-        assertEquals(1, programmaLivelli1.getIdProgramma());
+        assertEquals(2, programmaLivelli1.getIdProgramma());
         ProgrammaLivelli returnedProgrammaLivelli = programmaLivelli.getProgrammaLivelli();
         System.out.println("Programma originale " +  programmaLivelli);
         System.out.println("Programma ritornato " + returnedProgrammaLivelli);
@@ -32,11 +31,11 @@ public class ProgrammaLivelliTest {
 
 
         assertEquals("ProgrammaL", programmaLivelli.getNome());
-        assertEquals(0, programmaLivelli.getIdProgramma());
         System.out.println(programmaLivelli);
         programmaLivelli.setNome("Programmaa");
         assertEquals("Programmaa", programmaLivelli.getNome());
         System.out.println("Nome nuovo" + programmaLivelli.getNome());
+
         assertEquals(Tipo.PROGRAMMALIVELLI, programmaLivelli.getTipoProgramma());
         assertEquals(4, programmaLivelli.getMassimoLivelli());
         assertEquals(3, programmaLivelli.getLivelloVip());
@@ -44,6 +43,7 @@ public class ProgrammaLivelliTest {
         assertEquals(5, programmaLivelli.getPuntiSpesa());
         assertEquals(10, programmaLivelli.getImportoSpesa());
         assertNull(programmaLivelli.getCatalogoPremi());
+
         programmaLivelli.setLivelloVip(4);
         assertEquals(4,programmaLivelli.getLivelloVip());
         programmaLivelli.setPuntiSpesa(10);

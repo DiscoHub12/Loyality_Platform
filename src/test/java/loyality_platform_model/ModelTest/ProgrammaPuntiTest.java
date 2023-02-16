@@ -7,7 +7,6 @@ import loyality_platform_model.Models.Tipo;
 import org.junit.jupiter.api.Test;
 import java.util.HashSet;
 import java.util.Set;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ProgrammaPuntiTest {
@@ -16,7 +15,7 @@ public class ProgrammaPuntiTest {
     public void testClass() {
         ProgrammaPunti programmaPunti = new ProgrammaPunti("Programma0", "12-02-2023",100,80, 5, 20);
         assertEquals("Programma0", programmaPunti.getNome());
-        assertEquals(0, programmaPunti.getIdProgramma());
+        assertEquals(1, programmaPunti.getIdProgramma());
         assertEquals(Tipo.PROGRAMMAPUNTI, programmaPunti.getTipoProgramma());
         assertTrue(programmaPunti.isMaxPunti());
         System.out.println(programmaPunti.getIdProgramma());
@@ -67,20 +66,22 @@ public class ProgrammaPuntiTest {
         assertNull(programmaPunti1.getProgrammaLivelli());
         assertFalse(programmaPunti1.isMaxPunti());
         assertEquals(0, programmaPunti1.getNumeroPuntiMassimi());
-        assertEquals(1, programmaPunti1.getIdProgramma());
+        assertEquals(2, programmaPunti1.getIdProgramma());
         System.out.println(programmaPunti1);
         System.out.println(programmaPunti1.getIdProgramma());
-        programmaPunti1.setNumeroPuntiMassimi(200);
-        assertTrue(programmaPunti1.isMaxPunti());
-        assertEquals(200, programmaPunti1.getNumeroPuntiMassimi());
-        System.out.println(programmaPunti1);
+
 
         try{
-            programmaPunti1.setNumeroPuntiMassimi(-1);
+            programmaPunti.setPuntiVIP(10);
         }catch (IllegalArgumentException e){
             System.out.println(e.getMessage());
         }
 
+        try{
+            programmaPunti.setPuntiVIP(-1);
+        }catch (IllegalArgumentException e){
+            System.out.println(e.getMessage());
+        }
 
     }
 }

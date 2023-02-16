@@ -20,7 +20,7 @@ public class ProgrammaPunti implements ProgrammaFedelta {
 
     private String nome;
 
-    private String dataAttivazione;
+    private final String dataAttivazione;
 
     private boolean maxPunti;
 
@@ -43,20 +43,15 @@ public class ProgrammaPunti implements ProgrammaFedelta {
      * and invokes set methods which contain controls within them.
      */
     public ProgrammaPunti(String nome, String dataAttivazione, int numeroPuntiMassimi, int puntiVIP, int puntiSpesa, double importoSpesa) {
-        this.idProgramma = contatorePP++;
+        this.idProgramma = ++contatorePP;
+        this.dataAttivazione = dataAttivazione;
         this.setNome(nome);
         this.setPuntiVIP(puntiVIP);
         this.setPuntiSpesa(puntiSpesa);
         this.setImportoSpesa(importoSpesa);
-        this.setDataAttivazione(dataAttivazione);
+        this.setNumeroPuntiMassimi(numeroPuntiMassimi);
         this.catalogoPremi= null;
-        if(numeroPuntiMassimi > 0 ){
-            this.setNumeroPuntiMassimi(numeroPuntiMassimi);
-            this.setMaxPunti(true);
-        }else {
-            this.setMaxPunti(false);
-            this.setNumeroPuntiMassimi(0);
-        }
+
     }
 
     /**
@@ -96,16 +91,6 @@ public class ProgrammaPunti implements ProgrammaFedelta {
         return dataAttivazione;
     }
 
-    /**
-     * This method sets the activation date of the program.
-     * @param dataAttivazione the activation date of the program.
-     */
-    @Override
-    public void setDataAttivazione(String dataAttivazione) {
-        if (Objects.equals(dataAttivazione, ""))
-            throw new IllegalArgumentException("Date not valid.");
-        this.dataAttivazione = dataAttivazione;
-    }
 
     /**
      * This method returns the type of the program.
@@ -169,9 +154,9 @@ public class ProgrammaPunti implements ProgrammaFedelta {
     public void setNumeroPuntiMassimi(int numeroPuntiMassimi) {
         if (numeroPuntiMassimi < 0)
             throw new IllegalArgumentException("Illegal max number of points.");
-        if(!this.isMaxPunti())
-            this.setMaxPunti(true);
+        this.setMaxPunti(numeroPuntiMassimi > 0);
         this.numeroPuntiMassimi = numeroPuntiMassimi;
+
     }
 
     /**
