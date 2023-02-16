@@ -22,13 +22,10 @@ public class UI_Titolare {
     private final GestorePuntoVendita titolare;
     private final Azienda azienda;
     private final HandlerAzienda gestoreAzienda = new HandlerAzienda();
-
     private final HandlerCliente gestoreCliente = new HandlerCliente();
 
     private final HandlerMessaggi gestoreMessaggi = new HandlerMessaggi();
-
     private final HandlerPremi gestorePremi = new HandlerPremi();
-
     private final HandlerProgrammaFedelta gestoreProgrammi = new HandlerProgrammaFedelta();
 
     private final HandlerVisite gestoreVisite = new HandlerVisite();
@@ -97,7 +94,7 @@ public class UI_Titolare {
         int choice;
         System.out.println("""
                 SEZIONE SPAZIO FEDELTA'
-                Elenco tutti i dettagli del tuo Spazio Fedeltà : 
+                Dettagli del tuo Spazio Fedeltà :
                 
                 """);
         System.out.println(this.gestoreAzienda.getSpazioFedeltaAzienda(this.azienda.getIdAzienda()).toString());
@@ -164,7 +161,7 @@ public class UI_Titolare {
         choice = sc.nextInt();
         switch (choice) {
             case 1 -> {
-                //Todo implementare, manca getProgrammaFedeltàById(int idProgramma);
+                //Todo implementare.
             }
             case 2 -> {
                 //Todo controllare il tipo di programma, e richiamare la modifica corrispondente.
@@ -186,7 +183,7 @@ public class UI_Titolare {
                 """);
         if (catalogoPremi != null) {
             for (CatalogoPremi catalogoPremi1 : catalogoPremi) {
-                System.out.println("Id Catalogo : " + catalogoPremi1.getIdCatalogoPremi());
+                System.out.println("Id Catalogo : " + catalogoPremi1.getIdCatalogoPremi() + " numero premi al suo interno : " + catalogoPremi1.getPremiCatalogo().size());
             }
         } else System.out.println("Non hai ancora attivato nessun Catalogo Premi.");
         System.out.println("""
@@ -542,7 +539,7 @@ public class UI_Titolare {
         int choice;
         System.out.println("""
                 Benvenuto nella creazione di un Programma Fedeltà.
-                Inserisci il tipo di Programma (attraverso il numero corrispettivo) in base a quelli elencati:
+                Inserisci il tipo di Programma che vuoi creare(attraverso il numero corrispettivo) in base a quelli elencati:
                 1. Programma a Punti
                 2. Programma a Livelli
                 3. Ritorna alla home.
@@ -579,7 +576,7 @@ public class UI_Titolare {
         if (Objects.equals(numeroMassimo, "SI")) {
             System.out.println("""
                     Hai scelto che un Cliente può acquisire un numero massimo di punti in una sola spesa.
-                    Inserisci il numero massimo.
+                    Inserisci il numero massimo:
                                             
                     """);
             numeroMassimoPunti = sc.nextInt();
@@ -829,7 +826,7 @@ public class UI_Titolare {
                 System.out.println("Inserisci il nome del Premio : \n");
                 String nomePremio = sc.nextLine();
                 System.out.println("""
-                        Il Premio deve essere riscattato attraverso i punti o i livelli ?
+                        Il Premio deve essere riscattato attraverso i punti o i livelli ? (inserisci il numero corrispettivo)
                         1. Punti
                         2. Livelli
                                                 
