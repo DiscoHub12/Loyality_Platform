@@ -145,19 +145,19 @@ public class DBMS {
     }
 
 
-    public boolean addProgrammaCoalizione(int idAzienda, ProgrammaFedelta programmaFedelta){
-        for(Azienda azienda: this.getAziendeIscritte()){
-            if(azienda.getIdAzienda() == idAzienda){
-                for(ProgrammaFedelta toScroll: this.getCoalizione().getAziendePerProgramma().keySet()){
-                    if(!toScroll.equals(programmaFedelta)){
+    public boolean addProgrammaCoalizione(int idAzienda, ProgrammaFedelta programmaFedelta) {
+        for (Azienda azienda : this.getAziendeIscritte()) {
+            if (azienda.getIdAzienda() == idAzienda) {
+                for (ProgrammaFedelta toScroll : this.getCoalizione().getAziendePerProgramma().keySet()) {
+                    if (!toScroll.equals(programmaFedelta)) {
                         Set<Azienda> aziende = new HashSet<>();
                         aziende.add(azienda);
                         this.getCoalizione().getAziendePerProgramma().put(programmaFedelta, aziende);
                         return true;
                     }
-                    for(Map.Entry<ProgrammaFedelta, Set<Azienda>> entry: this.getCoalizione().getAziendePerProgramma().entrySet()){
-                        for(Azienda azienda1 : entry.getValue()) {
-                            if(!azienda1.equals(azienda)){
+                    for (Map.Entry<ProgrammaFedelta, Set<Azienda>> entry : this.getCoalizione().getAziendePerProgramma().entrySet()) {
+                        for (Azienda azienda1 : entry.getValue()) {
+                            if (!azienda1.equals(azienda)) {
                                 return this.getCoalizione().getAziendePerProgramma().get(programmaFedelta).add(azienda);
                             }
                         }
@@ -170,9 +170,9 @@ public class DBMS {
 
     //--OPERAZIONI AZIENDA--
 
-    public Azienda getAziendaById(int idAzienda){
-        for(Azienda azienda : this.aziendeIscritte){
-            if(azienda.getIdAzienda() == idAzienda){
+    public Azienda getAziendaById(int idAzienda) {
+        for (Azienda azienda : this.aziendeIscritte) {
+            if (azienda.getIdAzienda() == idAzienda) {
                 return azienda;
             }
         }
@@ -275,9 +275,9 @@ public class DBMS {
         return null;
     }
 
-    public boolean addCatalogoPremiAzienda(int idAzienda, CatalogoPremi catalogoPremi){
-        for(Azienda azienda : this.aziendeIscritte){
-            if(azienda.getIdAzienda() == idAzienda){
+    public boolean addCatalogoPremiAzienda(int idAzienda, CatalogoPremi catalogoPremi) {
+        for (Azienda azienda : this.aziendeIscritte) {
+            if (azienda.getIdAzienda() == idAzienda) {
                 azienda.addCatalogoPremi(catalogoPremi);
                 return true;
             }
@@ -285,11 +285,11 @@ public class DBMS {
         return false;
     }
 
-    public boolean updateCatalogoPremiAzienda(int idAzienda, int idCatalogoPremi, CatalogoPremi catalogoPremiUpdated){
-        for(Azienda azienda : this.aziendeIscritte){
-            if(azienda.getIdAzienda() == idAzienda){
-                for(CatalogoPremi catalogoPremi : azienda.getCatalogoPremi()){
-                    if(catalogoPremi.getIdCatalogoPremi() == idCatalogoPremi){
+    public boolean updateCatalogoPremiAzienda(int idAzienda, int idCatalogoPremi, CatalogoPremi catalogoPremiUpdated) {
+        for (Azienda azienda : this.aziendeIscritte) {
+            if (azienda.getIdAzienda() == idAzienda) {
+                for (CatalogoPremi catalogoPremi : azienda.getCatalogoPremi()) {
+                    if (catalogoPremi.getIdCatalogoPremi() == idCatalogoPremi) {
                         catalogoPremi.setPremiCatalogo(catalogoPremiUpdated.getPremiCatalogo());
                         return true;
                     }
@@ -299,11 +299,11 @@ public class DBMS {
         return false;
     }
 
-    public boolean removeCatalogoPremiAzienda(int idAzienda, int idCatalogoPremi){
-        for(Azienda azienda : this.aziendeIscritte){
-            if(azienda.getIdAzienda() == idAzienda){
-                for(CatalogoPremi catalogoPremi : azienda.getCatalogoPremi()){
-                    if(catalogoPremi.getIdCatalogoPremi() == idCatalogoPremi){
+    public boolean removeCatalogoPremiAzienda(int idAzienda, int idCatalogoPremi) {
+        for (Azienda azienda : this.aziendeIscritte) {
+            if (azienda.getIdAzienda() == idAzienda) {
+                for (CatalogoPremi catalogoPremi : azienda.getCatalogoPremi()) {
+                    if (catalogoPremi.getIdCatalogoPremi() == idCatalogoPremi) {
                         azienda.removeCatalogoPremi(catalogoPremi);
                         return true;
                     }
@@ -440,42 +440,19 @@ public class DBMS {
         return false;
     }
 
-    public boolean updateProgrammaAzienda(int idAzienda, int idProgrammaFedelta, ProgrammaFedelta programmaFedeltaUpdated) {
+    public boolean updateProgrammaAzienda(int idAzienda, int idProgrammaFedelta) {
         for (Azienda azienda : this.getProgrammiAzienda().keySet()) {
             if (azienda.getIdAzienda() == idAzienda) {
                 for (ProgrammaFedelta programmaFedelta : this.getProgrammiAzienda().get(azienda)) {
                     if (programmaFedelta.getIdProgramma() == idProgrammaFedelta) {
-                        if (programmaFedelta.getProgrammaPunti() != null) {
-                            updateProgrammaPunti(programmaFedelta, programmaFedeltaUpdated);
-                            return true;
-                        } else if (programmaFedelta.getProgrammaLivelli() != null) {
-                            updateProgrammaLivelli(programmaFedelta, programmaFedeltaUpdated);
-                            return true;
-                        }
+                        Set<ProgrammaFedelta> programmi = this.getProgrammiAzienda().get(azienda);
+                        this.getProgrammiAzienda().put(azienda, programmi);
+                        return true;
                     }
                 }
             }
         }
         return false;
-    }
-
-    private void updateProgrammaPunti(ProgrammaFedelta programmaFedelta, ProgrammaFedelta programmaFedeltaUpdated) {
-        programmaFedelta.getProgrammaPunti().setNome(programmaFedeltaUpdated.getProgrammaPunti().getNome());
-        programmaFedelta.getProgrammaPunti().setDataAttivazione(programmaFedeltaUpdated.getProgrammaPunti().getDataAttivazione());
-        programmaFedelta.getProgrammaPunti().setNumeroPuntiMassimi(programmaFedeltaUpdated.getProgrammaPunti().getNumeroPuntiMassimi());
-        programmaFedelta.getProgrammaPunti().setPuntiVIP(programmaFedeltaUpdated.getProgrammaPunti().getPuntiVIP());
-        programmaFedelta.getProgrammaPunti().setPuntiSpesa(programmaFedeltaUpdated.getProgrammaPunti().getPuntiSpesa());
-        programmaFedelta.getProgrammaPunti().setImportoSpesa(programmaFedeltaUpdated.getProgrammaPunti().getImportoSpesa());
-    }
-
-    private void updateProgrammaLivelli(ProgrammaFedelta programmaFedelta, ProgrammaFedelta programmaFedeltaUpdated) {
-        programmaFedelta.getProgrammaLivelli().setNome(programmaFedeltaUpdated.getProgrammaLivelli().getNome());
-        programmaFedelta.getProgrammaLivelli().setDataAttivazione(programmaFedeltaUpdated.getProgrammaLivelli().getDataAttivazione());
-        programmaFedelta.getProgrammaLivelli().setMassimoLivelli(programmaFedeltaUpdated.getProgrammaLivelli().getMassimoLivelli());
-        programmaFedelta.getProgrammaLivelli().setLivelloVip(programmaFedeltaUpdated.getProgrammaLivelli().getLivelloVip());
-        programmaFedelta.getProgrammaLivelli().setPolicyLivelli(programmaFedeltaUpdated.getProgrammaLivelli().getPolicyLivelli());
-        programmaFedelta.getProgrammaLivelli().setPuntiSpesa(programmaFedeltaUpdated.getProgrammaLivelli().getPuntiSpesa());
-        programmaFedelta.getProgrammaLivelli().setImportoSpesa(programmaFedeltaUpdated.getProgrammaLivelli().getImportoSpesa());
     }
 
     public boolean removeProgrammaAzienda(int idAzienda, int idProgrammaFedelta) {
@@ -762,14 +739,14 @@ public class DBMS {
 
 
     public boolean addPremioCliente(int idCliente, Premio premio) {
-        for(Cliente cliente : this.clientiIscritti) {
-            if(cliente.getIdCliente() == idCliente){
-                if(!premiCliente.containsKey(cliente)){
+        for (Cliente cliente : this.clientiIscritti) {
+            if (cliente.getIdCliente() == idCliente) {
+                if (!premiCliente.containsKey(cliente)) {
                     Set<Premio> premiCliente = new HashSet<>();
                     premiCliente.add(premio);
                     this.premiCliente.put(cliente, premiCliente);
                     return true;
-                }else {
+                } else {
                     this.premiCliente.get(cliente).add(premio);
                     return true;
                 }
