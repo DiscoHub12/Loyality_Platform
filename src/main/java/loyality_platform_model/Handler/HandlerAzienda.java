@@ -70,9 +70,11 @@ public class HandlerAzienda {
      * @param idDipendente
      * @return
      */
-    public String getDetailsDipendente(int idDipendente) {
-        //Todo implementare
-        return null;
+    public String getDetailsDipendente(int idAzienda, int idDipendente) {
+        Dipendente dipendente = getDipendenteById(idAzienda, idDipendente);
+        if(dipendente != null)
+            return dipendente.toString();
+        return "Employee with this id dont'e exists.";
     }
 
     /**
