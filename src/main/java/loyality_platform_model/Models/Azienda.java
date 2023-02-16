@@ -153,7 +153,7 @@ public class Azienda {
         return false;
     }
 
-    private String catalogoPremiIfExist() {
+    public String catalogoPremiIfExist() {
         String tmp = "";
         if (this.catalogoPremi.isEmpty())
             tmp = "There is no active Rewards Catalogue.";
