@@ -2,10 +2,7 @@ package loyality_platform_model.Models;
 
 import loyality_platform_model.DBMS.DBMS;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class Coalizione {
 
@@ -44,6 +41,63 @@ public class Coalizione {
 
     public Map<ProgrammaFedelta, Set<Azienda>> getAziendePerProgramma() {
         return this.aziendePerProgramma;
+    }
+
+    /**
+     * This method allows you to take all the customers
+     * registered in a certain Loyalty Program.
+     * @param idProgramma the id for Loyalty Program.
+     * @return a list of Customers registered in a certain Loyalty Program.
+     */
+    public Set<Cliente> getClientiIscrittiProgramma(int idProgramma) {
+        if (idProgramma <= 0)
+            throw new IllegalArgumentException("Invalid id for the Loyalty Program.");
+        for (ProgrammaFedelta programmaFedelta : this.clientiIscritti.keySet()) {
+            if (programmaFedelta.getIdProgramma() == idProgramma) {
+                return this.clientiIscritti.get(programmaFedelta);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * This method allows you to take all the Customers
+     * who are registered in an active Loyalty Program of a
+     * specific Company, if it exists.
+     * @param idAzienda the id for the Company.
+     * @param idProgramma the id for the Loyalty Program.
+     * @return a list of Customers enrolled in a certain Loyalty Program
+     * active in a Company.
+     */
+    public Set<Cliente> getClientiIscrittiAProgrammaAzienda(int idAzienda, int idProgramma) {
+        Set<Cliente> clientiIscritti = new HashSet<>();
+        if (idAzienda <= 0 || idProgramma <= 0)
+            throw new IllegalArgumentException("Invalid id for the Company or the Loyalty Program.");
+        for (ProgrammaFedelta programmaFedelta : this.aziendePerProgramma.keySet()) {
+            if (programmaFedelta.getIdProgramma() == idProgramma) {
+                for (Azienda azienda : this.aziendePerProgramma.get(programmaFedelta)) {
+                    if (azienda.getIdAzienda() == idAzienda) {
+                        clientiIscritti.addAll(this.clientiIscritti.get(programmaFedelta));
+                    }
+                }
+            }
+        }
+        return clientiIscritti;
+    }
+
+    /**
+     * This method allows you to take all the Companies
+     * that are registered in a specific Loyalty Program.
+     * @param idProgramma the id for the Loyalty Program to get all Company.
+     * @return all Companies that have that specific Loyalty Program active.
+     */
+    public Set<Azienda> getAziendeIscritteProgramma(int idProgramma) {
+        for (ProgrammaFedelta programmaFedelta : this.aziendePerProgramma.keySet()) {
+            if (programmaFedelta.getIdProgramma() == idProgramma) {
+                return this.aziendePerProgramma.get(programmaFedelta);
+            }
+        }
+        return null;
     }
 
     /**
