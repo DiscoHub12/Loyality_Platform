@@ -144,6 +144,30 @@ public class DBMS {
         return false;
     }
 
+
+    public boolean addProgrammaCoalizione(int idAzienda, ProgrammaFedelta programmaFedelta){
+        for(Azienda azienda: this.getAziendeIscritte()){
+            if(azienda.getIdAzienda() == idAzienda){
+                for(ProgrammaFedelta toScroll: this.getCoalizione().getAziendePerProgramma().keySet()){
+                    if(!toScroll.equals(programmaFedelta)){
+                        Set<Azienda> aziende = new HashSet<>();
+                        aziende.add(azienda);
+                        this.getCoalizione().getAziendePerProgramma().put(programmaFedelta, aziende);
+                        return true;
+                    }
+                    for(Map.Entry<ProgrammaFedelta, Set<Azienda>> entry: this.getCoalizione().getAziendePerProgramma().entrySet()){
+                        for(Azienda azienda1 : entry.getValue()) {
+                            if(!azienda1.equals(azienda)){
+                                return this.getCoalizione().getAziendePerProgramma().get(programmaFedelta).add(azienda);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     //--OPERAZIONI AZIENDA--
 
     public GestorePuntoVendita getTitolareAzienda(int idAzienda) {
@@ -364,6 +388,7 @@ public class DBMS {
                     this.getProgrammiAzienda().put(azienda, programmiAzienda);
                     return true;
                 }
+                this.addProgrammaCoalizione(idAzienda, programmaFedelta);
             }
         }
         return false;
