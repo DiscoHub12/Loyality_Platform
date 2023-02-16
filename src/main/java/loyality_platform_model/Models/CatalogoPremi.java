@@ -1,6 +1,5 @@
 package loyality_platform_model.Models;
 
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
