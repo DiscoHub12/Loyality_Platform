@@ -28,12 +28,12 @@ public class HandlerAziendaTest {
      */
 
     private final Map<Integer, Integer> policy= new HashMap<>();
-    private final ProgrammaFedelta programmaFedeltaPunti1 = new ProgrammaPunti("ProgrammaUno", 100, 2, 10, 20);
-    private final ProgrammaFedelta programmaFedeltaPunti2 = new ProgrammaPunti("ProgrammaUno", 100, 2, 10, 20);
-    private final ProgrammaFedelta programmaFedeltaPunti3 = new ProgrammaPunti("ProgrammaUno", 100, 2, 10, 20);
-    private final ProgrammaFedelta programmaFedeltaLivelli1 = new ProgrammaLivelli("ProgrammaUno", 100, 2, policy, 2, 10);
-    private final ProgrammaFedelta programmaFedeltaLivelli2 = new ProgrammaLivelli("ProgrammaUno", 100, 2, policy, 2, 10);
-    private final ProgrammaFedelta programmaFedeltaLivelli3 = new ProgrammaLivelli("ProgrammaUno", 100, 2, policy, 2, 10);
+    private final ProgrammaFedelta programmaFedeltaPunti1 = new ProgrammaPunti("ProgrammaUno",  "22-02-2022", 100, 2, 10, 20);
+    private final ProgrammaFedelta programmaFedeltaPunti2 = new ProgrammaPunti("ProgrammaUno", "22-02-2022",100, 2, 10, 20);
+    private final ProgrammaFedelta programmaFedeltaPunti3 = new ProgrammaPunti("ProgrammaUno", "22-02-2022",100, 2, 10, 20);
+    private final ProgrammaFedelta programmaFedeltaLivelli1 = new ProgrammaLivelli("ProgrammaUno", "22-02-2022",100, 2, policy, 2, 10);
+    private final ProgrammaFedelta programmaFedeltaLivelli2 = new ProgrammaLivelli("ProgrammaUno", "22-02-2022",100, 2, policy, 2, 10);
+    private final ProgrammaFedelta programmaFedeltaLivelli3 = new ProgrammaLivelli("ProgrammaUno", "22-02-2022",100, 2, policy, 2, 10);
 
     /**
      * PREMI PER TEST
@@ -67,13 +67,13 @@ public class HandlerAziendaTest {
         catalogoPremi.add(catalogo);
         //Azienda 1
         db.addAzienda(azienda);
-        db.addDipendente(azienda, dipendente);
-        db.addProgrammaAzienda(azienda, programmaFedeltaPunti1);
-        db.addProgrammaAzienda(azienda, programmaFedeltaPunti2);
-        db.addProgrammaAzienda(azienda, programmaFedeltaPunti3);
-        db.addProgrammaAzienda(azienda, programmaFedeltaLivelli1);
-        db.addProgrammaAzienda(azienda, programmaFedeltaLivelli2);
-        db.addProgrammaAzienda(azienda, programmaFedeltaLivelli3);
+        db.addDipendente(azienda.getIdAzienda(), dipendente);
+        db.addProgrammaAzienda(this.azienda.getIdAzienda(), programmaFedeltaPunti1);
+        db.addProgrammaAzienda(this.azienda.getIdAzienda(), programmaFedeltaPunti2);
+        db.addProgrammaAzienda(this.azienda.getIdAzienda(), programmaFedeltaPunti3);
+        db.addProgrammaAzienda(this.azienda.getIdAzienda(), programmaFedeltaLivelli1);
+        db.addProgrammaAzienda(this.azienda.getIdAzienda(), programmaFedeltaLivelli2);
+        db.addProgrammaAzienda(this.azienda.getIdAzienda(), programmaFedeltaLivelli3);
 
     }
 
@@ -128,14 +128,14 @@ public class HandlerAziendaTest {
     @Test
     public void testModificaDipendente() {
         initTotal();
-        assertThrows(IllegalArgumentException.class, () -> this.handler.modificaDipendente(-1, 1, handler.getTitolareAzienda(1), "email", false));
-        assertThrows(IllegalArgumentException.class, () -> this.handler.modificaDipendente(1, -1, handler.getTitolareAzienda(1), "email", false));
-        assertThrows(IllegalArgumentException.class, () -> this.handler.modificaDipendente(1, 1, handler.getTitolareAzienda(1), "", false));
-        assertTrue(this.handler.modificaDipendente(1, 1, this.handler.getTitolareAzienda(1), "ciao", false));
+        assertThrows(IllegalArgumentException.class, () -> this.handler.modificaDipendente(-1, 1, "email", false));
+        assertThrows(IllegalArgumentException.class, () -> this.handler.modificaDipendente(1, -1, "email", false));
+        assertThrows(IllegalArgumentException.class, () -> this.handler.modificaDipendente(1, 1, "", false));
+        assertTrue(this.handler.modificaDipendente(1, 1, "ciao", false));
         Dipendente dipendente1 = this.handler.getDipendenteById(this.azienda.getIdAzienda(), 1);
         assertEquals("ciao", dipendente1.getEmail());
         assertFalse(dipendente1.isRestrizioni());
-        assertTrue(this.handler.modificaDipendente(1, 1, this.handler.getTitolareAzienda(1), "email", true));
+        assertTrue(this.handler.modificaDipendente(1, 1,  "email", true));
         Dipendente dipendente2 = this.handler.getDipendenteById(this.azienda.getIdAzienda(), 1);
         assertEquals("email", dipendente2.getEmail());
         assertTrue(dipendente2.isRestrizioni());
@@ -168,10 +168,10 @@ public class HandlerAziendaTest {
     @Test
     public void testModificaSpazioFedelta() {
         initTotal();
-        assertThrows(NullPointerException.class, () -> this.handler.modificaSpazioFedelta(1, null));
-        assertThrows(IllegalArgumentException.class, () -> this.handler.modificaSpazioFedelta(-1, new SpazioFedelta("nome", "indirizzo", "numeroTelefono", "email")));
+        assertThrows(NullPointerException.class, () -> this.handler.modificaSpazioFedelta(1, null, "indirizzo", "numerotelefono", "email"));
+        assertThrows(IllegalArgumentException.class, () -> this.handler.modificaSpazioFedelta(-1, "nome", "indirizzo", "numeroTelefono", "email"));
         SpazioFedelta spazioFedeltaUpdated = new SpazioFedelta("nome", "indirizzo", "numerotelefono", "email");
-        assertTrue(this.handler.modificaSpazioFedelta(this.azienda.getIdAzienda(), spazioFedeltaUpdated));
+        assertTrue(this.handler.modificaSpazioFedelta(this.azienda.getIdAzienda(), "nome", "indirizzo", "numeroTelefono", "email"));
         assertEquals(spazioFedeltaUpdated, this.handler.getSpazioFedeltaAzienda(this.azienda.getIdAzienda()));
     }
 
