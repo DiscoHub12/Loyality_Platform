@@ -46,6 +46,8 @@ public class DBMS {
 
     private final Set<Abbonamento> abbonamenti;
 
+    private Coalizione coalizione;
+
 
     private DBMS() {
         this.aziendeIscritte = new HashSet<>();
@@ -96,6 +98,51 @@ public class DBMS {
         return this.tessereClienti;
     }
 
+    public Coalizione getCoalizione() {
+        return this.coalizione;
+    }
+
+    public boolean addClienteCoalizione(int idCliente, ProgrammaFedelta programmaFedelta) {
+        for (Cliente cliente : this.getClientiIscritti()) {
+            if (cliente.getIdCliente() == idCliente) {
+                for (Map.Entry<Azienda, Set<ProgrammaFedelta>> entry : this.getProgrammiAzienda().entrySet()) {
+                    for (ProgrammaFedelta toScroll : entry.getValue()) {
+                        if (toScroll.equals(programmaFedelta)) {
+                            for (ProgrammaFedelta programmaFedelta1 : this.getCoalizione().getClientiIscritti().keySet()) {
+                                if (programmaFedelta.equals(programmaFedelta1)) {
+                                    this.getCoalizione().getClientiIscritti().get(programmaFedelta).add(cliente);
+                                }
+                                Set<Cliente> clienti = new HashSet<>();
+                                clienti.add(cliente);
+                                this.getCoalizione().getClientiIscritti().put(programmaFedelta, clienti);
+                            }
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean deleteClienteCoalizione(int idCliente, ProgrammaFedelta programmaFedelta) {
+        for (Cliente cliente : this.getClientiIscritti()) {
+            if (cliente.getIdCliente() == idCliente) {
+                for (Map.Entry<Azienda, Set<ProgrammaFedelta>> entry : this.getProgrammiAzienda().entrySet()) {
+                    for (ProgrammaFedelta toScroll : entry.getValue()) {
+                        if (toScroll.equals(programmaFedelta)) {
+                            for (ProgrammaFedelta programmaFedelta1 : this.getCoalizione().getClientiIscritti().keySet()) {
+                                if (programmaFedelta.equals(programmaFedelta1)) {
+                                    return this.getCoalizione().getClientiIscritti().get(programmaFedelta).remove(cliente);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
     //--OPERAZIONI AZIENDA--
 
@@ -204,7 +251,7 @@ public class DBMS {
 
 
     public boolean addAzienda(Azienda azienda) {
-       return this.getAziendeIscritte().add(azienda);
+        return this.getAziendeIscritte().add(azienda);
     }
 
 
@@ -223,7 +270,7 @@ public class DBMS {
     public boolean removeAzienda(int idAzienda) {
         for (Azienda azienda1 : this.getAziendeIscritte()) {
             if (azienda1.getIdAzienda() == idAzienda) {
-               return this.getAziendeIscritte().remove(azienda1);
+                return this.getAziendeIscritte().remove(azienda1);
             }
         }
         return false;
@@ -285,7 +332,7 @@ public class DBMS {
             if (azienda.getIdAzienda() == idAzienda) {
                 for (Dipendente dipendente1 : this.getDipendentiAzienda().get(azienda)) {
                     if (dipendente1.getIdDipendente() == idDipendente) {
-                       return this.getDipendentiAzienda().get(azienda).remove(dipendente1);
+                        return this.getDipendentiAzienda().get(azienda).remove(dipendente1);
                     }
                 }
             }
@@ -397,7 +444,7 @@ public class DBMS {
                         this.getCouponPreconfiguratiAzienda().put(azienda, couponAzienda);
                         return true;
                     } else {
-                       return this.getCouponPreconfiguratiAzienda().get(azienda).add(couponPreconfigurato);
+                        return this.getCouponPreconfiguratiAzienda().get(azienda).add(couponPreconfigurato);
                     }
                 } else {
                     Set<Coupon> couponAzienda = new HashSet<>();
@@ -432,7 +479,7 @@ public class DBMS {
             if (azienda.getIdAzienda() == idAzienda) {
                 for (Coupon coupon : this.getCouponPreconfiguratiAzienda().get(azienda)) {
                     if (coupon.getIdCoupon() == idCoupon) {
-                       return this.getCouponPreconfiguratiAzienda().get(azienda).remove(coupon);
+                        return this.getCouponPreconfiguratiAzienda().get(azienda).remove(coupon);
                     }
                 }
             }
@@ -441,11 +488,10 @@ public class DBMS {
     }
 
 
-
     //--OPERAZIONI CLIENTE--
 
     public boolean addCliente(Cliente cliente) {
-       return this.getClientiIscritti().add(cliente);
+        return this.getClientiIscritti().add(cliente);
     }
 
     public boolean updateCliente(int idCliente, Cliente clienteUpdated) {
@@ -463,7 +509,7 @@ public class DBMS {
     public boolean removeCliente(Cliente cliente) {
         for (Cliente cliente1 : this.getClientiIscritti()) {
             if (cliente1.getIdCliente() == cliente.getIdCliente()) {
-               return this.getClientiIscritti().remove(cliente1);
+                return this.getClientiIscritti().remove(cliente1);
             }
         }
         return false;
@@ -571,7 +617,7 @@ public class DBMS {
                         this.getSMSCliente().put(cliente, smsCliente);
                         return true;
                     } else {
-                       return this.getSMSCliente().get(cliente).add(sms);
+                        return this.getSMSCliente().get(cliente).add(sms);
                     }
                 } else {
                     Set<SMS> smsCliente = new HashSet<>();
@@ -583,7 +629,6 @@ public class DBMS {
         }
         return false;
     }
-
 
 
     public boolean addCoupon(int idAzienda, int idCliente, int idCoupon) {
@@ -617,7 +662,7 @@ public class DBMS {
     }
 
     public boolean updateCoupon(Cliente cliente, int idCoupon, Coupon couponUpdated) {
-        for(Cliente cliente1 : this.getCouponCliente().keySet()) {
+        for (Cliente cliente1 : this.getCouponCliente().keySet()) {
             if (cliente1.equals(cliente)) {
                 for (Coupon coupon : this.getCouponCliente().get(cliente)) {
                     if (coupon.getIdCoupon() == idCoupon) {
@@ -651,7 +696,7 @@ public class DBMS {
     }
 
     public boolean updatePremioCliente(Cliente cliente, int idPremio, Premio premioUpdated) {
-        for(Cliente cliente1 : this.getPremiCliente().keySet()) {
+        for (Cliente cliente1 : this.getPremiCliente().keySet()) {
             if (cliente.equals(cliente1)) {
                 for (Premio premio : this.getPremiCliente().get(cliente)) {
                     if (premio.getIdPremio() == idPremio) {
@@ -723,7 +768,7 @@ public class DBMS {
             if (cliente.getIdCliente() == idCliente) {
                 for (Visita visita : this.getVisiteCliente().get(cliente)) {
                     if (visita.getIdVisita() == idVisita) {
-                       return this.getVisiteCliente().get(cliente).remove(visita);
+                        return this.getVisiteCliente().get(cliente).remove(visita);
                     }
                 }
             }
@@ -731,21 +776,30 @@ public class DBMS {
         return false;
     }
 
-    public void addTessera(Tessera tessera) {
-        this.getTessereClienti().add(tessera);
-    }
-
-    public boolean updateTessera(int idTessera, Tessera tesseraUpdated) {
-        for (Tessera tessera : this.getTessereClienti()) {
-            if (tessera.getIdTessera() == idTessera) {
-
-                return true;
+    public boolean addTessera(Tessera tessera) {
+        for (Tessera toScroll : this.getTessereClienti()) {
+            if (!tessera.equals(toScroll)) {
+                for (Cliente cliente : this.getClientiIscritti()) {
+                    if (cliente.getIdCliente() == tessera.getIdCliente()) {
+                        if (cliente.getTessera() == null)
+                            cliente.setTessera(tessera);
+                    }
+                    this.getClientiIscritti().add(cliente);
+                    return this.getTessereClienti().add(tessera);
+                }
             }
         }
         return false;
     }
 
-
+    public Tessera getTesseraById(int idTessera) {
+        for (Tessera tessera : this.getTessereClienti()) {
+            if (tessera.getIdTessera() == idTessera) {
+                return tessera;
+            }
+        }
+        return null;
+    }
 
 
     //TODO rivedere, per me non serve
