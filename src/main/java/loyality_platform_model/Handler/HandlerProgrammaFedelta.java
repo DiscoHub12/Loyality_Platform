@@ -76,18 +76,22 @@ public class HandlerProgrammaFedelta {
      * @param idAzienda considered company.
      * @param idProgramma loyalty program to edit.
      * @param nome new name.
-     * @param dataAttivazione new date activation.
      * @param numeroPuntiMax new maximum number of points.
      * @param puntiVip  new points to become a vip.
      * @param puntiSpesa new points that are given with a total amount spent.
      * @param importoSpesa new amount to spend to get points.
      * @return <code>true</code> if the program was updated, <code>false</code> otherwise.
      */
-    public boolean modificaProgrammaPunti(int idAzienda, int idProgramma, String nome, String dataAttivazione, int numeroPuntiMax, int puntiVip, int puntiSpesa, double importoSpesa) {
+    public boolean modificaProgrammaPunti(int idAzienda, int idProgramma, String nome, int numeroPuntiMax, int puntiVip, int puntiSpesa, double importoSpesa) {
         if (idProgramma < 1 || idAzienda < 1)
             throw new IllegalArgumentException("Id not correct");
-        ProgrammaPunti pp = new ProgrammaPunti(nome, dataAttivazione, numeroPuntiMax, puntiVip, puntiSpesa, importoSpesa);
-        return this.getDbms().updateProgrammaAzienda(idAzienda, idProgramma, pp);
+        ProgrammaPunti pp = this.getDbms().getProgrammaFedeltaById(idAzienda, idProgramma).getProgrammaPunti();
+        pp.setNome(nome);
+        pp.setNumeroPuntiMassimi(numeroPuntiMax);
+        pp.setPuntiVIP(puntiVip);
+        pp.setPuntiSpesa(puntiSpesa);
+        pp.setImportoSpesa(importoSpesa);
+        return this.getDbms().updateProgrammaAzienda(idAzienda, idProgramma);
     }
 
     /**
@@ -95,7 +99,6 @@ public class HandlerProgrammaFedelta {
      * @param idAzienda considered company.
      * @param idProgramma loyalty program to edit.
      * @param nome new name.
-     * @param dataAttivazione new date activation.
      * @param massimoLivelli new maximum number of levels.
      * @param livelloVip new levels to become a vip.
      * @param puntiSpesa new points that are given with a total amount spent.
@@ -109,14 +112,19 @@ public class HandlerProgrammaFedelta {
      * @param newPoints new points for this level.
      * @return <code>true</code> if the program was updated, <code>false</code> otherwise.
      */
-    public boolean modificaProgrammaLivelli(int idAzienda, int idProgramma, String nome, String dataAttivazione,int massimoLivelli, int livelloVip, int puntiSpesa, double importoSpesa,
+    public boolean modificaProgrammaLivelli(int idAzienda, int idProgramma, String nome, int massimoLivelli, int livelloVip, int puntiSpesa, double importoSpesa,
                                             boolean addLevel, int pointsNewLevel, boolean removeLevel, int levelToRemove, boolean updatePointsLevel, int levelToUpdate, int newPoints) {
         if (idProgramma < 1 || idAzienda < 1)
             throw new IllegalArgumentException("Id not correct");
-        ProgrammaFedelta programmaFedelta = this.getDbms().getProgrammaFedeltaById(idAzienda, idProgramma);
-        Map<Integer, Integer> newMap = updatePolicyPL(programmaFedelta,addLevel, pointsNewLevel, removeLevel, levelToRemove, updatePointsLevel, levelToUpdate, newPoints);
-        ProgrammaLivelli pl = new ProgrammaLivelli(nome, dataAttivazione, massimoLivelli, livelloVip, newMap, puntiSpesa, importoSpesa);
-        return this.getDbms().updateProgrammaAzienda(idAzienda, idProgramma, pl);
+        ProgrammaLivelli pl = this.getDbms().getProgrammaFedeltaById(idAzienda, idProgramma).getProgrammaLivelli();
+        Map<Integer, Integer> newMap = updatePolicyPL(pl ,addLevel, pointsNewLevel, removeLevel, levelToRemove, updatePointsLevel, levelToUpdate, newPoints);
+        pl.setNome(nome);
+        pl.setMassimoLivelli(massimoLivelli);
+        pl.setLivelloVip(livelloVip);
+        pl.setPuntiSpesa(puntiSpesa);
+        pl.setImportoSpesa(importoSpesa);
+        pl.setPolicyLivelli(newMap);
+        return this.getDbms().updateProgrammaAzienda(idAzienda, idProgramma);
     }
 
 

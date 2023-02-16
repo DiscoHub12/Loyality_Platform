@@ -2,7 +2,6 @@ package loyality_platform_model.Handler;
 
 import loyality_platform_model.DBMS.DBMS;
 import loyality_platform_model.Models.*;
-
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
@@ -26,10 +25,11 @@ public class HandlerTessera {
         return dbms;
     }
 
+
     /**
      * This method creates the card associated with a specific customer.
-     *
      * @param idCliente customer to whom the card is created.
+     * @return <code>true</code> if the card is created successfully, <code>false</code> otherwise.
      */
     public boolean creaTessera(int idCliente) {
         if (idCliente < 1)
@@ -74,9 +74,9 @@ public class HandlerTessera {
 
     /**
      * This method allows you to manually add points to a customer's card.
-     *
      * @param numeroPunti points to add.
-     * @param idTessera   customer card on which to add points.
+     * @param idTessera customer card on which to add points.
+     * @return <code>true</code> if the points are added correctly, <code>false</code> otherwise.
      */
     public boolean addPuntiManuale(int numeroPunti, int idTessera) {
         if (idTessera < 1)
@@ -92,10 +92,10 @@ public class HandlerTessera {
     }
 
     /**
-     * This method allows you to manually add points to a set of customer's card.
-     *
-     * @param idTessere   customer cards on which to add points.
+     * This method allows you to manually add points to a customer's card.
+     * @param idTessere customer cards on which to add points.
      * @param numeroPunti points to add.
+     * @return <code>true</code> if the points are added correctly, <code>false</code> otherwise.
      */
     public boolean addPuntiClienti(Set<Integer> idTessere, int numeroPunti) {
         if (numeroPunti < 1)
@@ -114,9 +114,9 @@ public class HandlerTessera {
 
     /**
      * This method allows you to manually remove points to a customer's card.
-     *
-     * @param idTessera   customer cards on which to remove points.
      * @param numeroPunti points to remove.
+     * @param idTessera customer card on which to add points.
+     * @return <code>true</code> if the points are deleted correctly, <code>false</code> otherwise.
      */
     public boolean removePuntiCliente(int idTessera, int numeroPunti) {
         if (idTessera < 1)
@@ -132,10 +132,10 @@ public class HandlerTessera {
     }
 
     /**
-     * This method allows you to manually add points to a set of customer's card.
-     *
-     * @param idTessere   customer cards on which to remove points.
+     * This method allows you to manually remove points to a customer's card.
+     * @param idTessere customer cards on which to remove points.
      * @param numeroPunti points to remove.
+     * @return <code>true</code> if the points are deleted correctly, <code>false</code> otherwise.
      */
     public boolean removePuntiClienti(Set<Integer> idTessere, int numeroPunti) {
         if (numeroPunti < 1)
@@ -156,9 +156,9 @@ public class HandlerTessera {
     /**
      * This method adds a loyalty program to the customer card,
      * when the customer signs up for a loyalty program.
-     *
-     * @param idTessera        card where to add the program.
+     * @param idTessera card where to add the program.
      * @param programmaFedelta loyalty program to add.
+     * @return <code>true</code> if the program is added successfully, <code>false</code> otherwise.
      */
     public boolean addProgrammaFedelta(int idTessera, ProgrammaFedelta programmaFedelta) {
         Objects.requireNonNull(programmaFedelta);
@@ -181,11 +181,11 @@ public class HandlerTessera {
     }
 
     /**
-     * This method removes a loyalty program from the customer's card,
-     * if they unsubscribe from the program.
-     *
-     * @param idTessera        card where to remove the program.
+     * This method removes a loyalty program to the customer card,
+     * when the customer signs up for a loyalty program.
+     * @param idTessera card where to remove the program.
      * @param programmaFedelta loyalty program to remove.
+     * @return <code>true</code> if the program is deleted successfully, <code>false</code> otherwise.
      */
     public boolean deleteProgrammaFedelta(int idTessera, ProgrammaFedelta programmaFedelta) {
         Objects.requireNonNull(programmaFedelta);
