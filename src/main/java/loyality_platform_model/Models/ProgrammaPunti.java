@@ -14,9 +14,9 @@ import java.util.*;
  */
 public class ProgrammaPunti implements ProgrammaFedelta {
 
-    private final int idProgramma;
+    private final int idProgrammaPunti;
 
-    private static int contatorePP = 0;
+    public static int contatore = 0;
 
     private String nome;
 
@@ -43,7 +43,7 @@ public class ProgrammaPunti implements ProgrammaFedelta {
      * and invokes set methods which contain controls within them.
      */
     public ProgrammaPunti(String nome, String dataAttivazione, int numeroPuntiMassimi, int puntiVIP, int puntiSpesa, double importoSpesa) {
-        this.idProgramma = ++contatorePP;
+        this.idProgrammaPunti = ++contatore;
         this.dataAttivazione = dataAttivazione;
         this.setNome(nome);
         this.setPuntiVIP(puntiVIP);
@@ -60,7 +60,7 @@ public class ProgrammaPunti implements ProgrammaFedelta {
      */
     @Override
     public int getIdProgramma() {
-        return idProgramma;
+        return idProgrammaPunti;
     }
 
     /**
@@ -262,6 +262,7 @@ public class ProgrammaPunti implements ProgrammaFedelta {
     @Override
     public String toString() {
         return "\t-DETAILS PROGRAMMA PUNTI-" +
+                "\nId: " + idProgrammaPunti +
                 "\nNome: " + nome +
                 "\nData Attivazione: " + dataAttivazione +
                 "\nMassimo Punti: " + maxPunti +
