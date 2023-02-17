@@ -9,7 +9,7 @@ public class Coalizione {
     /**
      * This attribute represents the DataBase.
      */
-    private final DBMS dbms;
+
 
     /**
      * This attribute represents a map where the
@@ -30,7 +30,6 @@ public class Coalizione {
      * Constructor who creates an object of type Coalition
      */
     public Coalizione() {
-        this.dbms = DBMS.getInstance();
         this.clientiIscritti = new HashMap<>();
         this.aziendePerProgramma = new HashMap<>();
     }
@@ -98,6 +97,44 @@ public class Coalizione {
             }
         }
         return null;
+    }
+
+    public boolean addClienteCoalizione(ProgrammaFedelta programmaFedelta, Cliente cliente){
+        if(this.clientiIscritti == null || this.clientiIscritti.keySet().isEmpty()){
+            Set<Cliente> clienti = new HashSet<>();
+            clienti.add(cliente);
+            assert  this.clientiIscritti != null;
+            this.clientiIscritti.put(programmaFedelta, clienti);
+            return true;
+        }else if(!this.clientiIscritti.containsKey(programmaFedelta)){
+            Set<Cliente> clienti = new HashSet<>();
+            clienti.add(cliente);
+            this.clientiIscritti.put(programmaFedelta, clienti);
+            return true;
+        }else if(!this.clientiIscritti.get(programmaFedelta).isEmpty()){
+            this.clientiIscritti.get(programmaFedelta).add(cliente);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean addAziendaCoalizione(ProgrammaFedelta programmaFedelta, Azienda azienda){
+        if(this.aziendePerProgramma == null || this.aziendePerProgramma.keySet().isEmpty()){
+            Set<Azienda> aziende = new HashSet<>();
+            aziende.add(azienda);
+            assert this.aziendePerProgramma != null;
+            this.aziendePerProgramma.put(programmaFedelta, aziende);
+            return true;
+        }else if(!this.aziendePerProgramma.containsKey(programmaFedelta)){
+            Set<Azienda> aziende = new HashSet<>();
+            aziende.add(azienda);
+            this.aziendePerProgramma.put(programmaFedelta, aziende);
+            return true;
+        }else if (!this.aziendePerProgramma.get(programmaFedelta).isEmpty()){
+            this.aziendePerProgramma.get(programmaFedelta).add(azienda);
+            return true;
+        }
+        return false;
     }
 
     /**
