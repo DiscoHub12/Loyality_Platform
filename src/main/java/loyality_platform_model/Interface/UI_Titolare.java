@@ -92,9 +92,6 @@ public class UI_Titolare {
     }
 
 
-
-
-
     //-------------------SEZIONE SPAZIO FEDELTA-----------------------
     public void sezioneSpazioFedelta() {
         int choice;
