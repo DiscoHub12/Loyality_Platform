@@ -67,10 +67,13 @@ public class HandlerAzienda {
     }
 
     /**
+     *
      * @param idDipendente
      * @return
      */
     public String getDetailsDipendente(int idAzienda, int idDipendente) {
+        if(idAzienda <= 0 || idDipendente <= 0)
+            throw new IllegalArgumentException("Invalid id for Company or Employee");
         Dipendente dipendente = getDipendenteById(idAzienda, idDipendente);
         if(dipendente != null)
             return dipendente.toString();
