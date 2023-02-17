@@ -15,9 +15,8 @@ import java.util.Objects;
  */
 public class ProgrammaLivelli implements ProgrammaFedelta {
 
-    private final int idProgramma;
+    private final int idProgrammaLivelli;
 
-    private static int contatorePL = 0;
 
     private String nome;
 
@@ -36,14 +35,14 @@ public class ProgrammaLivelli implements ProgrammaFedelta {
     private final Tipo tipoProgramma = Tipo.PROGRAMMALIVELLI;
 
     public ProgrammaLivelli(String nome, String dataAttivazione, int massimoLivelli, int livelloVip, Map<Integer, Integer> policy, int puntiSpesa, double importoSpesa) {
-        this.idProgramma = ++contatorePL;
+        this.idProgrammaLivelli = ++ProgrammaPunti.contatore;
         this.dataAttivazione = dataAttivazione;
         this.setNome(nome);
         this.setMassimoLivelli(massimoLivelli);
         this.setLivelloVip(livelloVip);
         this.setPuntiSpesa(puntiSpesa);
         this.setImportoSpesa(importoSpesa);
-        this.policyLivelli = policy ;
+        this.setPolicyLivelli(policy);
         this.catalogoPremi= null;
     }
 
@@ -53,7 +52,7 @@ public class ProgrammaLivelli implements ProgrammaFedelta {
      */
     @Override
     public int getIdProgramma() {
-        return idProgramma;
+        return idProgrammaLivelli;
     }
 
     /**
@@ -162,6 +161,8 @@ public class ProgrammaLivelli implements ProgrammaFedelta {
      * @param policyLivelli new policy.
      */
     public void setPolicyLivelli(Map<Integer, Integer> policyLivelli) {
+        if(policyLivelli.size() > this.getMassimoLivelli())
+            throw new IllegalArgumentException("Too much level");
         this.policyLivelli = policyLivelli;
     }
 
@@ -286,6 +287,7 @@ public class ProgrammaLivelli implements ProgrammaFedelta {
     @Override
     public String toString() {
         return "\t-ProgrammaLivelli-" +
+                "\nid: " + idProgrammaLivelli +
                 "\nnome: " + nome +
                 "\ndataAttivazione: " + dataAttivazione +
                 "\nmassimoLivelli: " + massimoLivelli +
