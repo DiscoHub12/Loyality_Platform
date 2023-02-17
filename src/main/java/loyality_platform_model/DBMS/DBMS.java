@@ -18,37 +18,109 @@ public class DBMS {
      */
     private static DBMS instance;
 
+    /**
+     * This attribute represents companies that are
+     * registered on the Platform.
+     */
     private final Set<Azienda> aziendeIscritte;
 
+    /**
+     * This attribute represents a map where the key is the company,
+     * and its value is the employees who have an Account within the platform.
+     */
     private final Map<Azienda, Set<Dipendente>> dipendentiAzienda;
 
+    /**
+     * This attribute represents a map where the key is a company,
+     * and the value is a list of Loyalty Programs that are active in that
+     * particular company.
+     */
     private final Map<Azienda, Set<ProgrammaFedelta>> programmiAzienda;
 
+    /**
+     * This attribute represents a map where the Key is the company,
+     * and the value is a list of pre-configured Coupons that the
+     * company has created.
+     */
     private final Map<Azienda, Set<Coupon>> couponPreconfiguratiAzienda;
 
+    /**
+     * This attribute represents a map where the Key is the Company,
+     * and the value is a list of Preconfigured SMS that a Company
+     * has created and can use to send to Customers.
+     */
     private final Map<Azienda, Set<SMS>> SMSPreconfiguratiAzienda;
 
+    /**
+     * This attribute represents all Customers who are registered
+     * on the platform.
+     */
     private final Set<Cliente> clientiIscritti;
 
+    /**
+     * This attribute represents a map where the Key is a registered Customer,
+     * and the Value is a list of SMS that the Customer has received,
+     * it is possible for the Employee to see the messages received from
+     * the Customer.
+     */
     private final Map<Cliente, Set<SMS>> SMSCliente;
 
+    /**
+     * This attribute represents a map where the Key is a Client,
+     * and the Value is a list of Visits that the Client has booked.
+     */
     private final Map<Cliente, Set<Visita>> visiteCliente;
 
+    /**
+     * This attribute represents a map where the Key is a Customer,
+     * and the Value is a list of Coupons that a Customer owns.
+     */
     private final Map<Cliente, Set<Coupon>> couponCliente;
 
+    /**
+     * This attribute represents a map where the Key is a Customer,
+     * and the Value is a list of Rewards that the Customer has claimed.
+     */
     private final Map<Cliente, Set<Premio>> premiCliente;
 
+    /**
+     * This attributes rapresents all Card in the Platform.
+     */
     private final Set<Tessera> tessereClienti;
 
+    /**
+     * This attribute represents the list of all Loyalty programs
+     * made available by the PlatformManager.
+     */
     private final Set<ProgrammaFedelta> programmiDisponibili;
 
+    /**
+     * This attribute represents a list of SMS Packages
+     * that Cardholders can purchase.
+     */
     private final Set<PacchettoSMS> pacchettiSMS;
 
+    /**
+     * This attribute represents a list of purchasable
+     * Subscriptions for the platform.
+     */
     private final Set<Abbonamento> abbonamenti;
 
+    /**
+     * This attribute represents a Coalition-type object, which therefore takes
+     * into account the entire Coalition that is formed through the
+     * Companies and the corresponding Loyalty Programmes.
+     */
     private Coalizione coalizione;
 
 
+    /**
+     * Private Constructor, instantiates a DBMS type object to keep
+     * track of all data within the platform, acts as a kind of DataBase
+     * only for project simulation.
+     * The methods within this class, pretend to be a Backend that simulates
+     * requests to the Database by taking the data, adding, removing or updating any data.
+     */
     private DBMS() {
         this.aziendeIscritte = new HashSet<>();
         this.dipendentiAzienda = new HashMap<>();
@@ -66,6 +138,11 @@ public class DBMS {
         this.SMSPreconfiguratiAzienda = new HashMap<>();
     }
 
+    /**
+     * SINGLETON Pattern
+     * @return the instance of the Database,
+     * in order not to lose any data, so that it is not instantiated
+     */
     public static DBMS getInstance() {
         if (instance == null) {
             instance = new DBMS();
@@ -532,6 +609,21 @@ public class DBMS {
                 }
             }
         }
+        return false;
+    }
+
+    public boolean addConfigurazioneSMS(int idAzienda , ConfigurazioneSMS configurazioneSMS){
+        //Todo implementare
+        return false;
+    }
+
+    public boolean updateConfigurazioneSMS(int idAzienda, int idConfigurazione, ConfigurazioneSMS configurazioneSMSUpdated){
+        //Todo implementare
+        return false;
+    }
+
+    public boolean removeConfigurazioneSMS(int idAzienda, int idConfigurazione){
+        //Todo implementare
         return false;
     }
 
