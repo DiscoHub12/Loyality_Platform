@@ -95,7 +95,7 @@ public class UI_Titolare {
         System.out.println("""
                 SEZIONE SPAZIO FEDELTA'
                 Dettagli del tuo Spazio Fedeltà :
-                
+                                
                 """);
         System.out.println(this.gestoreAzienda.getSpazioFedeltaAzienda(this.azienda.getIdAzienda()).toString());
         System.out.println("""
@@ -149,7 +149,8 @@ public class UI_Titolare {
         int choice;
         System.out.println("Inserisci l'id del Programma Fedeltà per vederne i dettagli : \n");
         idProgramma = sc.nextInt();
-        System.out.println("Ecco i dettagli del Programma Fedeltà : \n " + this.gestoreProgrammi.getDetailsProgrammaFedelta(this.azienda.getIdAzienda(), idProgramma));
+        ProgrammaFedelta programmaFedelta = this.gestoreProgrammi.getProgrammaFedeltaById(this.azienda.getIdAzienda(), idProgramma);
+        System.out.println("Ecco i dettagli del Programma Fedeltà : \n " + programmaFedelta.toString());
         System.out.println("""
                 Elenco le attività disponibili:
                 1. Aggiungi Catalogo Premi
@@ -161,7 +162,11 @@ public class UI_Titolare {
         choice = sc.nextInt();
         switch (choice) {
             case 1 -> {
-                //Todo implementare.
+                if (programmaFedelta.getTipoProgramma() == Tipo.PROGRAMMAPUNTI) {
+                    aggiungiCatalogoPremiPPunti(programmaFedelta);
+                } else {
+                    aggiungiCatalogoPremiPLivelli(programmaFedelta);
+                }
             }
             case 2 -> {
                 //Todo controllare il tipo di programma, e richiamare la modifica corrispondente.
@@ -190,7 +195,7 @@ public class UI_Titolare {
                 Elenco le attività disponibili nella sezione Catalogo Premi :
                 1. Aggiungi un nuovo Catalogo Premi
                 2. Ritorna alla Home.
-                
+                                
                 """);
         choice = sc.nextInt();
         switch (choice) {
@@ -255,7 +260,7 @@ public class UI_Titolare {
         System.out.println("""
                 SEZIONE ACCOUNT DIPENDENTI
                 Elenco gli Account di tutti i Dipendenti della tua piattaforma:
-                
+                                
                 """);
         if (dipendenti != null) {
             for (Dipendente dipendente : dipendenti) {
@@ -596,7 +601,7 @@ public class UI_Titolare {
                 System.out.println("Vuoi aggiungere un Catalogo Premi al Programma Fedeltà ? (SI-NO)");
                 String scelta = sc.nextLine();
                 if (Objects.equals(scelta, "SI")) {
-                    aggiungiProgrammaFedelta();
+                    //Todo implementare
                 }
             }
             case 2 -> {
@@ -659,7 +664,7 @@ public class UI_Titolare {
                 System.out.println("Vuoi aggiungere un Catalogo Premi al Programma Fedeltà ? (SI-NO)\n");
                 String scelta = sc.nextLine();
                 if (Objects.equals(scelta, "SI")) {
-                    aggiungiCatalogoPremiGenerale();
+                    //Todo implementare.
                 }
             }
             case 2 -> {
@@ -680,26 +685,26 @@ public class UI_Titolare {
         sezioneBackOffice();
     }
 
-    public void modificaProgrammaAPunti(ProgrammaPunti programmaPunti){
+    public void modificaProgrammaAPunti(ProgrammaPunti programmaPunti) {
         System.out.println("Inserisci il nuovo nome per il programma, altrimenti premi invio per non modificare il valore : ");
         String nomeUpdated = sc.nextLine();
-        if(nomeUpdated == null)
+        if (nomeUpdated == null)
             nomeUpdated = programmaPunti.getNome();
         System.out.println("Inserisci il numero punti massimi : ");
         int numeroPuntiMassimi = sc.nextInt();
-        if(numeroPuntiMassimi == 0)
+        if (numeroPuntiMassimi == 0)
             programmaPunti.getNumeroPuntiMassimi();
         System.out.println("Inserisci il numero di punti per diventare un Cliente VIP, altrimenti premi invio per non modificare il valore : ");
         int numeroPuntiVip = sc.nextInt();
-        if(numeroPuntiVip == 0)
+        if (numeroPuntiVip == 0)
             numeroPuntiVip = programmaPunti.getPuntiVIP();
         System.out.println("Inserisci l'importo da spendere per acquisire un numero di punti che imposterai dopo questo passaggio:\n");
         double importoDaSpendere = sc.nextDouble();
-        if(importoDaSpendere == 0)
+        if (importoDaSpendere == 0)
             importoDaSpendere = programmaPunti.getImportoSpesa();
         System.out.println("Inserisci il numero di punti per l'importo appena aggiunto:\n");
         int numeroPunti = sc.nextInt();
-        if(numeroPunti == 0)
+        if (numeroPunti == 0)
             numeroPunti = programmaPunti.getPuntiSpesa();
         System.out.println("""
                 Inserisci :
@@ -709,7 +714,7 @@ public class UI_Titolare {
                                 
                 """);
         int choice = sc.nextInt();
-        switch (choice){
+        switch (choice) {
             case 1 -> {
                 this.gestoreProgrammi.modificaProgrammaPunti(this.azienda.getIdAzienda(), programmaPunti.getIdProgramma(), nomeUpdated, numeroPuntiMassimi, numeroPuntiVip, numeroPunti, importoDaSpendere);
                 System.out.println("Programma modificato correttamente.\nRitorno alla home principale.");
@@ -728,15 +733,15 @@ public class UI_Titolare {
     public void modificaProgrammaALivelli(ProgrammaLivelli programmaLivelli) {
         System.out.println("Inserisci il nuovo nome per il programma, altrimenti premi invio per non modificare il valore : ");
         String nomeUpdated = sc.nextLine();
-        if(nomeUpdated == null)
+        if (nomeUpdated == null)
             nomeUpdated = programmaLivelli.getNome();
         System.out.println("Inserisci il numero massimo di livelli : ");
         int numeroLivelliMassimi = sc.nextInt();
-        if(numeroLivelliMassimi == 0)
+        if (numeroLivelliMassimi == 0)
             numeroLivelliMassimi = programmaLivelli.getMassimoLivelli();
         System.out.println("Inserisci il numero di livelli per diventare un Cliente VIP, altrimenti premi invio per non modificare il valore : ");
         int numeroLivelloVIP = sc.nextInt();
-        if(numeroLivelloVIP == 0)
+        if (numeroLivelloVIP == 0)
             numeroLivelloVIP = programmaLivelli.getLivelloVip();
         //Todo finire.
     }
@@ -868,56 +873,79 @@ public class UI_Titolare {
             }
         }
     }
-    public void aggiungiCatalogoPremiPPunti(int idProgramma) {
+
+    public void aggiungiCatalogoPremiPPunti(ProgrammaFedelta programmaFedelta) {
         System.out.println("Inserisci il nome per il nuovo Catalogo Premi : \n");
         String nome = sc.nextLine();
         int i = 0;
         int premi;
-        Set<Premio> premiCreati = new HashSet<>();
         int choice;
-        while (i == 0) {
-            System.out.println("""
-                    Seleziona :
-                    1. Aggiungi un premio al Catalogo
-                    2. Se vuoi terminare l'aggiunta dei premi. 
-                                        
-                    """);
-            premi = sc.nextInt();
-            if (premi == 1) {
-                Premio premio = null;
-                System.out.println("Inserisci il nome del Premio : \n");
-                String nomePremio = sc.nextLine();
-                System.out.println("Inserisci il numero di punti per riscattare il premio : \n");
-                int numeroPunti = sc.nextInt();
-                premio = new Premio(nomePremio, true, numeroPunti);
-                premiCreati.add(premio);
-            } else i = 1;
-            System.out.println("""
-                    Inserisci :
-                    1. Conferma Creazione.
-                    2. Annulla Creazione.
-                    3. Ritorna alla home
-                                    
-                    """);
-            choice = sc.nextInt();
-            switch (choice) {
-                case 1 -> {
-                    this.gestorePremi.aggiungiCatalogoProgrammaLivelli(this.azienda.getIdAzienda(), idProgramma, premiCreati);
-                    System.out.println("Catalogo Premi Generale aggiunto correttamente.\nRitorno alla home.");
-                    sezioneBackOffice();
-                }
-                case 2 -> {
-                    System.out.println("Hai annullato l'operazione.\nRitorno alla home.");
-                    sezioneBackOffice();
-                }
-                case 3 -> {
-                    sezioneBackOffice();
-                }
+        Set<Premio> premiCreati = this.compilaCatalogoPremiPunti();
+        System.out.println("""
+                Inserisci :
+                1. Conferma Creazione.
+                2. Annulla Creazione.
+                3. Ritorna alla home
+                                
+                """);
+        choice = sc.nextInt();
+        switch (choice) {
+            case 1 -> {
+                this.gestorePremi.aggiungiCatalogoAProgrammaPunti(this.azienda.getIdAzienda(), programmaFedelta.getIdProgramma(), premiCreati);
+                System.out.println("Catalogo Premi Generale aggiunto correttamente.\nRitorno alla home.");
+                sezioneBackOffice();
+            }
+            case 2 -> {
+                System.out.println("Hai annullato l'operazione.\nRitorno alla home.");
+                sezioneBackOffice();
+            }
+            case 3 -> {
+                sezioneBackOffice();
             }
         }
     }
 
-    public void aggiungiCatalogoPremiPLivelli(int idProgramma) {
+    public void aggiungiCatalogoPremiPLivelli(ProgrammaFedelta programmaFedelta) {
+        if (programmaFedelta.getCatalogoPremi() != null) {
+            System.out.println("""
+                    Il Programma Fedeltà possiede già un Catalogo Premi. 
+                    Per inserire il nuovo Catalogo, questo deve essere rimosso. 
+                    Desideri continuare ? (SI-NO)
+                                        
+                    """);
+            String choice = sc.nextLine();
+            if (Objects.equals(choice, "NO") || Objects.equals(choice, "no")) {
+                System.out.println("Ritorno alla schermata principale.");
+                sezioneProgrammaFedelta();
+            }
+        }
+        Set<Premio> premiCreati = this.compilaCatalogoPremiLivelli();
+        int choice;
+        System.out.println("""
+                Inserisci :
+                1. Conferma aggiunta.
+                2. Annulla aggiunta.
+                3. Ritorna alla home
+                                
+                """);
+        choice = sc.nextInt();
+        switch (choice) {
+            case 1 -> {
+                this.gestorePremi.aggiungiCatalogoProgrammaLivelli(this.azienda.getIdAzienda(), programmaFedelta.getIdProgramma(), premiCreati);
+                System.out.println("Catalogo Premi Generale aggiunto correttamente.\nRitorno alla home.");
+                sezioneBackOffice();
+            }
+            case 2 -> {
+                System.out.println("Hai annullato l'operazione.\nRitorno alla home.");
+                sezioneBackOffice();
+            }
+            case 3 -> {
+                sezioneBackOffice();
+            }
+        }
+    }
+
+    public Set<Premio> compilaCatalogoPremiPunti() {
         System.out.println("Inserisci il nome per il nuovo Catalogo Premi : \n");
         String nome = sc.nextLine();
         int i = 0;
@@ -928,7 +956,7 @@ public class UI_Titolare {
             System.out.println("""
                     Seleziona :
                     1. Aggiungi un premio al Catalogo
-                    2. Se vuoi terminare l'aggiunta dei premi. 
+                    2. Se vuoi terminare l'aggiunta dei premi.
                                         
                     """);
             premi = sc.nextInt();
@@ -941,28 +969,35 @@ public class UI_Titolare {
                 premio = new Premio(nomePremio, true, numeroLivelliPerRiscatto);
                 premiCreati.add(premio);
             } else i = 1;
-            System.out.println("""
-                    Inserisci :
-                    1. Conferma Creazione.
-                    2. Annulla Creazione.
-                    3. Ritorna alla home
-                                    
-                    """);
-            choice = sc.nextInt();
-            switch (choice) {
-                case 1 -> {
-                    this.gestorePremi.aggiungiCatalogoProgrammaLivelli(this.azienda.getIdAzienda(), idProgramma, premiCreati);
-                    System.out.println("Catalogo Premi Generale aggiunto correttamente.\nRitorno alla home.");
-                    sezioneBackOffice();
-                }
-                case 2 -> {
-                    System.out.println("Hai annullato l'operazione.\nRitorno alla home.");
-                    sezioneBackOffice();
-                }
-                case 3 -> {
-                    sezioneBackOffice();
-                }
-            }
         }
+        return premiCreati;
+    }
+
+    public Set<Premio> compilaCatalogoPremiLivelli() {
+        System.out.println("Inserisci il nome per il nuovo Catalogo Premi : \n");
+        String nome = sc.nextLine();
+        int i = 0;
+        int premi;
+        Set<Premio> premiCreati = new HashSet<>();
+        while (i == 0) {
+            System.out.println("""
+                    Seleziona :
+                    1. Aggiungi un premio al Catalogo
+                    2. Se vuoi terminare l'aggiunta dei premi.
+                                        
+                    """);
+            premi = sc.nextInt();
+            if (premi == 1) {
+                Premio premio = null;
+                System.out.println("Inserisci il nome del Premio : \n");
+                String nomePremio = sc.nextLine();
+                System.out.println("Inserisci il numero di livelli per riscattare il premio : \n");
+                int numeroLivelliPerRiscatto = sc.nextInt();
+                premio = new Premio(nomePremio, true, numeroLivelliPerRiscatto);
+                premiCreati.add(premio);
+            } else i = 1;
+        }
+        return premiCreati;
+
     }
 }
