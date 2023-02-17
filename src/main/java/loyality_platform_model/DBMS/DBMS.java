@@ -126,16 +126,17 @@ public class DBMS {
         this.dipendentiAzienda = new HashMap<>();
         this.programmiAzienda = new HashMap<>();
         this.couponPreconfiguratiAzienda = new HashMap<>();
+        this.SMSPreconfiguratiAzienda = new HashMap<>();
         this.clientiIscritti = new HashSet<>();
+        this.tessereClienti = new HashSet<>();
         this.SMSCliente = new HashMap<>();
         this.couponCliente = new HashMap<>();
         this.premiCliente = new HashMap<>();
         this.visiteCliente = new HashMap<>();
-        this.tessereClienti = new HashSet<>();
         this.programmiDisponibili = new HashSet<>();
         this.pacchettiSMS = new HashSet<>();
         this.abbonamenti = new HashSet<>();
-        this.SMSPreconfiguratiAzienda = new HashMap<>();
+        this.coalizione = new Coalizione();
     }
 
     /**
@@ -631,7 +632,7 @@ public class DBMS {
     //--OPERAZIONI CLIENTE--
 
     public boolean addCliente(Cliente cliente) {
-        return this.getClientiIscritti().add(cliente);
+        return this.clientiIscritti.add(cliente);
     }
 
     public boolean updateCliente(int idCliente, Cliente clienteUpdated) {

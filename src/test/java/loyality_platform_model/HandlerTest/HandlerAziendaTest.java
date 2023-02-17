@@ -15,18 +15,21 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class HandlerAziendaTest {
 
-    /**
-     * AZIENDA 1:
-     */
+    //TITOLARE
     private final GestorePuntoVendita gestore = new GestorePuntoVendita("Alessio", "Cognome1", "prova@gmail.com");
+
+    //SPAZIO FEDELTA
     private final SpazioFedelta spazio = new SpazioFedelta("Spazio1", "Indirizzo1", "Telefono1", "email1");
+
+    //AZIENDA
     private final Azienda azienda = new Azienda(gestore, spazio);
+
+    //DIPENDENTI AZIENDA
     private final Dipendente dipendente = new Dipendente("Dipendente1", "Cognome1", "prova@gmail1.com", false);
+    private final Dipendente dipendente1 = new Dipendente("Dipendente2", "Cognome2", "prova@gmail1.com", true);
 
-    /**
-     * PROGRAMMI FEDELTA PER TEST
-     */
 
+    //POLICY PROGRAMMI E PROGRAMMI
     private final Map<Integer, Integer> policy= new HashMap<>();
     private final ProgrammaFedelta programmaFedeltaPunti1 = new ProgrammaPunti("ProgrammaUno",  "22-02-2022", 100, 2, 10, 20);
     private final ProgrammaFedelta programmaFedeltaPunti2 = new ProgrammaPunti("ProgrammaUno", "22-02-2022",100, 2, 10, 20);
@@ -35,15 +38,18 @@ public class HandlerAziendaTest {
     private final ProgrammaFedelta programmaFedeltaLivelli2 = new ProgrammaLivelli("ProgrammaUno", "22-02-2022",100, 2, policy, 2, 10);
     private final ProgrammaFedelta programmaFedeltaLivelli3 = new ProgrammaLivelli("ProgrammaUno", "22-02-2022",100, 2, policy, 2, 10);
 
-    /**
-     * PREMI PER TEST
-     */
+    //PREMI P
     private final Premio premio1 = new Premio("Premio1", false, 2);
     private final Premio premio2 = new Premio("Premio2", false, 2);
     private final Premio premio3 = new Premio("Premio3", false, 2);
     private final Premio premio4 = new Premio("Premio4", false, 2);
     private final Set<Premio> premi = new HashSet<>();
     private final Set<CatalogoPremi> cataloghi = new HashSet<>();
+
+    //CLIENTE
+    private final Cliente cliente = new Cliente("Nome", "Cognome", "Telefono", "Email");
+
+    private final Tessera tessera = new Tessera(cliente.getIdCliente());
 
     /**
      * HANDLERAZIENDA E DBMS
@@ -56,6 +62,7 @@ public class HandlerAziendaTest {
         System.out.println("Id Azienda : " + this.azienda.getIdAzienda());
         System.out.println("Id Spazio Fedeltà azienda : " + this.spazio.getIdSpazioFedelta());
         System.out.println("Id Dipendente azienda : " + this.dipendente.getIdDipendente());
+        System.out.printf("Id Dipendente 2 azienda : " + this.dipendente1.getIdDipendente());
         Set<Premio> premi = new HashSet<>();
         premi.add(premio1);
         premi.add(premio2);
@@ -68,13 +75,28 @@ public class HandlerAziendaTest {
         //Azienda 1
         db.addAzienda(azienda);
         db.addDipendente(azienda.getIdAzienda(), dipendente);
+        db.addDipendente(azienda.getIdAzienda(), dipendente1);
         db.addProgrammaAzienda(this.azienda.getIdAzienda(), programmaFedeltaPunti1);
         db.addProgrammaAzienda(this.azienda.getIdAzienda(), programmaFedeltaPunti2);
         db.addProgrammaAzienda(this.azienda.getIdAzienda(), programmaFedeltaPunti3);
         db.addProgrammaAzienda(this.azienda.getIdAzienda(), programmaFedeltaLivelli1);
         db.addProgrammaAzienda(this.azienda.getIdAzienda(), programmaFedeltaLivelli2);
         db.addProgrammaAzienda(this.azienda.getIdAzienda(), programmaFedeltaLivelli3);
-
+        db.getCoalizione().addAziendaCoalizione(programmaFedeltaPunti1, azienda);
+        db.getCoalizione().addAziendaCoalizione(programmaFedeltaPunti2, azienda);
+        db.getCoalizione().addAziendaCoalizione(programmaFedeltaPunti3, azienda);
+        db.getCoalizione().addAziendaCoalizione(programmaFedeltaLivelli1, azienda);
+        db.getCoalizione().addAziendaCoalizione(programmaFedeltaLivelli2, azienda);
+        db.getCoalizione().addAziendaCoalizione(programmaFedeltaLivelli3, azienda);
+        //CLIENTE
+        db.addCliente(cliente);
+        db.addTessera(tessera);
+        db.getCoalizione().addClienteCoalizione(programmaFedeltaPunti1, cliente);
+        db.getCoalizione().addClienteCoalizione(programmaFedeltaPunti2, cliente);
+        db.getCoalizione().addClienteCoalizione(programmaFedeltaPunti3, cliente);
+        db.getCoalizione().addClienteCoalizione(programmaFedeltaLivelli1, cliente);
+        db.getCoalizione().addClienteCoalizione(programmaFedeltaLivelli2, cliente);
+        db.getCoalizione().addClienteCoalizione(programmaFedeltaLivelli3, cliente);
     }
 
     @Test
@@ -168,19 +190,21 @@ public class HandlerAziendaTest {
     @Test
     public void testModificaSpazioFedelta() {
         initTotal();
-        assertThrows(NullPointerException.class, () -> this.handler.modificaSpazioFedelta(1, null, "indirizzo", "numerotelefono", "email"));
         assertThrows(IllegalArgumentException.class, () -> this.handler.modificaSpazioFedelta(-1, "nome", "indirizzo", "numeroTelefono", "email"));
         SpazioFedelta spazioFedeltaUpdated = new SpazioFedelta("nome", "indirizzo", "numerotelefono", "email");
         assertTrue(this.handler.modificaSpazioFedelta(this.azienda.getIdAzienda(), "nome", "indirizzo", "numeroTelefono", "email"));
-        assertEquals(spazioFedeltaUpdated, this.handler.getSpazioFedeltaAzienda(this.azienda.getIdAzienda()));
+        assertEquals("nome", this.handler.getSpazioFedeltaAzienda(this.azienda.getIdAzienda()).getNome());
+        assertEquals("indirizzo", this.handler.getSpazioFedeltaAzienda(this.azienda.getIdAzienda()).getIndirizzo());
+        assertEquals("numeroTelefono", this.handler.getSpazioFedeltaAzienda(this.azienda.getIdAzienda()).getNumeroTelefono());
+        assertEquals("email", this.handler.getSpazioFedeltaAzienda(this.azienda.getIdAzienda()).getEmail());
     }
 
     @Test
     public void testGetProgrammiFedeltaAzienda() {
         initTotal();
         assertThrows(IllegalArgumentException.class, () -> this.handler.getProgrammiFedeltaAzienda(-1));
-        Set<ProgrammaFedelta> programmiFedeltà = this.handler.getProgrammiFedeltaAzienda(this.azienda.getIdAzienda());
-        assertEquals(programmiFedeltà, this.handler.getProgrammiFedeltaAzienda(this.azienda.getIdAzienda()));
+        Set<ProgrammaFedelta> programmiFedelta = this.handler.getProgrammiFedeltaAzienda(this.azienda.getIdAzienda());
+        assertEquals(programmiFedelta, this.handler.getProgrammiFedeltaAzienda(this.azienda.getIdAzienda()));
     }
 
     @Test

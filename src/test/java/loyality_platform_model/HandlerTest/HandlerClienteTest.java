@@ -83,6 +83,7 @@ public class HandlerClienteTest {
 
     @Test
     public void testIdentificaClienteTessera(){
+        initDb();
         Cliente cliente = this.handler.identificaClienteTessera(this.tesseraCliente.getIdTessera());
         assertNotNull(cliente);
         assertEquals(this.cliente.getIdCliente(), cliente.getIdCliente());
@@ -92,6 +93,7 @@ public class HandlerClienteTest {
 
     @Test
     public void testIdrntificaClienteCodice(){
+        initDb();
         Cliente cliente = this.handler.identificaClienteCodice(this.cliente.getIdCliente());
         assertNotNull(cliente);
         assertEquals(this.cliente.getIdCliente(), cliente.getIdCliente());
@@ -101,6 +103,7 @@ public class HandlerClienteTest {
 
     @Test
     public void testGetTesseraCliente(){
+        initDb();
         Tessera tessera = this.handler.getTesseraCliente(this.cliente.getIdCliente());
         assertNotNull(tessera);
         assertEquals(1, tessera.getIdTessera());
@@ -109,6 +112,7 @@ public class HandlerClienteTest {
 
     @Test
     public void testGetSMSCliente(){
+        initDb();
         Set<SMS> smsCliente = this.handler.getSMSCliente(this.cliente.getIdCliente());
         assertNotNull(smsCliente);
         assertEquals(smsCliente, this.handler.getSMSCliente(this.cliente.getIdCliente()));
@@ -116,18 +120,26 @@ public class HandlerClienteTest {
 
     @Test
     public void testGetVisiteCliente(){
+        initDb();
         Set<Visita> visiteCliente = this.handler.getVisiteCliente(this.cliente.getIdCliente());
         assertNotNull(visiteCliente);
+        assertEquals(visiteCliente, this.handler.getVisiteCliente(this.cliente.getIdCliente()));
     }
 
     @Test
     public void testGetPremiCliente(){
-        //Todo implementare.
+        initDb();
+        Set<Premio> premiCliente = this.handler.getPremiCliente(this.cliente.getIdCliente());
+        assertNotNull(premiCliente);
+        assertEquals(premiCliente, this.handler.getPremiCliente(this.cliente.getIdCliente()));
     }
 
     @Test
     public void testGetCouponCliente(){
-        //Todo implementare
+        initDb();
+        Set<Coupon> couponCliente = this.handler.getCouponCliente(this.cliente.getIdCliente());
+        assertNotNull(couponCliente);
+        assertEquals(couponCliente, this.handler.getCouponCliente(this.cliente.getIdCliente()));
     }
 
     @Test
