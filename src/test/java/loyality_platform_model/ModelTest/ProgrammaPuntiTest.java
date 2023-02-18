@@ -13,7 +13,7 @@ public class ProgrammaPuntiTest {
 
     @Test
     public void testClass() {
-        ProgrammaPunti programmaPunti = new ProgrammaPunti("Programma0", "12-02-2023",100,80, 5, 20);
+        ProgrammaPunti programmaPunti = new ProgrammaPunti("Programma0", "12-02-2023",100,80, 5, 20, null);
         assertEquals("Programma0", programmaPunti.getNome());
         assertEquals(1, programmaPunti.getIdProgramma());
         assertEquals(Tipo.PROGRAMMAPUNTI, programmaPunti.getTipoProgramma());
@@ -61,7 +61,7 @@ public class ProgrammaPuntiTest {
         }
 
 
-        ProgrammaPunti programmaPunti1 = new ProgrammaPunti("Programma1", "12-02-2023",0, 80, 5, 10);
+        ProgrammaPunti programmaPunti1 = new ProgrammaPunti("Programma1", "12-02-2023",0, 80, 5, 10, null);
         assertEquals(programmaPunti1, programmaPunti1.getProgrammaPunti());
         assertNull(programmaPunti1.getProgrammaLivelli());
         assertFalse(programmaPunti1.isMaxPunti());

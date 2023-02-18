@@ -17,10 +17,10 @@ public class ProgrammaLivelliTest {
         policy.put(2, 10);
         policy.put(3, 20);
         policy.put(4, 30);
-        ProgrammaLivelli programmaLivelli = new ProgrammaLivelli("ProgrammaL", "12-02-2023",4,3, policy, 5, 10);
+        ProgrammaLivelli programmaLivelli = new ProgrammaLivelli("ProgrammaL", "12-02-2023",4,3, policy, 5, 10, null);
         System.out.println(programmaLivelli.getIdProgramma());
         assertEquals(1, programmaLivelli.getIdProgramma());
-        ProgrammaLivelli programmaLivelli1 = new ProgrammaLivelli("ProvaL","12-02-2023", 6, 4, policy, 3, 6);
+        ProgrammaLivelli programmaLivelli1 = new ProgrammaLivelli("ProvaL","12-02-2023", 6, 4, policy, 3, 6, null);
         System.out.println(programmaLivelli1.getIdProgramma());
         assertEquals(2, programmaLivelli1.getIdProgramma());
         ProgrammaLivelli returnedProgrammaLivelli = programmaLivelli.getProgrammaLivelli();
@@ -76,6 +76,15 @@ public class ProgrammaLivelliTest {
         System.out.println(programmaLivelli);
 
 
+        try{
+            Map<Integer, Integer> map = new HashMap<>();
+            map.put(1, 10);
+            map.put(2, 20);
+            map.put(3, 60);
+            ProgrammaLivelli programmaLivelli2 = new ProgrammaLivelli("Provamap", "2022-02-22", 2, 1, map, 10, 10, null);
+        }catch (IllegalArgumentException e){
+            System.out.println(e.getMessage());
+        }
 
         try{
             programmaLivelli.setMassimoLivelli(-1);
