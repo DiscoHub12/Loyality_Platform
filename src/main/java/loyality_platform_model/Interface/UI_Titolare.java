@@ -868,7 +868,7 @@ public class UI_Titolare {
         Date date = Calendar.getInstance().getTime();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String dataAttivazione = dateFormat.format(date);
-        this.gestoreProgrammi.aggiungiProgrammaPunti(this.azienda.getIdAzienda(), nomeProgramma, dataAttivazione, numeroMassimoPunti, puntiPerVip, numeroPunti, importoDaSpendere);
+        this.gestoreProgrammi.aggiungiProgrammaPunti(this.azienda.getIdAzienda(), nomeProgramma, dataAttivazione, numeroMassimoPunti, puntiPerVip, numeroPunti, importoDaSpendere, null);
         //Todo aggiungere il gestore che aggiunge i premi al Programma appena creato.
         System.out.println("""
                 Programma Fedeltà aggiunto correttamente e in corso fin da subito.
@@ -933,7 +933,7 @@ public class UI_Titolare {
         Date date = Calendar.getInstance().getTime();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String dataAttivazione = dateFormat.format(date);
-        this.gestoreProgrammi.aggiungiProgrammaLivelli(this.azienda.getIdAzienda(), nomeProgramma, dataAttivazione, livelliMassimi, livelloVIP, policyLivelli, numeroPunti, importoDaSpendere);
+        this.gestoreProgrammi.aggiungiProgrammaLivelli(this.azienda.getIdAzienda(), nomeProgramma, dataAttivazione, livelliMassimi, livelloVIP, policyLivelli, numeroPunti, importoDaSpendere, null);
         //Todo aggiungere il gestore che aggiunge i premi al Programma appena creato.
         System.out.println("""
                 Programma Fedeltà aggiunto correttamente e in corso fin da subito.
