@@ -450,7 +450,7 @@ public class UI_Titolare {
                     System.out.println("Sei Sicuro di voler eliminare il Coupon ? (SI-NO)");
                     String choice1 = sc.nextLine();
                     if (Objects.equals(choice1, "SI") || Objects.equals(choice1, "si")) {
-                        this.gestorePremi.rimuoviCouponPreconfigurato(this.azienda.getIdAzienda(), coupon.getIdCoupon());
+                        this.gestorePremi.deleteCouponPreconfigurato(this.azienda.getIdAzienda(), coupon.getIdCoupon());
                     } else {
                         System.out.println("Ritorno alla schermata principale.");
                         sezioneCouponPreconfigurato();

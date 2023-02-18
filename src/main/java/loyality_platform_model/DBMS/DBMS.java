@@ -590,7 +590,6 @@ public class DBMS {
                 for (Coupon coupon : this.getCouponPreconfiguratiAzienda().get(azienda)) {
                     if (coupon.getIdCoupon() == idCoupon) {
                         coupon.setValoreSconto(coupondUpdated.getValoreSconto());
-                        coupon.setDataAttivazione(coupondUpdated.getDataAttivazione());
                         coupon.setDataScadenza(coupondUpdated.getDataScadenza());
                         return true;
                     }

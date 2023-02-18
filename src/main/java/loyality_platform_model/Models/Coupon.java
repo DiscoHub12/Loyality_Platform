@@ -30,7 +30,7 @@ public class Coupon {
      * This attribute rapresents the activation date
      * of this Coupon.
      */
-    private Date dataAttivazione;
+    private String dataAttivazione;
 
     /**
      * This attribute rapresents the expiration
@@ -67,7 +67,7 @@ public class Coupon {
         this.valoreSconto = valoreSconto;
     }
 
-    public Date getDataAttivazione() {
+    public String getDataAttivazione() {
         return dataAttivazione;
     }
 
@@ -75,10 +75,11 @@ public class Coupon {
      * Method that set the actiovation Date about this Coupon.
      *
      * @param dataAttivazione the activation Date.
-     * @throws NullPointerException if the dataAttivazione is null.
+     * @throws IllegalArgumentException if the dataAttivazione is null or invalid.
      */
-    public void setDataAttivazione(Date dataAttivazione) {
-        Objects.requireNonNull(dataAttivazione);
+    public void setDataAttivazione(String dataAttivazione) {
+        if(Objects.equals(dataAttivazione, "") || dataAttivazione == null)
+            throw new IllegalArgumentException("Invalid activation date.");
         this.dataAttivazione = dataAttivazione;
     }
 
