@@ -1,21 +1,23 @@
 package loyality_platform_model.Interface;
+import loyality_platform_model.DBMS.DBMS;
 import loyality_platform_model.Handler.*;
 import loyality_platform_model.Models.*;
 
 import java.util.Date;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.Set;
 
 import static java.lang.System.exit;
 public class UI_Cliente {
     private final Scanner sc;
     private final Cliente cliente;
-    //private final Azienda azienda;
     private final HandlerCliente gestoreCliente = new HandlerCliente();
     private final HandlerPremi gestorePremi = new HandlerPremi();
     private final HandlerProgrammaFedelta gestoreProgrammi = new HandlerProgrammaFedelta();
     private final HandlerVisite gestoreVisite = new HandlerVisite();
     private final HandlerAzienda gestoreAzienda = new HandlerAzienda();
+    private final HandlerTessera gestoreTessera= new HandlerTessera();
     public UI_Cliente(Cliente cliente){
         this.cliente = cliente;
         this.sc = new Scanner(System.in);
@@ -61,48 +63,195 @@ public class UI_Cliente {
     //SOTTO-SEZIONE PROGRAMMI FEDELTA' (DI CLIENTI)
     public void sezioneIscrizioneProgrammiFedelta() {
         int choice;
-        System.out.println("\nSEZIONE PROGRAMMI FEDELTA'." +
-                "\nElenco dei programmi fedelta attivi per il negozio selezionato" +
-                "\n"); //+ this.gestoreAzienda.getSpazioFedeltaAzienda(this.azienda.getIdAzienda()));
         System.out.println("""
-                Elenco le attività disponibili nella sezione Spazio Fedeltà: 
-                1. Modifica Spazio Fedeltà
+                SEZIONE PROGRAMMI FEDELTA' .
+                Elenco delle attività disponibili nella sezione Iscrizione Programma Fedeltà: 
+                1. iscriviti ad un programma fedelta appartenente ad un negozio
+                2. iscriviti ad un programma fedelta disponibile nella piattaforma
+                Inserisci il numero corrispettivo
+                                
+                """);
+        choice = sc.nextInt();
+        switch (choice) {
+            case 1 -> sezioneCercaNegoziProgrammaFedelta();
+            case 2 -> sezioneIscrizioneProgrammaFedeltaPiattaforma();
+        }
+    }
+    //SOTTO SEZIONE CERCA NEGOZI (DI CLIENTI)
+    public void sezioneCercaNegozi() {
+        int choice;
+        String nomeNegozio;
+        int id;
+        System.out.println("""
+                SEZIONE CERCA NEGOZIO.
+                Cerca un negozio attraverso il nome:
+                Inserisci il nome del negozio.
+                                
+                """);
+        nomeNegozio = sc.nextLine();
+        Set<Azienda> aziende = DBMS.getInstance().getAziendeIscritte();
+        for (Azienda azienda1 : aziende) {
+            if (azienda1.getSpazioFedelta().getNome() == nomeNegozio) {
+                System.out.println("Id Negozio : " + azienda1.getSpazioFedelta().getIdSpazioFedelta() + "Nome Negozio : " + azienda1.getSpazioFedelta().getNome() +
+                        "Indirizzo Negozio : " + azienda1.getSpazioFedelta().getIndirizzo() + "Numero Telefono : " + azienda1.getSpazioFedelta().getNumeroTelefono() +
+                        "Email del negozio : " + azienda1.getSpazioFedelta().getEmail());
+            }
+            else
+                System.out.println("\nNon è stato trovato nessun negozio\nProva a cercare un altro negozio.");
+                sezioneCercaNegozi();
+        }
+    }
+    //SOTTO SEZIONE CERCA NEGOZI (DI ISCRIZIONE PROGRAMMA FEDELTA)
+    public void sezioneCercaNegoziProgrammaFedelta(){
+        //TODO
+        int choice;
+        String nomeNegozio;
+        int id;
+        System.out.println("""
+                SEZIONE PROGRAMMI FEDELTA' NEGOZIO.
+                Cerca un negozio attraverso il nome:
+                Inserisci il nome del negozio.
+                                
+                """);
+        nomeNegozio = sc.nextLine();
+        Set<Azienda> aziende= DBMS.getInstance().getAziendeIscritte();
+        for(Azienda azienda1 : aziende){
+            if(azienda1.getSpazioFedelta().getNome()==nomeNegozio){
+                Set<ProgrammaFedelta> programmiFedelta= this.gestoreAzienda.getProgrammiFedeltaAzienda(azienda1.getIdAzienda());
+                for(ProgrammaFedelta programmaFedelta1 : programmiFedelta){
+                    System.out.println("Id Programma : " + programmaFedelta1.getIdProgramma() + "Nome Programma : " + programmaFedelta1.getNome());
+                    System.out.println("""
+                    Possiedi la tessera cliente?
+                    1. Si
+                    2. No
+                    Inserisci il numero corrispettivo
+
+                    """);
+                    choice = sc.nextInt();
+                    switch (choice) {
+                        case 1 -> {
+                            System.out.println("Inserisci l'id del programma fedeltà desiderato : ");
+                            id=sc.nextInt();
+                            if(programmaFedelta1.getIdProgramma()==id){
+                                if(cliente.getTessera()!=null) {
+                                    this.gestoreTessera.addProgrammaFedelta(cliente.getTessera().getIdTessera(), programmaFedelta1);
+                                    System.out.println("Programma fedeltà aggiunto alla tua tessera");
+                                }else
+                                    throw new IllegalArgumentException("Errore: la tessera non è stata trovata o non esiste");
+                            }
+                        }
+                        case 2 -> creaTessera();
+                    }
+                    }
+                }
+            }
+    }
+        //SOTTO SEZIONE ISCRIZIONE PROGRAMMA FEDELTA PIATTAFORMA (DI ISCRIZIONE PROGRAMMA FEDELTA)
+        public void sezioneIscrizioneProgrammaFedeltaPiattaforma() {
+            int choice;
+            int id;
+            System.out.println("""
+                    SEZIONE PROGRAMMI FEDELTA' PIATTAFORMA.
+                    Elenco tutti i Programmi Fedeltà disponibili all'interno della piattaforma:
+                                    
+                    """);
+            Set<ProgrammaFedelta> programmiFedelta = DBMS.getInstance().getProgrammiDisponibili();
+            if (programmiFedelta != null) {
+                for (ProgrammaFedelta programmaFedelta1 : programmiFedelta) {
+                    System.out.println("Id Programma : " + programmaFedelta1.getIdProgramma() + "Nome Programma : " + programmaFedelta1.getNome());
+                }
+            }
+                System.out.println("""
+                        Per iscriversi al programma fedeltà desiderato è necessario essere in possesso di una tessera. Ne possiede già una?
+                        1. Sì
+                        2. No
+                        Inserisci il numero corrispettivo
+                                        
+                        """);
+                choice = sc.nextInt();
+                switch (choice) {
+                    case 1 -> {
+                        System.out.println("Inserisci l'id del programma fedeltà desiderato : ");
+                        id = sc.nextInt();
+                        Set<ProgrammaFedelta> programmiFedelta1 = DBMS.getInstance().getProgrammiDisponibili();
+                        if (programmiFedelta1 != null) {
+                            for (ProgrammaFedelta programmaFedelta2 : programmiFedelta1) {
+                                if (programmaFedelta2.getIdProgramma() == id) {
+                                    if (cliente.getTessera() != null) {
+                                        this.gestoreTessera.addProgrammaFedelta(cliente.getTessera().getIdTessera(), programmaFedelta2);
+                                        System.out.println("Programma fedeltà aggiunto alla tua tessera");
+                                    } else
+                                        throw new IllegalArgumentException("Errore: la tessera non è stata trovata o non esiste");
+                                }else
+                                    throw new IllegalArgumentException("Errore : programma selezionato non disponibile");
+                            }
+                        }
+                        else
+                            System.out.println("Non è disponibile nessun programma fedeltà all'interno della piattaforma.");
+                    }
+                    case 2 -> creaTessera();
+                }
+            }
+
+    //SOTTO SEZIONE TESSERA (DI CLIENTI)
+    public void sezioneTessera() {
+        int choice;
+        int id;
+        System.out.println("""
+                    SEZIONE INFO TESSERA
+                    Ecco le info della tua tessera :
+
+                    """);
+        cliente.getTessera().toString();
+        System.out.println("""
+                        Vuoi vedere i dettagli di un determinato programma fedeltà?
+                        1. Sì
+                        2. No (Ritornerai alla home)
+                        Inserisci il numero corrispettivo
+                                        
+                        """);
+        choice = sc.nextInt();
+        switch (choice) {
+            case 1 -> {
+                System.out.println("Inserisci l'id del programma fedeltà desiderato : ");
+            id = sc.nextInt();
+            Set<ProgrammaFedelta> programmiFedelta = DBMS.getInstance().getProgrammiDisponibili();
+            for (ProgrammaFedelta programmaFedelta1 : programmiFedelta) {
+                if (programmaFedelta1.getIdProgramma() == id) {
+                    programmaFedelta1.toString();
+                }
+            }
+        }
+            case 2 -> sezioneClienti();
+        }
+    }
+    //SOTTO SEZIONE PREMI (DI CLIENTI)
+    public void sezioneCatalogoPremi(){
+        //TODO
+        int choice;
+        System.out.println("\nSEZIONE PREMI." +
+                "\nElenco dei premi riscattati" +
+                "\n"); // this.gestoreCliente.getTesseraCliente(this.cliente.getIdCliente()));
+        System.out.println("""
+                Elenco le attività disponibili nella sezione Premi: 
+                1. Riscatta premio
                 2. Ritorna alla home
                 Inserisci il numero corrispettivo
                                 
                 """);
         choice = sc.nextInt();
         switch (choice) {
-            case 1 -> sezioneIscrizioneProgrammiFedelta();
+            case 1 -> sezioneRiscattaPremio();
             case 2 -> sezioneClienti();
         }
     }
-    public void sezioneCercaNegozi(){
-        int choice;
-        System.out.println("\nSEZIONE CERCA NEGOZI." +
-                "\nEcco la lista dei negozi registrati nella piattaforma" +
-                "\n"); //+ this.gestoreAzienda.getSpazioFedeltaAzienda(this.azienda.getIdAzienda()));
-        System.out.println("""
-                Elenco le possibili operazioni :
-                1. Cerca un negozio
-                2. Ritorna alla Home.
-                Inserisci il numero corrispettivo
-                                
-                """);
-        choice = sc.nextInt();
-        switch (choice) {
-            case 1 -> sezioneCercaNegozi();
-            case 2 -> sezioneClienti();
-        }
-    }
-    //SOTTO SEZIONE TESSERA (DI CLIENTI)
-    public void sezioneTessera() {
+    //SOTTO SEZIONE RISCATTA PREMI (DI CATALOGO PREMI)
+    public void sezioneRiscattaPremio(){
         //TODO
         int choice;
-        System.out.println("\nSEZIONE TESSERA." +
-                "\nEcco i dettagli della tua tessera" +
-                "\n");
-                //TODO in handlerTessera mi serve il metodo getTessera e getProgrammaFedeltà
+        System.out.println("\nSEZIONE PREMI." +
+                "\nElenco dei programmi fedeltà a cui è iscritto" +
+                "\n"); // this.gestoreCliente.getTesseraCliente(this.cliente.getIdCliente()));
         System.out.println("""
                 Elenco le attività disponibili nella sezione Tessera: 
                 1. Dettagli Programma Fedeltà a cui si è iscritto
@@ -116,10 +265,6 @@ public class UI_Cliente {
             case 2 -> sezioneClienti();
         }
     }
-    //SOTTO SEZIONE PREMI (DI CLIENTI)
-    public void sezioneCatalogoPremi(){
-        //TODO
-    }
     //SOTTO-SEZIONE LOGOUT
     public void sezioneLogout() {
         int choice;
@@ -129,6 +274,30 @@ public class UI_Cliente {
         choice = sc.nextInt();
         if (choice == 1) {
             exit(0);
+        }
+    }
+
+    //---------------------------------------------------------------------------------------
+
+    public void creaTessera() {
+        //TODO
+        int choice;
+        System.out.println("""
+                SEZIONE CREA TESSERA .
+                Vuoi creare una nuova tessera per questa piattaforma?: 
+                1. Si
+                2. No (ritornerai alla schermata home)
+                Inserisci il numero corrispettivo
+                                
+                """);
+        choice = sc.nextInt();
+        switch (choice) {
+            case 1 -> {
+                this.gestoreTessera.creaTessera(cliente.getIdCliente());
+                System.out.println("\nTessera creata correttamente.\nRitorno alla schermata principale.");
+                sezioneCercaNegoziProgrammaFedelta();
+            }
+            case 2 -> sezioneClienti();
         }
     }
 }
