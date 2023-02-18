@@ -20,12 +20,12 @@ public class HandlerProgrammaFedeltaTest {
 
     private final Azienda azienda = new Azienda(gestorePuntoVendita, spazioFedelta);
 
-    private final ProgrammaFedelta programmaFedelta1 = new ProgrammaPunti("PP", "2022-02-13", 100, 80, 10, 10);
+    private final ProgrammaFedelta programmaFedelta1 = new ProgrammaPunti("PP", "2022-02-13", 100, 80, 10, 10, null);
 
     private final Map<Integer, Integer> map = new HashMap<>();
 
 
-    private final ProgrammaFedelta programmaFedelta2 = new ProgrammaLivelli("PL", "2022-04-12", 3, 2, map, 10, 10);
+    private final ProgrammaFedelta programmaFedelta2 = new ProgrammaLivelli("PL", "2022-04-12", 3, 2, map, 10, 10, null);
 
 
     public void initTotal(){
@@ -74,12 +74,12 @@ public class HandlerProgrammaFedeltaTest {
     @Test
     public void testAggiungiProgrammaPunti(){
         initTotal();
-        assertTrue(handlerProgrammaFedelta.aggiungiProgrammaPunti(azienda.getIdAzienda(),"Program", "2022-07-02",0,90,5, 10));
+        assertTrue(handlerProgrammaFedelta.aggiungiProgrammaPunti(azienda.getIdAzienda(),"Program", "2022-07-02",0,90,5, 10, null));
         System.out.println("Add programma: "+ dbms.getProgrammiAzienda());
-        assertFalse(handlerProgrammaFedelta.aggiungiProgrammaPunti(4,"ProvaFalse","2022-01-02",0, 70, 10, 10));
+        assertFalse(handlerProgrammaFedelta.aggiungiProgrammaPunti(4,"ProvaFalse","2022-01-02",0, 70, 10, 10, null));
 
         try {
-            handlerProgrammaFedelta.aggiungiProgrammaPunti(0,"Prova", "",0,70,10, 10);
+            handlerProgrammaFedelta.aggiungiProgrammaPunti(0,"Prova", "",0,70,10, 10, null);
         }catch (IllegalArgumentException e){
             System.out.println(e.getMessage());
         }
@@ -94,9 +94,9 @@ public class HandlerProgrammaFedeltaTest {
         policy.put(3, 40);
         policy.put(4, 60);
         policy.put(5, 80);
-        assertTrue(handlerProgrammaFedelta.aggiungiProgrammaLivelli(azienda.getIdAzienda(), "ProgramL", "2022-02-15", 5, 4, policy, 10, 10));
+        assertTrue(handlerProgrammaFedelta.aggiungiProgrammaLivelli(azienda.getIdAzienda(), "ProgramL", "2022-02-15", 5, 4, policy, 10, 10, null));
         System.out.println("Add program : " + dbms.getProgrammiAzienda().get(azienda));
-        assertFalse(handlerProgrammaFedelta.aggiungiProgrammaLivelli(4,"ProvaFalse","2022-01-02",5, 3, policy,10, 10));
+        assertFalse(handlerProgrammaFedelta.aggiungiProgrammaLivelli(4,"ProvaFalse","2022-01-02",5, 3, policy,10, 10, null));
 
         System.out.println("Programmi totali :" + this.dbms.getProgrammiAzienda().get(azienda));
         ProgrammaFedelta toReturn = handlerProgrammaFedelta.getProgrammaFedeltaById(azienda.getIdAzienda(), 2);
