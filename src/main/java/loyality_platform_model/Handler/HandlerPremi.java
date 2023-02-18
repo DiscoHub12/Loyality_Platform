@@ -3,7 +3,6 @@ package loyality_platform_model.Handler;
 import loyality_platform_model.DBMS.DBMS;
 import loyality_platform_model.Models.*;
 
-import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
 
@@ -166,8 +165,12 @@ public class HandlerPremi {
                 for (Premio premio : catalogoPremi.getPremiCatalogo()) {
                     if (premio.getIdPremio() == idPremio) {
                         if (premio.getPunti() == 0) {
+                            premio.setNome(nome);
                             premio.setLivelli(number);
-                        } else premio.setPunti(number);
+                        } else {
+                            premio.setNome(nome);
+                            premio.setPunti(number);
+                        }
                         response = this.dbms.updateCatalogoPremiAzienda(idAzienda, idCatalogoPremi, catalogoPremi);
                     }
                 }
@@ -185,7 +188,7 @@ public class HandlerPremi {
      * @return true if the prize is removed, false othwerise.
      * @throws IllegalArgumentException if the idAzienda - idCatalogoPremi - idPremio is not correct.
      */
-    public boolean rimuoviPremio(int idAzienda, int idCatalogoPremi, int idPremio) {
+    public boolean deletePremio(int idAzienda, int idCatalogoPremi, int idPremio) {
         boolean response = false;
         if (idPremio <= 0 || idAzienda <= 0 || idCatalogoPremi <= 0)
             throw new IllegalArgumentException("Invalid id for the fields.");
@@ -195,7 +198,8 @@ public class HandlerPremi {
                 for (Premio premio : catalogoPremi.getPremiCatalogo()) {
                     if (premio.getIdPremio() == idPremio) {
                         catalogoPremi.rimuoviPremio(premio);
-                        response = this.dbms.updateCatalogoPremiAzienda(idAzienda, idCatalogoPremi, catalogoPremi);
+                        if (this.dbms.updateCatalogoPremiAzienda(idAzienda, catalogoPremi.getIdCatalogoPremi(), catalogoPremi))
+                            return true;
                     }
                 }
             }
@@ -229,7 +233,7 @@ public class HandlerPremi {
      * @return true if the Reward Catalog is removed, false otherwise.
      * @throws IllegalArgumentException if the idAzienda or idCatalogoPremi is not correct.
      */
-    public boolean rimuoviCatalogoPremi(int idAzienda, int idCatalogoPremi) {
+    public boolean deleteCatalogoPremi(int idAzienda, int idCatalogoPremi) {
         if (idAzienda <= 0 || idCatalogoPremi <= 0)
             throw new IllegalArgumentException("Invalid id for Company id Reward Catalog id");
         return this.dbms.removeCatalogoPremiAzienda(idAzienda, idCatalogoPremi);
@@ -280,7 +284,7 @@ public class HandlerPremi {
      * @param idCatalogoPremi    the id for the Reward Catalog to remove.
      * @throws IllegalArgumentException if the idAzienda or idProgrammaFedelta or idCatalogoPremi is not correct.
      */
-    public boolean removeCatalogoAProgramma(int idAzienda, int idProgrammaFedelta, int idCatalogoPremi) {
+    public boolean deleteCatalogoProgramma(int idAzienda, int idProgrammaFedelta, int idCatalogoPremi) {
         if (idAzienda <= 0 || idProgrammaFedelta <= 0 || idCatalogoPremi <= 0)
             throw new IllegalArgumentException("Invalid id for the fields.");
         //Todo implementare.
@@ -334,7 +338,7 @@ public class HandlerPremi {
      * @return true if the pre-configured Coupon is removed, false otherwise.
      * @throws IllegalArgumentException if the idAzienda or idCoupon is not valid.
      */
-    public boolean rimuoviCouponPreconfigurato(int idAzienda, int idCoupon) {
+    public boolean deleteCouponPreconfigurato(int idAzienda, int idCoupon) {
         if (idAzienda <= 0 || idCoupon <= 0)
             throw new IllegalArgumentException("Invalid id for the fields.");
         return this.dbms.removeCouponPreconfiguratoAzienda(idAzienda, idCoupon);
@@ -352,9 +356,9 @@ public class HandlerPremi {
         if (idCliente <= 0 || idPremio <= 0)
             throw new IllegalArgumentException("Invalid id for the fields.");
         Set<CatalogoPremi> catalogoPremiAzienda = this.dbms.getCatalogoPremiAzienda(idAzienda);
-        for(CatalogoPremi catalogoPremi : catalogoPremiAzienda){
-            for(Premio premio : catalogoPremi.getPremiCatalogo()){
-                if(premio.getIdPremio() == idPremio){
+        for (CatalogoPremi catalogoPremi : catalogoPremiAzienda) {
+            for (Premio premio : catalogoPremi.getPremiCatalogo()) {
+                if (premio.getIdPremio() == idPremio) {
                     response = this.dbms.addPremioCliente(idCliente, premio);
                 }
             }
@@ -377,9 +381,9 @@ public class HandlerPremi {
         if (idAzienda <= 0 || idProgrammaFedelta <= 0 || idCliente <= 0 || idPremio <= 0)
             throw new IllegalArgumentException("Invalid id for the fields.");
         ProgrammaFedelta programmaFedelta = this.dbms.getProgrammaFedeltaById(idAzienda, idProgrammaFedelta);
-        if(programmaFedelta != null){
-            for(Premio premio : programmaFedelta.getCatalogoPremi().getPremiCatalogo()){
-                if(premio.getIdPremio() == idPremio){
+        if (programmaFedelta != null) {
+            for (Premio premio : programmaFedelta.getCatalogoPremi().getPremiCatalogo()) {
+                if (premio.getIdPremio() == idPremio) {
                     response = this.dbms.addPremioCliente(idCliente, premio);
                 }
             }
@@ -428,29 +432,5 @@ public class HandlerPremi {
         if (idCliente <= 0 || idCoupon <= 0)
             throw new IllegalArgumentException("Invalid id for the fields.");
         return this.dbms.removeCoupon(idCliente, idCoupon);
-    }
-
-
-    /**
-     * Private method that allows to reduce all the duplicated code,
-     * since in most of the methods, the same requests are made to the Database,
-     * taking the ID of the Company.
-     * This method returns the interested company that you want to take,
-     * if it is registered and the id is valid otherwise it returns null.
-     *
-     * @param idAzienda the id of the Company to be taken in the Database.
-     * @return Company (Azienda) if exists, null otherwise.
-     * @throws IllegalArgumentException if the idAzienda is not valid or if the Company(Azienda)
-     *                                  is not registered inside the Platform.
-     */
-    private Azienda getAziendaById(int idAzienda) {
-        Azienda company = null;
-        if (idAzienda <= 0)
-            throw new IllegalArgumentException("Illegal id for the Company");
-        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
-            if (azienda.getIdAzienda() == idAzienda)
-                company = azienda;
-        }
-        return company;
     }
 }
