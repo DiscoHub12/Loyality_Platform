@@ -141,6 +141,7 @@ public class DBMS {
 
     /**
      * SINGLETON Pattern
+     *
      * @return the instance of the Database,
      * in order not to lose any data, so that it is not instantiated
      */
@@ -612,17 +613,17 @@ public class DBMS {
         return false;
     }
 
-    public boolean addConfigurazioneSMS(int idAzienda , ConfigurazioneSMS configurazioneSMS){
+    public boolean addConfigurazioneSMS(int idAzienda, ConfigurazioneSMS configurazioneSMS) {
         //Todo implementare
         return false;
     }
 
-    public boolean updateConfigurazioneSMS(int idAzienda, int idConfigurazione, ConfigurazioneSMS configurazioneSMSUpdated){
+    public boolean updateConfigurazioneSMS(int idAzienda, int idConfigurazione, ConfigurazioneSMS configurazioneSMSUpdated) {
         //Todo implementare
         return false;
     }
 
-    public boolean removeConfigurazioneSMS(int idAzienda, int idConfigurazione){
+    public boolean removeConfigurazioneSMS(int idAzienda, int idConfigurazione) {
         //Todo implementare
         return false;
     }
@@ -930,15 +931,20 @@ public class DBMS {
     }
 
     public boolean addTessera(Tessera tessera) {
-        for (Tessera toScroll : this.getTessereClienti()) {
-            if (!tessera.equals(toScroll)) {
-                for (Cliente cliente : this.getClientiIscritti()) {
-                    if (cliente.getIdCliente() == tessera.getIdCliente()) {
-                        if (cliente.getTessera() == null)
-                            cliente.setTessera(tessera);
+        for (Cliente cliente : this.clientiIscritti) {
+            if (cliente.getIdCliente() == tessera.getIdCliente()) {
+                if (cliente.getTessera() == null) {
+                    if (this.tessereClienti.isEmpty()) {
+                        cliente.setTessera(tessera);
+                        return this.tessereClienti.add(tessera);
+                    } else {
+                        for (Tessera toScroll : this.tessereClienti) {
+                            if (!toScroll.equals(tessera)) {
+                                cliente.setTessera(tessera);
+                                return this.tessereClienti.add(tessera);
+                            }
+                        }
                     }
-                    this.getClientiIscritti().add(cliente);
-                    return this.getTessereClienti().add(tessera);
                 }
             }
         }
