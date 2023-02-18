@@ -167,11 +167,10 @@ public class HandlerCliente {
                                     gestoreTessera.addPuntiAcquisto(importoSpeso, tessera, azienda);
                                 }else {
                                     if(importoSpeso >= coupon.getValoreSconto()){
-                                        //Todo continuare, guardare il delete Coupon del Cliente in HandlerPremi.
-                                        //gestorePremi.deleteCouponCliente(cliente.getIdCliente(), coupon.getIdCoupon());
-                                        //importoSpeso -= coupon.getValoreSconto();
-                                    }
-                                    gestoreTessera.addPuntiAcquisto(importoSpeso, tessera, azienda);
+                                        importoSpeso -= coupon.getValoreSconto();
+                                        gestorePremi.deleteCouponCliente(cliente.getIdCliente(), coupon.getIdCoupon());
+                                        gestoreTessera.addPuntiAcquisto(importoSpeso, tessera, azienda);
+                                    }else gestoreTessera.addPuntiAcquisto(importoSpeso, tessera, azienda);
                                 }
                             }
                         }
