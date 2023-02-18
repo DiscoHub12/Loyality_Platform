@@ -253,9 +253,10 @@ public class HandlerPremi {
         Objects.requireNonNull(premiCatalogo);
         if (idAzienda <= 0 || idProgrammaFedelta <= 0)
             throw new IllegalArgumentException("Invalid id for the fileds.");
-        CatalogoPremi newCatalogo = creaCatalogo(premiCatalogo);
-        //Todo implementare, riguardare
-        return false;
+        CatalogoPremi catalogoPremi = creaCatalogo(premiCatalogo);
+        ProgrammaFedelta programmaPunti = this.dbms.getProgrammaFedeltaById(idAzienda, idProgrammaFedelta);
+        programmaPunti.setCatalogoPremi(catalogoPremi);
+        return this.dbms.updateProgrammaAzienda(idAzienda, idProgrammaFedelta);
     }
 
     /**
@@ -267,11 +268,14 @@ public class HandlerPremi {
      * @param idProgrammaFedelta the id for the Loyalty Program to add the new Catalog, if not exists.
      * @param premiCatalogo      the prizes for the new Reward Catalog.
      */
-    public void aggiungiCatalogoProgrammaLivelli(int idAzienda, int idProgrammaFedelta, Set<Premio> premiCatalogo) {
+    public boolean aggiungiCatalogoProgrammaLivelli(int idAzienda, int idProgrammaFedelta, Set<Premio> premiCatalogo) {
         Objects.requireNonNull(premiCatalogo);
         if (idAzienda <= 0 || idProgrammaFedelta <= 0)
             throw new IllegalArgumentException("Invalid id for the Company or the id for Loyalty Program.");
-        //Todo implementare, manca getCatalogoPremi() su ProgrammaFedeltà, è presente su P.Punti e Livelli ma non posso accedere
+        CatalogoPremi catalogoPremi = creaCatalogo(premiCatalogo);
+        ProgrammaFedelta programmaLivelli = this.dbms.getProgrammaFedeltaById(idAzienda, idProgrammaFedelta);
+        programmaLivelli.setCatalogoPremi(catalogoPremi);
+        return this.dbms.updateProgrammaAzienda(idAzienda, programmaLivelli.getIdProgramma());
     }
 
     /**
@@ -287,8 +291,9 @@ public class HandlerPremi {
     public boolean deleteCatalogoProgramma(int idAzienda, int idProgrammaFedelta, int idCatalogoPremi) {
         if (idAzienda <= 0 || idProgrammaFedelta <= 0 || idCatalogoPremi <= 0)
             throw new IllegalArgumentException("Invalid id for the fields.");
-        //Todo implementare.
-        return false;
+        ProgrammaFedelta programma = this.dbms.getProgrammaFedeltaById(idAzienda, idProgrammaFedelta);
+        programma.setCatalogoPremi(null);
+        return this.dbms.updateProgrammaAzienda(idAzienda, programma.getIdProgramma());
     }
 
     /**
