@@ -76,6 +76,15 @@ public class ProgrammaLivelliTest {
         System.out.println(programmaLivelli);
 
 
+        try{
+            Map<Integer, Integer> map = new HashMap<>();
+            map.put(1, 10);
+            map.put(2, 20);
+            map.put(3, 60);
+            ProgrammaLivelli programmaLivelli2 = new ProgrammaLivelli("Provamap", "2022-02-22", 2, 1, map, 10, 10);
+        }catch (IllegalArgumentException e){
+            System.out.println(e.getMessage());
+        }
 
         try{
             programmaLivelli.setMassimoLivelli(-1);
