@@ -2,6 +2,7 @@ package loyality_platform_model.HandlerTest;
 
 import loyality_platform_model.DBMS.DBMS;
 import loyality_platform_model.Handler.HandlerAzienda;
+import loyality_platform_model.Handler.HandlerCliente;
 import loyality_platform_model.Handler.HandlerPremi;
 import loyality_platform_model.Models.*;
 import org.junit.jupiter.api.Test;
@@ -56,6 +57,8 @@ public class HandlerPremiTest {
     //HANDLER E DB
     private final HandlerPremi gestorePremi = new HandlerPremi();
     private final HandlerAzienda gestoreAzienda = new HandlerAzienda();
+
+    private final HandlerCliente gestoreCliente = new HandlerCliente();
     private final DBMS dbms = DBMS.getInstance();
 
     void initDb(){
@@ -158,12 +161,24 @@ public class HandlerPremiTest {
     @Test
     public void testAggiungiPremio(){
         initDb();
-        Set<CatalogoPremi> cataloghiPremi = this.gestoreAzienda.getCatalogoPremiAzienda(this.azienda.getIdAzienda());
-        CatalogoPremi catalogoPremi;
-        for(CatalogoPremi catalogoPremi1 : cataloghiPremi){
-            if(catalogoPremi1.getIdCatalogoPremi() == 1)
-                catalogoPremi = catalogoPremi1;
+        Set<CatalogoPremi> cataloghiPremiPunti = this.gestoreAzienda.getCatalogoPremiAzienda(this.azienda.getIdAzienda());
+        assertEquals(2, cataloghiPremiPunti.size());
+        CatalogoPremi catalogoPremiPunti = null;
+        for(CatalogoPremi catalogoPremi : cataloghiPremiPunti){
+            if(catalogoPremi.getIdCatalogoPremi() == 1)
+                catalogoPremiPunti = catalogoPremi;
         }
+        assert catalogoPremiPunti != null;
+        assertEquals(4, catalogoPremiPunti.getPremiCatalogo().size());
+        int size1 = catalogoPremiPunti.getPremiCatalogo().size();
+        CatalogoPremi catalogoPremiLivelli = null;
+        for(CatalogoPremi catalogoPremi : cataloghiPremiPunti){
+            if(catalogoPremi.getIdCatalogoPremi() == 2)
+                catalogoPremiLivelli = catalogoPremi;
+        }
+        assert catalogoPremiLivelli != null;
+        assertEquals(4, catalogoPremiLivelli.getPremiCatalogo().size());
+        int sizeL1 = catalogoPremiLivelli.getPremiCatalogo().size();
         assertThrows(IllegalArgumentException.class, () -> this.gestorePremi.aggiungiPremio(-1, 1, "nome", false, 10));
         assertThrows(IllegalArgumentException.class, () -> this.gestorePremi.aggiungiPremio(1, -1, "nome", false, 10));
         assertThrows(IllegalArgumentException.class, () -> this.gestorePremi.aggiungiPremio(1, -1, "", false, 10));
@@ -171,30 +186,135 @@ public class HandlerPremiTest {
         assertTrue(this.gestorePremi.aggiungiPremio(this.azienda.getIdAzienda(), 1, "nome", true, 10));
         assertTrue(this.gestorePremi.aggiungiPremio(this.azienda.getIdAzienda(), 1, "nome", true, 10));
         assertTrue(this.gestorePremi.aggiungiPremio(this.azienda.getIdAzienda(), 1, "nome", true, 10));
+        assertTrue(this.gestorePremi.aggiungiPremio(this.azienda.getIdAzienda(), 2, "nome", false, 10));
+        assertTrue(this.gestorePremi.aggiungiPremio(this.azienda.getIdAzienda(), 2, "nome", false, 10));
+        assertTrue(this.gestorePremi.aggiungiPremio(this.azienda.getIdAzienda(), 2, "nome", false, 10));
+        Set<CatalogoPremi> catalogoPremiAggiornatoPunti = this.gestoreAzienda.getCatalogoPremiAzienda(this.azienda.getIdAzienda());
+        CatalogoPremi catalogoPremiPuntiAggiornato = null ;
+        for(CatalogoPremi catalogoPremi : catalogoPremiAggiornatoPunti){
+            if(catalogoPremi.getIdCatalogoPremi() == 1)
+                catalogoPremiPuntiAggiornato = catalogoPremi;
+        }
+        assert catalogoPremiPuntiAggiornato != null;
+        assertEquals(7, catalogoPremiPuntiAggiornato.getPremiCatalogo().size());
+        int size2 = catalogoPremiPuntiAggiornato.getPremiCatalogo().size();
+        assertNotEquals(size1, size2);
+        CatalogoPremi catalogoPremiLivelliAggiornato = null;
+        for(CatalogoPremi catalogoPremi : catalogoPremiAggiornatoPunti){
+            if(catalogoPremi.getIdCatalogoPremi() == 1)
+                catalogoPremiLivelliAggiornato = catalogoPremi;
+        }
+        assert catalogoPremiLivelliAggiornato != null;
+        assertEquals(7, catalogoPremiLivelliAggiornato.getPremiCatalogo().size());
+        int sizeL2 = catalogoPremiLivelliAggiornato.getPremiCatalogo().size();
+        assertNotEquals(sizeL1, sizeL2);
     }
 
     @Test
     public void testModificaPremio(){
         initDb();
-        //Todo implementare
+        Set<CatalogoPremi> cataloghiPremiPunti = this.gestoreAzienda.getCatalogoPremiAzienda(this.azienda.getIdAzienda());
+        assertEquals(2, cataloghiPremiPunti.size());
+        CatalogoPremi catalogoPremiPunti = null;
+        for(CatalogoPremi catalogoPremi : cataloghiPremiPunti){
+            if(catalogoPremi.getIdCatalogoPremi() == 1)
+                catalogoPremiPunti = catalogoPremi;
+        }
+        assert catalogoPremiPunti != null;
+        Premio premioStandard1 = null;
+        for(Premio premio : catalogoPremiPunti.getPremiCatalogo()){
+            if(premio.getIdPremio() == 1)
+                premioStandard1 = premio;
+        }
+        assert premioStandard1 != null;
+        assertEquals("nome", premioStandard1.getNome());
+        assertEquals(5, premioStandard1.getPunti());
+        assertEquals(0, premioStandard1.getLivelli());
+        assertTrue(this.gestorePremi.modificaPremio(this.azienda.getIdAzienda(), 1, 1, "ciao", true, 25));
+        Set<CatalogoPremi> cataloghiPremiPunti1 = this.gestoreAzienda.getCatalogoPremiAzienda(this.azienda.getIdAzienda());
+        assertEquals(2, cataloghiPremiPunti1.size());
+        CatalogoPremi catalogoPremiPunti1 = null;
+        for(CatalogoPremi catalogoPremi : cataloghiPremiPunti1){
+            if(catalogoPremi.getIdCatalogoPremi() == 1)
+                catalogoPremiPunti1 = catalogoPremi;
+        }
+        Premio premioAggiornato = null;
+        assert catalogoPremiPunti1 != null;
+        for(Premio premio : catalogoPremiPunti1.getPremiCatalogo()){
+            if(premio.getIdPremio() == 1)
+                premioAggiornato = premio;
+        }
+        assert premioAggiornato != null;
+        assertEquals("ciao",premioAggiornato.getNome());
+        assertEquals(25, premioAggiornato.getPunti());
+
     }
 
     @Test
     public void testRimuoviPremio(){
         initDb();
-        //Todo implementare
+        Set<CatalogoPremi> cataloghiPremiPunti = this.gestoreAzienda.getCatalogoPremiAzienda(this.azienda.getIdAzienda());
+        assertEquals(2, cataloghiPremiPunti.size());
+        CatalogoPremi catalogoPremiPunti = null;
+        for(CatalogoPremi catalogoPremi : cataloghiPremiPunti){
+            if(catalogoPremi.getIdCatalogoPremi() == 1)
+                catalogoPremiPunti = catalogoPremi;
+        }
+        assert catalogoPremiPunti != null;
+        Premio premioStandard1 = null;
+        for(Premio premio : catalogoPremiPunti.getPremiCatalogo()){
+            if(premio.getIdPremio() == 1)
+                premioStandard1 = premio;
+        }
+        assert premioStandard1 != null;
+        assertEquals("nome", premioStandard1.getNome());
+        assertEquals(5, premioStandard1.getPunti());
+        assertEquals(0, premioStandard1.getLivelli());
+        assertTrue(this.gestorePremi.deletePremio(this.azienda.getIdAzienda(), 1, 1));
+        Set<CatalogoPremi> cataloghiPremiPuntiUpdated = this.gestoreAzienda.getCatalogoPremiAzienda(this.azienda.getIdAzienda());
+        assertEquals(2, cataloghiPremiPuntiUpdated.size());
+        CatalogoPremi catalogoPremiPuntiUpdated = null;
+        for(CatalogoPremi catalogoPremi : cataloghiPremiPuntiUpdated){
+            if(catalogoPremi.getIdCatalogoPremi() == 1)
+                catalogoPremiPuntiUpdated = catalogoPremi;
+        }
+        assert catalogoPremiPuntiUpdated != null;
+        assertFalse(catalogoPremiPuntiUpdated.getPremiCatalogo().contains(premioStandard1));
     }
 
     @Test
     public void testAggiungiCatalogoPremi(){
         initDb();
-        //Todo implementare
+        Set<CatalogoPremi> catalogoPremi = this.gestoreAzienda.getCatalogoPremiAzienda(this.azienda.getIdAzienda());
+        assertEquals(2, catalogoPremi.size());
+        Premio premio1 = new Premio("nome", true, 10);
+        Premio premio2 = new Premio("nome", true, 10);
+        Premio premio3 = new Premio("nome", true, 10);
+        Premio premio4 = new Premio("nome", true, 10);
+        Set<Premio> premi1 = new HashSet<>();
+        premi1.add(premio1);
+        premi1.add(premio2);
+        premi1.add(premio3);
+        premi1.add(premio4);
+        assertTrue(this.gestorePremi.aggiungiCatalogoPremi(this.azienda.getIdAzienda(), premi1));
+        assertTrue(this.gestorePremi.aggiungiCatalogoPremi(this.azienda.getIdAzienda(), premi1));
+        Set<CatalogoPremi> catalogoPremiUpdated = this.gestoreAzienda.getCatalogoPremiAzienda(this.azienda.getIdAzienda());
+        assertEquals(4, catalogoPremiUpdated.size());
+        assertTrue(this.gestorePremi.aggiungiCatalogoPremi(this.azienda.getIdAzienda(), premi1));
+        assertTrue(this.gestorePremi.aggiungiCatalogoPremi(this.azienda.getIdAzienda(), premi1));
+        Set<CatalogoPremi> catalogoPremiUpdated1 = this.gestoreAzienda.getCatalogoPremiAzienda(this.azienda.getIdAzienda());
+        assertEquals(6, catalogoPremiUpdated1.size());
     }
 
     @Test
     public void testRimuoviCatalogoPremi(){
         initDb();
-        //Todo implementare
+        Set<CatalogoPremi> catalogoPremi = this.gestoreAzienda.getCatalogoPremiAzienda(this.azienda.getIdAzienda());
+        assertEquals(2, catalogoPremi.size());
+        assertEquals(2, catalogoPremi.size());
+        assertTrue(this.gestorePremi.deleteCatalogoPremi(this.azienda.getIdAzienda(), 1));
+        Set<CatalogoPremi> catalogoPremiUpdated = this.gestoreAzienda.getCatalogoPremiAzienda(this.azienda.getIdAzienda());
+        assertEquals(1, catalogoPremiUpdated.size());
     }
 
     @Test
@@ -218,25 +338,75 @@ public class HandlerPremiTest {
     @Test
     public void aggiungiCouponPreconfigurato(){
         initDb();
-        //Todo implementare
+        Set<Coupon> couponAzienda = this.gestorePremi.getCouponPreconfiguratiAzienda(this.azienda.getIdAzienda());
+        assertEquals(3, couponAzienda.size());
+        assertTrue(this.gestorePremi.aggiungiCouponPreconfigurato(this.azienda.getIdAzienda(), 10, "dataScadenza"));
+        Set<Coupon> couponAziendaUpdated = this.gestorePremi.getCouponPreconfiguratiAzienda(this.azienda.getIdAzienda());
+        assertEquals(4, couponAziendaUpdated.size());
+        Coupon coupon = null;
+        for(Coupon coupons : couponAziendaUpdated){
+            if(coupons.getIdCoupon() == 4)
+                coupon = coupons;
+        }
+        assert coupon != null;
+        assertEquals(10, coupon.getValoreSconto());
+        assertEquals("dataScadenza", coupon.getDataScadenza());
     }
 
     @Test
     public void modificaCouponPreconfigurato(){
         initDb();
-        //Todo implementare
+        Set<Coupon> couponAzienda = this.gestorePremi.getCouponPreconfiguratiAzienda(this.azienda.getIdAzienda());
+        assertEquals(3, couponAzienda.size());
+        assertTrue(this.gestorePremi.aggiungiCouponPreconfigurato(this.azienda.getIdAzienda(), 10, "dataScadenza"));
+        Set<Coupon> couponAziendaUpdated = this.gestorePremi.getCouponPreconfiguratiAzienda(this.azienda.getIdAzienda());
+        assertEquals(4, couponAziendaUpdated.size());
+        Coupon coupon = null;
+        for(Coupon coupons : couponAziendaUpdated){
+            if(coupons.getIdCoupon() == 4)
+                coupon = coupons;
+        }
+        assert coupon != null;
+        assertEquals(10, coupon.getValoreSconto());
+        assertEquals("dataScadenza", coupon.getDataScadenza());
+        assertTrue(this.gestorePremi.modificaCouponPreconfigurato(this.azienda.getIdAzienda(), 4, 100, "dataScadenza1"));
+        Set<Coupon> couponAziendaUpdated1 = this.gestorePremi.getCouponPreconfiguratiAzienda(this.azienda.getIdAzienda());
+        assertEquals(4, couponAziendaUpdated.size());
+        Coupon coupon1 = null;
+        for(Coupon coupons : couponAziendaUpdated){
+            if(coupons.getIdCoupon() == 4)
+                coupon1 = coupons;
+        }
+        assert coupon1 != null;
+        assertEquals(100, coupon.getValoreSconto());
+        assertEquals("dataScadenza1", coupon.getDataScadenza());
     }
 
     @Test
     public void testRimuoviCouponPreconfigurato(){
         initDb();
-        //Todo implementare
+        Set<Coupon> couponAzienda = this.gestorePremi.getCouponPreconfiguratiAzienda(this.azienda.getIdAzienda());
+        assertEquals(3, couponAzienda.size());
+        Coupon coupon = null;
+        for(Coupon coupons : couponAzienda){
+            if(coupons.getIdCoupon() == 1)
+                coupon = coupons;
+        }
+        assertTrue(this.gestorePremi.deleteCouponPreconfigurato(this.azienda.getIdAzienda(), 1));
+        Set<Coupon> couponAziendaUpdated = this.gestorePremi.getCouponPreconfiguratiAzienda(this.azienda.getIdAzienda());
+        assertEquals(2, couponAziendaUpdated.size());
+        assertFalse(couponAziendaUpdated.contains(coupon));
     }
 
     @Test
     public void aggiungiPremioClienteCatalogoGenerale(){
         initDb();
-        //Todo implementare
+        assertTrue(this.gestorePremi.aggiungiPremioClienteCatalogoGenerale(this.azienda.getIdAzienda(), 1, 1));
+        assertTrue(this.gestorePremi.aggiungiPremioClienteCatalogoGenerale(this.azienda.getIdAzienda(), 1, 2));
+        assertTrue(this.gestorePremi.aggiungiPremioClienteCatalogoGenerale(this.azienda.getIdAzienda(), 1, 3));
+        Set<Premio> premiCliente = this.gestoreCliente.getPremiCliente(1);
+        assertNotNull(premiCliente);
+        assertEquals(3, premiCliente.size());
     }
 
     @Test
@@ -248,19 +418,49 @@ public class HandlerPremiTest {
     @Test
     public void deletePremioCliente(){
         initDb();
-        //Todo implementare
+        assertTrue(this.gestorePremi.aggiungiPremioClienteCatalogoGenerale(this.azienda.getIdAzienda(), 1, 1));
+        assertTrue(this.gestorePremi.aggiungiPremioClienteCatalogoGenerale(this.azienda.getIdAzienda(), 1, 2));
+        assertTrue(this.gestorePremi.aggiungiPremioClienteCatalogoGenerale(this.azienda.getIdAzienda(), 1, 3));
+        Set<Premio> premiCliente = this.gestoreCliente.getPremiCliente(1);
+        assertNotNull(premiCliente);
+        assertEquals(3, premiCliente.size());
+        assertTrue(this.gestorePremi.deletePremioCliente(cliente.getIdCliente(), 1));
+        assertTrue(this.gestorePremi.deletePremioCliente(cliente.getIdCliente(), 2));
+        Set<Premio> premiClienteUpdated = this.gestoreCliente.getPremiCliente(1);
+        assertNotNull(premiClienteUpdated);
+        assertEquals(1, premiClienteUpdated.size());
+
     }
 
     @Test
     public void aggiungiCouponCliente(){
         initDb();
-        //Todo implementare
+        assertTrue(this.gestorePremi.aggiungiCouponCliente(this.azienda.getIdAzienda(), this.cliente.getIdCliente(), this.coupon.getIdCoupon()));
+        assertTrue(this.gestorePremi.aggiungiCouponCliente(this.azienda.getIdAzienda(), this.cliente.getIdCliente(), this.coupon1.getIdCoupon()));
+        assertTrue(this.gestorePremi.aggiungiCouponCliente(this.azienda.getIdAzienda(), this.cliente.getIdCliente(), this.coupon2.getIdCoupon()));
+        Set<Coupon> couponCliente = this.gestoreCliente.getCouponCliente(this.cliente.getIdCliente());
+        assertNotNull(couponCliente);
+        assertEquals(3, couponCliente.size());
     }
 
     @Test
     public void deleteCouponCliente(){
         initDb();
-        //Todo implementare
+        assertTrue(this.gestorePremi.aggiungiCouponCliente(this.azienda.getIdAzienda(), this.cliente.getIdCliente(), this.coupon.getIdCoupon()));
+        assertTrue(this.gestorePremi.aggiungiCouponCliente(this.azienda.getIdAzienda(), this.cliente.getIdCliente(), this.coupon1.getIdCoupon()));
+        assertTrue(this.gestorePremi.aggiungiCouponCliente(this.azienda.getIdAzienda(), this.cliente.getIdCliente(), this.coupon2.getIdCoupon()));
+        Set<Coupon> couponCliente = this.gestoreCliente.getCouponCliente(this.cliente.getIdCliente());
+        assertNotNull(couponCliente);
+        assertEquals(3, couponCliente.size());
+        assertTrue(this.gestorePremi.deleteCouponCliente(this.cliente.getIdCliente(), this.coupon.getIdCoupon()));
+        Set<Coupon> couponCliente1 = this.gestoreCliente.getCouponCliente(this.cliente.getIdCliente());
+        assertNotNull(couponCliente1);
+        assertEquals(2, couponCliente1.size());
+        assertTrue(this.gestorePremi.deleteCouponCliente(this.cliente.getIdCliente(), this.coupon1.getIdCoupon()));
+        Set<Coupon> couponCliente2 = this.gestoreCliente.getCouponCliente(this.cliente.getIdCliente());
+        assertNotNull(couponCliente2);
+        assertEquals(1, couponCliente2.size());
+
     }
 
 }
