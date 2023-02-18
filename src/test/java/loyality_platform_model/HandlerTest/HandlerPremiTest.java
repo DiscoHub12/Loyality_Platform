@@ -20,14 +20,14 @@ public class HandlerPremiTest {
 
     //PROGRAMMI FEDELTA' PUNTI
     private final Map<Integer, Integer> policy= new HashMap<>();
-    private final ProgrammaFedelta programmaFedeltaPunti1 = new ProgrammaPunti("ProgrammaUno",  "22-02-2022", 100, 2, 10, 20);
-    private final ProgrammaFedelta programmaFedeltaPunti2 = new ProgrammaPunti("ProgrammaUno", "22-02-2022",100, 2, 10, 20);
-    private final ProgrammaFedelta programmaFedeltaPunti3 = new ProgrammaPunti("ProgrammaUno", "22-02-2022",100, 2, 10, 20);
+    private final ProgrammaFedelta programmaFedeltaPunti1 = new ProgrammaPunti("ProgrammaUno",  "22-02-2022", 100, 2, 10, 20, null);
+    private final ProgrammaFedelta programmaFedeltaPunti2 = new ProgrammaPunti("ProgrammaUno", "22-02-2022",100, 2, 10, 20, null);
+    private final ProgrammaFedelta programmaFedeltaPunti3 = new ProgrammaPunti("ProgrammaUno", "22-02-2022",100, 2, 10, 20, null);
 
     //PROGRAMMI FEDELT' LIVELLI
-    private final ProgrammaFedelta programmaFedeltaLivelli1 = new ProgrammaLivelli("ProgrammaUno", "22-02-2022",100, 2, policy, 2, 10);
-    private final ProgrammaFedelta programmaFedeltaLivelli2 = new ProgrammaLivelli("ProgrammaUno", "22-02-2022",100, 2, policy, 2, 10);
-    private final ProgrammaFedelta programmaFedeltaLivelli3 = new ProgrammaLivelli("ProgrammaUno", "22-02-2022",100, 2, policy, 2, 10);
+    private final ProgrammaFedelta programmaFedeltaLivelli1 = new ProgrammaLivelli("ProgrammaUno", "22-02-2022",100, 2, policy, 2, 10, null);
+    private final ProgrammaFedelta programmaFedeltaLivelli2 = new ProgrammaLivelli("ProgrammaUno", "22-02-2022",100, 2, policy, 2, 10, null);
+    private final ProgrammaFedelta programmaFedeltaLivelli3 = new ProgrammaLivelli("ProgrammaUno", "22-02-2022",100, 2, policy, 2, 10, null);
 
     //COUPON
     private final Coupon coupon = new Coupon(20, "22-03-2022");
@@ -95,6 +95,9 @@ public class HandlerPremiTest {
         this.premiLivelli.add(premioLivelli3);
         CatalogoPremi catalogoPremiLivelli = new CatalogoPremi(this.premiLivelli);
         this.dbms.addCatalogoPremiAzienda(this.azienda.getIdAzienda(), catalogoPremiLivelli);
+        //CATALOGO PREMI PROGRAMMI
+        this.programmaFedeltaPunti3.setCatalogoPremi(catalogoPremiPunti);
+        this.programmaFedeltaLivelli3.setCatalogoPremi(catalogoPremiLivelli);
         //CLIENTE
         this.dbms.addCliente(cliente);
         this.dbms.addTessera(tesseraCliente);
@@ -320,19 +323,98 @@ public class HandlerPremiTest {
     @Test
     public void testAggiungiCatalogoProgrammaPunti(){
         initDb();
-        //Todo implementare
+        Set<Premio> premiCatalogo = new HashSet<>();
+        premiCatalogo.add(new Premio("premio", true, 10));
+        premiCatalogo.add(new Premio("premi1", true, 10));
+        premiCatalogo.add(new Premio("premio2", true, 10));
+        assertThrows(NullPointerException.class, () -> this.gestorePremi.aggiungiCatalogoAProgrammaPunti(this.azienda.getIdAzienda(), this.programmaFedeltaPunti1.getIdProgramma(), null));
+        assertThrows(IllegalArgumentException.class, () -> this.gestorePremi.aggiungiCatalogoAProgrammaPunti(this.azienda.getIdAzienda(), -1, premiCatalogo));
+        assertThrows(IllegalArgumentException.class, () -> this.gestorePremi.aggiungiCatalogoAProgrammaPunti(-1, this.programmaFedeltaPunti1.getIdProgramma(), premiCatalogo));
+        Set<ProgrammaFedelta> programmiAzienda = this.gestoreAzienda.getProgrammiFedeltaAzienda(this.azienda.getIdAzienda());
+        ProgrammaFedelta programmaFedelta = null;
+        for(ProgrammaFedelta programmaFedelta1 : programmiAzienda){
+            if(programmaFedelta1.getIdProgramma() == 1)
+                programmaFedelta = programmaFedelta1;
+        }
+        assertNotNull(programmaFedelta);
+        assertNull(programmaFedelta.getCatalogoPremi());
+        assertTrue(this.gestorePremi.aggiungiCatalogoAProgrammaPunti(this.azienda.getIdAzienda(), this.programmaFedeltaPunti1.getIdProgramma(), premiCatalogo));
+        Set<ProgrammaFedelta> programmiAziendaUpdated = this.gestoreAzienda.getProgrammiFedeltaAzienda(this.azienda.getIdAzienda());
+        ProgrammaFedelta programmaFedeltaUpdated = null;
+        for(ProgrammaFedelta programmaFedelta1 : programmiAziendaUpdated){
+            if(programmaFedelta1.getIdProgramma() == 1)
+                programmaFedeltaUpdated = programmaFedelta1;
+        }
+        assertNotNull(programmaFedeltaUpdated);
+        assertNotNull(programmaFedeltaUpdated.getCatalogoPremi());
+
     }
 
     @Test
     public void testAggiungiCatalogoProgrammaLivelli(){
         initDb();
-        //Todo implementare
+        Set<Premio> premiCatalogo = new HashSet<>();
+        premiCatalogo.add(new Premio("premio", false, 10));
+        premiCatalogo.add(new Premio("premi1", false, 10));
+        premiCatalogo.add(new Premio("premio2", false, 10));
+        assertThrows(NullPointerException.class, () -> this.gestorePremi.aggiungiCatalogoProgrammaLivelli(this.azienda.getIdAzienda(), this.programmaFedeltaPunti1.getIdProgramma(), null));
+        assertThrows(IllegalArgumentException.class, () -> this.gestorePremi.aggiungiCatalogoProgrammaLivelli(this.azienda.getIdAzienda(), -1, premiCatalogo));
+        assertThrows(IllegalArgumentException.class, () -> this.gestorePremi.aggiungiCatalogoProgrammaLivelli(-1, this.programmaFedeltaPunti1.getIdProgramma(), premiCatalogo));
+        Set<ProgrammaFedelta> programmiAzienda = this.gestoreAzienda.getProgrammiFedeltaAzienda(this.azienda.getIdAzienda());
+        ProgrammaFedelta programmaFedelta = null;
+        for(ProgrammaFedelta programmaFedelta1 : programmiAzienda){
+            if(programmaFedelta1.getIdProgramma() == 4)
+                programmaFedelta = programmaFedelta1;
+        }
+        assertNotNull(programmaFedelta);
+        assertNull(programmaFedelta.getCatalogoPremi());
+        assertTrue(this.gestorePremi.aggiungiCatalogoProgrammaLivelli(this.azienda.getIdAzienda(), this.programmaFedeltaLivelli1.getIdProgramma(), premiCatalogo));
+        Set<ProgrammaFedelta> programmiAziendaUpdated = this.gestoreAzienda.getProgrammiFedeltaAzienda(this.azienda.getIdAzienda());
+        ProgrammaFedelta programmaFedeltaUpdated = null;
+        for(ProgrammaFedelta programmaFedelta1 : programmiAziendaUpdated){
+            if(programmaFedelta1.getIdProgramma() == 4)
+                programmaFedeltaUpdated = programmaFedelta1;
+        }
+        assertNotNull(programmaFedeltaUpdated);
+        assertNotNull(programmaFedeltaUpdated.getCatalogoPremi());
     }
 
     @Test
     public void testRimuoviCatalogoProgramma(){
         initDb();
-        //Todo implementare
+        Set<Premio> premiCatalogo = new HashSet<>();
+        premiCatalogo.add(new Premio("premio", false, 10));
+        premiCatalogo.add(new Premio("premi1", false, 10));
+        premiCatalogo.add(new Premio("premio2", false, 10));
+        assertThrows(NullPointerException.class, () -> this.gestorePremi.aggiungiCatalogoProgrammaLivelli(this.azienda.getIdAzienda(), this.programmaFedeltaPunti1.getIdProgramma(), null));
+        assertThrows(IllegalArgumentException.class, () -> this.gestorePremi.aggiungiCatalogoProgrammaLivelli(this.azienda.getIdAzienda(), -1, premiCatalogo));
+        assertThrows(IllegalArgumentException.class, () -> this.gestorePremi.aggiungiCatalogoProgrammaLivelli(-1, this.programmaFedeltaPunti1.getIdProgramma(), premiCatalogo));
+        Set<ProgrammaFedelta> programmiAzienda = this.gestoreAzienda.getProgrammiFedeltaAzienda(this.azienda.getIdAzienda());
+        ProgrammaFedelta programmaFedelta = null;
+        for(ProgrammaFedelta programmaFedelta1 : programmiAzienda){
+            if(programmaFedelta1.getIdProgramma() == 4)
+                programmaFedelta = programmaFedelta1;
+        }
+        assertNotNull(programmaFedelta);
+        assertNull(programmaFedelta.getCatalogoPremi());
+        assertTrue(this.gestorePremi.aggiungiCatalogoProgrammaLivelli(this.azienda.getIdAzienda(), this.programmaFedeltaLivelli1.getIdProgramma(), premiCatalogo));
+        Set<ProgrammaFedelta> programmiAziendaUpdated = this.gestoreAzienda.getProgrammiFedeltaAzienda(this.azienda.getIdAzienda());
+        ProgrammaFedelta programmaFedeltaUpdated = null;
+        for(ProgrammaFedelta programmaFedelta1 : programmiAziendaUpdated){
+            if(programmaFedelta1.getIdProgramma() == 4)
+                programmaFedeltaUpdated = programmaFedelta1;
+        }
+        assertNotNull(programmaFedeltaUpdated);
+        assertNotNull(programmaFedeltaUpdated.getCatalogoPremi());
+        assertTrue(this.gestorePremi.deleteCatalogoProgramma(this.azienda.getIdAzienda(), programmaFedeltaUpdated.getIdProgramma(), programmaFedeltaUpdated.getCatalogoPremi().getIdCatalogoPremi()));
+        Set<ProgrammaFedelta> programmiAziendaUpdated1 = this.gestoreAzienda.getProgrammiFedeltaAzienda(this.azienda.getIdAzienda());
+        ProgrammaFedelta programmaFedeltaUpdated1 = null;
+        for(ProgrammaFedelta programmaFedelta1 : programmiAziendaUpdated1){
+            if(programmaFedelta1.getIdProgramma() == 4)
+                programmaFedeltaUpdated1 = programmaFedelta1;
+        }
+        assertNotNull(programmaFedeltaUpdated1);
+        assertNull(programmaFedeltaUpdated.getCatalogoPremi());
     }
 
     @Test
@@ -412,7 +494,14 @@ public class HandlerPremiTest {
     @Test
     public void aggiungiPremioClienteCatalogoProgramma(){
         initDb();
-        //Todo implementare
+        assertTrue(this.gestorePremi.aggiungiPremioClienteCatalogoProgramma(this.azienda.getIdAzienda() , this.programmaFedeltaPunti3.getIdProgramma(), this.cliente.getIdCliente(), 1));
+        Set<Premio> premiCliente = this.gestoreCliente.getPremiCliente(this.cliente.getIdCliente());
+        assertNotNull(premiCliente);
+        assertTrue(premiCliente.contains(this.premioPunti));
+        assertTrue(this.gestorePremi.aggiungiPremioClienteCatalogoProgramma(this.azienda.getIdAzienda() , this.programmaFedeltaLivelli3.getIdProgramma(), this.cliente.getIdCliente(), 6));
+        Set<Premio> premiCliente1 = this.gestoreCliente.getPremiCliente(this.cliente.getIdCliente());
+        assertNotNull(premiCliente1);
+        assertTrue(premiCliente1.contains(this.premioLivelli1));
     }
 
     @Test
