@@ -42,7 +42,7 @@ public class ProgrammaPunti implements ProgrammaFedelta {
      * maximum number of points. It requests the fundamental attributes for creation,
      * and invokes set methods which contain controls within them.
      */
-    public ProgrammaPunti(String nome, String dataAttivazione, int numeroPuntiMassimi, int puntiVIP, int puntiSpesa, double importoSpesa) {
+    public ProgrammaPunti(String nome, String dataAttivazione, int numeroPuntiMassimi, int puntiVIP, int puntiSpesa, double importoSpesa, CatalogoPremi catalogoPremi) {
         this.idProgrammaPunti = ++contatore;
         this.dataAttivazione = dataAttivazione;
         this.setNome(nome);
@@ -50,7 +50,7 @@ public class ProgrammaPunti implements ProgrammaFedelta {
         this.setPuntiSpesa(puntiSpesa);
         this.setImportoSpesa(importoSpesa);
         this.setNumeroPuntiMassimi(numeroPuntiMassimi);
-        this.catalogoPremi= null;
+        this.setCatalogoPremi(catalogoPremi);
 
     }
 
@@ -237,7 +237,6 @@ public class ProgrammaPunti implements ProgrammaFedelta {
      */
     @Override
     public void setCatalogoPremi(CatalogoPremi catalogoPremi) {
-        Objects.requireNonNull(catalogoPremi);
         this.catalogoPremi = catalogoPremi;
     }
 

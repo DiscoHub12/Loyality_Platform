@@ -34,7 +34,7 @@ public class ProgrammaLivelli implements ProgrammaFedelta {
 
     private final Tipo tipoProgramma = Tipo.PROGRAMMALIVELLI;
 
-    public ProgrammaLivelli(String nome, String dataAttivazione, int massimoLivelli, int livelloVip, Map<Integer, Integer> policy, int puntiSpesa, double importoSpesa) {
+    public ProgrammaLivelli(String nome, String dataAttivazione, int massimoLivelli, int livelloVip, Map<Integer, Integer> policy, int puntiSpesa, double importoSpesa, CatalogoPremi catalogoPremi) {
         this.idProgrammaLivelli = ++ProgrammaPunti.contatore;
         this.dataAttivazione = dataAttivazione;
         this.setNome(nome);
@@ -43,7 +43,7 @@ public class ProgrammaLivelli implements ProgrammaFedelta {
         this.setPuntiSpesa(puntiSpesa);
         this.setImportoSpesa(importoSpesa);
         this.setPolicyLivelli(policy);
-        this.catalogoPremi= null;
+        this.setCatalogoPremi(catalogoPremi);
     }
 
     /**
@@ -254,7 +254,6 @@ public class ProgrammaLivelli implements ProgrammaFedelta {
      */
     @Override
     public void setCatalogoPremi(CatalogoPremi catalogoPremi) {
-        Objects.requireNonNull(catalogoPremi);
         this.catalogoPremi = catalogoPremi;
     }
 

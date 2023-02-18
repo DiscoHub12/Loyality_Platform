@@ -1,6 +1,7 @@
 package loyality_platform_model.Handler;
 
 import loyality_platform_model.DBMS.DBMS;
+import loyality_platform_model.Models.CatalogoPremi;
 import loyality_platform_model.Models.ProgrammaFedelta;
 import loyality_platform_model.Models.ProgrammaLivelli;
 import loyality_platform_model.Models.ProgrammaPunti;
@@ -63,10 +64,10 @@ public class HandlerProgrammaFedelta {
      * @param importoSpesa    amount to spend to get points.
      * @return <code>true</code> if the program was added, <code>false</code> otherwise.
      */
-    public boolean aggiungiProgrammaPunti(int idAzienda, String nome, String dataAttivazione, int numeroPuntiMax, int puntiVip, int puntiSpesa, double importoSpesa) {
+    public boolean aggiungiProgrammaPunti(int idAzienda, String nome, String dataAttivazione, int numeroPuntiMax, int puntiVip, int puntiSpesa, double importoSpesa, CatalogoPremi catalogoPremi) {
         if (idAzienda < 1)
             throw new IllegalArgumentException("Id not correct");
-        return this.getDbms().addProgrammaAzienda(idAzienda, creaProgrammaPunti(nome, dataAttivazione, numeroPuntiMax, puntiVip, puntiSpesa, importoSpesa));
+        return this.getDbms().addProgrammaAzienda(idAzienda, creaProgrammaPunti(nome, dataAttivazione, numeroPuntiMax, puntiVip, puntiSpesa, importoSpesa, catalogoPremi));
     }
 
     /**
@@ -82,10 +83,10 @@ public class HandlerProgrammaFedelta {
      * @param importoSpesa    amount to spend to get points.
      * @return <code>true</code> if the program was added, <code>false</code> otherwise.
      */
-    public boolean aggiungiProgrammaLivelli(int idAzienda, String nome, String dataAttivazione, int massimoLivelli, int livelloVip, Map<Integer, Integer> map, int puntiSpesa, double importoSpesa) {
+    public boolean aggiungiProgrammaLivelli(int idAzienda, String nome, String dataAttivazione, int massimoLivelli, int livelloVip, Map<Integer, Integer> map, int puntiSpesa, double importoSpesa, CatalogoPremi catalogoPremi) {
         if (idAzienda < 1)
             throw new IllegalArgumentException("Id not correct");
-        ProgrammaLivelli toAdd = creaProgrammaLivelli(nome, dataAttivazione, massimoLivelli, livelloVip, map, puntiSpesa, importoSpesa);
+        ProgrammaLivelli toAdd = creaProgrammaLivelli(nome, dataAttivazione, massimoLivelli, livelloVip, map, puntiSpesa, importoSpesa, catalogoPremi);
         return this.getDbms().addProgrammaAzienda(idAzienda, toAdd);
     }
 
@@ -164,8 +165,8 @@ public class HandlerProgrammaFedelta {
      * @param importoSpesa    amount to spend to get points.
      * @return a new points program.
      */
-    private ProgrammaPunti creaProgrammaPunti(String nome, String dataAttivazione, int numeroPuntiMax, int puntiVip, int puntiSpesa, double importoSpesa) {
-        return new ProgrammaPunti(nome, dataAttivazione, numeroPuntiMax, puntiVip, puntiSpesa, importoSpesa);
+    private ProgrammaPunti creaProgrammaPunti(String nome, String dataAttivazione, int numeroPuntiMax, int puntiVip, int puntiSpesa, double importoSpesa, CatalogoPremi catalogoPremi) {
+        return new ProgrammaPunti(nome, dataAttivazione, numeroPuntiMax, puntiVip, puntiSpesa, importoSpesa, catalogoPremi);
     }
 
     /**
@@ -180,8 +181,8 @@ public class HandlerProgrammaFedelta {
      * @param importoSpesa    amount to spend to get points.
      * @return a new levels program.
      */
-    private ProgrammaLivelli creaProgrammaLivelli(String nome, String dataAttivazione, int massimoLivelli, int livelloVip, Map<Integer, Integer> map, int puntiSpesa, double importoSpesa) {
-        return new ProgrammaLivelli(nome, dataAttivazione, massimoLivelli, livelloVip, map, puntiSpesa, importoSpesa);
+    private ProgrammaLivelli creaProgrammaLivelli(String nome, String dataAttivazione, int massimoLivelli, int livelloVip, Map<Integer, Integer> map, int puntiSpesa, double importoSpesa, CatalogoPremi catalogoPremi) {
+        return new ProgrammaLivelli(nome, dataAttivazione, massimoLivelli, livelloVip, map, puntiSpesa, importoSpesa, catalogoPremi);
     }
 
 }
