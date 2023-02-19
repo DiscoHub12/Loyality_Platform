@@ -261,25 +261,28 @@ public class DBMS {
     public boolean addProgrammaCoalizione(int idAzienda, ProgrammaFedelta programmaFedelta) {
         for (Azienda azienda : this.getAziendeIscritte()) {
             if (azienda.getIdAzienda() == idAzienda) {
-                for (ProgrammaFedelta toScroll : this.getCoalizione().getAziendePerProgramma().keySet()) {
-                    if (!toScroll.equals(programmaFedelta)) {
-                        Set<Azienda> aziende = new HashSet<>();
-                        aziende.add(azienda);
-                        this.getCoalizione().getAziendePerProgramma().put(programmaFedelta, aziende);
-                        return true;
-                    }
-                    for (Map.Entry<ProgrammaFedelta, Set<Azienda>> entry : this.getCoalizione().getAziendePerProgramma().entrySet()) {
-                        for (Azienda azienda1 : entry.getValue()) {
-                            if (!azienda1.equals(azienda)) {
-                                return this.getCoalizione().getAziendePerProgramma().get(programmaFedelta).add(azienda);
-                            }
-                        }
-                    }
-                }
+                return this.coalizione.addAziendaCoalizione(programmaFedelta, azienda);
             }
         }
         return false;
     }
+        /**for (ProgrammaFedelta toScroll : this.getCoalizione().getAziendePerProgramma().keySet()) {
+         if (!toScroll.equals(programmaFedelta)) {
+         Set<Azienda> aziende = new HashSet<>();
+         aziende.add(azienda);
+         this.getCoalizione().getAziendePerProgramma().put(programmaFedelta, aziende);
+         return true;
+         }
+         for (Map.Entry<ProgrammaFedelta, Set<Azienda>> entry : this.getCoalizione().getAziendePerProgramma().entrySet()) {
+         for (Azienda azienda1 : entry.getValue()) {
+         if (!azienda1.equals(azienda)) {
+         return this.getCoalizione().getAziendePerProgramma().get(programmaFedelta).add(azienda);
+         }
+         }
+         }
+         }
+         */
+
 
     //--OPERAZIONI AZIENDA--
 
@@ -533,11 +536,13 @@ public class DBMS {
                         Set<ProgrammaFedelta> programmiAzienda = new HashSet<>();
                         programmiAzienda.add(programmaFedelta);
                         this.getProgrammiAzienda().put(azienda, programmiAzienda);
+                        this.addProgrammaCoalizione(idAzienda, programmaFedelta);
                         return true;
                     } else {
                         for (ProgrammaFedelta programmaFedelta1 : this.getProgrammiAzienda().get(azienda)) {
                             if (programmaFedelta1.equals(programmaFedelta))
                                 return false;
+                            this.addProgrammaCoalizione(idAzienda, programmaFedelta);
                             return this.getProgrammiAzienda().get(azienda).add(programmaFedelta);
                         }
                     }
@@ -545,9 +550,9 @@ public class DBMS {
                     Set<ProgrammaFedelta> programmiAzienda = new HashSet<>();
                     programmiAzienda.add(programmaFedelta);
                     this.getProgrammiAzienda().put(azienda, programmiAzienda);
+                    this.addProgrammaCoalizione(idAzienda, programmaFedelta);
                     return true;
                 }
-                this.addProgrammaCoalizione(idAzienda, programmaFedelta);
             }
         }
         return false;
@@ -573,6 +578,7 @@ public class DBMS {
             if (azienda.getIdAzienda() == idAzienda) {
                 for (ProgrammaFedelta programmaFedelta1 : this.getProgrammiAzienda().get(azienda)) {
                     if (programmaFedelta1.getIdProgramma() == idProgrammaFedelta) {
+                        this.coalizione.deleteAziendaProgramma(idAzienda, idProgrammaFedelta);
                         return this.getProgrammiAzienda().get(azienda).remove(programmaFedelta1);
                     }
 
