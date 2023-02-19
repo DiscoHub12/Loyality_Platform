@@ -1,14 +1,12 @@
 package loyality_platform_model.Interface;
 
 import loyality_platform_model.DBMS.DBMS;
-import loyality_platform_model.Handler.*;
 import loyality_platform_model.Models.*;
-
+import loyality_platform_model.Utils.Utils;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.Set;
-
 import static java.lang.System.exit;
 
 public class UI_Dipendente {
@@ -17,47 +15,25 @@ public class UI_Dipendente {
 
     private final Azienda azienda;
 
-    private final HandlerTessera gestoreTessera = new HandlerTessera();
-
-    private final HandlerCliente gestoreCliente = new HandlerCliente();
-
-    private final HandlerPremi gestorePremi = new HandlerPremi();
-
-    private final HandlerVisite gestoreVisita = new HandlerVisite();
-
-    private final HandlerMessaggi gestoreMessaggi = new HandlerMessaggi();
+    private final Utils utils = new Utils();
 
     public UI_Dipendente(Azienda azienda) {
         this.azienda = azienda;
         this.scanner = new Scanner(System.in);
+        homeDipendente();
     }
 
-    public void homeDipendente() {
+
+    private void homeDipendente() {
         int choice;
         System.out.println("""
                 BENVENUTO
                 Elenco le sezioni disponibili nella Dashboard Dipendente:
-                1. Sezione Clienti
-                2. Logout
-                Inserisci il numero corrispondente
-                   
-                """);
-        choice = scanner.nextInt();
-        switch (choice) {
-            case 1 -> sezioneClienti();
-            case 2 -> sezioneLogout();
-        }
-    }
-
-
-    private void sezioneClienti() {
-        int choice;
-        System.out.println("""
-                Elenco delle sezioni disponibili nella Sezione Clienti:
+                
                 1. Sezione Crea Tessera
                 2. Sezione Identifica Cliente
                 3. Sezione Convalida Acquisto
-                4. Indietro
+                4. Logout
                 Inserisci il numero corrispettivo
                    
                 """);
@@ -69,7 +45,7 @@ public class UI_Dipendente {
                 int tessera;
                 System.out.println("""
                         Il Cliente possiede la tessera ?
-                        1. Sì
+                        1. Si'
                         2. No
                         Inserisci il numero corrispettivo
                            
@@ -81,7 +57,7 @@ public class UI_Dipendente {
                     int newTessera;
                     System.out.println("""
                             Vuoi creare una nuova tessera ?
-                            1. Sì
+                            1. Si'
                             2. No
                             Inserisci il numero corrispettivo
                                
@@ -90,24 +66,21 @@ public class UI_Dipendente {
                     if (newTessera == 1)
                         this.sezioneCreaTessera();
                     if (newTessera == 2) {
-                        System.out.println("Non è possibile accedere alla sezione convalida acquisto.");
-                        this.sezioneClienti();
+                        System.out.println("Non e' possibile accedere alla sezione convalida acquisto.");
+                        this.homeDipendente();
                     }
                     this.sezioneConvalidaAcquisto();
                 }
             }
-            case 4 -> homeDipendente();
+            case 4 -> this.sezioneLogout();
         }
     }
 
     private void sezioneCreaTessera() {
         int choice;
-        System.out.println("""
-                Creazione di una nuova Tessera per un cliente.
-                Inserisci il nome del Cliente :
-                             
-                """);
-        String nome = scanner.nextLine();
+        String nome;
+        System.out.println("Inserisci il nome del Cliente : \n");
+        nome = scanner.nextLine();
         while (Objects.equals(nome, "") || nome == null) {
             System.out.println("Nome non valido. Reinserisci il nome del Cliente : \n");
             nome = scanner.nextLine();
@@ -132,6 +105,7 @@ public class UI_Dipendente {
         }
 
         System.out.println("""
+                
                 1. Conferma Creazione.
                 2. Annulla Creazione.
                                 
@@ -140,10 +114,18 @@ public class UI_Dipendente {
         switch (choice) {
             case 1 -> {
                 Cliente cliente = new Cliente(nome, cognome, telefono, email);
-                DBMS.getInstance().getClientiIscritti().add(cliente); //??
-                this.gestoreTessera.creaTessera(cliente.getIdCliente());
+                int idCliente = 0;
+                for(Cliente cliente1 : DBMS.getInstance().getClientiIscritti()){
+                    if(cliente.equals(cliente1))
+                        idCliente = cliente1.getIdCliente();
+                }
+                if(this.utils.getHandlerTessera().creaTessera(idCliente))
+                    System.out.println("Tessera creata con successo.");
+                else System.out.println("Errore nella creazione della tessera. Riprovare.");
+                this.homeDipendente();
+
             }
-            case 2 -> sezioneClienti();
+            case 2 -> homeDipendente();
         }
     }
 
@@ -162,7 +144,7 @@ public class UI_Dipendente {
             case 1 -> selezioneDatiPersonali();
             case 2 -> selezioneCodiceTessera();
             case 3 -> selezioneTesseraFisica();
-            case 4 -> sezioneClienti();
+            case 4 -> homeDipendente();
         }
     }
 
@@ -181,13 +163,14 @@ public class UI_Dipendente {
             cognome = scanner.nextLine();
         }
         System.out.println("""
+                
                 1. Conferma.
                 2. Annulla.
                                 
                 """);
         choice = scanner.nextInt();
         switch (choice) {
-            case 1 -> sezioneClienteIdentificato(this.gestoreCliente.identificaCliente(nome, cognome).getIdCliente());
+            case 1 -> sezioneClienteIdentificato(this.utils.getHandlerCliente().identificaCliente(nome, cognome).getIdCliente());
             case 2 -> sezioneIdentificaCliente();
         }
     }
@@ -207,7 +190,7 @@ public class UI_Dipendente {
                 """);
         choice = scanner.nextInt();
         switch (choice) {
-            case 1 -> sezioneClienteIdentificato(this.gestoreCliente.identificaClienteCodice(codice).getIdCliente());
+            case 1 -> sezioneClienteIdentificato(this.utils.getHandlerCliente().identificaClienteCodice(codice).getIdCliente());
             case 2 -> sezioneIdentificaCliente();
         }
     }
@@ -225,7 +208,7 @@ public class UI_Dipendente {
         switch (choice) {
             case 1 -> selezioneDatiPersonali();
             case 2 -> selezioneCodiceTessera();
-            case 3 -> sezioneClienti();
+            case 3 -> homeDipendente();
         }
     }
 
@@ -248,7 +231,7 @@ public class UI_Dipendente {
                 System.out.println("Scan non disponibile");
                 idTessera = convalidaAcquistoDati();
             }
-            case 3 -> sezioneClienti();
+            case 3 -> homeDipendente();
         }
         System.out.println("Inserisci l'importo speso dal cliente : ");
         double importo = scanner.nextDouble();
@@ -266,7 +249,7 @@ public class UI_Dipendente {
                 for (Coupon coupon1 : entry.getValue()) {
                     if (coupon1.getIdCoupon() == idCoupon)
                         coupon = coupon1;
-                    this.gestoreCliente.convalidaAcquisto(azienda.getIdAzienda(), idTessera, importo, coupon, gestoreTessera, gestorePremi);
+                    this.utils.getHandlerCliente().convalidaAcquisto(azienda.getIdAzienda(), idTessera, importo, coupon, utils.getHandlerTessera(), utils.getHandlerPremi());
                 }
             }
         }
@@ -286,7 +269,7 @@ public class UI_Dipendente {
             System.out.println("Cognome non valido. Reinserisci il cognome del Cliente : \n");
             cognome = scanner.nextLine();
         }
-        idTessera = this.gestoreCliente.identificaCliente(nome, cognome).getTessera().getIdTessera();
+        idTessera = this.utils.getHandlerCliente().identificaCliente(nome, cognome).getTessera().getIdTessera();
         return idTessera;
     }
 
@@ -309,29 +292,34 @@ public class UI_Dipendente {
             case 2 -> sezioneAggiungiCodiceSconto(idClienteIdentificato);
             case 3 -> sezioneVisite(idClienteIdentificato);
             case 4 -> sezioneMessaggi(idClienteIdentificato);
-            case 5 -> sezioneClienti();
+            case 5 -> homeDipendente();
         }
     }
 
     private void sezioneTessera(int idCliente) {
         int choice;
-        Tessera tessera = this.gestoreCliente.getTesseraCliente(idCliente);
-        System.out.println("SEZIONE TESSERA CLIENTE. " +
-                "\n Informazione relative alla tessera del Cliente: " +
-                "\n" + tessera.toString());
-        System.out.println("""
-                Elenco le possibili operazioni che puoi effettuare :
-                1. Aggiungi punti
-                2. Rimuovi punti
-                3. Ritorna alla Home del Cliente
-                Inserisci il numero corrispondente
-                                
-                """);
-        choice = scanner.nextInt();
-        switch (choice) {
-            case 1 -> selezioneAggiungiPunti(tessera);
-            case 2 -> selezioneRimuoviPunti(tessera);
-            case 3 -> sezioneClienteIdentificato(idCliente);
+        Tessera tessera = this.utils.getHandlerCliente().getTesseraCliente(idCliente);
+        if (tessera == null) {
+            System.out.println("Il cliente non possiede la tessera.");
+            this.sezioneClienteIdentificato(idCliente);
+        } else {
+            System.out.println("SEZIONE TESSERA CLIENTE. " +
+                    "\n Informazione relative alla tessera del Cliente: " +
+                    "\n" + tessera);
+            System.out.println("""
+                    Elenco le possibili operazioni che puoi effettuare :
+                    1. Aggiungi punti
+                    2. Rimuovi punti
+                    3. Ritorna alla Home del Cliente
+                    Inserisci il numero corrispondente
+                                    
+                    """);
+            choice = scanner.nextInt();
+            switch (choice) {
+                case 1 -> selezioneAggiungiPunti(tessera);
+                case 2 -> selezioneRimuoviPunti(tessera);
+                case 3 -> sezioneClienteIdentificato(idCliente);
+            }
         }
     }
 
@@ -350,7 +338,13 @@ public class UI_Dipendente {
                 """);
         choice = scanner.nextInt();
         switch (choice) {
-            case 1 -> this.gestoreTessera.addPuntiManuale(punti, tessera.getIdTessera());
+            case 1 -> {
+                if(this.utils.getHandlerTessera().addPuntiManuale(punti, tessera.getIdTessera())){
+                    System.out.println("Punti aggiunti con successo.");
+                    this.utils.getHandlerMessaggi().inviaSMS(tessera.getIdCliente(), "Ti sono stati aggiunti dei punti, controllare il profilo.");
+                } else System.out.println("Punti non aggiunti. Riprovare.");
+                this.sezioneTessera(tessera.getIdCliente());
+            }
             case 2 -> sezioneTessera(tessera.getIdCliente());
         }
     }
@@ -370,7 +364,13 @@ public class UI_Dipendente {
                 """);
         choice = scanner.nextInt();
         switch (choice) {
-            case 1 -> this.gestoreTessera.removePuntiCliente(punti, tessera.getIdTessera());
+            case 1 -> {
+                if(this.utils.getHandlerTessera().removePuntiCliente(punti, tessera.getIdTessera())){
+                    System.out.println("Punti rimossi con successo.");
+                    this.utils.getHandlerMessaggi().inviaSMS(tessera.getIdCliente(), "Ti sono stati rimossi dei punti, controlla il profilo.");
+                } else System.out.println("Punti non rimossi. Riprovare.");
+                this.sezioneTessera(tessera.getIdCliente());
+            }
             case 2 -> sezioneTessera(tessera.getIdCliente());
         }
     }
@@ -394,7 +394,13 @@ public class UI_Dipendente {
                     """);
             conferma = scanner.nextInt();
             switch (conferma) {
-                case 1 -> this.gestorePremi.aggiungiCouponCliente(idCliente, azienda.getIdAzienda(), choice);
+                case 1 -> {
+                    if(this.utils.getHandlerPremi().aggiungiCouponCliente(idCliente, azienda.getIdAzienda(), choice)){
+                        System.out.println("Coupon aggiunto con successo.");
+                        this.utils.getHandlerMessaggi().inviaSMS(idCliente, "Ti è stato aggiunto un coupon, controllare il profilo");
+                    } else System.out.println("Coupon non aggiunto. Riprovare.");
+                    this.sezioneClienteIdentificato(idCliente);
+                }
                 case 2 -> sezioneClienteIdentificato(idCliente);
             }
         }
@@ -402,7 +408,7 @@ public class UI_Dipendente {
 
     private String printCouponPreconfigurati() {
         StringBuilder tmp = new StringBuilder();
-        Set<Coupon> couponAzienda = this.gestorePremi.getCouponPreconfiguratiAzienda(azienda.getIdAzienda());
+        Set<Coupon> couponAzienda = this.utils.getHandlerPremi().getCouponPreconfiguratiAzienda(azienda.getIdAzienda());
         if (couponAzienda == null) {
             tmp.append(" ");
         }
@@ -419,7 +425,18 @@ public class UI_Dipendente {
                 "\n" + printVisiteCliente(idCliente));
         if (printVisiteCliente(idCliente).equals(" ")) {
             System.out.println("Non sono presenti visite.");
-            sezioneClienteIdentificato(idCliente); //??
+            System.out.println("""
+                    Desideri aggiungere una visita :
+                    1. Conferma
+                    2. Annulla
+                    Inserisci il numero corrispondente
+                                    
+                    """);
+            int choice1 = scanner.nextInt();
+            switch (choice1){
+                case 1 -> this.selezioneAggiungiVisita(idCliente);
+                case 2 -> sezioneClienteIdentificato(idCliente);
+            }
         } else {
             System.out.println("""
                     Elenco le possibili operazioni che puoi effettuare :
@@ -440,7 +457,7 @@ public class UI_Dipendente {
 
     private String printVisiteCliente(int idCliente) {
         StringBuilder tmp = new StringBuilder();
-        Set<Visita> visite = this.gestoreCliente.getVisiteCliente(idCliente);
+        Set<Visita> visite = this.utils.getHandlerCliente().getVisiteCliente(idCliente);
         if (visite == null) {
             tmp.append(" ");
         }
@@ -475,14 +492,15 @@ public class UI_Dipendente {
         switch (choice) {
             case 1 -> {
                 visita = new Visita(luogo, data);
-                for (Visita toScroll : this.gestoreCliente.getVisiteCliente(idCliente)) {
+                for (Visita toScroll : this.utils.getHandlerCliente().getVisiteCliente(idCliente)) {
                     if (toScroll.equals(visita)) {
                         System.out.println("Impossibile aggiungere la visita, visita già presente.");
                         sezioneVisite(idCliente);
                     } else {
-                        this.gestoreVisita.aggiungiVisita(idCliente, data, luogo);
-                        this.gestoreMessaggi.inviaSMS(idCliente, "Hai una nuova visita.");
+                        this.utils.getHandlerVisite().aggiungiVisita(idCliente, data, luogo);
+                        this.utils.getHandlerMessaggi().inviaSMS(idCliente, "Hai una nuova visita.");
                         System.out.println("Visita aggiunta con successo.");
+                        this.sezioneVisite(idCliente);
                     }
                 }
             }
@@ -496,7 +514,7 @@ public class UI_Dipendente {
         idVisita = scanner.nextInt();
         System.out.println(
                 "Informazione relative alla visita selezionata : " +
-                        "\n" + this.gestoreVisita.getDetailsVisita(idCliente, idVisita));
+                        "\n" + this.utils.getHandlerVisite().getDetailsVisita(idCliente, idVisita));
         operazioniVisita(idCliente, idVisita);
     }
 
@@ -528,10 +546,10 @@ public class UI_Dipendente {
         choice = scanner.nextInt();
         switch (choice) {
             case 1 -> {
-                this.gestoreVisita.rimuoviVisita(idCliente, idVisita);
-                //Caso d'uso vede visite ?
-                this.gestoreMessaggi.inviaSMS(idCliente, "Ti è stata rimossa una visita, controllare il profilo.");
+                this.utils.getHandlerVisite().rimuoviVisita(idCliente, idVisita);
+                this.utils.getHandlerMessaggi().inviaSMS(idCliente, "Ti è stata rimossa una visita, controllare il profilo.");
                 System.out.println("Visita rimossa correttamente.");
+                this.sezioneVisite(idCliente);
             }
             case 2 -> operazioniVisita(idCliente, idVisita);
         }
@@ -540,7 +558,7 @@ public class UI_Dipendente {
     private void selezioneModificaVisita(int idVisita, int idCliente) {
         int choice1, choice2, conferma;
         Visita toChange = null;
-        for (Visita visita : this.gestoreCliente.getVisiteCliente(idCliente)) {
+        for (Visita visita : this.utils.getHandlerCliente().getVisiteCliente(idCliente)) {
             if (visita.getIdVisita() == idVisita)
                 toChange = visita;
         }
@@ -611,15 +629,16 @@ public class UI_Dipendente {
         switch (conferma) {
             case 1 -> {
                 Visita newVisita = new Visita(newLuogo, newDate);
-                for (Visita visita : this.gestoreCliente.getVisiteCliente(idCliente)) {
+                for (Visita visita : this.utils.getHandlerCliente().getVisiteCliente(idCliente)) {
                     if (visita.equals(newVisita)) {
                         System.out.println("Modifica non effettuata, visita già presente con queste informazioni");
                         operazioniVisita(idCliente, idVisita);
                     }
                 }
-                this.gestoreVisita.modificaVisita(idCliente, idVisita, newDate, newLuogo, completata);
-                this.gestoreMessaggi.inviaSMS(idCliente, "Potrebbe essere stata modificata una visita, controlla il proflo.");
+                this.utils.getHandlerVisite().modificaVisita(idCliente, idVisita, newDate, newLuogo, completata);
+                this.utils.getHandlerMessaggi().inviaSMS(idCliente, "Potrebbe essere stata modificata una visita, controlla il proflo.");
                 System.out.println("Visita modificata con successo.");
+                this.sezioneVisite(idCliente);
             }
             case 2 -> operazioniVisita(idCliente, idVisita);
         }
@@ -630,7 +649,7 @@ public class UI_Dipendente {
         int choice;
         System.out.println(
                 "Elenco degli SMS del Cliente : " +
-                        "\n" + this.gestoreCliente.getSMSCliente(idCliente));
+                        "\n" + this.utils.getHandlerCliente().getSMSCliente(idCliente));
         System.out.println("""
                 Vuoi inviare un SMS :
                 1. Conferma
@@ -669,7 +688,10 @@ public class UI_Dipendente {
                 """);
         conferma = scanner.nextInt();
         switch (conferma) {
-            case 1 -> this.gestoreMessaggi.inviaSMS(idCliente, testo);
+            case 1 -> {
+                this.utils.getHandlerMessaggi().inviaSMS(idCliente, testo);
+                this.sezioneMessaggi(idCliente);
+            }
             case 2 -> sezioneMessaggi(idCliente);
         }
     }
@@ -677,7 +699,7 @@ public class UI_Dipendente {
     private String selezioneMessaggioPreconfigurato() {
         int choice;
         String testo = "";
-        Set<SMS> SMSpreConfigurati = this.gestoreMessaggi.getSMSPreconfigurati(azienda.getIdAzienda()); //??
+        Set<SMS> SMSpreConfigurati = this.utils.getHandlerMessaggi().getSMSPreconfigurati(azienda.getIdAzienda()); //??
         System.out.println(
                 "Elenco di SMS preconfigurati : " +
                         "\n" + SMSpreConfigurati.toString());
