@@ -1,7 +1,8 @@
 package loyality_platform_model.Interface;
 
-import loyality_platform_model.Handler.*;
+
 import loyality_platform_model.Models.*;
+import loyality_platform_model.Utils.Utils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -18,30 +19,37 @@ import static java.lang.System.exit;
  */
 public class UI_Titolare {
 
+    /**
+     *
+     */
     private final Scanner sc;
-    private final GestorePuntoVendita titolare;
+
+
+    /**
+     *
+     */
     private final Azienda azienda;
-    private final HandlerAzienda gestoreAzienda = new HandlerAzienda();
-    private final HandlerCliente gestoreCliente = new HandlerCliente();
 
-    private final HandlerMessaggi gestoreMessaggi = new HandlerMessaggi();
-    private final HandlerPremi gestorePremi = new HandlerPremi();
-    private final HandlerProgrammaFedelta gestoreProgrammi = new HandlerProgrammaFedelta();
-
-    private final HandlerVisite gestoreVisite = new HandlerVisite();
-
+    /**
+     *
+     */
     private final Coalizione coalizione;
+
+    /**
+     *
+     */
+    private final Utils gestori;
+
 
     /**
      * Constructor that create an Interface prototype
      * for the Backoffice (Owner)
      *
-     * @param titolare the Owner (GestorePuntoVendita)
      */
-    public UI_Titolare(Azienda azienda, GestorePuntoVendita titolare, Coalizione coalizione) {
+    public UI_Titolare(Azienda azienda, Coalizione coalizione) {
         this.azienda = azienda;
-        this.titolare = titolare;
         this.coalizione = coalizione;
+        this.gestori = new Utils();
         this.sc = new Scanner(System.in);
     }
 
@@ -100,7 +108,7 @@ public class UI_Titolare {
                 Dettagli del tuo Spazio Fedeltà :
                                 
                 """);
-        SpazioFedelta spazioFedelta = this.gestoreAzienda.getSpazioFedeltaAzienda(this.azienda.getIdAzienda());
+        SpazioFedelta spazioFedelta = this.gestori.getHandlerAzienda().getSpazioFedeltaAzienda(this.azienda.getIdAzienda());
         System.out.println(spazioFedelta.toString());
         System.out.println("""
                 Elenco le attività disponibili nella sezione Spazio Fedeltà:
@@ -127,7 +135,7 @@ public class UI_Titolare {
                 Elenco tutti i Programmi Fedeltà attivi:
                                 
                 """);
-        Set<ProgrammaFedelta> programmaFedeltas = this.gestoreAzienda.getProgrammiFedeltaAzienda(this.azienda.getIdAzienda());
+        Set<ProgrammaFedelta> programmaFedeltas = this.gestori.getHandlerAzienda().getProgrammiFedeltaAzienda(this.azienda.getIdAzienda());
         if (programmaFedeltas != null) {
             for (ProgrammaFedelta programmaFedelta : programmaFedeltas) {
                 System.out.println("Id Programma : " + programmaFedelta.getIdProgramma() + "Nome Programma : " + programmaFedelta.getNome());
@@ -157,13 +165,14 @@ public class UI_Titolare {
         int choice;
         System.out.println("Inserisci l'id del Programma Fedeltà per vederne i dettagli : \n");
         idProgramma = sc.nextInt();
-        ProgrammaFedelta programmaFedelta = this.gestoreProgrammi.getProgrammaFedeltaById(this.azienda.getIdAzienda(), idProgramma);
+        ProgrammaFedelta programmaFedelta = this.gestori.getHandlerProgrammaFedelta().getProgrammaFedeltaById(this.azienda.getIdAzienda(), idProgramma);
         System.out.println("Ecco i dettagli del Programma Fedeltà : \n " + programmaFedelta.toString());
         System.out.println("""
                 Elenco le attività disponibili:
                 1. Aggiungi Catalogo Premi
-                2. Modifica Programma Fedeltà
-                3. Ritorna alla home
+                2. Controlla Catalogo Premi
+                3. Modifica Programma Fedeltà
+                4. Ritorna alla home
                 Inserisci il numero corrispettivo
                                 
                 """);
@@ -189,15 +198,35 @@ public class UI_Titolare {
                 }
             }
             case 2 -> {
+                if(programmaFedelta.getCatalogoPremi() == null){
+                    System.out.println("""
+                            Questo programma fedeltà non ha ancora il Catalogo Premi.
+                            Seleziona : 
+                            1. Aggiungi un Catalogo Premi a questo Programma Fedeltà. 
+                            2. Ritorna alla schermata Principale. 
+                            
+                            """);
+                    int choice1 = sc.nextInt();
+                    switch (choice1){
+                        case 1 -> {
+                            if (programmaFedelta.getTipoProgramma() == Tipo.PROGRAMMAPUNTI) {
+                                aggiungiCatalogoPremiPPunti(programmaFedelta);
+                            } else {
+                                aggiungiCatalogoPremiPLivelli(programmaFedelta);
+                            }
+                        }
+                        case 2 ->sezioneProgrammaFedelta();
+                    }
+                } else controllaCatalogoPremi(programmaFedelta.getCatalogoPremi(), programmaFedelta);
+            }
+            case 3 -> {
                 if (programmaFedelta.getTipoProgramma() == Tipo.PROGRAMMAPUNTI) {
                     modificaProgrammaAPunti(programmaFedelta.getProgrammaPunti());
                 } else {
                     modificaProgrammaALivelli(programmaFedelta.getProgrammaLivelli());
                 }
             }
-            case 3 -> {
-
-            }
+            case 4 -> sezioneBackOffice();
         }
     }
 
@@ -206,7 +235,7 @@ public class UI_Titolare {
     //SEZIONE 1
     public void sezioneCatalogoPremi() {
         int choice;
-        Set<CatalogoPremi> catalogoPremi = this.gestoreAzienda.getCatalogoPremiAzienda(this.azienda.getIdAzienda());
+        Set<CatalogoPremi> catalogoPremi = this.gestori.getHandlerAzienda().getCatalogoPremiAzienda(this.azienda.getIdAzienda());
         System.out.println("""
                 SEZIONE CATALOGO PREMI
                 Elenco tutti i Cataloghi Premi attualmente disponibili :
@@ -220,13 +249,99 @@ public class UI_Titolare {
         System.out.println("""
                 Elenco le attività disponibili nella sezione Catalogo Premi :
                 1. Aggiungi Catalogo Premi
-                2. Ritorna alla Home.
+                2. Controlla Catalogo Premi
+                3. Ritorna alla Home.
                                 
                 """);
         choice = sc.nextInt();
         switch (choice) {
             case 1 -> aggiungiCatalogoPremiGenerale();
-            case 2 -> sezioneBackOffice();
+            case 2 -> {
+                System.out.println("Inserisci l'id del Catalogo Premi che vuoi controllare : \n");
+                int idCatalogo = sc.nextInt();
+                assert catalogoPremi != null;
+                for(CatalogoPremi catalogoPremi1 : catalogoPremi){
+                    if(catalogoPremi1.getIdCatalogoPremi() == idCatalogo){
+                        controllaCatalogoPremi(catalogoPremi1, null);
+                    }
+                }
+            }
+            case 3 -> sezioneBackOffice();
+        }
+    }
+
+    public void controllaCatalogoPremi(CatalogoPremi catalogoPremi, ProgrammaFedelta programmaFedelta){
+        int choice;
+        System.out.println("Ecco i dettagli del Catalogo Premi : \n" + catalogoPremi.toString());
+        System.out.println("""
+                Elenco le attività disponibili :
+                1. Modifica Catalogo Premi
+                2. Rimuovi Catalogo Premi
+                
+                """);
+        choice = sc.nextInt();
+        switch (choice) {
+            case 1 -> {
+                System.out.println("""
+                        Elenco le possibili modifiche :
+                        1. Modifica premi
+                        2. Aggiungi Premio
+                        3. Rimuovi Premio.
+                        
+                        """);
+                int choice1 = sc.nextInt();
+                switch (choice1){
+                    case 1 -> System.out.println("Modifica non disponibile.");
+                    case 2 -> {
+                        System.out.println("Inserisci il nome per il premio : \n");
+                        String nome = sc.nextLine();
+                        int numero;
+                        int tipo;
+                        if(programmaFedelta.getTipoProgramma() == Tipo.PROGRAMMAPUNTI){
+                            tipo = 1;
+                            System.out.println("Inserisci il numero di punti per riscattare il premio : \n");
+                            numero = sc.nextInt();
+                        }else {
+                            tipo = 0;
+                            System.out.println("Inserisci il numero di livelli per riscattare il premio : \n");
+                            numero = sc.nextInt();
+                        }
+                        System.out.println("Sei sicuro di aggiungere il Premio al Catalogo Premi ? (SI-NO)\n");
+                        String choice2 = sc.nextLine();
+                        if(Objects.equals(choice2, "SI") || Objects.equals(choice2, "si")){
+                            if(tipo == 1){
+
+                            }else{
+                                //Todo implementare
+                            }
+                        }else {
+                            System.out.println("Ritorno alla schermata precedente.\n");
+                            controllaCatalogoPremi(catalogoPremi, programmaFedelta);
+                        }
+                    }
+                    case 3 -> {
+                        System.out.println("Inserisci il nome del Premio che vuoi rimuovere tra quelli elencati : ");
+                        String nome = sc.nextLine();
+                        for(Premio premio : catalogoPremi.getPremiCatalogo()){
+                            if(Objects.equals(premio.getNome(), nome)){
+                                //Todo implementare
+                            }
+                        }
+                    }
+                }
+            }
+            case 2 -> {
+                System.out.println("""
+                        Sei sicuro di voler rimuovere il Catalogo Premi ? (SI-NO)
+                        
+                        """);
+                String choice3 = sc.nextLine();
+                if(Objects.equals(choice3, "SI") || Objects.equals(choice3, "si")){
+                    if(programmaFedelta == null){
+                        this.gestori.getHandlerPremi().deleteCatalogoPremi(this.azienda.getIdAzienda(), catalogoPremi.getIdCatalogoPremi());
+                    }else this.gestori.getHandlerPremi().deleteCatalogoProgramma(this.azienda.getIdAzienda(), programmaFedelta.getIdProgramma(), catalogoPremi.getIdCatalogoPremi());
+                }
+            }
         }
     }
 
@@ -255,7 +370,7 @@ public class UI_Titolare {
     //SEZIONE 2
     public void sezioneConfigurazioneCoupon() {
         int choice;
-        Set<Coupon> couponAzienda = this.gestorePremi.getCouponPreconfiguratiAzienda(this.azienda.getIdAzienda());
+        Set<Coupon> couponAzienda = this.gestori.getHandlerPremi().getCouponPreconfiguratiAzienda(this.azienda.getIdAzienda());
         System.out.println("""
                 SEZIONE CONFIGURAZIONE COUPON.
                 Elenco tutti i Coupon creati precedentemente
@@ -285,7 +400,7 @@ public class UI_Titolare {
     //SEZIONE 3
     public void sezioneConfigurazioneSMS() {
         int choice;
-        Set<SMS> smsPreconfigurati = this.gestoreMessaggi.getSMSPreconfigurati(this.azienda.getIdAzienda());
+        Set<SMS> smsPreconfigurati = this.gestori.getHandlerMessaggi().getSMSPreconfigurati(this.azienda.getIdAzienda());
         System.out.println("""
                 SEZIONE CONFIGURAZIONI SMS
                 Elenco tutti i tuoi SMS Preconfigurati creati precedentemente :
@@ -297,7 +412,7 @@ public class UI_Titolare {
             }
         }else System.out.println("Non hai ancora nessun messaggio preconfigurato.");
         System.out.println("""
-                Elenco le possibili operazioni : 
+                Elenco le possibili operazioni :
                 1. Aggiungi SMS Preconfigurato
                 2. Seleziona SMS Preconfigurato.
                 3. Ritorna alla home.
@@ -322,7 +437,7 @@ public class UI_Titolare {
             System.out.println("Id non disponibile. Reinserisci l'id dell'SMS preconfigurato : \n");
             idSMS = sc.nextInt();
         }
-        ConfigurazioneSMS sms = this.gestoreMessaggi.getSMSPreconfigurato(this.azienda.getIdAzienda(), idSMS);
+        ConfigurazioneSMS sms = this.gestori.getHandlerMessaggi().getSMSPreconfigurato(this.azienda.getIdAzienda(), idSMS);
         if(sms != null){
             System.out.println("""
                     Elenco le possibili operazioni :
@@ -371,7 +486,7 @@ public class UI_Titolare {
                     System.out.println("Sei Sicuro di voler eliminare l'SMS Preconfigurato ? (SI-NO)");
                     String choice1 = sc.nextLine();
                     if (Objects.equals(choice1, "SI") || Objects.equals(choice1, "si")) {
-                        //Todo implementare, manca il metodo su HandlerMessaggi
+                        //Todo implementare
                     } else {
                         System.out.println("Ritorno alla schermata principale.");
                         sezioneCouponPreconfigurato();
@@ -401,10 +516,10 @@ public class UI_Titolare {
             System.out.println("Id non valido. Reinserisci l'id del Coupon : \n");
             idCoupon = sc.nextInt();
         }
-        Coupon coupon = this.gestorePremi.getCouponPreconfiguratoAzienda(this.azienda.getIdAzienda(), idCoupon);
+        Coupon coupon = this.gestori.getHandlerPremi().getCouponPreconfiguratoAzienda(this.azienda.getIdAzienda(), idCoupon);
         if (coupon != null) {
             System.out.println("\nEcco le informazioni del Coupon selezionato : " +
-                    "\n" + coupon.toString());
+                    "\n" + coupon);
             System.out.println("""
                     Elenco le possibili operazioni :
                     1. Modifica Coupon Preconfigurato
@@ -434,7 +549,7 @@ public class UI_Titolare {
                     choice = sc.nextInt();
                     switch (choice) {
                         case 1 -> {
-                            this.gestorePremi.modificaCouponPreconfigurato(this.azienda.getIdAzienda(), coupon.getIdCoupon(), valoreSconto, dataScadenza);
+                            this.gestori.getHandlerPremi().modificaCouponPreconfigurato(this.azienda.getIdAzienda(), coupon.getIdCoupon(), valoreSconto, dataScadenza);
                             System.out.println("Coupon Preconfigurato modificato correttamente. Ritorno alla schermata precedente.");
                             sezioneConfigurazioneCoupon();
                         }
@@ -450,7 +565,7 @@ public class UI_Titolare {
                     System.out.println("Sei Sicuro di voler eliminare il Coupon ? (SI-NO)");
                     String choice1 = sc.nextLine();
                     if (Objects.equals(choice1, "SI") || Objects.equals(choice1, "si")) {
-                        this.gestorePremi.deleteCouponPreconfigurato(this.azienda.getIdAzienda(), coupon.getIdCoupon());
+                        this.gestori.getHandlerPremi().deleteCouponPreconfigurato(this.azienda.getIdAzienda(), coupon.getIdCoupon());
                     } else {
                         System.out.println("Ritorno alla schermata principale.");
                         sezioneCouponPreconfigurato();
@@ -459,9 +574,9 @@ public class UI_Titolare {
             }
         } else {
             System.out.println("""
-                    Coupon non trovato. Inserisci : 
-                    1. Reinserisci l'id 
-                    2. Ritorna alla schermata precedente. 
+                    Coupon non trovato. Inserisci :
+                    1. Reinserisci l'id
+                    2. Ritorna alla schermata precedente.
                                         
                     """);
             choice = sc.nextInt();
@@ -476,7 +591,7 @@ public class UI_Titolare {
     //SEZIONE 1
     public void sezioneUtenti() {
         int choice;
-        Set<Dipendente> dipendenti = this.gestoreAzienda.getDipendentiAzienda(this.azienda.getIdAzienda());
+        Set<Dipendente> dipendenti = this.gestori.getHandlerAzienda().getDipendentiAzienda(this.azienda.getIdAzienda());
         System.out.println("""
                 SEZIONE ACCOUNT DIPENDENTI
                 Elenco gli Account di tutti i Dipendenti della tua piattaforma:
@@ -514,7 +629,7 @@ public class UI_Titolare {
             System.out.println("Id non valido. Reinserisci l'id del Dipendente : \n");
             idDipendente = sc.nextInt();
         }
-        Dipendente identificato = this.gestoreAzienda.getDipendenteById(this.azienda.getIdAzienda(), idDipendente);
+        Dipendente identificato = this.gestori.getHandlerAzienda().getDipendenteById(this.azienda.getIdAzienda(), idDipendente);
         if (identificato != null) {
             System.out.println("\nEcco le informazioni del Dipendente selezionato : " +
                     "\n" + identificato);
@@ -542,7 +657,7 @@ public class UI_Titolare {
                             """);
                     choice = sc.nextInt();
                     if (choice == 1) {
-                        this.gestoreAzienda.rimuoviDipendente(this.azienda.getIdAzienda(), idDipendente);
+                        this.gestori.getHandlerAzienda().rimuoviDipendente(this.azienda.getIdAzienda(), idDipendente);
                         System.out.println("Account rimosso con successo.\nRitorno alla schermata principale.");
                         sezioneUtenti();
                     } else sezioneDipendente();
@@ -574,7 +689,7 @@ public class UI_Titolare {
                             """);
                     choice = sc.nextInt();
                     if (choice == 1) {
-                        this.gestoreAzienda.modificaDipendente(this.azienda.getIdAzienda(), idDipendente, email, restr);
+                        this.gestori.getHandlerAzienda().modificaDipendente(this.azienda.getIdAzienda(), idDipendente, email, restr);
                         System.out.println("""
                                 Modifiche avvenute con successo.
                                 Ritorno alla schermata precedente con la lista aggiornata.
@@ -594,7 +709,7 @@ public class UI_Titolare {
     //SEZIONE 1
     public void sezioneClientiIscritti() {
         int choice;
-        Set<Cliente> clientiIscritti = this.gestoreAzienda.getClientiAzienda(this.azienda.getIdAzienda(), this.coalizione);
+        Set<Cliente> clientiIscritti = this.gestori.getHandlerAzienda().getClientiAzienda(this.azienda.getIdAzienda(), this.coalizione);
         System.out.println("\nEcco la lista di tutti i tuoi clienti: ");
         if (clientiIscritti == null) {
             System.out.println("Clienti non disponibili.");
@@ -625,7 +740,7 @@ public class UI_Titolare {
             System.out.println("\nId non valid. Reinserisci l'id del Cliente da identificare : \n");
             choice = sc.nextInt();
         }
-        Cliente identificato = this.gestoreCliente.identificaClienteCodice(choice);
+        Cliente identificato = this.gestori.getHandlerCliente().identificaClienteCodice(choice);
         if (identificato != null) {
             System.out.println("\nEcco le informazioni del cliente selezionato : " +
                     "\n" + identificato);
@@ -654,12 +769,12 @@ public class UI_Titolare {
     //SEZIONE 1
     public void sezioneCoalizioneAzienda(){
         System.out.println("""
-                SEZIONE COALIZIONE AZIENDA 
-                In questa sezione, verranno mostrati i tuoi Programmi Fedeltà 
-                e le corrispettive Aziende che ne sono iscritte. 
+                SEZIONE COALIZIONE AZIENDA
+                In questa sezione, verranno mostrati i tuoi Programmi Fedeltà
+                e le corrispettive Aziende che ne sono iscritte.
                 
                 """);
-        for(ProgrammaFedelta programmaFedelta : this.gestoreAzienda.getProgrammiFedeltaAzienda(this.azienda.getIdAzienda())){
+        for(ProgrammaFedelta programmaFedelta : this.gestori.getHandlerAzienda().getProgrammiFedeltaAzienda(this.azienda.getIdAzienda())){
             System.out.println("Programma Fedeltà : " +
                     "Id Programma : " + programmaFedelta.getIdProgramma() +
                     "Nome Programma : " + programmaFedelta.getNome() +
@@ -697,7 +812,7 @@ public class UI_Titolare {
         String nome;
         String indirizzo;
         String numeroTelefono;
-        String email = "";
+        String email;
         System.out.println("\nInserisci il nuovo nome per lo Spazio Fedeltà o premi invio per mantenere: \n");
         nome = sc.nextLine();
         if (Objects.equals(nome, "") || nome == null)
@@ -724,7 +839,7 @@ public class UI_Titolare {
         choice = sc.nextInt();
         switch (choice) {
             case 1 -> {
-                this.gestoreAzienda.modificaSpazioFedelta(this.azienda.getSpazioFedelta().getIdSpazioFedelta(), nome, indirizzo, numeroTelefono, email);
+                this.gestori.getHandlerAzienda().modificaSpazioFedelta(this.azienda.getSpazioFedelta().getIdSpazioFedelta(), nome, indirizzo, numeroTelefono, email);
                 System.out.println("Modifiche avvenute con successo.\nRitorno alla home");
                 homeBackoffice();
             }
@@ -782,7 +897,7 @@ public class UI_Titolare {
         choice = sc.nextInt();
         switch (choice) {
             case 1 -> {
-                this.gestoreAzienda.aggiungiDipendente(this.azienda.getIdAzienda(), nome, cognome, email, restr);
+                this.gestori.getHandlerAzienda().aggiungiDipendente(this.azienda.getIdAzienda(), nome, cognome, email, restr);
                 System.out.println("\nAccount per il dipendente creato correttamente.\nRitorno alla schermata principale.");
                 sezioneUtenti();
             }
@@ -868,8 +983,8 @@ public class UI_Titolare {
         Date date = Calendar.getInstance().getTime();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String dataAttivazione = dateFormat.format(date);
-        this.gestoreProgrammi.aggiungiProgrammaPunti(this.azienda.getIdAzienda(), nomeProgramma, dataAttivazione, numeroMassimoPunti, puntiPerVip, numeroPunti, importoDaSpendere, null);
-        //Todo aggiungere il gestore che aggiunge i premi al Programma appena creato.
+        CatalogoPremi catalogoPremi = this.gestori.getHandlerPremi().creaCatalogo(premiCatalogo);
+        this.gestori.getHandlerProgrammaFedelta().aggiungiProgrammaPunti(this.azienda.getIdAzienda(), nomeProgramma, dataAttivazione, numeroMassimoPunti, puntiPerVip, numeroPunti, importoDaSpendere, catalogoPremi);
         System.out.println("""
                 Programma Fedeltà aggiunto correttamente e in corso fin da subito.
                 Ritorno alla home principale.
@@ -933,8 +1048,8 @@ public class UI_Titolare {
         Date date = Calendar.getInstance().getTime();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String dataAttivazione = dateFormat.format(date);
-        this.gestoreProgrammi.aggiungiProgrammaLivelli(this.azienda.getIdAzienda(), nomeProgramma, dataAttivazione, livelliMassimi, livelloVIP, policyLivelli, numeroPunti, importoDaSpendere, null);
-        //Todo aggiungere il gestore che aggiunge i premi al Programma appena creato.
+        CatalogoPremi catalogoPremi = this.gestori.getHandlerPremi().creaCatalogo(premiCatalogo);
+        this.gestori.getHandlerProgrammaFedelta().aggiungiProgrammaLivelli(this.azienda.getIdAzienda(), nomeProgramma, dataAttivazione, livelliMassimi, livelloVIP, policyLivelli, numeroPunti, importoDaSpendere, catalogoPremi);
         System.out.println("""
                 Programma Fedeltà aggiunto correttamente e in corso fin da subito.
                 Ritorno alla home principale.
@@ -974,7 +1089,7 @@ public class UI_Titolare {
         int choice = sc.nextInt();
         switch (choice) {
             case 1 -> {
-                this.gestoreProgrammi.modificaProgrammaPunti(this.azienda.getIdAzienda(), programmaPunti.getIdProgramma(), nomeUpdated, numeroPuntiMassimi, numeroPuntiVip, numeroPunti, importoDaSpendere);
+                this.gestori.getHandlerProgrammaFedelta().modificaProgrammaPunti(this.azienda.getIdAzienda(), programmaPunti.getIdProgramma(), nomeUpdated, numeroPuntiMassimi, numeroPuntiVip, numeroPunti, importoDaSpendere);
                 System.out.println("Programma modificato correttamente.\nRitorno alla home principale.");
                 sezioneBackOffice();
             }
@@ -1022,7 +1137,7 @@ public class UI_Titolare {
         int choice = sc.nextInt();
         switch (choice) {
             case 1 -> {
-                //Todo implementare
+                this.gestori.getHandlerProgrammaFedelta().modificaProgrammaLivelli(this.azienda.getIdAzienda(), programmaLivelli.getIdProgramma(), nomeUpdated, numeroLivelliMassimi, numeroLivelloVIP, updatedMap, numeroPunti, importoDaSpendere);
                 System.out.println("Programma modificato correttamente.\nRitorno alla home principale.");
                 sezioneBackOffice();
             }
@@ -1067,7 +1182,7 @@ public class UI_Titolare {
         choice = sc.nextInt();
         switch (choice) {
             case 1 -> {
-                this.gestoreProgrammi.rimuoviProgrammaFedelta(this.azienda.getIdAzienda(), idProgramma);
+                this.gestori.getHandlerProgrammaFedelta().rimuoviProgrammaFedelta(this.azienda.getIdAzienda(), idProgramma);
                 System.out.println("\nProgramma Fedeltà rimosso con successo. Ritorno alla schermata precedente.\n");
                 sezioneProgrammiFedelta();
             }
@@ -1104,7 +1219,7 @@ public class UI_Titolare {
         choice = sc.nextInt();
         switch (choice) {
             case 1 -> {
-                this.gestorePremi.aggiungiCouponPreconfigurato(this.azienda.getIdAzienda(), importoCoupon, dataScadenza);
+                this.gestori.getHandlerPremi().aggiungiCouponPreconfigurato(this.azienda.getIdAzienda(), importoCoupon, dataScadenza);
                 System.out.println("\nCoupon creato correttamente. Ritorno alla schermata principale.\n");
                 sezioneConfigurazioneCoupon();
             }
@@ -1116,7 +1231,7 @@ public class UI_Titolare {
     private void  aggiungiSMSPreconfigurato(){
         System.out.println("""
                 Benvenuto nella creazione di un SMS Preconfigurato.,
-                Inserisci il testo del messaggio : 
+                Inserisci il testo del messaggio :
                 
                 """);
         String testoConfigurato = sc.nextLine();
@@ -1193,7 +1308,7 @@ public class UI_Titolare {
             choice = sc.nextInt();
             switch (choice) {
                 case 1 -> {
-                    this.gestorePremi.aggiungiCatalogoPremi(this.azienda.getIdAzienda(), premiCreati);
+                    this.gestori.getHandlerPremi().aggiungiCatalogoPremi(this.azienda.getIdAzienda(), premiCreati);
                     System.out.println("Catalogo Premi Generale aggiunto correttamente.\nRitorno alla home.");
                     sezioneBackOffice();
                 }
@@ -1201,9 +1316,7 @@ public class UI_Titolare {
                     System.out.println("Hai annullato l'operazione.\nRitorno alla home.");
                     sezioneBackOffice();
                 }
-                case 3 -> {
-                    sezioneBackOffice();
-                }
+                case 3 -> sezioneBackOffice();
             }
         }
     }
@@ -1223,7 +1336,7 @@ public class UI_Titolare {
         choice = sc.nextInt();
         switch (choice) {
             case 1 -> {
-                this.gestorePremi.aggiungiCatalogoAProgrammaPunti(this.azienda.getIdAzienda(), programmaFedelta.getIdProgramma(), premiCreati);
+                this.gestori.getHandlerPremi().aggiungiCatalogoAProgrammaPunti(this.azienda.getIdAzienda(), programmaFedelta.getIdProgramma(), premiCreati);
                 System.out.println("Catalogo Premi Generale aggiunto correttamente.\nRitorno alla home.");
                 sezioneBackOffice();
             }
@@ -1231,17 +1344,15 @@ public class UI_Titolare {
                 System.out.println("Hai annullato l'operazione.\nRitorno alla home.");
                 sezioneBackOffice();
             }
-            case 3 -> {
-                sezioneBackOffice();
-            }
+            case 3 -> sezioneBackOffice();
         }
     }
 
     private void aggiungiCatalogoPremiPLivelli(ProgrammaFedelta programmaFedelta) {
         if (programmaFedelta.getCatalogoPremi() != null) {
             System.out.println("""
-                    Il Programma Fedeltà possiede già un Catalogo Premi. 
-                    Per inserire il nuovo Catalogo, questo deve essere rimosso. 
+                    Il Programma Fedeltà possiede già un Catalogo Premi.
+                    Per inserire il nuovo Catalogo, questo deve essere rimosso.
                     Desideri continuare ? (SI-NO)
                                         
                     """);
@@ -1263,7 +1374,7 @@ public class UI_Titolare {
         choice = sc.nextInt();
         switch (choice) {
             case 1 -> {
-                this.gestorePremi.aggiungiCatalogoProgrammaLivelli(this.azienda.getIdAzienda(), programmaFedelta.getIdProgramma(), premiCreati);
+                this.gestori.getHandlerPremi().aggiungiCatalogoProgrammaLivelli(this.azienda.getIdAzienda(), programmaFedelta.getIdProgramma(), premiCreati);
                 System.out.println("Catalogo Premi Generale aggiunto correttamente.\nRitorno alla home.");
                 sezioneBackOffice();
             }
@@ -1271,9 +1382,7 @@ public class UI_Titolare {
                 System.out.println("Hai annullato l'operazione.\nRitorno alla home.");
                 sezioneBackOffice();
             }
-            case 3 -> {
-                sezioneBackOffice();
-            }
+            case 3 -> sezioneBackOffice();
         }
     }
 
@@ -1317,7 +1426,7 @@ public class UI_Titolare {
                     """);
             premi = sc.nextInt();
             if (premi == 1) {
-                Premio premio = null;
+                Premio premio;
                 System.out.println("Inserisci il nome del Premio : \n");
                 String nomePremio = sc.nextLine();
                 System.out.println("Inserisci il numero di livelli per riscattare il premio : \n");
