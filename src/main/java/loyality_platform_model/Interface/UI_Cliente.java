@@ -227,44 +227,60 @@ public class UI_Cliente {
     }
     //SOTTO SEZIONE PREMI (DI CLIENTI)
     public void sezioneCatalogoPremi(){
-        //TODO
-        int choice;
-        System.out.println("\nSEZIONE PREMI." +
-                "\nElenco dei premi riscattati" +
-                "\n"); // this.gestoreCliente.getTesseraCliente(this.cliente.getIdCliente()));
+        int id;
+        int id1;
+        int id2;
+        int id3;
+        Set<Premio> premi=this.gestoreCliente.getPremiCliente(cliente.getIdCliente());
+        Set<ProgrammaFedelta> programmiFedelta=this.gestoreCliente.getTesseraCliente(cliente.getIdCliente()).getProgrammiFedelta();
         System.out.println("""
-                Elenco le attività disponibili nella sezione Premi: 
-                1. Riscatta premio
-                2. Ritorna alla home
-                Inserisci il numero corrispettivo
+                    SEZIONE PREMI
+                    Elenco dei premi riscattati :
+
+                    """);
+        if(premi!=null){
+            for(Premio premio : premi){
+                System.out.println("Id : " + premio.getIdPremio() + "Nome : " +premio.getNome());
+            }
+        }
+
+        System.out.println("""
+                SEZIONE RISCATTA PREMIO
+                Elenco dei programmi fedeltà a cui si è iscritto :
                                 
                 """);
-        choice = sc.nextInt();
-        switch (choice) {
-            case 1 -> sezioneRiscattaPremio();
-            case 2 -> sezioneClienti();
+        if(programmiFedelta != null){
+            for(ProgrammaFedelta programmaFedelta1 : programmiFedelta){
+                System.out.println("Id : " + programmaFedelta1.getIdProgramma() + "Nome : " +programmaFedelta1.getNome());
+            }
         }
-    }
-    //SOTTO SEZIONE RISCATTA PREMI (DI CATALOGO PREMI)
-    public void sezioneRiscattaPremio(){
-        //TODO
-        int choice;
-        System.out.println("\nSEZIONE PREMI." +
-                "\nElenco dei programmi fedeltà a cui è iscritto" +
-                "\n"); // this.gestoreCliente.getTesseraCliente(this.cliente.getIdCliente()));
-        System.out.println("""
-                Elenco le attività disponibili nella sezione Tessera: 
-                1. Dettagli Programma Fedeltà a cui si è iscritto
-                2. Ritorna alla home
-                Inserisci il numero corrispettivo
-                                
-                """);
-        choice = sc.nextInt();
-        switch (choice) {
-            case 1 -> sezioneTessera();
-            case 2 -> sezioneClienti();
+        System.out.println("Inserisci l'id del programma fedeltà su cui vuoi vedere il catalogo premi : ");
+        id=sc.nextInt();
+        Set<Azienda> aziende = DBMS.getInstance().getCoalizione().getAziendeIscritteProgramma(id);
+        for(Azienda azienda1 : aziende){
+            System.out.println(("Id Negozio : " +azienda1.getIdAzienda() + "Nome Azienda : " +azienda1.getSpazioFedelta().getNome()));
         }
+        System.out.println("Inserisci id del negozio su cui vuoi vedere il catalogo premi : ");
+        id1=sc.nextInt();
+        Set<CatalogoPremi> cataloghiPremi= this.gestoreAzienda.getCatalogoPremiAzienda(id1);
+        for(CatalogoPremi catalogoPremi1 : cataloghiPremi){
+            System.out.println(catalogoPremi1.toString());
+        }
+        System.out.println("Inserisci id del catalogo premi che ti interessa : ");
+        id2=sc.nextInt();
+        for(CatalogoPremi catalogoPremi2 : cataloghiPremi){
+            if(catalogoPremi2.getIdCatalogoPremi()==id2){
+                Set<Premio> premi1 = catalogoPremi2.getPremiCatalogo();
+                for(Premio premio1 : premi1){
+                    System.out.println(premio1.toString());
+                }
+            }
+        }
+        System.out.println("Inserisci id del premio che si vuole riscattare : ");
+        id3=sc.nextInt();
+        this.gestorePremi.aggiungiPremioClienteCatalogoProgramma(id1,id,cliente.getIdCliente(),id3);
     }
+
     //SOTTO-SEZIONE LOGOUT
     public void sezioneLogout() {
         int choice;
