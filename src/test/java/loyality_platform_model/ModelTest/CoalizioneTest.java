@@ -134,9 +134,53 @@ public class CoalizioneTest {
         assertTrue(clientiIscrittiProgrammaAzienda.contains(cliente1));
         assertFalse(clientiIscrittiProgrammaAzienda.contains(cliente2));
         assertFalse(clientiIscrittiProgrammaAzienda.contains(cliente3));
+    }
 
+    @Test
+    public void testGetClientiAzienda(){
+        assertTrue(this.dbms.getCoalizione().addProgrammaFedelta(programmaPunti0));
+        assertTrue(this.dbms.getCoalizione().addProgrammaFedelta(programmaPunti1));
+        assertTrue(this.dbms.getCoalizione().addProgrammaFedelta(programmaPunti2));
+        assertTrue(this.dbms.getCoalizione().addProgrammaFedelta(programmaLivelli0));
+        assertTrue(this.dbms.getCoalizione().addProgrammaFedelta(programmaLivelli1));
+        assertTrue(this.dbms.getCoalizione().addProgrammaFedelta(programmaLivelli2));
 
+        assertTrue(this.dbms.getCoalizione().addAziendaCoalizione(programmaPunti0, azienda0));
+        assertFalse(this.dbms.getCoalizione().addAziendaCoalizione(programmaPunti0, azienda0));
+        assertTrue(this.dbms.getCoalizione().addAziendaCoalizione(programmaPunti1, azienda0));
+        assertFalse(this.dbms.getCoalizione().addAziendaCoalizione(programmaPunti1, azienda0));
+        assertTrue(this.dbms.getCoalizione().addAziendaCoalizione(programmaPunti2, azienda0));
+        assertFalse(this.dbms.getCoalizione().addAziendaCoalizione(programmaPunti2, azienda0));
 
+        assertTrue(this.dbms.getCoalizione().addClienteCoalizione(programmaPunti0, cliente0));
+        assertFalse(this.dbms.getCoalizione().addClienteCoalizione(programmaPunti0, cliente0));
+        assertTrue(this.dbms.getCoalizione().addClienteCoalizione(programmaPunti1, cliente0));
+        assertFalse(this.dbms.getCoalizione().addClienteCoalizione(programmaPunti1, cliente0));
+        assertTrue(this.dbms.getCoalizione().addClienteCoalizione(programmaPunti2, cliente0));
+        assertFalse(this.dbms.getCoalizione().addClienteCoalizione(programmaPunti2, cliente0));
+
+        assertTrue(this.dbms.getCoalizione().addClienteCoalizione(programmaPunti0, cliente1));
+        assertFalse(this.dbms.getCoalizione().addClienteCoalizione(programmaPunti0, cliente1));
+        assertTrue(this.dbms.getCoalizione().addClienteCoalizione(programmaPunti1, cliente1));
+        assertFalse(this.dbms.getCoalizione().addClienteCoalizione(programmaPunti1, cliente1));
+        assertTrue(this.dbms.getCoalizione().addClienteCoalizione(programmaPunti2, cliente1));
+        assertFalse(this.dbms.getCoalizione().addClienteCoalizione(programmaPunti2, cliente1));
+
+        assertTrue(this.dbms.getCoalizione().addClienteCoalizione(programmaPunti0, cliente2));
+        assertFalse(this.dbms.getCoalizione().addClienteCoalizione(programmaPunti0, cliente2));
+        assertTrue(this.dbms.getCoalizione().addClienteCoalizione(programmaPunti1, cliente3));
+        assertFalse(this.dbms.getCoalizione().addClienteCoalizione(programmaPunti1, cliente3));
+        assertTrue(this.dbms.getCoalizione().addClienteCoalizione(programmaPunti2, cliente3));
+        assertFalse(this.dbms.getCoalizione().addClienteCoalizione(programmaPunti2, cliente3));
+
+        Set<Cliente> clientiAzienda = this.dbms.getCoalizione().getClientiAzienda(azienda0.getIdAzienda());
+
+        assertNotNull(clientiAzienda);
+
+        assertTrue(clientiAzienda.contains(cliente0));
+        assertTrue(clientiAzienda.contains(cliente1));
+        assertTrue(clientiAzienda.contains(cliente2));
+        assertTrue(clientiAzienda.contains(cliente3));
     }
 
     @Test
