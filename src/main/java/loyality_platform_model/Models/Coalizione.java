@@ -100,41 +100,35 @@ public class Coalizione {
     }
 
     public boolean addClienteCoalizione(ProgrammaFedelta programmaFedelta, Cliente cliente){
-        if(this.clientiIscritti == null || this.clientiIscritti.keySet().isEmpty()){
-            Set<Cliente> clienti = new HashSet<>();
-            clienti.add(cliente);
-            assert  this.clientiIscritti != null;
-            this.clientiIscritti.put(programmaFedelta, clienti);
-            return true;
-        }else if(!this.clientiIscritti.containsKey(programmaFedelta)){
+        if(!this.clientiIscritti.containsKey(programmaFedelta)){
             Set<Cliente> clienti = new HashSet<>();
             clienti.add(cliente);
             this.clientiIscritti.put(programmaFedelta, clienti);
             return true;
-        }else if(!this.clientiIscritti.get(programmaFedelta).isEmpty()){
-            this.clientiIscritti.get(programmaFedelta).add(cliente);
+        }else {
+            Set<Cliente> clientiIscritti = this.clientiIscritti.get(programmaFedelta);
+            if(clientiIscritti.contains(cliente))
+                return false;
+            clientiIscritti.add(cliente);
+            this.clientiIscritti.put(programmaFedelta, clientiIscritti);
             return true;
         }
-        return false;
     }
 
     public boolean addAziendaCoalizione(ProgrammaFedelta programmaFedelta, Azienda azienda){
-        if(this.aziendePerProgramma == null || this.aziendePerProgramma.keySet().isEmpty()){
-            Set<Azienda> aziende = new HashSet<>();
-            aziende.add(azienda);
-            assert this.aziendePerProgramma != null;
-            this.aziendePerProgramma.put(programmaFedelta, aziende);
+        if(!this.aziendePerProgramma.containsKey(programmaFedelta)){
+            Set<Azienda> azienda1 = new HashSet<>();
+            azienda1.add(azienda);
+            this.aziendePerProgramma.put(programmaFedelta, azienda1);
             return true;
-        }else if(!this.aziendePerProgramma.containsKey(programmaFedelta)){
-            Set<Azienda> aziende = new HashSet<>();
-            aziende.add(azienda);
-            this.aziendePerProgramma.put(programmaFedelta, aziende);
-            return true;
-        }else if (!this.aziendePerProgramma.get(programmaFedelta).isEmpty()){
-            this.aziendePerProgramma.get(programmaFedelta).add(azienda);
+        }else {
+            Set<Azienda> aziendeIscritte = this.aziendePerProgramma.get(programmaFedelta);
+            if(aziendeIscritte.contains(azienda))
+                return false;
+            aziendeIscritte.add(azienda);
+            this.aziendePerProgramma.put(programmaFedelta, aziendeIscritte);
             return true;
         }
-        return false;
     }
 
     /**
@@ -159,6 +153,42 @@ public class Coalizione {
     public void updateAziendePerProgramma(Map<ProgrammaFedelta, Set<Azienda>> aziendePerProgramma) {
         Objects.requireNonNull(aziendePerProgramma);
         this.aziendePerProgramma = aziendePerProgramma;
+    }
+
+    public boolean deleteClienteProgramma(int idCliente, int idProgramma){
+        for(ProgrammaFedelta programmaFedelta : this.clientiIscritti.keySet()){
+            if(programmaFedelta.getIdProgramma() == idProgramma){
+                for(Cliente cliente : this.clientiIscritti.get(programmaFedelta)){
+                    if(cliente.getIdCliente() == idCliente){
+                        this.clientiIscritti.get(programmaFedelta).remove(cliente);
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean deleteAziendaProgramma(int idAzienda, int idProgramma){
+        for(ProgrammaFedelta programmaFedelta : this.aziendePerProgramma.keySet()){
+            if(programmaFedelta.getIdProgramma() == idProgramma){
+                for(Azienda azienda : this.aziendePerProgramma.get(programmaFedelta)){
+                    if(azienda.getIdAzienda() == idAzienda){
+                        this.aziendePerProgramma.get(programmaFedelta).remove(azienda);
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean addProgrammaFedelta(ProgrammaFedelta programmaFedelta){
+        if(programmaFedelta == null)
+            return false;
+        this.aziendePerProgramma.put(programmaFedelta, new HashSet<>());
+        this.clientiIscritti.put(programmaFedelta, new HashSet<>());
+        return true;
     }
 
 }
