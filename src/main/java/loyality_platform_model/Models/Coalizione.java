@@ -59,6 +59,20 @@ public class Coalizione {
         return null;
     }
 
+    public Set<Cliente> getClientiAzienda(int idAzienda){
+        Set<Cliente> clienti = new HashSet<>();
+        if(idAzienda <= 0)
+            throw new IllegalArgumentException("Invalid id for the Company.");
+        for(ProgrammaFedelta programmaFedelta : this.aziendePerProgramma.keySet()){
+            for(Azienda azienda : this.aziendePerProgramma.get(programmaFedelta)){
+                if(azienda.getIdAzienda() == idAzienda){
+                    clienti.addAll(this.clientiIscritti.get(programmaFedelta));
+                }
+            }
+        }
+        return clienti;
+    }
+
     /**
      * This method allows you to take all the Customers
      * who are registered in an active Loyalty Program of a
