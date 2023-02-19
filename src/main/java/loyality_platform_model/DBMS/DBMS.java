@@ -182,26 +182,34 @@ public class DBMS {
     }
 
     public boolean addClienteCoalizione(int idCliente, ProgrammaFedelta programmaFedelta) {
-        for (Cliente cliente : this.getClientiIscritti()) {
+        for (Cliente cliente : this.clientiIscritti) {
             if (cliente.getIdCliente() == idCliente) {
-                for (Map.Entry<Azienda, Set<ProgrammaFedelta>> entry : this.getProgrammiAzienda().entrySet()) {
-                    for (ProgrammaFedelta toScroll : entry.getValue()) {
-                        if (toScroll.equals(programmaFedelta)) {
-                            for (ProgrammaFedelta programmaFedelta1 : this.getCoalizione().getClientiIscritti().keySet()) {
-                                if (programmaFedelta.equals(programmaFedelta1)) {
-                                    this.getCoalizione().getClientiIscritti().get(programmaFedelta).add(cliente);
-                                }
-                                Set<Cliente> clienti = new HashSet<>();
-                                clienti.add(cliente);
-                                this.getCoalizione().getClientiIscritti().put(programmaFedelta, clienti);
-                            }
-                            return true;
-                        }
-                    }
-                }
+                return this.coalizione.addClienteCoalizione(programmaFedelta, cliente);
             }
+            return false;
         }
         return false;
+        /**
+         for (Cliente cliente : this.getClientiIscritti()) {
+         if (cliente.getIdCliente() == idCliente) {
+         for (Map.Entry<Azienda, Set<ProgrammaFedelta>> entry : this.getProgrammiAzienda().entrySet()) {
+         for (ProgrammaFedelta toScroll : entry.getValue()) {
+         if (toScroll.equals(programmaFedelta)) {
+         for (ProgrammaFedelta programmaFedelta1 : this.getCoalizione().getClientiIscritti().keySet()) {
+         if (programmaFedelta.equals(programmaFedelta1)) {
+         this.getCoalizione().getClientiIscritti().get(programmaFedelta).add(cliente);
+         }
+         Set<Cliente> clienti = new HashSet<>();
+         clienti.add(cliente);
+         this.getCoalizione().getClientiIscritti().put(programmaFedelta, clienti);
+         }
+         return true;
+         }
+         }
+         }
+         }
+         }
+         */
     }
 
     public boolean deleteClienteCoalizione(int idCliente, ProgrammaFedelta programmaFedelta) {
@@ -216,6 +224,32 @@ public class DBMS {
                                 }
                             }
                         }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean addAziendaCoalizione(int idAzienda, int idProgramma) {
+        for (Azienda azienda : this.aziendeIscritte) {
+            if (azienda.getIdAzienda() == idAzienda) {
+                for (ProgrammaFedelta programmaFedelta : this.coalizione.getAziendePerProgramma().keySet()) {
+                    if (programmaFedelta.getIdProgramma() == idProgramma) {
+                        return this.coalizione.addAziendaCoalizione(programmaFedelta, azienda);
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean deleteAziendaCoalizione(int idAzienda, int idProgramma) {
+        for (ProgrammaFedelta programmaFedelta : this.coalizione.getAziendePerProgramma().keySet()) {
+            if (programmaFedelta.getIdProgramma() == idProgramma) {
+                for (Azienda azienda : this.coalizione.getAziendeIscritteProgramma(programmaFedelta.getIdProgramma())) {
+                    if (azienda.getIdAzienda() == idAzienda) {
+                        return this.coalizione.deleteAziendaProgramma(idAzienda, idProgramma);
                     }
                 }
             }
