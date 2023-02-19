@@ -151,7 +151,8 @@ public class Tessera {
                 "\nId Tessera: "+ idTessera +
                 "\nId Cliente: " + idCliente +
                 "\nProgrammiFedelta: " + toStringProgrammiFedelta() +
-                "\nPunti: " + punti ;
+                "\nPunti: " + punti +
+                "\nLivelli : "+ livelli;
     }
 
     private String toStringProgrammiFedelta() {
