@@ -217,7 +217,6 @@ public class HandlerAzienda {
         Objects.requireNonNull(coalizione);
         if (idAzienda <= 0)
             throw new IllegalArgumentException("Invalid id for the Company");
-        //Todo implementare
-        return null;
+        return coalizione.getClientiAzienda(idAzienda);
     }
 }
