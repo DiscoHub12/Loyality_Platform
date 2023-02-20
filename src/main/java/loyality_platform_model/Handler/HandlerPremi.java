@@ -125,7 +125,7 @@ public class HandlerPremi {
      * @param number          the number of point, if the Prize is for points program, level otherwise.
      * @throws IllegalArgumentException if the idCatalogoPremi is not valid or if not exist.
      */
-    public boolean aggiungiPremio(int idAzienda, int idCatalogoPremi, String nome, boolean isPoints, int number) {
+    public boolean aggiungiPremioCatalogo(int idAzienda, int idCatalogoPremi, String nome, boolean isPoints, int number) {
         boolean response = false;
         if (idAzienda <= 0 || idCatalogoPremi <= 0)
             throw new IllegalArgumentException("Illegal id for the Reward Catalog.");
@@ -140,6 +140,31 @@ public class HandlerPremi {
             }
         }
         return response;
+    }
+
+    /**
+     * This method allows you to add a new reward to a specific
+     * Reward Catalog of a specific Loyalty Program.
+     *
+     * @param idAzienda   the id for the Company.
+     * @param idProgramma the id for the Loyalty Program.
+     * @param nome        the name for the Prize.
+     * @param isPoints    the variable that indicates if the Prize is points or level.
+     * @param number      the number of points-level for get the Prize.
+     * @return true if success, false otherwise.
+     */
+    public boolean aggiungiPremioProgramma(int idAzienda, int idProgramma, String nome, boolean isPoints, int number) {
+        if (idAzienda <= 0 || idProgramma <= 0)
+            throw new IllegalArgumentException("Invalid id for the fields.");
+        ProgrammaFedelta programmaFedelta = this.dbms.getProgrammaFedeltaById(idAzienda, idProgramma);
+        if (programmaFedelta != null) {
+            if (programmaFedelta.getCatalogoPremi() != null) {
+                Premio premio = creaPremio(nome, isPoints, number);
+                programmaFedelta.getCatalogoPremi().aggiungiPremio(premio);
+                return this.dbms.updateProgrammaAzienda(idAzienda, idProgramma);
+            }
+        }
+        return false;
     }
 
 
@@ -205,6 +230,33 @@ public class HandlerPremi {
             }
         }
         return response;
+    }
+
+    /**
+     * This method allows you to go and remove a specific Reward
+     * within a Reward Catalog of a loyalty program.
+     *
+     * @param idAzienda       the id for the Company.
+     * @param idProgramma     the id for the Loyalty Program to get the Reward Catalog.
+     * @param idCatalogoPremi the Reward Catalog.
+     * @param idPremio        the Prize to remove into the Reward Catalog.
+     * @return true if success, false otherwise.
+     */
+    public boolean deletePremioProgramama(int idAzienda, int idProgramma, int idCatalogoPremi, int idPremio) {
+        if (idAzienda <= 0 || idProgramma <= 0 || idCatalogoPremi <= 0 || idPremio <= 0)
+            throw new IllegalArgumentException("Invalid id for the fields.");
+        ProgrammaFedelta programmaFedelta = this.dbms.getProgrammaFedeltaById(idAzienda, idProgramma);
+        if (programmaFedelta != null) {
+            if (programmaFedelta.getCatalogoPremi().getIdCatalogoPremi() == idCatalogoPremi) {
+                for (Premio premio : programmaFedelta.getCatalogoPremi().getPremiCatalogo()) {
+                    if (premio.getIdPremio() == idPremio) {
+                        programmaFedelta.getCatalogoPremi().rimuoviPremio(premio);
+                        return this.dbms.updateProgrammaAzienda(idAzienda, idProgramma);
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     /**
