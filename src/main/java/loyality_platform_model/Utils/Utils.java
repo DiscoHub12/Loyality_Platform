@@ -1,6 +1,10 @@
 package loyality_platform_model.Utils;
 
+import loyality_platform_model.DBMS.DBMS;
 import loyality_platform_model.Handler.*;
+import loyality_platform_model.Models.Azienda;
+
+import java.util.Objects;
 
 /**
  * This class, as the name represents, represents a class of "Useful" components,
@@ -85,4 +89,15 @@ public class Utils {
     public HandlerVisite getHandlerVisite() {
         return handlerVisite;
     }
+
+    public Azienda getAziendaByLogin(String nome, String cognome){
+        for(Azienda azienda : DBMS.getInstance().getAziendeIscritte()){
+            if(Objects.equals(azienda.getTitolare().getNome(), nome) && Objects.equals(azienda.getTitolare().getCognome(), cognome))
+                return azienda;
+        }
+        return null;
+    }
+
+    //Todo aggiungere gli stessi metodi con Utente, Dipendente e Gestore.
+
 }

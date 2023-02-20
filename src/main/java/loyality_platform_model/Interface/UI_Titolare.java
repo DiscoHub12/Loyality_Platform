@@ -50,6 +50,7 @@ public class UI_Titolare {
         this.coalizione = coalizione;
         this.gestori = new Utils();
         this.sc = new Scanner(System.in);
+        homeBackoffice();
     }
 
     public void homeBackoffice() {
@@ -960,12 +961,10 @@ public class UI_Titolare {
         int puntiPerVip;
         System.out.println("""
                 Hai scelto Programma a Punti.
-                Inserisci il nome che vuoi assegnare a questo programma :
-                                    
-                """);
+                Inserisci il nome che vuoi assegnare a questo programma :""");
         nomeProgramma = sc.nextLine();
         System.out.println("Inserisci l'importo da spendere per acquisire un numero di punti che imposterai dopo questo passaggio : ");
-        importoDaSpendere = sc.nextDouble();
+        importoDaSpendere = Double.parseDouble(sc.nextLine());
         System.out.println("Inserisci il numero di punti per l'importo appena aggiunto :");
         numeroPunti = sc.nextInt();
         System.out.println("Vuoi impostare un numero massimo di punti che un Cliente può acquisire in una singola spesa ? (SI-NO)");

@@ -1,5 +1,7 @@
 package loyality_platform_model.Interface;
 
+import loyality_platform_model.DBMS.DBMS;
+import loyality_platform_model.Models.Azienda;
 import loyality_platform_model.Models.Cliente;
 import loyality_platform_model.Models.Dipendente;
 import loyality_platform_model.Models.GestorePuntoVendita;
@@ -90,47 +92,81 @@ public class UI_Home {
     }
 
     public void loginGestorePiattaforma() {
+        sc.nextLine();
+        String nome;
+        String cognome;
         System.out.println("""
                 Inserisci la tua email :
                                 
                 """);
-        String email = sc.nextLine();
-        while (Objects.equals(email, "") || email == null) {
+        nome = sc.nextLine();
+        while (Objects.equals(nome, "") || nome == null) {
             System.out.println("L'email non può essere vuota. Reinserisci l'email.");
-            email = sc.nextLine();
+            nome = sc.nextLine();
         }
         System.out.println("""
                 Inserisci la password :
                                 
                 """);
-        String password = sc.nextLine();
-        while (Objects.equals(password, "") || password == null) {
+        cognome = sc.nextLine();
+        while (Objects.equals(cognome, "") || cognome == null) {
             System.out.println("La password non può essere vuota. Reinserisci la password : ");
-            password = sc.nextLine();
+            cognome = sc.nextLine();
         }
-        //Todo richiamare il metodo che torna il Gestore loggato + richiamare la corrispettiva UI.
+        Azienda azienda = getGestoreByLogin(nome, cognome);
+        if(azienda == null){
+            System.out.println("""
+                    Credenziali non valide. Inserisci : 
+                    1. Esegui nuovamente il Login. 
+                    2. Ritorna alla Home. 
+                    
+                    """);
+            int choice = sc.nextInt();
+            switch (choice){
+                case 1 -> loginTitolare();
+                case 2 -> login();
+            }
+        } //Todo implementare
     }
 
     public void loginTitolare() {
+        String nome;
+        String cognome;
         System.out.println("""
-                Inserisci la tua email :
+                Inserisci il tuo nome :
                                 
                 """);
-        String email = sc.nextLine();
-        while (Objects.equals(email, "") || email == null) {
+        nome = sc.nextLine();
+        while (Objects.equals(nome, "") || nome == null) {
             System.out.println("L'email non può essere vuota. Reinserisci l'email.");
-            email = sc.nextLine();
+            nome = sc.nextLine();
         }
         System.out.println("""
-                Inserisci la password :
+                Inserisci la tua password :
                                 
                 """);
-        String password = sc.nextLine();
-        while (Objects.equals(password, "") || password == null) {
+        cognome = sc.nextLine();
+        while (Objects.equals(cognome, "") || cognome == null) {
             System.out.println("La password non può essere vuota. Reinserisci la password : ");
-            password = sc.nextLine();
+            cognome = sc.nextLine();
         }
-        //Todo richiamare il metodo che torna il Titolare loggato + richiamare la corrispettiva UI.
+        Azienda azienda = getGestoreByLogin(nome, cognome);
+        if(azienda == null){
+            System.out.println("""
+                    Credenziali non valide. Inserisci : 
+                    1. Esegui nuovamente il Login. 
+                    2. Ritorna alla Home. 
+                    
+                    """);
+            int choice = sc.nextInt();
+            switch (choice){
+                case 1 -> loginTitolare();
+                case 2 -> login();
+            }
+        }else {
+            System.out.println("Login Success.");
+            UI_Titolare ui = new UI_Titolare(azienda, DBMS.getInstance().getCoalizione());
+        }
     }
 
     public void loginDipendente() {
@@ -210,9 +246,8 @@ public class UI_Home {
         exit(0);
     }
 
-    private GestorePuntoVendita getGestoreByLogin(String email, String password) {
-        //Todo implemetare, ci deve essere un metodo o negli HandlerAzienda o nell'Utils che fa questo.
-        return null;
+    private Azienda getGestoreByLogin(String nome, String cognome) {
+        return this.utils.getAziendaByLogin(nome, cognome);
     }
 
     private Dipendente getDipendenteByLogin(String email, String password) {

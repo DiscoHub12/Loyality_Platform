@@ -24,7 +24,7 @@ public class InitProjectData {
     //DATABASE
     private DBMS dbms = DBMS.getInstance();
 
-    private InitProjectData() {
+    public InitProjectData() {
         this.dbms.addAzienda(azienda);
         this.dbms.addDipendente(azienda.getIdAzienda(), dipendente0);
         this.dbms.addDipendente(azienda.getIdAzienda(), dipendente1);
