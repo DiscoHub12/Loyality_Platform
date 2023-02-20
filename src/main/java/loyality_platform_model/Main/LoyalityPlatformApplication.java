@@ -1,19 +1,14 @@
 package loyality_platform_model.Main;
+import loyality_platform_model.Interface.UI_Home;
+import loyality_platform_model.Utils.InitProjectData;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@SpringBootApplication
-@RestController
 public class LoyalityPlatformApplication {
     public static void main(String[] args) {
-        SpringApplication.run(LoyalityPlatformApplication.class, args);
-    }
 
-    @RequestMapping(value="/")
-    public String helloWorldTest(){
-        return "Hello Word";
+        InitProjectData initData = new InitProjectData();
+
+        UI_Home home = new UI_Home();
+
     }
 }
