@@ -8,27 +8,26 @@ public class InitProjectData {
     private static InitProjectData instance;
 
     //GESTORE E AZIENDA
-    private GestorePuntoVendita titolare = new GestorePuntoVendita("Mario", "Rossi", "mariorossi@gmail.com");
+    private final GestorePuntoVendita titolare = new GestorePuntoVendita("Mario", "Rossi", "mariorossi@gmail.com");
 
-    private Dipendente dipendente0 = new Dipendente("Luca", "Neri", "lucaneri@gmail.com", true);
+    private final Dipendente dipendente0 = new Dipendente("Luca", "Neri", "lucaneri@gmail.com", true);
 
-    private Dipendente dipendente1 = new Dipendente("Marco", "Magni", "marcomagni@gmail.com", true);
+    private final Dipendente dipendente1 = new Dipendente("Marco", "Magni", "marcomagni@gmail.com", true);
 
-    private SpazioFedelta spazioFedelta = new SpazioFedelta("Azienda", "Indirizzo", "000000", "emailazienda@gmail.com");
+    private final SpazioFedelta spazioFedelta = new SpazioFedelta("Azienda", "Indirizzo", "000000", "emailazienda@gmail.com");
 
-    private Azienda azienda = new Azienda(titolare, spazioFedelta);
+    private final Azienda azienda = new Azienda(titolare, spazioFedelta);
 
     //CLIENTE
-    private Cliente cliente = new Cliente("Luigi", "Mauri", "0000000", "lucamauri@gmail.com");
-
-    //DATABASE
-    private DBMS dbms = DBMS.getInstance();
+    private final Cliente cliente = new Cliente("Luigi", "Mauri", "0000000", "lucamauri@gmail.com");
 
     public InitProjectData() {
-        this.dbms.addAzienda(azienda);
-        this.dbms.addDipendente(azienda.getIdAzienda(), dipendente0);
-        this.dbms.addDipendente(azienda.getIdAzienda(), dipendente1);
-        this.dbms.addCliente(cliente);
+        //DATABASE
+        DBMS dbms = DBMS.getInstance();
+        dbms.addAzienda(azienda);
+        dbms.addDipendente(azienda.getIdAzienda(), dipendente0);
+        dbms.addDipendente(azienda.getIdAzienda(), dipendente1);
+        dbms.addCliente(cliente);
     }
 
     public static InitProjectData getInstance() {

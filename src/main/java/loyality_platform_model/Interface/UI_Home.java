@@ -3,14 +3,10 @@ package loyality_platform_model.Interface;
 import loyality_platform_model.DBMS.DBMS;
 import loyality_platform_model.Models.Azienda;
 import loyality_platform_model.Models.Cliente;
-import loyality_platform_model.Models.Dipendente;
-import loyality_platform_model.Models.GestorePuntoVendita;
 import loyality_platform_model.Utils.InitProjectData;
 import loyality_platform_model.Utils.Utils;
-
 import java.util.Objects;
 import java.util.Scanner;
-
 import static java.lang.System.exit;
 
 /**
@@ -31,21 +27,12 @@ public class UI_Home {
     private final Utils utils;
 
     /**
-     * Object of type InitProjectData, it will be called
-     * inside the Constructor, in such a way that in the "Main"
-     * class of the project, when the Home is instantiated,
-     * the program will start, also instantiating all the "example" data
-     * for program execution.
-     */
-    private final InitProjectData initData;
-
-    /**
      * Scanner for User-terminal input.
      */
     private final Scanner sc;
 
     public UI_Home() {
-        this.initData = InitProjectData.getInstance();
+        InitProjectData initData = InitProjectData.getInstance();
         this.utils = new Utils();
         this.sc = new Scanner(System.in);
         welcomePage();
@@ -77,7 +64,7 @@ public class UI_Home {
                 1. Login Gestore Piattaforma
                 2. Login Titolare
                 3. Login Dipendente
-                4. Login Utente
+                4. Login Cliente
                 5. Ritorna alla home.
                                 
                 """);
@@ -86,7 +73,7 @@ public class UI_Home {
             case 1 -> loginGestorePiattaforma();
             case 2 -> loginTitolare();
             case 3 -> loginDipendente();
-            case 4 -> loginUtente();
+            case 4 -> loginCliente();
             case 5 -> welcomePage();
         }
     }
@@ -95,19 +82,13 @@ public class UI_Home {
         sc.nextLine();
         String nome;
         String cognome;
-        System.out.println("""
-                Inserisci la tua email :
-                                
-                """);
-        nome = sc.nextLine();
+        System.out.println("Inserisci la tua mail: ");
+        nome = sc.next();
         while (Objects.equals(nome, "") || nome == null) {
             System.out.println("L'email non può essere vuota. Reinserisci l'email.");
             nome = sc.nextLine();
         }
-        System.out.println("""
-                Inserisci la password :
-                                
-                """);
+        System.out.println("Inserisci la tua password: ");
         cognome = sc.nextLine();
         while (Objects.equals(cognome, "") || cognome == null) {
             System.out.println("La password non può essere vuota. Reinserisci la password : ");
@@ -116,9 +97,9 @@ public class UI_Home {
         Azienda azienda = getGestoreByLogin(nome, cognome);
         if(azienda == null){
             System.out.println("""
-                    Credenziali non valide. Inserisci : 
-                    1. Esegui nuovamente il Login. 
-                    2. Ritorna alla Home. 
+                    Credenziali non valide. Inserisci :
+                    1. Esegui nuovamente il Login.
+                    2. Ritorna alla Home.
                     
                     """);
             int choice = sc.nextInt();
@@ -126,25 +107,22 @@ public class UI_Home {
                 case 1 -> loginTitolare();
                 case 2 -> login();
             }
-        } //Todo implementare
+        }else {
+            System.out.println("Sezione gestore piattaforma ancora non disponibile.");
+            this.login();
+        }
     }
 
     public void loginTitolare() {
         String nome;
         String cognome;
-        System.out.println("""
-                Inserisci il tuo nome :
-                                
-                """);
+        System.out.println("Inserisci il tuo nome: ");
         nome = sc.nextLine();
         while (Objects.equals(nome, "") || nome == null) {
             System.out.println("L'email non può essere vuota. Reinserisci l'email.");
             nome = sc.nextLine();
         }
-        System.out.println("""
-                Inserisci la tua password :
-                                
-                """);
+        System.out.println("Inserisci la tua password: ");
         cognome = sc.nextLine();
         while (Objects.equals(cognome, "") || cognome == null) {
             System.out.println("La password non può essere vuota. Reinserisci la password : ");
@@ -153,9 +131,9 @@ public class UI_Home {
         Azienda azienda = getGestoreByLogin(nome, cognome);
         if(azienda == null){
             System.out.println("""
-                    Credenziali non valide. Inserisci : 
-                    1. Esegui nuovamente il Login. 
-                    2. Ritorna alla Home. 
+                    Credenziali non valide. Inserisci :
+                    1. Esegui nuovamente il Login.
+                    2. Ritorna alla Home.
                     
                     """);
             int choice = sc.nextInt();
@@ -170,47 +148,67 @@ public class UI_Home {
     }
 
     public void loginDipendente() {
-        System.out.println("""
-                Inserisci la tua email :
-                                
-                """);
-        String email = sc.nextLine();
-        while (Objects.equals(email, "") || email == null) {
-            System.out.println("L'email non può essere vuota. Reinserisci l'email.");
-            email = sc.nextLine();
+        System.out.println("Inserisci il tuo nome: ");
+        String nome = sc.nextLine();
+        while (Objects.equals(nome, "") || nome == null) {
+            System.out.println("Il nome non può essere vuoto. Reinseriscilo.");
+            nome = sc.nextLine();
         }
-        System.out.println("""
-                Inserisci la password :
-                                
-                """);
-        String password = sc.nextLine();
-        while (Objects.equals(password, "") || password == null) {
-            System.out.println("La password non può essere vuota. Reinserisci la password : ");
-            password = sc.nextLine();
+        System.out.println("Inserisci il tuo cognome: ");
+        String cognome = sc.nextLine();
+        while (Objects.equals(cognome, "") || cognome == null) {
+            System.out.println("Il cognome non può essere vuoto. Reinseriscilo. ");
+            cognome = sc.nextLine();
         }
-        //Todo richiamare il metodo che torna il Dipendente loggato + richiamare la corrispettiva UI.
+        Azienda azienda = getDipendenteByLogin(nome, cognome);
+        if(azienda == null){
+            System.out.println("""
+                    Credenziali non valide. Inserisci :
+                    1. Esegui nuovamente il Login.
+                    2. Ritorna alla Home.
+                    
+                    """);
+            int choice = sc.nextInt();
+            switch (choice){
+                case 1 -> loginDipendente();
+                case 2 -> login();
+            }
+        }else {
+            System.out.println("Login Success.");
+            UI_Dipendente ui = new UI_Dipendente(azienda);
+        }
     }
 
-    public void loginUtente() {
-        System.out.println("""
-                Inserisci la tua email :
-                                
-                """);
-        String email = sc.nextLine();
-        while (Objects.equals(email, "") || email == null) {
-            System.out.println("L'email non può essere vuota. Reinserisci l'email.");
-            email = sc.nextLine();
+    public void loginCliente() {
+        System.out.println("Inserisci il tuo nome: ");
+        String nome = sc.nextLine();
+        while (Objects.equals(nome, "") || nome == null) {
+            System.out.println("Il nome non può essere vuoto. Reinseriscilo: ");
+            nome = sc.nextLine();
         }
-        System.out.println("""
-                Inserisci la password :
-                                
-                """);
-        String password = sc.nextLine();
-        while (Objects.equals(password, "") || password == null) {
-            System.out.println("La password non può essere vuota. Reinserisci la password : ");
-            password = sc.nextLine();
+        System.out.println("Inserisci il tuo cognome: ");
+        String cognome = sc.nextLine();
+        while (Objects.equals(cognome, "") || cognome == null) {
+            System.out.println("Il cognome non può essere vuoto. Reinseriscilo: ");
+            cognome = sc.nextLine();
         }
-        //Todo richiamare il metodo che torna l'Utente loggato + richiamare la corrispettiva UI.
+        Cliente cliente = getClienteByLogin(nome, cognome);
+        if(cliente == null){
+            System.out.println("""
+                    Credenziali non valide. Inserisci :
+                    1. Esegui nuovamente il Login.
+                    2. Ritorna alla Home.
+                    
+                    """);
+            int choice = sc.nextInt();
+            switch (choice){
+                case 1 -> loginCliente();
+                case 2 -> login();
+            }
+        }else {
+            System.out.println("Login Success.");
+            UI_Cliente ui = new UI_Cliente(cliente);
+        }
     }
 
     public void registrazione() {
@@ -250,13 +248,11 @@ public class UI_Home {
         return this.utils.getAziendaByLogin(nome, cognome);
     }
 
-    private Dipendente getDipendenteByLogin(String email, String password) {
-        //Todo implemetare, ci deve essere un metodo o negli HandlerAzienda o nell'Utils che fa questo.
-        return null;
+    private Azienda getDipendenteByLogin(String nome, String cognome) {
+        return this.utils.getAziendaByLoginDipendente(nome, cognome);
     }
 
-    private Cliente getClienteByLogin(String email, String password) {
-        //Todo implemetare, ci deve essere un metodo o negli HandlerAzienda o nell'Utils che fa questo.
-        return null;
+    private Cliente getClienteByLogin(String nome, String cognome) {
+       return this.utils.getClienteByLogin(nome, cognome);
     }
 }

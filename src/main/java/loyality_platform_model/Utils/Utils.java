@@ -3,8 +3,11 @@ package loyality_platform_model.Utils;
 import loyality_platform_model.DBMS.DBMS;
 import loyality_platform_model.Handler.*;
 import loyality_platform_model.Models.Azienda;
-
+import loyality_platform_model.Models.Cliente;
+import loyality_platform_model.Models.Dipendente;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * This class, as the name represents, represents a class of "Useful" components,
@@ -66,29 +69,36 @@ public class Utils {
         return handlerAzienda;
     }
 
+
     public HandlerCliente getHandlerCliente() {
         return handlerCliente;
     }
+
 
     public HandlerMessaggi getHandlerMessaggi() {
         return handlerMessaggi;
     }
 
+
     public HandlerPremi getHandlerPremi() {
         return handlerPremi;
     }
+
 
     public HandlerProgrammaFedelta getHandlerProgrammaFedelta() {
         return handlerProgrammaFedelta;
     }
 
+
     public HandlerTessera getHandlerTessera() {
         return handlerTessera;
     }
 
+
     public HandlerVisite getHandlerVisite() {
         return handlerVisite;
     }
+
 
     public Azienda getAziendaByLogin(String nome, String cognome){
         for(Azienda azienda : DBMS.getInstance().getAziendeIscritte()){
@@ -98,6 +108,22 @@ public class Utils {
         return null;
     }
 
-    //Todo aggiungere gli stessi metodi con Utente, Dipendente e Gestore.
+    public Azienda getAziendaByLoginDipendente(String nome, String cognome){
+        for(Map.Entry<Azienda, Set<Dipendente>> entry: DBMS.getInstance().getDipendentiAzienda().entrySet()){
+            for(Dipendente dipendente : entry.getValue()){
+                if(Objects.equals(dipendente.getNome(), nome) && Objects.equals(dipendente.getCognome(), cognome))
+                    return entry.getKey();
+            }
+        }
+        return null;
+    }
+
+   public Cliente getClienteByLogin(String nome, String cognome){
+        for(Cliente cliente: DBMS.getInstance().getClientiIscritti()){
+            if(Objects.equals(cliente.getNome(), nome) && Objects.equals(cliente.getCognome(), cognome))
+                return cliente;
+        }
+        return null;
+   }
 
 }
