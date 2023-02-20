@@ -37,6 +37,11 @@ public class SMS {
     public String getTesto() {
         return this.testo;
     }
+    public void setTesto(String t){
+        if(Objects.equals(t, ""))
+            throw new IllegalArgumentException("Empty text");
+        this.testo=t;
+    }
 
     /**
      * This method returns the time the SMS was sent.

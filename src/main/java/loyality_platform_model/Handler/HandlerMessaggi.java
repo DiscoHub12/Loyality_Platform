@@ -122,4 +122,27 @@ public class HandlerMessaggi {
             this.dbms.addSMS(cliente.getIdCliente(),messaggio);
         }
     }
+    public void aggiungiConfigurazioneSMS(int idAzienda, String testo){
+        if(idAzienda<1)
+            throw new IllegalArgumentException("Company id not correct");
+        if(Objects.equals(testo,""))
+            throw new IllegalArgumentException("you have not written the text for the message");
+        ConfigurazioneSMS newConfigurazione = creaConfigurazioneSMS(testo);
+        SMS newSMS = creaSMSPreconfigurato(newConfigurazione);
+        this.dbms.addConfigurazioneSMS(idAzienda,newSMS);
+    }
+    public void aggiornaConfigurazioneSMS(int idAzienda,int idConfigurazione,String testo){
+        if(idAzienda<1 || idConfigurazione<1)
+            throw new IllegalArgumentException("Company id or sms id are not correct");
+        if(Objects.equals(testo,""))
+            throw new IllegalArgumentException("you have not written the text for the message");
+        ConfigurazioneSMS newConfigurazione = creaConfigurazioneSMS(testo);
+        SMS newSMS = creaSMSPreconfigurato(newConfigurazione);
+        this.dbms.updateConfigurazioneSMS(idAzienda,idConfigurazione,newSMS);
+    }
+    public void rimuoviConfigurazioenSMS(int idAzienda, int idConfigurazione){
+        if(idAzienda<1 || idConfigurazione<1)
+            throw new IllegalArgumentException("Company id or sms id are not correct");
+        this.dbms.removeConfigurazioneSMS(idAzienda, idConfigurazione);
+    }
 }
