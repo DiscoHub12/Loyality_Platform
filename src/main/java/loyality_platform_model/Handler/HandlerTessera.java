@@ -2,7 +2,6 @@ package loyality_platform_model.Handler;
 
 import loyality_platform_model.DBMS.DBMS;
 import loyality_platform_model.Models.*;
-
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
@@ -244,8 +243,7 @@ public class HandlerTessera {
                 for (ProgrammaFedelta program : tessera.getProgrammiFedelta()) {
                     if (program.equals(programmaFedelta)) {
                         tessera.deleteProgrammaFedelta(programmaFedelta);
-                        return true;
-                        //return this.getDbms().deleteClienteCoalizione(tessera.getIdCliente(), programmaFedelta);
+                        return this.getDbms().deleteClienteCoalizione(tessera.getIdCliente(), programmaFedelta);
                     }
                 }
             }
