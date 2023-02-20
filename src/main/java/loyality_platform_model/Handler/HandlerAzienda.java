@@ -2,6 +2,7 @@ package loyality_platform_model.Handler;
 
 import loyality_platform_model.DBMS.DBMS;
 import loyality_platform_model.Models.*;
+
 import java.util.Objects;
 import java.util.Set;
 
@@ -45,7 +46,7 @@ public class HandlerAzienda {
      * registered on the Platform.
      *
      * @param idAzienda the id of Company (Azienda).
-     * @return a list of Employee of the Company (Azienda).
+     * @return a Set of Employee of the Company (Azienda).
      * @throws IllegalArgumentException if the idAzienda is not valid.
      */
     public Set<Dipendente> getDipendentiAzienda(int idAzienda) {
@@ -55,30 +56,19 @@ public class HandlerAzienda {
     }
 
     /**
+     * This method, allows you to take a specific Employee
+     * of a specific Company, through his identifier.
      *
-     * @param idAzienda
-     * @param idDipendente
-     * @return
+     * @param idAzienda    the id for the Company.
+     * @param idDipendente the id for the Employee.
+     * @return Empoloyee with this id if exists, null otherwise.
      */
-    public Dipendente getDipendenteById(int idAzienda, int idDipendente){
-        if(idAzienda <= 0 || idDipendente <= 0)
+    public Dipendente getDipendenteById(int idAzienda, int idDipendente) {
+        if (idAzienda <= 0 || idDipendente <= 0)
             throw new IllegalArgumentException("Invalid id for Company or Employee.");
-       return this.dbms.getDipendenteById(idAzienda, idDipendente);
+        return this.dbms.getDipendenteById(idAzienda, idDipendente);
     }
 
-    /**
-     *
-     * @param idDipendente
-     * @return
-     */
-    public String getDetailsDipendente(int idAzienda, int idDipendente) {
-        if(idAzienda <= 0 || idDipendente <= 0)
-            throw new IllegalArgumentException("Invalid id for Company or Employee");
-        Dipendente dipendente = getDipendenteById(idAzienda, idDipendente);
-        if(dipendente != null)
-            return dipendente.toString();
-        return "Employee with this id dont'e exists.";
-    }
 
     /**
      * This method allows you to create a new employee
@@ -162,7 +152,7 @@ public class HandlerAzienda {
      * This method allowa you to change the Loyalty Area of
      * a registered Company (Azienda) taken through its id.
      *
-     * @param idAzienda        the Company (Azienda) id.
+     * @param idAzienda the Company (Azienda) id.
      * @throws NullPointerException     if the spazioFedeltaNew is null.
      * @throws IllegalArgumentException if the idAzienda is not valid.
      */
@@ -179,7 +169,7 @@ public class HandlerAzienda {
      * keeps track of the Coalition in the platform.
      *
      * @param idAzienda the Company (Azienda) id.
-     * @return a list of Loyality Programs active of a given Company.
+     * @return a Set of Loyality Programs active of a given Company.
      * @throws IllegalArgumentException if the idAzienda is not valid.
      */
     public Set<ProgrammaFedelta> getProgrammiFedeltaAzienda(int idAzienda) {
@@ -193,7 +183,7 @@ public class HandlerAzienda {
      * a given Company.
      *
      * @param idAzienda the Company (Azienda) id.
-     * @return list of Reward Catalogs of a given Company, if it has.
+     * @return Set of Reward Catalogs of a given Company, if it has.
      * @throws IllegalArgumentException if the idAzienda is not correct.
      */
     public Set<CatalogoPremi> getCatalogoPremiAzienda(int idAzienda) {
@@ -209,7 +199,7 @@ public class HandlerAzienda {
      *
      * @param idAzienda  the Company (Azienda) id.
      * @param coalizione the Coalition.
-     * @return the list of all Customers.
+     * @return the Set of all Customers.
      * @throws NullPointerException     if coalizione is null.
      * @throws IllegalArgumentException if the idAzienda is not valid.
      */

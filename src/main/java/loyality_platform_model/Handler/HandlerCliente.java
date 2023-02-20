@@ -86,7 +86,7 @@ public class HandlerCliente {
      * from a particular Costumer if exists, to be identified by its id.
      *
      * @param idCliente the id about the Costumer.
-     * @return a list of SMS received from Costumer.
+     * @return a Set of SMS received from Costumer.
      * @throws IllegalArgumentException if the id for Customer is not valid.
      */
     public Set<SMS> getSMSCliente(int idCliente) {
@@ -101,7 +101,7 @@ public class HandlerCliente {
      * through his id.
      *
      * @param idCliente the id about the Costumer.
-     * @return a list of Visits about the Costumer.
+     * @return a Set of Visits about the Costumer.
      * @throws IllegalArgumentException if the idCliente is not valid.
      */
     public Set<Visita> getVisiteCliente(int idCliente) {
@@ -117,7 +117,7 @@ public class HandlerCliente {
      * to be identified by his id.
      *
      * @param idCliente the id about the Customer.
-     * @return a list of rewards received froma  particular Customer.
+     * @return a Set of rewards received froma  particular Customer.
      * @throws IllegalArgumentException if the idCliente is not valid.
      */
     public Set<Premio> getPremiCliente(int idCliente) {
@@ -132,7 +132,7 @@ public class HandlerCliente {
      * identified by id.
      *
      * @param idCliente the id about the Customer.
-     * @return a list of Coupons held by the Costumer, if any exists.
+     * @return a Set of Coupons held by the Costumer, if any exists.
      * @throws IllegalArgumentException if the idCliente is not valid.
      */
     public Set<Coupon> getCouponCliente(int idCliente) {
@@ -146,31 +146,31 @@ public class HandlerCliente {
      * particular Customer registered on the Platform and on the
      * company's, current, loyalty program.
      *
-     * @param idAzienda    the name about the Customer.
-     * @param idTessera the surname about the Customer.
-     * @param importoSpeso
-     * @param coupon
-     * @param gestoreTessera
-     * @param gestorePremi
+     * @param idAzienda      the name about the Customer.
+     * @param idTessera      the surname about the Customer.
+     * @param importoSpeso   the amount spent
+     * @param coupon         the Coupon, if the Customer has one.
+     * @param gestoreTessera the handler to add the points to the Customer's Card.
+     * @param gestorePremi   the handler reward that allows to manage the Customer's Coupons and other.
      * @throws IllegalArgumentException if the idTessera is not valid.
      */
     public void convalidaAcquisto(int idAzienda, int idTessera, double importoSpeso, Coupon coupon, HandlerTessera gestoreTessera, HandlerPremi gestorePremi) {
         if (idTessera <= 0)
             throw new IllegalArgumentException("Illegal number of Customer card.");
-        for(Azienda azienda : this.dbms.getAziendeIscritte()){
-            if(azienda.getIdAzienda() == idAzienda){
+        for (Azienda azienda : this.dbms.getAziendeIscritte()) {
+            if (azienda.getIdAzienda() == idAzienda) {
                 for (Tessera tessera : this.dbms.getTessereClienti()) {
                     if (tessera.getIdTessera() == idTessera) {
                         for (Cliente cliente : this.dbms.getClientiIscritti()) {
                             if (tessera.getIdCliente() == cliente.getIdCliente()) {
-                                if(coupon == null){
+                                if (coupon == null) {
                                     gestoreTessera.addPuntiAcquisto(importoSpeso, tessera, azienda);
-                                }else {
-                                    if(importoSpeso >= coupon.getValoreSconto()){
+                                } else {
+                                    if (importoSpeso >= coupon.getValoreSconto()) {
                                         importoSpeso -= coupon.getValoreSconto();
                                         gestorePremi.deleteCouponCliente(cliente.getIdCliente(), coupon.getIdCoupon());
                                         gestoreTessera.addPuntiAcquisto(importoSpeso, tessera, azienda);
-                                    }else gestoreTessera.addPuntiAcquisto(importoSpeso, tessera, azienda);
+                                    } else gestoreTessera.addPuntiAcquisto(importoSpeso, tessera, azienda);
                                 }
                             }
                         }
