@@ -9,18 +9,23 @@ import java.util.Scanner;
 import java.util.Set;
 import static java.lang.System.exit;
 
+/**
+ * This is a prototype class and represents the terminal interface for the employee.
+ * The Employee interface will consist of several parts, divided into methods.
+ */
+
 public class UI_Dipendente {
 
     private final Scanner scanner;
 
     private final Azienda azienda;
 
-    private final Utils utils = new Utils();
+    private final Utils utils;
 
     public UI_Dipendente(Azienda azienda) {
         this.azienda = azienda;
         this.scanner = new Scanner(System.in);
-        homeDipendente();
+        this.utils = new Utils();
     }
 
 
@@ -76,6 +81,7 @@ public class UI_Dipendente {
         }
     }
 
+    //-------------------SEZIONE CREA TESSERA-----------------------
     private void sezioneCreaTessera() {
         int choice;
         String nome;
@@ -129,6 +135,7 @@ public class UI_Dipendente {
         }
     }
 
+    //-------------------SEZIONE IDENTIFICA CLIENTE-----------------------
     private void sezioneIdentificaCliente() {
         int choice;
         System.out.println("""
@@ -213,6 +220,7 @@ public class UI_Dipendente {
     }
 
 
+    //-------------------SEZIONE CONVALIDA ACQUISTO-----------------------
     private void sezioneConvalidaAcquisto() {
         int choice, idCoupon;
         int idTessera = 0;
@@ -242,15 +250,22 @@ public class UI_Dipendente {
                                 
                 """);
         int codice = scanner.nextInt();
-        if (codice == 1) {
-            System.out.println("Inserisce il valore del coupon : ");
-            idCoupon = scanner.nextInt();
-            for (Map.Entry<Cliente, Set<Coupon>> entry : DBMS.getInstance().getCouponCliente().entrySet()) {
-                for (Coupon coupon1 : entry.getValue()) {
-                    if (coupon1.getIdCoupon() == idCoupon)
-                        coupon = coupon1;
-                    this.utils.getHandlerCliente().convalidaAcquisto(azienda.getIdAzienda(), idTessera, importo, coupon, utils.getHandlerTessera(), utils.getHandlerPremi());
+        switch (codice) {
+            case 1 -> {
+                System.out.println("Inserisce il valore del coupon : ");
+                idCoupon = scanner.nextInt();
+                for (Map.Entry<Cliente, Set<Coupon>> entry : DBMS.getInstance().getCouponCliente().entrySet()) {
+                    for (Coupon coupon1 : entry.getValue()) {
+                        if (coupon1.getIdCoupon() == idCoupon)
+                            coupon = coupon1;
+                        this.utils.getHandlerCliente().convalidaAcquisto(azienda.getIdAzienda(), idTessera, importo, coupon, utils.getHandlerTessera(), utils.getHandlerPremi());
+                        this.homeDipendente();
+                    }
                 }
+            }
+            case 2 -> {
+                this.utils.getHandlerCliente().convalidaAcquisto(azienda.getIdAzienda(), idTessera, importo, null, utils.getHandlerTessera(), utils.getHandlerPremi());
+                this.homeDipendente();
             }
         }
     }
@@ -273,6 +288,8 @@ public class UI_Dipendente {
         return idTessera;
     }
 
+
+    //-------------------SEZIONE CLIENTE IDENTIFICATO-----------------------
     private void sezioneClienteIdentificato(int idClienteIdentificato) {
         int choice;
         System.out.println("""
@@ -296,6 +313,8 @@ public class UI_Dipendente {
         }
     }
 
+
+    //-------------------SEZIONE TESSERA-----------------------
     private void sezioneTessera(int idCliente) {
         int choice;
         Tessera tessera = this.utils.getHandlerCliente().getTesseraCliente(idCliente);
@@ -376,6 +395,7 @@ public class UI_Dipendente {
     }
 
 
+    //-------------------SEZIONE AGGIUNGI COUPON-----------------------
     private void sezioneAggiungiCodiceSconto(int idCliente) {
         int choice, conferma;
         System.out.println("SEZIONE AGGIUNGI CODICE SCONTO. " +
@@ -418,6 +438,8 @@ public class UI_Dipendente {
         return tmp.toString();
     }
 
+
+    //-------------------SEZIONE VISITE-----------------------
     private void sezioneVisite(int idCliente) {
         int choice;
         System.out.println("SEZIONE VISITE CLIENTE. " +
@@ -645,6 +667,7 @@ public class UI_Dipendente {
     }
 
 
+    //-------------------SEZIONE MESSAGGI-----------------------
     private void sezioneMessaggi(int idCliente) {
         int choice;
         System.out.println(
@@ -719,6 +742,8 @@ public class UI_Dipendente {
         return testo;
     }
 
+
+    //-------------------SEZIONE LOGOUT-----------------------
     private void sezioneLogout() {
         int choice;
         System.out.println("""
