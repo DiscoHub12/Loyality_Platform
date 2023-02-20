@@ -17,14 +17,15 @@ import java.util.Set;
 
 public class DBMSTest {
 
-    //TITOLARE
+    //AZIENDA 1
     private final GestorePuntoVendita gestore = new GestorePuntoVendita("Alessio", "Cognome1", "prova@gmail.com");
-
-    //SPAZIO FEDELTA
     private final SpazioFedelta spazio = new SpazioFedelta("Spazio1", "Indirizzo1", "Telefono1", "email1");
-
-    //AZIENDA
     private final Azienda azienda = new Azienda(gestore, spazio);
+
+    //AZIENDA 2
+    private final GestorePuntoVendita gestore1 = new GestorePuntoVendita("Nome", "Cognome", "nomecognome@gmail.com");
+    private final SpazioFedelta spazio1 = new SpazioFedelta("Spazio2", "Indirizzo2", "Telefono2", "email2");
+    private final Azienda azienda1 = new Azienda(gestore1, spazio1);
 
     //DIPENDENTI AZIENDA
     private final Dipendente dipendente = new Dipendente("Dipendente1", "Cognome1", "prova@gmail1.com", false);
@@ -74,6 +75,8 @@ public class DBMSTest {
         db.addDipendente(azienda.getIdAzienda(), dipendente);
         db.addDipendente(azienda.getIdAzienda(), dipendente1);
         db.addProgrammaAzienda(this.azienda.getIdAzienda(), programmaFedeltaPunti1);
+
+        db.addAzienda(azienda1);
         // db.addProgrammaAzienda(this.azienda.getIdAzienda(), programmaFedeltaPunti2);
         //db.addProgrammaAzienda(this.azienda.getIdAzienda(), programmaFedeltaPunti3);
         //db.addProgrammaAzienda(this.azienda.getIdAzienda(), programmaFedeltaLivelli1);
@@ -99,6 +102,7 @@ public class DBMSTest {
     @Test
     public void testAddProgrammaAzienda(){
         initDb();
+
         assertEquals(1, this.db.getProgrammiAzienda().get(azienda).size());
         assertTrue(this.db.addProgrammaAzienda(this.azienda.getIdAzienda(), this.programmaFedeltaPunti2));
         assertTrue(this.db.addProgrammaAzienda(this.azienda.getIdAzienda(), this.programmaFedeltaPunti3));
@@ -107,6 +111,36 @@ public class DBMSTest {
         assertTrue(this.db.getCoalizione().getAziendePerProgramma().get(programmaFedeltaPunti1).contains(this.azienda));
         assertTrue(this.db.getCoalizione().getAziendePerProgramma().get(programmaFedeltaPunti2).contains(this.azienda));
         assertTrue(this.db.getCoalizione().getAziendePerProgramma().get(programmaFedeltaPunti3).contains(this.azienda));
+
+
+        assertTrue(this.db.addProgrammaAzienda(this.azienda.getIdAzienda(), this.programmaFedeltaLivelli1));
+        assertTrue(this.db.addProgrammaAzienda(this.azienda.getIdAzienda(), this.programmaFedeltaLivelli2));
+        assertEquals(5, this.db.getProgrammiAzienda().get(azienda).size());
+        assertEquals(1, this.db.getCoalizione().getAziendePerProgramma().get(programmaFedeltaLivelli1).size());
+        assertEquals(1, this.db.getCoalizione().getAziendePerProgramma().get(programmaFedeltaLivelli2).size());
+        assertTrue(this.db.getCoalizione().getAziendePerProgramma().get(programmaFedeltaPunti1).contains(this.azienda));
+        assertTrue(this.db.getCoalizione().getAziendePerProgramma().get(programmaFedeltaPunti2).contains(this.azienda));
+        assertTrue(this.db.getCoalizione().getAziendePerProgramma().get(programmaFedeltaPunti3).contains(this.azienda));
+        assertTrue(this.db.getCoalizione().getAziendePerProgramma().get(programmaFedeltaLivelli1).contains(this.azienda));
+        assertTrue(this.db.getCoalizione().getAziendePerProgramma().get(programmaFedeltaLivelli2).contains(this.azienda));
+
+        assertNull(this.db.getProgrammiAzienda().get(azienda1));
+        assertTrue(this.db.addProgrammaAzienda(this.azienda1.getIdAzienda(), this.programmaFedeltaPunti1));
+        assertTrue(this.db.addProgrammaAzienda(this.azienda1.getIdAzienda(), this.programmaFedeltaPunti2));
+        assertTrue(this.db.addProgrammaAzienda(this.azienda1.getIdAzienda(), this.programmaFedeltaPunti3));
+        assertEquals(3, this.db.getProgrammiAzienda().get(azienda1).size());
+        assertTrue(this.db.getCoalizione().getAziendePerProgramma().get(programmaFedeltaPunti1).contains(this.azienda1));
+        assertTrue(this.db.getCoalizione().getAziendePerProgramma().get(programmaFedeltaPunti2).contains(this.azienda1));
+        assertTrue(this.db.getCoalizione().getAziendePerProgramma().get(programmaFedeltaPunti3).contains(this.azienda1));
+        assertTrue(this.db.getCoalizione().getAziendePerProgramma().get(programmaFedeltaPunti1).contains(this.azienda));
+        assertTrue(this.db.getCoalizione().getAziendePerProgramma().get(programmaFedeltaPunti2).contains(this.azienda));
+        assertTrue(this.db.getCoalizione().getAziendePerProgramma().get(programmaFedeltaPunti3).contains(this.azienda));
+        assertEquals(2, this.db.getCoalizione().getAziendePerProgramma().get(programmaFedeltaPunti1).size());
+        assertEquals(2, this.db.getCoalizione().getAziendePerProgramma().get(programmaFedeltaPunti2).size());
+        assertEquals(2, this.db.getCoalizione().getAziendePerProgramma().get(programmaFedeltaPunti3).size());
+
+
+
     }
 
     @Test
@@ -127,6 +161,16 @@ public class DBMSTest {
         assertTrue(this.db.getCoalizione().getAziendePerProgramma().get(programmaFedeltaPunti2).contains(this.azienda));
         assertTrue(this.db.getCoalizione().getAziendePerProgramma().get(programmaFedeltaPunti3).contains(this.azienda));
 
+    }
+
+    @Test
+    public void testAddClienteCoalizione(){
+        //Todo implementare.
+    }
+
+    @Test
+    public void testRemoveClienteCoalizione(){
+        //Todo implementare.
     }
 
 
