@@ -44,7 +44,6 @@ public class UI_Titolare {
     /**
      * Constructor that create an Interface prototype
      * for the Backoffice (Owner)
-     *
      */
     public UI_Titolare(Azienda azienda, Coalizione coalizione) {
         this.azienda = azienda;
@@ -198,16 +197,16 @@ public class UI_Titolare {
                 }
             }
             case 2 -> {
-                if(programmaFedelta.getCatalogoPremi() == null){
+                if (programmaFedelta.getCatalogoPremi() == null) {
                     System.out.println("""
                             Questo programma fedeltà non ha ancora il Catalogo Premi.
                             Seleziona : 
                             1. Aggiungi un Catalogo Premi a questo Programma Fedeltà. 
                             2. Ritorna alla schermata Principale. 
-                            
+                                                        
                             """);
                     int choice1 = sc.nextInt();
-                    switch (choice1){
+                    switch (choice1) {
                         case 1 -> {
                             if (programmaFedelta.getTipoProgramma() == Tipo.PROGRAMMAPUNTI) {
                                 aggiungiCatalogoPremiPPunti(programmaFedelta);
@@ -215,7 +214,7 @@ public class UI_Titolare {
                                 aggiungiCatalogoPremiPLivelli(programmaFedelta);
                             }
                         }
-                        case 2 ->sezioneProgrammaFedelta();
+                        case 2 -> sezioneProgrammaFedelta();
                     }
                 } else controllaCatalogoPremi(programmaFedelta.getCatalogoPremi(), programmaFedelta);
             }
@@ -260,8 +259,8 @@ public class UI_Titolare {
                 System.out.println("Inserisci l'id del Catalogo Premi che vuoi controllare : \n");
                 int idCatalogo = sc.nextInt();
                 assert catalogoPremi != null;
-                for(CatalogoPremi catalogoPremi1 : catalogoPremi){
-                    if(catalogoPremi1.getIdCatalogoPremi() == idCatalogo){
+                for (CatalogoPremi catalogoPremi1 : catalogoPremi) {
+                    if (catalogoPremi1.getIdCatalogoPremi() == idCatalogo) {
                         controllaCatalogoPremi(catalogoPremi1, null);
                     }
                 }
@@ -270,14 +269,14 @@ public class UI_Titolare {
         }
     }
 
-    public void controllaCatalogoPremi(CatalogoPremi catalogoPremi, ProgrammaFedelta programmaFedelta){
+    public void controllaCatalogoPremi(CatalogoPremi catalogoPremi, ProgrammaFedelta programmaFedelta) {
         int choice;
         System.out.println("Ecco i dettagli del Catalogo Premi : \n" + catalogoPremi.toString());
         System.out.println("""
                 Elenco le attività disponibili :
                 1. Modifica Catalogo Premi
                 2. Rimuovi Catalogo Premi
-                
+                                
                 """);
         choice = sc.nextInt();
         switch (choice) {
@@ -287,34 +286,57 @@ public class UI_Titolare {
                         1. Modifica premi
                         2. Aggiungi Premio
                         3. Rimuovi Premio.
-                        
+                                                
                         """);
                 int choice1 = sc.nextInt();
-                switch (choice1){
+                switch (choice1) {
                     case 1 -> System.out.println("Modifica non disponibile.");
                     case 2 -> {
                         System.out.println("Inserisci il nome per il premio : \n");
                         String nome = sc.nextLine();
-                        int numero;
-                        int tipo;
-                        if(programmaFedelta.getTipoProgramma() == Tipo.PROGRAMMAPUNTI){
-                            tipo = 1;
-                            System.out.println("Inserisci il numero di punti per riscattare il premio : \n");
-                            numero = sc.nextInt();
+                        int numero = 0;
+                        int tipo = 0;
+                        if(programmaFedelta != null){
+                            if (programmaFedelta.getTipoProgramma() == Tipo.PROGRAMMAPUNTI) {
+                                tipo = 1;
+                                System.out.println("Inserisci il numero di punti per riscattare il premio : \n");
+                                numero = sc.nextInt();
+                            } else if(programmaFedelta.getTipoProgramma() == Tipo.PROGRAMMALIVELLI){
+                                System.out.println("Inserisci il numero di livelli per riscattare il premio : \n");
+                                numero = sc.nextInt();
+                            }
                         }else {
-                            tipo = 0;
-                            System.out.println("Inserisci il numero di livelli per riscattare il premio : \n");
-                            numero = sc.nextInt();
+                            System.out.println("""
+                                    Inserisci :
+                                    1. Il Premio deve essere riscattato attraverso i punti. 
+                                    2. Il Premio deve essere riscattato attraverso i livelli. 
+                                    
+                                    """);
+                            int choice3 = sc.nextInt();
+                            if(choice3 == 1){
+                                System.out.println("Inserisci il numero di punti per riscattare il premio : ");
+                                numero = sc.nextInt();
+                                while (numero <= 1){
+                                    System.out.println("Numero di punti non valido. Reinserisci il numnero di punti : ");
+                                    numero = sc.nextInt();
+                                }
+                                tipo = 1;
+                            }else {
+                                System.out.println("Inserisci il numero di livelli per riscattare il premio : ");
+                                numero = sc.nextInt();
+                                while (numero <= 1){
+                                    System.out.println("Numero di livelli non valido. Reinserisci il numnero di livelli : ");
+                                    numero = sc.nextInt();
+                                }
+                            }
                         }
                         System.out.println("Sei sicuro di aggiungere il Premio al Catalogo Premi ? (SI-NO)\n");
                         String choice2 = sc.nextLine();
-                        if(Objects.equals(choice2, "SI") || Objects.equals(choice2, "si")){
-                            if(tipo == 1){
-
-                            }else{
-                                //Todo implementare
-                            }
-                        }else {
+                        if (Objects.equals(choice2, "SI") || Objects.equals(choice2, "si")) {
+                            if (programmaFedelta != null) {
+                                this.gestori.getHandlerPremi().aggiungiPremioProgramma(this.azienda.getIdAzienda(), programmaFedelta.getIdProgramma(), nome, tipo == 1, numero);
+                            } else this.gestori.getHandlerPremi().aggiungiPremioCatalogo(this.azienda.getIdAzienda(), catalogoPremi.getIdCatalogoPremi(), nome, tipo == 1, numero);
+                        } else {
                             System.out.println("Ritorno alla schermata precedente.\n");
                             controllaCatalogoPremi(catalogoPremi, programmaFedelta);
                         }
@@ -322,9 +344,12 @@ public class UI_Titolare {
                     case 3 -> {
                         System.out.println("Inserisci il nome del Premio che vuoi rimuovere tra quelli elencati : ");
                         String nome = sc.nextLine();
-                        for(Premio premio : catalogoPremi.getPremiCatalogo()){
-                            if(Objects.equals(premio.getNome(), nome)){
-                                //Todo implementare
+                        for (Premio premio : catalogoPremi.getPremiCatalogo()) {
+                            if (Objects.equals(premio.getNome(), nome)) {
+                                if (programmaFedelta != null) {
+                                    this.gestori.getHandlerPremi().deletePremioProgramama(this.azienda.getIdAzienda(), programmaFedelta.getIdProgramma(), catalogoPremi.getIdCatalogoPremi(), premio.getIdPremio());
+                                } else
+                                    this.gestori.getHandlerPremi().deletePremio(this.azienda.getIdAzienda(), catalogoPremi.getIdCatalogoPremi(), premio.getIdPremio());
                             }
                         }
                     }
@@ -333,13 +358,14 @@ public class UI_Titolare {
             case 2 -> {
                 System.out.println("""
                         Sei sicuro di voler rimuovere il Catalogo Premi ? (SI-NO)
-                        
+                                                
                         """);
                 String choice3 = sc.nextLine();
-                if(Objects.equals(choice3, "SI") || Objects.equals(choice3, "si")){
-                    if(programmaFedelta == null){
+                if (Objects.equals(choice3, "SI") || Objects.equals(choice3, "si")) {
+                    if (programmaFedelta == null) {
                         this.gestori.getHandlerPremi().deleteCatalogoPremi(this.azienda.getIdAzienda(), catalogoPremi.getIdCatalogoPremi());
-                    }else this.gestori.getHandlerPremi().deleteCatalogoProgramma(this.azienda.getIdAzienda(), programmaFedelta.getIdProgramma(), catalogoPremi.getIdCatalogoPremi());
+                    } else
+                        this.gestori.getHandlerPremi().deleteCatalogoProgramma(this.azienda.getIdAzienda(), programmaFedelta.getIdProgramma(), catalogoPremi.getIdCatalogoPremi());
                 }
             }
         }
@@ -404,23 +430,23 @@ public class UI_Titolare {
         System.out.println("""
                 SEZIONE CONFIGURAZIONI SMS
                 Elenco tutti i tuoi SMS Preconfigurati creati precedentemente :
-                
+                                
                 """);
-        if(smsPreconfigurati != null){
-            for(SMS sms : smsPreconfigurati){
+        if (smsPreconfigurati != null) {
+            for (SMS sms : smsPreconfigurati) {
                 System.out.println("Id SMS : " + sms.getIdSMS() + " Messaggio Preconfigurato : " + sms.getConfigurazione().getTestoConfigurato());
             }
-        }else System.out.println("Non hai ancora nessun messaggio preconfigurato.");
+        } else System.out.println("Non hai ancora nessun messaggio preconfigurato.");
         System.out.println("""
                 Elenco le possibili operazioni :
                 1. Aggiungi SMS Preconfigurato
                 2. Seleziona SMS Preconfigurato.
                 3. Ritorna alla home.
                 Inserisci il numero corrispettivo
-                
+                                
                 """);
         choice = sc.nextInt();
-        switch (choice){
+        switch (choice) {
             case 1 -> aggiungiSMSPreconfigurato();
             case 2 -> sezioneSMSPreconfigurato();
             case 3 -> sezioneBackOffice();
@@ -429,16 +455,16 @@ public class UI_Titolare {
 
 
     //SEZIONE 4
-    public void sezioneSMSPreconfigurato(){
+    public void sezioneSMSPreconfigurato() {
         int choice;
         System.out.println("Inserisci l'id dell'SMS preconfigurato che vuoi gestire : \n");
         int idSMS = sc.nextInt();
-        while(idSMS == 0){
+        while (idSMS == 0) {
             System.out.println("Id non disponibile. Reinserisci l'id dell'SMS preconfigurato : \n");
             idSMS = sc.nextInt();
         }
         ConfigurazioneSMS sms = this.gestori.getHandlerMessaggi().getSMSPreconfigurato(this.azienda.getIdAzienda(), idSMS);
-        if(sms != null){
+        if (sms != null) {
             System.out.println("""
                     Elenco le possibili operazioni :
                     1. Modifica SMS Preconfigurato
@@ -452,22 +478,22 @@ public class UI_Titolare {
                 case 1 -> {
                     System.out.println("Inserisci il nuovo testo per l'SMS : \n");
                     String nuovoTesto = sc.nextLine();
-                    while (Objects.equals(nuovoTesto, "") || nuovoTesto == null){
+                    while (Objects.equals(nuovoTesto, "") || nuovoTesto == null) {
                         System.out.println("Testo non valido. Reinserisci il testo : \n");
                         nuovoTesto = sc.nextLine();
                     }
-                    while (Objects.equals(nuovoTesto, sms.getTestoConfigurato())){
+                    while (Objects.equals(nuovoTesto, sms.getTestoConfigurato())) {
                         System.out.println("Il testo è uguale a quello già presente. Reinserisci il testo : ");
                         nuovoTesto = sc.nextLine();
                         System.out.println("""
-                            Inserisci :
-                            1. Conferma modifica.
-                            2. Annulla modifica.
-                            3. Ritorna alla home
-                                            
-                            """);
+                                Inserisci :
+                                1. Conferma modifica.
+                                2. Annulla modifica.
+                                3. Ritorna alla home
+                                                
+                                """);
                         int choice1 = sc.nextInt();
-                        switch (choice1){
+                        switch (choice1) {
                             case 1 -> {
                                 //Todo implementare, manca HandlerMessaggi
                                 System.out.println("Configurazione SMS modificata con successo. Ritorno alla schermata precedente.");
@@ -493,7 +519,7 @@ public class UI_Titolare {
                     }
                 }
             }
-        }else {
+        } else {
             System.out.println("""
                     SMS non trovato. Inserisci :
                     1. Reinserisci l'id
@@ -767,25 +793,26 @@ public class UI_Titolare {
     //-----------------------SEZIONE COALIZIONE AZIENDA----------------------------
 
     //SEZIONE 1
-    public void sezioneCoalizioneAzienda(){
+    public void sezioneCoalizioneAzienda() {
         System.out.println("""
                 SEZIONE COALIZIONE AZIENDA
                 In questa sezione, verranno mostrati i tuoi Programmi Fedeltà
                 e le corrispettive Aziende che ne sono iscritte.
-                
+                                
                 """);
-        for(ProgrammaFedelta programmaFedelta : this.gestori.getHandlerAzienda().getProgrammiFedeltaAzienda(this.azienda.getIdAzienda())){
+        for (ProgrammaFedelta programmaFedelta : this.gestori.getHandlerAzienda().getProgrammiFedeltaAzienda(this.azienda.getIdAzienda())) {
             System.out.println("Programma Fedeltà : " +
                     "Id Programma : " + programmaFedelta.getIdProgramma() +
                     "Nome Programma : " + programmaFedelta.getNome() +
                     "Aziende iscritte : ");
-            if(this.coalizione.getAziendeIscritteProgramma(programmaFedelta.getIdProgramma()) != null){
-                for(Azienda azienda : this.coalizione.getAziendeIscritteProgramma(programmaFedelta.getIdProgramma())){
+            if (this.coalizione.getAziendeIscritteProgramma(programmaFedelta.getIdProgramma()) != null) {
+                for (Azienda azienda : this.coalizione.getAziendeIscritteProgramma(programmaFedelta.getIdProgramma())) {
                     System.out.println("-Id Azienda : " + azienda.getIdAzienda() +
                             "-Nome Azienda : " + azienda.getSpazioFedelta().getNome() +
                             "-Indirizzo Azienda : " + azienda.getSpazioFedelta().getIndirizzo());
                 }
-            }else System.out.println("Nessun Azienda iscritta al tuo Programma Fedeltà con l'id : " + programmaFedelta.getIdProgramma());
+            } else
+                System.out.println("Nessun Azienda iscritta al tuo Programma Fedeltà con l'id : " + programmaFedelta.getIdProgramma());
         }
     }
 
@@ -853,8 +880,6 @@ public class UI_Titolare {
     }
 
 
-
-
     private void creaNuovoDipendente() {
         int choice;
         System.out.println("""
@@ -905,8 +930,6 @@ public class UI_Titolare {
             case 3 -> sezioneBackOffice();
         }
     }
-
-
 
 
     private void aggiungiProgrammaFedelta() {
@@ -1228,14 +1251,14 @@ public class UI_Titolare {
         }
     }
 
-    private void  aggiungiSMSPreconfigurato(){
+    private void aggiungiSMSPreconfigurato() {
         System.out.println("""
                 Benvenuto nella creazione di un SMS Preconfigurato.,
                 Inserisci il testo del messaggio :
-                
+                                
                 """);
         String testoConfigurato = sc.nextLine();
-        while(Objects.equals(testoConfigurato, "") || testoConfigurato == null){
+        while (Objects.equals(testoConfigurato, "") || testoConfigurato == null) {
             System.out.println("Testo non valido. Reinserisci il testo per il messaggio preconfigurato : ");
             testoConfigurato = sc.nextLine();
         }
@@ -1244,7 +1267,7 @@ public class UI_Titolare {
                 1. Conferma creazione.
                 2. Annulla creazione.
                 3. Ritorna alla home.
-                
+                                
                 """);
         int choice = sc.nextInt();
         switch (choice) {

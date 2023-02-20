@@ -182,16 +182,16 @@ public class HandlerPremiTest {
         assert catalogoPremiLivelli != null;
         assertEquals(4, catalogoPremiLivelli.getPremiCatalogo().size());
         int sizeL1 = catalogoPremiLivelli.getPremiCatalogo().size();
-        assertThrows(IllegalArgumentException.class, () -> this.gestorePremi.aggiungiPremio(-1, 1, "nome", false, 10));
-        assertThrows(IllegalArgumentException.class, () -> this.gestorePremi.aggiungiPremio(1, -1, "nome", false, 10));
-        assertThrows(IllegalArgumentException.class, () -> this.gestorePremi.aggiungiPremio(1, -1, "", false, 10));
-        assertThrows(IllegalArgumentException.class, () -> this.gestorePremi.aggiungiPremio(1, -1, "nome", false, -1));
-        assertTrue(this.gestorePremi.aggiungiPremio(this.azienda.getIdAzienda(), 1, "nome", true, 10));
-        assertTrue(this.gestorePremi.aggiungiPremio(this.azienda.getIdAzienda(), 1, "nome", true, 10));
-        assertTrue(this.gestorePremi.aggiungiPremio(this.azienda.getIdAzienda(), 1, "nome", true, 10));
-        assertTrue(this.gestorePremi.aggiungiPremio(this.azienda.getIdAzienda(), 2, "nome", false, 10));
-        assertTrue(this.gestorePremi.aggiungiPremio(this.azienda.getIdAzienda(), 2, "nome", false, 10));
-        assertTrue(this.gestorePremi.aggiungiPremio(this.azienda.getIdAzienda(), 2, "nome", false, 10));
+        assertThrows(IllegalArgumentException.class, () -> this.gestorePremi.aggiungiPremioCatalogo(-1, 1, "nome", false, 10));
+        assertThrows(IllegalArgumentException.class, () -> this.gestorePremi.aggiungiPremioCatalogo(1, -1, "nome", false, 10));
+        assertThrows(IllegalArgumentException.class, () -> this.gestorePremi.aggiungiPremioCatalogo(1, -1, "", false, 10));
+        assertThrows(IllegalArgumentException.class, () -> this.gestorePremi.aggiungiPremioCatalogo(1, -1, "nome", false, -1));
+        assertTrue(this.gestorePremi.aggiungiPremioCatalogo(this.azienda.getIdAzienda(), 1, "nome", true, 10));
+        assertTrue(this.gestorePremi.aggiungiPremioCatalogo(this.azienda.getIdAzienda(), 1, "nome", true, 10));
+        assertTrue(this.gestorePremi.aggiungiPremioCatalogo(this.azienda.getIdAzienda(), 1, "nome", true, 10));
+        assertTrue(this.gestorePremi.aggiungiPremioCatalogo(this.azienda.getIdAzienda(), 2, "nome", false, 10));
+        assertTrue(this.gestorePremi.aggiungiPremioCatalogo(this.azienda.getIdAzienda(), 2, "nome", false, 10));
+        assertTrue(this.gestorePremi.aggiungiPremioCatalogo(this.azienda.getIdAzienda(), 2, "nome", false, 10));
         Set<CatalogoPremi> catalogoPremiAggiornatoPunti = this.gestoreAzienda.getCatalogoPremiAzienda(this.azienda.getIdAzienda());
         CatalogoPremi catalogoPremiPuntiAggiornato = null ;
         for(CatalogoPremi catalogoPremi : catalogoPremiAggiornatoPunti){
