@@ -647,18 +647,55 @@ public class DBMS {
         return false;
     }
 
-    public boolean addConfigurazioneSMS(int idAzienda, ConfigurazioneSMS configurazioneSMS) {
-        //Todo implementare
+    public boolean addConfigurazioneSMS(int idAzienda, SMS smsPreconfigurato) {
+        for(Azienda azienda : this.getSMSPreconfiguratiAzienda().keySet()){
+            if(azienda.getIdAzienda() == idAzienda){
+                if(this.getSMSPreconfiguratiAzienda().containsKey(azienda)){
+                    if(this.getSMSPreconfiguratiAzienda().get(azienda) == null){
+                        Set<SMS> smsAzienda = new HashSet<>();
+                        smsAzienda.add(smsPreconfigurato);
+                        this.getSMSPreconfiguratiAzienda().put(azienda, smsAzienda);
+                        return true;
+                    }else {
+                        return this.getSMSPreconfiguratiAzienda().get(azienda).add(smsPreconfigurato);
+                    }
+                }else {
+                    Set<SMS> smsAzienda = new HashSet<>();
+                    smsAzienda.add(smsPreconfigurato);
+                    this.getSMSPreconfiguratiAzienda().put(azienda,smsAzienda);
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
-    public boolean updateConfigurazioneSMS(int idAzienda, int idConfigurazione, ConfigurazioneSMS configurazioneSMSUpdated) {
-        //Todo implementare
+    public boolean updateConfigurazioneSMS(int idAzienda, int idConfigurazione, SMS smsPreconfigurato) {
+        for(Azienda azienda : this.getSMSPreconfiguratiAzienda().keySet()){
+            if(azienda.getIdAzienda() == idAzienda){
+                for(SMS smsAzienda : this.getSMSPreconfiguratiAzienda().get(azienda)){
+                    if(smsAzienda.getIdSMS() == idConfigurazione){
+                        smsAzienda.setTesto(smsPreconfigurato.getTesto());
+                        return true;
+                    }
+                }
+            }
+        }
         return false;
     }
 
     public boolean removeConfigurazioneSMS(int idAzienda, int idConfigurazione) {
         //Todo implementare
+        for(Azienda azienda : this.getSMSPreconfiguratiAzienda().keySet()){
+            if(azienda.getIdAzienda() == idAzienda){
+                for(SMS smsAzienda : this.getSMSPreconfiguratiAzienda().get(azienda)){
+                    if(smsAzienda.getIdSMS() == idConfigurazione){
+                        this.getSMSPreconfiguratiAzienda().get(azienda).remove(smsAzienda);
+                        return true;
+                    }
+                }
+            }
+        }
         return false;
     }
 
