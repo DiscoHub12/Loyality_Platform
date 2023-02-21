@@ -111,7 +111,7 @@ public class HandlerAziendaTest {
         Set<Dipendente> dipendenti = handler.getDipendentiAzienda(1);
         assertNotNull(dipendenti);
         assertEquals(dipendenti, this.db.getDipendentiAzienda().get(azienda));
-        this.handler.aggiungiDipendente(1, "alessio", "giacche", "email", true);
+        this.handler.aggiungiDipendente(1, "alessio", "giacche", "email", "password", true);
         Set<Dipendente> dipendenti1 = handler.getDipendentiAzienda(1);
         assertNotNull(dipendenti1);
         assertEquals(dipendenti1, this.db.getDipendentiAzienda().get(azienda));
@@ -138,11 +138,11 @@ public class HandlerAziendaTest {
     @Test
     public void testAggiungiDipendente() {
         initTotal();
-        this.handler.aggiungiDipendente(1, "Nome", "Cognome", "Email", false);
-        this.handler.aggiungiDipendente(1, "Alessio", "Cognome1", "email", false);
+        this.handler.aggiungiDipendente(1, "Nome", "Cognome", "Email", "password",false);
+        this.handler.aggiungiDipendente(1, "Alessio", "Cognome1", "email", "password",false);
         Set<Dipendente> dipendentiAzienda1 = this.db.getDipendentiAzienda().get(azienda);
         assertEquals(dipendentiAzienda1, this.handler.getDipendentiAzienda(this.azienda.getIdAzienda()));
-        this.handler.aggiungiDipendente(this.azienda.getIdAzienda(), "sofia", "scattolini", "email", true);
+        this.handler.aggiungiDipendente(this.azienda.getIdAzienda(), "sofia", "scattolini", "email", "password",true);
         Set<Dipendente> dipendentiAzienda2= this.db.getDipendentiAzienda().get(azienda);
         assertEquals(dipendentiAzienda2, this.handler.getDipendentiAzienda(this.azienda.getIdAzienda()));
     }
@@ -172,7 +172,7 @@ public class HandlerAziendaTest {
         Set<Dipendente> dipendenti = this.handler.getDipendentiAzienda(this.azienda.getIdAzienda());
         assertTrue(this.handler.rimuoviDipendente(this.azienda.getIdAzienda(), 1));
         assertFalse(dipendenti.contains(dipendente1));
-        this.handler.aggiungiDipendente(this.azienda.getIdAzienda(), "test", "test", "email", false);
+        this.handler.aggiungiDipendente(this.azienda.getIdAzienda(), "test", "test", "email", "password",false);
         Dipendente dipendente2 = this.handler.getDipendenteById(this.azienda.getIdAzienda(), 2);
         Set<Dipendente> dipendenti2= this.handler.getDipendentiAzienda(this.azienda.getIdAzienda());
         assertTrue(this.handler.rimuoviDipendente(this.azienda.getIdAzienda(), 2));
