@@ -54,6 +54,7 @@ public class UI_Titolare {
     }
 
     public void homeBackoffice() {
+        sc.nextLine();
         int choice;
         System.out.println("""
                 BENVENUTO
@@ -71,6 +72,7 @@ public class UI_Titolare {
 
     //SEZIONE BACKOFFICE PRINCIPALE
     public void sezioneBackOffice() {
+        sc.nextLine();
         int choice;
         System.out.println("""
                 SEZIONE BACKOFFICE
@@ -102,6 +104,7 @@ public class UI_Titolare {
 
     //-------------------SEZIONE SPAZIO FEDELTA-----------------------
     public void sezioneSpazioFedelta() {
+        sc.nextLine();
         int choice;
         System.out.println("""
                 SEZIONE SPAZIO FEDELTA'
@@ -117,6 +120,7 @@ public class UI_Titolare {
                 Inserisci il numero corrispettivo
                                 
                 """);
+        sc.nextLine();
         choice = sc.nextInt();
         switch (choice) {
             case 1 -> modificaSpazioFedelta(spazioFedelta);
@@ -801,20 +805,30 @@ public class UI_Titolare {
                 e le corrispettive Aziende che ne sono iscritte.
                                 
                 """);
-        for (ProgrammaFedelta programmaFedelta : this.gestori.getHandlerAzienda().getProgrammiFedeltaAzienda(this.azienda.getIdAzienda())) {
-            System.out.println("Programma Fedeltà : " +
-                    "Id Programma : " + programmaFedelta.getIdProgramma() +
-                    "Nome Programma : " + programmaFedelta.getNome() +
-                    "Aziende iscritte : ");
-            if (this.coalizione.getAziendeIscritteProgramma(programmaFedelta.getIdProgramma()) != null) {
-                for (Azienda azienda : this.coalizione.getAziendeIscritteProgramma(programmaFedelta.getIdProgramma())) {
-                    System.out.println("-Id Azienda : " + azienda.getIdAzienda() +
-                            "-Nome Azienda : " + azienda.getSpazioFedelta().getNome() +
-                            "-Indirizzo Azienda : " + azienda.getSpazioFedelta().getIndirizzo());
-                }
-            } else
-                System.out.println("Nessun Azienda iscritta al tuo Programma Fedeltà con l'id : " + programmaFedelta.getIdProgramma());
-        }
+        if(this.gestori.getHandlerAzienda().getProgrammiFedeltaAzienda(this.azienda.getIdAzienda()) != null){
+            for (ProgrammaFedelta programmaFedelta : this.gestori.getHandlerAzienda().getProgrammiFedeltaAzienda(this.azienda.getIdAzienda())) {
+                System.out.println("Programma Fedeltà : " +
+                        "Id Programma : " + programmaFedelta.getIdProgramma() +
+                        "Nome Programma : " + programmaFedelta.getNome() +
+                        "Aziende iscritte : ");
+                if (this.coalizione.getAziendeIscritteProgramma(programmaFedelta.getIdProgramma()) != null) {
+                    for (Azienda azienda : this.coalizione.getAziendeIscritteProgramma(programmaFedelta.getIdProgramma())) {
+                        System.out.println("-Id Azienda : " + azienda.getIdAzienda() +
+                                "-Nome Azienda : " + azienda.getSpazioFedelta().getNome() +
+                                "-Indirizzo Azienda : " + azienda.getSpazioFedelta().getIndirizzo());
+                    }
+                } else
+                    System.out.println("Nessun Azienda iscritta al tuo Programma Fedeltà con l'id : " + programmaFedelta.getIdProgramma());
+            }
+        }else System.out.println("Nessunn programma attivo e nessuna Azienda partecipante.");
+        System.out.println("""
+                Seleziona : 
+                1. Ritorna alla schermata principale.    
+                """);
+        int choice = sc.nextInt();
+        if(choice == 1)
+            sezioneBackOffice();
+
     }
 
     //-------------------------SEZIONE LOGOUT--------------------
@@ -836,6 +850,7 @@ public class UI_Titolare {
 
     //1) METODO MODIFICA SPAZIO FEDELTA
     private void modificaSpazioFedelta(SpazioFedelta spazioFedelta) {
+        sc.nextLine();
         int choice;
         String nome;
         String indirizzo;
@@ -843,6 +858,7 @@ public class UI_Titolare {
         String email;
         System.out.println("\nInserisci il nuovo nome per lo Spazio Fedeltà o premi invio per mantenere: \n");
         nome = sc.nextLine();
+        sc.nextLine();
         if (Objects.equals(nome, "") || nome == null)
             nome = spazioFedelta.getNome();
         System.out.println("\nInserisci il nuovo indirizzo per lo Spazio Fedletà o premi invio per mantenere: \n");
@@ -873,9 +889,9 @@ public class UI_Titolare {
             }
             case 2 -> {
                 System.out.println("Hai annullato le modifiche.\nRitorno alla home.");
-                homeBackoffice();
+                sezioneBackOffice();
             }
-            case 3 -> homeBackoffice();
+            case 3 -> sezioneBackOffice();
         }
 
     }
@@ -905,6 +921,12 @@ public class UI_Titolare {
             System.out.println("Email non valida. Reinserisci l'email del Dipendente : \n");
             email = sc.nextLine();
         }
+        System.out.println("Crea una password temporanea per il Dipendente : ");
+        String password = sc.nextLine();
+        while (Objects.equals(password, "") || password == null) {
+            System.out.println("Email non valida. Reinserisci l'email del Dipendente : \n");
+            password = sc.nextLine();
+        }
         System.out.println("Inserisci 0 per l'accesso a tutta la piattaforma, 1 se ha accesso ristretto");
         int restrizioni = sc.nextInt();
         boolean restr;
@@ -923,7 +945,7 @@ public class UI_Titolare {
         choice = sc.nextInt();
         switch (choice) {
             case 1 -> {
-                this.gestori.getHandlerAzienda().aggiungiDipendente(this.azienda.getIdAzienda(), nome, cognome, email, restr);
+                this.gestori.getHandlerAzienda().aggiungiDipendente(this.azienda.getIdAzienda(), nome, cognome, email,password, restr);
                 System.out.println("\nAccount per il dipendente creato correttamente.\nRitorno alla schermata principale.");
                 sezioneUtenti();
             }

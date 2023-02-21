@@ -58,6 +58,7 @@ public class UI_Home {
 
 
     public void login() {
+        sc.nextLine();
         int choice;
         System.out.println("""
                 Seleziona :
@@ -79,11 +80,13 @@ public class UI_Home {
     }
 
     public void loginGestorePiattaforma() {
+        sc.nextLine();
         System.out.println("Sezione gestore piattaforma non disponibile.");
         this.login();
     }
 
     public void loginTitolare() {
+        sc.nextLine();
         String email;
         String password;
         System.out.println("Inserisci la tua email: ");
@@ -118,6 +121,7 @@ public class UI_Home {
     }
 
     public void loginDipendente() {
+        sc.nextLine();
         String email;
         String password;
         System.out.println("Inserisci la tua email: ");
@@ -152,6 +156,7 @@ public class UI_Home {
     }
 
     public void loginCliente() {
+        sc.nextLine();
         String email;
         String password;
         System.out.println("Inserisci la tua email: ");
@@ -186,6 +191,7 @@ public class UI_Home {
     }
 
     public void registrazione() {
+        sc.nextLine();
         System.out.println("""
                 Benvenuto.
                 Inserisci il tuo nome :
@@ -207,7 +213,19 @@ public class UI_Home {
                                 
                 """);
         String email = sc.nextLine();
-        //Todo richiamare il metodo HandlerCliente che crea il cliente (metodo da aggiungere) + ritornare alla pagina Login.
+        System.out.println("""
+                Inserisci la tua password:
+                                
+                """);
+        String password = sc.nextLine();
+        boolean res = this.utils.getHandlerCliente().addCliente(nome, cognome, numeroTelefono, email, password);
+        if(res){
+            System.out.println("Account creato correttamente. Ritorno alla pagina iniziale...");
+            welcomePage();
+        }else {
+            System.out.println("Errore temporaneo. Ritorno alla fase di registrazione");
+            registrazione();
+        }
     }
 
     public void exitProgram() {
