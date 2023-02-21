@@ -954,25 +954,36 @@ public class DBMS {
         }
         return false;
     }
-
-    public boolean addVisita(int idCliente, Visita visita) {
+    public Visita getVisitaById(int idCliente, int idVisita) {
         for (Cliente cliente : this.getVisiteCliente().keySet()) {
             if (cliente.getIdCliente() == idCliente) {
-                if (this.getVisiteCliente().containsKey(cliente)) {
-                    if (this.getVisiteCliente().get(cliente) == null) {
-                        Set<Visita> visiteCliente = new HashSet<>();
-                        visiteCliente.add(visita);
-                        this.getVisiteCliente().put(cliente, visiteCliente);
-                        return true;
-                    } else {
+                for (Visita visita : this.getVisiteCliente().get(cliente)) {
+                    if (visita.getIdVisita() == idVisita) {
+                        return visita;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public boolean addVisita(int idCliente, Visita visita) {
+        for(Cliente cliente : this.getClientiIscritti()){
+            if(cliente.getIdCliente() == idCliente){
+                if(this.getVisiteCliente().containsKey(cliente)){
+                    if(this.getVisiteCliente().get(cliente) == null){
+                        Set<Visita> visite = new HashSet<>();
+                        visite.add(visita);
+                        this.getVisiteCliente().put(cliente, visite);
+                    }else{
                         return this.getVisiteCliente().get(cliente).add(visita);
                     }
-                } else {
-                    Set<Visita> visiteCliente = new HashSet<>();
-                    visiteCliente.add(visita);
-                    this.getVisiteCliente().put(cliente, visiteCliente);
-                    return true;
+            }else{
+                    Set<Visita> visite = new HashSet<>();
+                    visite.add(visita);
+                    this.getVisiteCliente().put(cliente, visite);
                 }
+                return true;
             }
         }
         return false;
