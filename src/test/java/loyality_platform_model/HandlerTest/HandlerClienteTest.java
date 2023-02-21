@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class HandlerClienteTest {
 
 
-    private Cliente cliente = new Cliente("Nome", "Cognome", "Telefono", "Email");
+    private Cliente cliente = new Cliente("Nome", "Cognome", "Telefono", "Email", "password");
 
     private final Tessera tesseraCliente = new Tessera(this.cliente.getIdCliente());
 

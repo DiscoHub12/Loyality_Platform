@@ -23,7 +23,7 @@ public class Dipendente {
      * This attribute represent the id for
      * this Employee.
      */
-    private int idDipendente;
+    private final int idDipendente;
 
     /**
      * This attribute represent the Name
@@ -44,6 +44,12 @@ public class Dipendente {
     private String email;
 
     /**
+     * This attribute represent the password
+     * for this Employee.
+     */
+    private String password;
+
+    /**
      * This attribute represent the restriction
      * for this Employee. If the restrictions are false,
      * it means they have full access to the entire platform.
@@ -58,16 +64,18 @@ public class Dipendente {
      * @param nome        the name for the Employee.
      * @param cognome     the surname for the Employee.
      * @param email       the email for the Employee.
+     * @param password  the password for the Employee.
      * @param restrizioni the restrictions for the Employee.
      */
-    public Dipendente(String nome, String cognome, String email, boolean restrizioni) {
+    public Dipendente(String nome, String cognome, String email, String password,boolean restrizioni) {
         this.idDipendente = ++contatoreDipendente;
         if (Objects.equals(nome, "") || Objects.equals(cognome, "") || Objects.equals(email, ""))
             throw new IllegalArgumentException("Illegal value for nome, cognome or email");
         this.nome = nome;
         this.cognome = cognome;
-        this.email = email;
-        this.restrizioni = restrizioni;
+        this.setEmail(email);
+        this.setPassword(password);
+        this.setRestrizioni(restrizioni);
     }
 
     public int getIdDipendente() {
@@ -92,6 +100,16 @@ public class Dipendente {
         this.email = email;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        if (Objects.equals(password, ""))
+            throw new IllegalArgumentException("Illegal password for employee.");
+        this.password = password;
+    }
+
     public boolean isRestrizioni() {
         return this.restrizioni;
     }
@@ -113,9 +131,8 @@ public class Dipendente {
         if (object == null)
             return false;
         if (object instanceof Dipendente tmp) {
-            if (this.getIdDipendente() == tmp.getIdDipendente() && this.getNome() == tmp.getNome() &&
-                    this.getEmail() == tmp.getDetails())
-                return true;
+            return this.getIdDipendente() == tmp.getIdDipendente() && Objects.equals(this.getNome(), tmp.getNome()) &&
+                    Objects.equals(this.getEmail(), tmp.getDetails());
         }
         return false;
     }

@@ -14,7 +14,7 @@ public class HandlerProgrammaFedeltaTest {
 
     private final HandlerProgrammaFedelta handlerProgrammaFedelta = new HandlerProgrammaFedelta();
 
-    private final GestorePuntoVendita gestorePuntoVendita = new GestorePuntoVendita("Mario", "Rossi", "mario.rossi@gmmail.com");
+    private final GestorePuntoVendita gestorePuntoVendita = new GestorePuntoVendita("Mario", "Rossi", "mario.rossi@gmmail.com", "password");
 
     private final SpazioFedelta spazioFedelta = new SpazioFedelta("Azienda1", "c.da azienda", "0000", "azienda@gmmail.com");
 

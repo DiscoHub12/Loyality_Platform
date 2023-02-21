@@ -79,10 +79,10 @@ public class HandlerAzienda {
      * @param email   the email for the Employee to add.
      * @throws IllegalArgumentException if the id Company, Name, Surname or Email for Employee is not valid.
      */
-    public Dipendente creaDipendente(String nome, String cognome, String email, boolean restrizioni) {
+    public Dipendente creaDipendente(String nome, String cognome, String email, String password,boolean restrizioni) {
         if (Objects.equals(nome, "") || Objects.equals(cognome, "") || Objects.equals(email, ""))
             throw new IllegalArgumentException("Invalid fields for name, surname or email.");
-        return new Dipendente(nome, cognome, email, restrizioni);
+        return new Dipendente(nome, cognome, email, password,restrizioni);
     }
 
     /**

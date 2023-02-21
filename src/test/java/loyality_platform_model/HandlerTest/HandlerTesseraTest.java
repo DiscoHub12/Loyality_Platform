@@ -17,7 +17,7 @@ public class HandlerTesseraTest {
 
     private final DBMS dbms = DBMS.getInstance();
 
-    private final Cliente cliente = new Cliente("Mario", "Rossi", "0000", "aaaa@aaa");
+    private final Cliente cliente = new Cliente("Mario", "Rossi", "0000", "aaaa@aaa", "password");
 
 
     public void init(){
@@ -44,7 +44,7 @@ public class HandlerTesseraTest {
         init();
         Tessera tessera = new Tessera(cliente.getIdCliente());
          dbms.addTessera(tessera);
-         GestorePuntoVendita gestorePuntoVendita = new GestorePuntoVendita("Mario", "Neri", "mario");
+         GestorePuntoVendita gestorePuntoVendita = new GestorePuntoVendita("Mario", "Neri", "mario", "password");
          SpazioFedelta spazioFedelta = new SpazioFedelta("Azienda", "azienda", "00000", "emailAzienda");
          Azienda azienda = new Azienda(gestorePuntoVendita, spazioFedelta);
          ProgrammaFedelta programmaFedelta = new ProgrammaPunti("PP", "2022-02-02", 100, 80, 10, 10, null);
@@ -67,7 +67,7 @@ public class HandlerTesseraTest {
         init();
         Tessera tessera = new Tessera(cliente.getIdCliente());
         dbms.addTessera(tessera);
-        GestorePuntoVendita gestorePuntoVendita = new GestorePuntoVendita("Mario", "Neri", "mario");
+        GestorePuntoVendita gestorePuntoVendita = new GestorePuntoVendita("Mario", "Neri", "mario", "password1");
         SpazioFedelta spazioFedelta = new SpazioFedelta("Azienda", "azienda", "00000", "emailAzienda");
         Azienda azienda = new Azienda(gestorePuntoVendita, spazioFedelta);
         Map<Integer, Integer> map = new HashMap<>();
@@ -97,7 +97,7 @@ public class HandlerTesseraTest {
         init();
         Tessera tessera = new Tessera(cliente.getIdCliente());
         dbms.addTessera(tessera);
-        GestorePuntoVendita gestorePuntoVendita = new GestorePuntoVendita("Mario", "Neri", "mario");
+        GestorePuntoVendita gestorePuntoVendita = new GestorePuntoVendita("Mario", "Neri", "mario", "password2");
         SpazioFedelta spazioFedelta = new SpazioFedelta("Azienda", "azienda", "00000", "emailAzienda");
         Azienda azienda = new Azienda(gestorePuntoVendita, spazioFedelta);
         Map<Integer, Integer> map = new HashMap<>();
@@ -148,7 +148,7 @@ public class HandlerTesseraTest {
     public void testAddPuntiClienti(){
         init();
         Tessera tessera = new Tessera(cliente.getIdCliente());
-        Cliente cliente1 = new Cliente("Mario", "Neri", "0000", "ciao");
+        Cliente cliente1 = new Cliente("Mario", "Neri", "0000", "ciao", "password3");
         Tessera tessera1 = new Tessera(cliente1.getIdCliente());
         dbms.addTessera(tessera);
         dbms.addCliente(cliente1);
@@ -209,7 +209,7 @@ public class HandlerTesseraTest {
     public void testRemovePuntiClienti(){
         init();
         Tessera tessera = new Tessera(cliente.getIdCliente());
-        Cliente cliente1 = new Cliente("Mario", "Neri", "0000", "ciao");
+        Cliente cliente1 = new Cliente("Mario", "Neri", "0000", "ciao", "password");
         Tessera tessera1 = new Tessera(cliente1.getIdCliente());
         dbms.addTessera(tessera);
         dbms.addCliente(cliente1);
@@ -248,7 +248,7 @@ public class HandlerTesseraTest {
         init();
         Tessera tessera = new Tessera(cliente.getIdCliente());
         dbms.addTessera(tessera);
-        GestorePuntoVendita gestorePuntoVendita = new GestorePuntoVendita("Mario", "Neri", "mario");
+        GestorePuntoVendita gestorePuntoVendita = new GestorePuntoVendita("Mario", "Neri", "mario", "password4");
         SpazioFedelta spazioFedelta = new SpazioFedelta("Azienda", "azienda", "00000", "emailAzienda");
         Azienda azienda = new Azienda(gestorePuntoVendita, spazioFedelta);
         ProgrammaFedelta programmaFedelta = new ProgrammaPunti("PP", "2022-02-02", 100, 80, 10, 10, null);
@@ -278,7 +278,7 @@ public class HandlerTesseraTest {
         init();
         Tessera tessera = new Tessera(cliente.getIdCliente());
         dbms.addTessera(tessera);
-        GestorePuntoVendita gestorePuntoVendita = new GestorePuntoVendita("Mario", "Neri", "mario");
+        GestorePuntoVendita gestorePuntoVendita = new GestorePuntoVendita("Mario", "Neri", "mario", "password5");
         SpazioFedelta spazioFedelta = new SpazioFedelta("Azienda", "azienda", "00000", "emailAzienda");
         Azienda azienda = new Azienda(gestorePuntoVendita, spazioFedelta);
         ProgrammaFedelta programmaFedelta = new ProgrammaPunti("PP", "2022-02-02", 100, 80, 10, 10, null);

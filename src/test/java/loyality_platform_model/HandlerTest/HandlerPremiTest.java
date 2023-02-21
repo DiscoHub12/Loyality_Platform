@@ -12,9 +12,9 @@ import static org.junit.jupiter.api.Assertions.*;
 public class HandlerPremiTest {
 
     //TITOLARE E AZIENDA
-    private final GestorePuntoVendita titolare = new GestorePuntoVendita("Nome", "Cognome", "Email");
-    private final Dipendente dipendente = new Dipendente("Dipendente1", "Cognome1", "prova@gmail1.com", false);
-    private final Dipendente dipendente1 = new Dipendente("Dipendente2", "Cognome2", "prova@gmail1.com", true);
+    private final GestorePuntoVendita titolare = new GestorePuntoVendita("Nome", "Cognome", "Email", "password");
+    private final Dipendente dipendente = new Dipendente("Dipendente1", "Cognome1", "prova@gmail1.com",  "password", false);
+    private final Dipendente dipendente1 = new Dipendente("Dipendente2", "Cognome2", "prova@gmail1.com", "password", true);
     private final SpazioFedelta spazioFedelta = new SpazioFedelta("Nome", "Indizzo", "Numero Telefono", "Email");
     private final Azienda azienda = new Azienda(titolare, spazioFedelta);
 
@@ -50,7 +50,7 @@ public class HandlerPremiTest {
     private final Set<Premio> premiLivelli = new HashSet<>();
 
     //CLIENTE E TESSERA
-    private final Cliente cliente = new Cliente("Nome", "Cognome", "Telefono", "Email");
+    private final Cliente cliente = new Cliente("Nome", "Cognome", "Telefono", "Email", "Password");
     private final Tessera tesseraCliente = new Tessera(this.cliente.getIdCliente());
 
 

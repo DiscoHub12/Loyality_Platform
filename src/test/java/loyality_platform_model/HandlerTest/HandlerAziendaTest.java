@@ -4,9 +4,7 @@ import loyality_platform_model.DBMS.DBMS;
 import loyality_platform_model.Handler.HandlerAzienda;
 import loyality_platform_model.Models.*;
 import org.junit.jupiter.api.Test;
-
 import java.util.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -16,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class HandlerAziendaTest {
 
     //TITOLARE
-    private final GestorePuntoVendita gestore = new GestorePuntoVendita("Alessio", "Cognome1", "prova@gmail.com");
+    private final GestorePuntoVendita gestore = new GestorePuntoVendita("Alessio", "Cognome1", "prova@gmail.com", "password");
 
     //SPAZIO FEDELTA
     private final SpazioFedelta spazio = new SpazioFedelta("Spazio1", "Indirizzo1", "Telefono1", "email1");
@@ -25,8 +23,8 @@ public class HandlerAziendaTest {
     private final Azienda azienda = new Azienda(gestore, spazio);
 
     //DIPENDENTI AZIENDA
-    private final Dipendente dipendente = new Dipendente("Dipendente1", "Cognome1", "prova@gmail1.com", false);
-    private final Dipendente dipendente1 = new Dipendente("Dipendente2", "Cognome2", "prova@gmail1.com", true);
+    private final Dipendente dipendente = new Dipendente("Dipendente1", "Cognome1", "prova@gmail1.com", "password",false);
+    private final Dipendente dipendente1 = new Dipendente("Dipendente2", "Cognome2", "prova@gmail1.com", "password", true);
 
 
     //POLICY PROGRAMMI E PROGRAMMI
@@ -47,7 +45,7 @@ public class HandlerAziendaTest {
     private final Set<CatalogoPremi> cataloghi = new HashSet<>();
 
     //CLIENTE
-    private final Cliente cliente = new Cliente("Nome", "Cognome", "Telefono", "Email");
+    private final Cliente cliente = new Cliente("Nome", "Cognome", "Telefono", "Email", "Password");
 
     private final Tessera tessera = new Tessera(cliente.getIdCliente());
 
@@ -122,17 +120,19 @@ public class HandlerAziendaTest {
     @Test
     public void testCreaDipendente() {
         initTotal();
-        assertThrows(IllegalArgumentException.class, () -> handler.creaDipendente("","","",false));
-        Dipendente dipendente = handler.creaDipendente("Nome", "Cognome", "Email", false);
+        assertThrows(IllegalArgumentException.class, () -> handler.creaDipendente("","","","",false));
+        Dipendente dipendente = handler.creaDipendente("Nome", "Cognome", "Email", "password", false);
         assertNotNull(dipendente);
         assertEquals("Nome", dipendente.getNome());
         assertEquals("Cognome", dipendente.getCognome());
         assertEquals("Email", dipendente.getEmail());
-        Dipendente dipendente1 = this.handler.creaDipendente("Alessio", "Giacche", "email", true);
+        assertEquals("password", dipendente.getPassword());
+        Dipendente dipendente1 = this.handler.creaDipendente("Alessio", "Giacche", "email", "password1", true);
         assertNotNull(dipendente1);
         assertEquals("Alessio", dipendente1.getNome());
         assertEquals("Giacche", dipendente1.getCognome());
         assertEquals("email", dipendente1.getEmail());
+        assertEquals("password1", dipendente1.getPassword());
     }
 
     @Test

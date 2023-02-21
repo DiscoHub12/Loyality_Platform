@@ -18,18 +18,18 @@ import java.util.Set;
 public class DBMSTest {
 
     //AZIENDA 1
-    private final GestorePuntoVendita gestore = new GestorePuntoVendita("Alessio", "Cognome1", "prova@gmail.com");
+    private final GestorePuntoVendita gestore = new GestorePuntoVendita("Alessio", "Cognome1", "prova@gmail.com", "password");
     private final SpazioFedelta spazio = new SpazioFedelta("Spazio1", "Indirizzo1", "Telefono1", "email1");
     private final Azienda azienda = new Azienda(gestore, spazio);
 
     //AZIENDA 2
-    private final GestorePuntoVendita gestore1 = new GestorePuntoVendita("Nome", "Cognome", "nomecognome@gmail.com");
+    private final GestorePuntoVendita gestore1 = new GestorePuntoVendita("Nome", "Cognome", "nomecognome@gmail.com", "password");
     private final SpazioFedelta spazio1 = new SpazioFedelta("Spazio2", "Indirizzo2", "Telefono2", "email2");
     private final Azienda azienda1 = new Azienda(gestore1, spazio1);
 
     //DIPENDENTI AZIENDA
-    private final Dipendente dipendente = new Dipendente("Dipendente1", "Cognome1", "prova@gmail1.com", false);
-    private final Dipendente dipendente1 = new Dipendente("Dipendente2", "Cognome2", "prova@gmail1.com", true);
+    private final Dipendente dipendente = new Dipendente("Dipendente1", "Cognome1", "prova@gmail1.com", "password1", false);
+    private final Dipendente dipendente1 = new Dipendente("Dipendente2", "Cognome2", "prova@gmail1.com", "password2" ,true);
 
 
     //POLICY PROGRAMMI E PROGRAMMI
@@ -50,11 +50,11 @@ public class DBMSTest {
     private final Set<CatalogoPremi> cataloghi = new HashSet<>();
 
     //CLIENTE
-    private final Cliente cliente = new Cliente("Nome", "Cognome", "Telefono", "Email");
+    private final Cliente cliente = new Cliente("Nome", "Cognome", "Telefono", "Email", "Password");
 
     private final Tessera tessera = new Tessera(cliente.getIdCliente());
 
-    private DBMS db = DBMS.getInstance();
+    private final DBMS db = DBMS.getInstance();
 
     void initDb(){
         System.out.println("Id Azienda : " + this.azienda.getIdAzienda());
