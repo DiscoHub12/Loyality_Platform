@@ -30,6 +30,31 @@ public class HandlerCliente {
     }
 
     /**
+     * This method allow to create a new Customer account into the
+     * Platform.
+     *
+     * @param nome     the name of the Customer.
+     * @param cognome  the surname of the Customer.
+     * @param telefono the telephone number of the Customer.
+     * @param email    the email of the Customer.
+     * @param password the password of the Customer.
+     * @return true if the Customer is created successfully, false otherwise.
+     * @throws IllegalArgumentException if the filed is not valids.
+     */
+    public boolean addCliente(String nome, String cognome, String telefono, String email, String password) {
+        if (Objects.equals(nome, "") || Objects.equals(cognome, "") || Objects.equals(telefono, "") || Objects.equals(email, "") || Objects.equals(password, "")) {
+            throw new IllegalArgumentException("Invalid Fields. The field can't be empty.");
+        }
+        for (Cliente cliente : this.dbms.getClientiIscritti()) {
+            if (Objects.equals(cliente.getNome(), nome) && Objects.equals(cliente.getCognome(), cognome) && Objects.equals(cliente.getEmail(), email))
+                return false;
+        }
+        Cliente newCustomer = new Cliente(nome, cognome, telefono, email, password);
+        return this.dbms.addCliente(newCustomer);
+
+    }
+
+    /**
      * This method allows you to identify a Customer
      * who will be searched within the platform by name and surname.
      *
@@ -51,8 +76,11 @@ public class HandlerCliente {
      *
      * @param idTessera the card code about the Costumer to identify.
      * @return a Costumer object if exists, null otherwise.
+     * @throws IllegalArgumentException if the idTessera is not valid.
      */
     public Cliente identificaClienteTessera(int idTessera) {
+        if (idTessera <= 0)
+            throw new IllegalArgumentException("Invalid id for the Card.");
         return this.dbms.identificaClienteTessera(idTessera);
     }
 
@@ -62,8 +90,11 @@ public class HandlerCliente {
      *
      * @param idCliente the id about the Costumer to identify;
      * @return a Costumer object if exists, null otherwise.
+     * @throws IllegalArgumentException if the idCliente is not valid.
      */
     public Cliente identificaClienteCodice(int idCliente) {
+        if (idCliente <= 0)
+            throw new IllegalArgumentException("Invalid id for the Customer.");
         return this.dbms.identificaClienteCodice(idCliente);
     }
 
@@ -74,6 +105,7 @@ public class HandlerCliente {
      *
      * @param idCliente the id about the Costumer.
      * @return the Card if the Costumer has one, null otherwise.
+     * @throws IllegalArgumentException if the idCliente is not valid.
      */
     public Tessera getTesseraCliente(int idCliente) {
         if (idCliente <= 0)

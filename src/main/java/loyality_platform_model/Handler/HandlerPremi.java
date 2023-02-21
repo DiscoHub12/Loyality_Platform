@@ -23,7 +23,7 @@ public class HandlerPremi {
      * created by an Owner, if they exist.
      *
      * @param idAzienda the id for the Company (Azienda).
-     * @return a list of preconfigured Coupons if exists, null otherwise.
+     * @return a Set of preconfigured Coupons if exists, null otherwise.
      */
     public Set<Coupon> getCouponPreconfiguratiAzienda(int idAzienda) {
         return this.dbms.getCouponPreconfiguratiAzienda(idAzienda);
@@ -37,9 +37,11 @@ public class HandlerPremi {
      * @param idAzienda the id for the Company (Azienda).
      * @param idCoupon  the id of the Coupon.
      * @return Coupon if exists, null otherwise.
-     * @throws IllegalArgumentException if the idCoupon is not valid.
+     * @throws IllegalArgumentException if the idCoupon or idAzienda is not valid.
      */
     public Coupon getCouponPreconfiguratoAzienda(int idAzienda, int idCoupon) {
+        if (idAzienda <= 0 || idCoupon <= 0)
+            throw new IllegalArgumentException("Invalid id for the Company or Coupon");
         Set<Coupon> couponAzienda = this.getCouponPreconfiguratiAzienda(idAzienda);
         for (Coupon coupon : couponAzienda) {
             if (coupon.getIdCoupon() == idCoupon) {
@@ -75,7 +77,7 @@ public class HandlerPremi {
      *                 level program.
      * @param number   the number of point, if the Prize is for points program, level otherwise.
      * @return the new Prize created.
-     * @throws IllegalArgumentException if nome, number is invalid.
+     * @throws IllegalArgumentException if nome or number is invalid.
      */
     public Premio creaPremio(String nome, boolean isPoints, int number) {
         if (Objects.equals(nome, "") || number <= 0)
@@ -241,6 +243,7 @@ public class HandlerPremi {
      * @param idCatalogoPremi the Reward Catalog.
      * @param idPremio        the Prize to remove into the Reward Catalog.
      * @return true if success, false otherwise.
+     * @throws IllegalArgumentException if the id are not valid.
      */
     public boolean deletePremioProgramama(int idAzienda, int idProgramma, int idCatalogoPremi, int idPremio) {
         if (idAzienda <= 0 || idProgramma <= 0 || idCatalogoPremi <= 0 || idPremio <= 0)
@@ -319,6 +322,8 @@ public class HandlerPremi {
      * @param idAzienda          the id for the Company.
      * @param idProgrammaFedelta the id for the Loyalty Program to add the new Catalog, if not exists.
      * @param premiCatalogo      the prizes for the new Reward Catalog.
+     * @throws NullPointerException     if the premiCatalogo is null.
+     * @throws IllegalArgumentException if the idAzienda or idProgrammaFedelta is not correct.
      */
     public boolean aggiungiCatalogoProgrammaLivelli(int idAzienda, int idProgrammaFedelta, Set<Premio> premiCatalogo) {
         Objects.requireNonNull(premiCatalogo);
@@ -407,10 +412,11 @@ public class HandlerPremi {
      *
      * @param idCliente the id for the Customer.
      * @param idPremio  the id for the Prize to add into the Customer profile.
+     * @throws IllegalArgumentException if the idAzienda or idCliente or idPremio is not valid.
      */
     public boolean aggiungiPremioClienteCatalogoGenerale(int idAzienda, int idCliente, int idPremio) {
         boolean response = false;
-        if (idCliente <= 0 || idPremio <= 0)
+        if (idCliente <= 0 || idPremio <= 0 || idAzienda <= 0)
             throw new IllegalArgumentException("Invalid id for the fields.");
         Set<CatalogoPremi> catalogoPremiAzienda = this.dbms.getCatalogoPremiAzienda(idAzienda);
         for (CatalogoPremi catalogoPremi : catalogoPremiAzienda) {
