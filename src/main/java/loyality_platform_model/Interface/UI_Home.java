@@ -1,6 +1,5 @@
 package loyality_platform_model.Interface;
 
-import loyality_platform_model.DBMS.DBMS;
 import loyality_platform_model.Models.Azienda;
 import loyality_platform_model.Models.Cliente;
 import loyality_platform_model.Utils.InitProjectData;
@@ -32,10 +31,8 @@ public class UI_Home {
     private final Scanner sc;
 
     public UI_Home() {
-        InitProjectData initData = InitProjectData.getInstance();
         this.utils = new Utils();
         this.sc = new Scanner(System.in);
-        welcomePage();
     }
 
     public void welcomePage() {
@@ -116,7 +113,7 @@ public class UI_Home {
             }
         }else {
             System.out.println("Login Success.");
-            UI_Titolare ui = new UI_Titolare(azienda, DBMS.getInstance().getCoalizione());
+            UI_Titolare ui = new UI_Titolare(azienda, this);
         }
     }
 
