@@ -10,8 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TesseraTest {
 
+    Cliente cliente = new Cliente("Mario", "Rossi", "000", "mario.rossi@gmmail.com", "password");
 
-    Cliente cliente = new Cliente("Mario", "Rossi", "000", "mario.rossi@gmmail.com");
 
     @Test
     public void testClass() {

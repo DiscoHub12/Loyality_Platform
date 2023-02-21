@@ -3,23 +3,21 @@ package loyality_platform_model.ModelTest;
 import loyality_platform_model.DBMS.DBMS;
 import loyality_platform_model.Models.*;
 import org.junit.jupiter.api.Test;
-
 import java.util.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CoalizioneTest {
 
     //CLIENTI TEST
-    private final Cliente cliente0 = new Cliente("nome0", "cognome0", "telefono0", "email0");
-    private final Cliente cliente1 = new Cliente("nome0", "cognome0", "telefono0", "email0");
-    private final Cliente cliente2 = new Cliente("nome0", "cognome0", "telefono0", "email0");
-    private final Cliente cliente3 = new Cliente("nome0", "cognome0", "telefono0", "email0");
-    private final Cliente cliente4 = new Cliente("nome0", "cognome0", "telefono0", "email0");
-    private final Cliente cliente5 = new Cliente("nome0", "cognome0", "telefono0", "email0");
+    private final Cliente cliente0 = new Cliente("nome0", "cognome0", "telefono0", "email0", "password");
+    private final Cliente cliente1 = new Cliente("nome0", "cognome0", "telefono0", "email0", "password0");
+    private final Cliente cliente2 = new Cliente("nome0", "cognome0", "telefono0", "email0", "password1");
+    private final Cliente cliente3 = new Cliente("nome0", "cognome0", "telefono0", "email0", "password2");
+    private final Cliente cliente4 = new Cliente("nome0", "cognome0", "telefono0", "email0", "password3");
+    private final Cliente cliente5 = new Cliente("nome0", "cognome0", "telefono0", "email0", "password4");
 
     //GESTORE E SPAZIO FEDELTA' PER TEST
-    private final GestorePuntoVendita gestore = new GestorePuntoVendita("nome", "cognome", "email");
+    private final GestorePuntoVendita gestore = new GestorePuntoVendita("nome", "cognome", "email", "password");
     private final SpazioFedelta spazioFedelta = new SpazioFedelta("nome", "indirizzo", "telefono", "email");
 
     //AZIENDE PER TEST

@@ -2,21 +2,18 @@ package loyality_platform_model.ModelTest;
 
 import loyality_platform_model.Models.Visita;
 import org.junit.jupiter.api.Test;
-import java.util.Calendar;
-import java.util.Date;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class VisitaTest {
 
-    private String luogo = "Camerino";
-    private String data="20/01/2023";
+    private final String luogo = "Camerino";
+    private final String data="20/01/2023";
 
     @Test
     public void testCostructor(){
         assertThrows(NullPointerException.class, () -> new Visita("", ""));
         assertThrows(NullPointerException.class, () -> new Visita(luogo , null));
         assertThrows(NullPointerException.class, () -> new Visita("", data));
-        Visita visita = new Visita(luogo, data);
     }
 
     @Test
