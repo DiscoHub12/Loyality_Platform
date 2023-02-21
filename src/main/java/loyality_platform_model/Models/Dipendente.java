@@ -132,12 +132,12 @@ public class Dipendente {
             return false;
         if (object instanceof Dipendente tmp) {
             return this.getIdDipendente() == tmp.getIdDipendente() && Objects.equals(this.getNome(), tmp.getNome()) &&
-                    Objects.equals(this.getEmail(), tmp.getDetails());
+                    Objects.equals(this.getEmail(), tmp.toString());
         }
         return false;
     }
 
-    public String getDetails() {
+    public String toString() {
         return "\t-DETAILS EMPLOYEE-" +
                 "\nNome : " + this.getNome() +
                 "\nCognome : " + this.getCognome() +
