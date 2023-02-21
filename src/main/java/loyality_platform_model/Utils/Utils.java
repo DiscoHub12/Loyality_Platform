@@ -100,27 +100,27 @@ public class Utils {
     }
 
 
-    public Azienda getAziendaByLogin(String nome, String cognome){
+    public Azienda getAziendaByLogin(String email, String password){
         for(Azienda azienda : DBMS.getInstance().getAziendeIscritte()){
-            if(Objects.equals(azienda.getTitolare().getNome(), nome) && Objects.equals(azienda.getTitolare().getCognome(), cognome))
+            if(Objects.equals(azienda.getTitolare().getEmail(), email) && Objects.equals(azienda.getTitolare().getPassword(), password))
                 return azienda;
         }
         return null;
     }
 
-    public Azienda getAziendaByLoginDipendente(String nome, String cognome){
+    public Azienda getAziendaByLoginDipendente(String email, String password){
         for(Map.Entry<Azienda, Set<Dipendente>> entry: DBMS.getInstance().getDipendentiAzienda().entrySet()){
             for(Dipendente dipendente : entry.getValue()){
-                if(Objects.equals(dipendente.getNome(), nome) && Objects.equals(dipendente.getCognome(), cognome))
+                if(Objects.equals(dipendente.getEmail(), email) && Objects.equals(dipendente.getPassword(), password))
                     return entry.getKey();
             }
         }
         return null;
     }
 
-   public Cliente getClienteByLogin(String nome, String cognome){
+   public Cliente getClienteByLogin(String email, String password){
         for(Cliente cliente: DBMS.getInstance().getClientiIscritti()){
-            if(Objects.equals(cliente.getNome(), nome) && Objects.equals(cliente.getCognome(), cognome))
+            if(Objects.equals(cliente.getEmail(), email) && Objects.equals(cliente.getPassword(), password))
                 return cliente;
         }
         return null;

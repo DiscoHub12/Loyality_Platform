@@ -119,10 +119,10 @@ public class UI_Dipendente {
         choice = scanner.nextInt();
         switch (choice) {
             case 1 -> {
-                Cliente cliente = new Cliente(nome, cognome, telefono, email);
                 int idCliente = 0;
                 for(Cliente cliente1 : DBMS.getInstance().getClientiIscritti()){
-                    if(cliente.equals(cliente1))
+                    if(cliente1.getNome().equals(nome) && cliente1.getCognome().equals(cognome) &&
+                    cliente1.getEmail().equals(email) && cliente1.getTelefono().equals(telefono))
                         idCliente = cliente1.getIdCliente();
                 }
                 if(this.utils.getHandlerTessera().creaTessera(idCliente))
