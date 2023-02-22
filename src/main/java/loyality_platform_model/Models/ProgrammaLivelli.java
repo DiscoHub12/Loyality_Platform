@@ -295,7 +295,7 @@ public class ProgrammaLivelli implements ProgrammaFedelta {
                 "\npuntiSpesa: " + puntiSpesa +
                 "\nimportoSpesa: " + importoSpesa +
                 "\ntipoProgramma: " + tipoProgramma+
-                "\nCatalogo Premi: " + toStringCatalogo();
+                "\nId Catalogo Premi: " + this.catalogoPremi.getIdCatalogoPremi();
     }
 
     private String toStringCatalogo(){

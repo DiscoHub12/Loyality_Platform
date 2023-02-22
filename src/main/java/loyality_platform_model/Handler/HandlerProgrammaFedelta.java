@@ -6,6 +6,7 @@ import loyality_platform_model.Models.ProgrammaFedelta;
 import loyality_platform_model.Models.ProgrammaLivelli;
 import loyality_platform_model.Models.ProgrammaPunti;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * This class is a loyalty program manager, so it is responsible for viewing the details
@@ -88,6 +89,20 @@ public class HandlerProgrammaFedelta {
             throw new IllegalArgumentException("Id not correct");
         ProgrammaLivelli toAdd = creaProgrammaLivelli(nome, dataAttivazione, massimoLivelli, livelloVip, map, puntiSpesa, importoSpesa, catalogoPremi);
         return this.getDbms().addProgrammaAzienda(idAzienda, toAdd);
+    }
+
+    /**
+     *
+     * @param idAzienda
+     * @param programmaFedelta
+     * @return
+     */
+    public boolean aggiungiProgrammaEsistente(int idAzienda, ProgrammaFedelta programmaFedelta){
+        Objects.requireNonNull(programmaFedelta);
+        if(idAzienda <= 0)
+            throw new IllegalArgumentException("Invalid Company id.");
+
+        return this.getDbms().addProgrammaAzienda(idAzienda, programmaFedelta);
     }
 
     /**
