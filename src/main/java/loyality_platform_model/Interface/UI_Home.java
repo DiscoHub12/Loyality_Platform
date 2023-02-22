@@ -4,8 +4,10 @@ import loyality_platform_model.Models.Azienda;
 import loyality_platform_model.Models.Cliente;
 import loyality_platform_model.Utils.InitProjectData;
 import loyality_platform_model.Utils.Utils;
+
 import java.util.Objects;
 import java.util.Scanner;
+
 import static java.lang.System.exit;
 
 /**
@@ -99,21 +101,38 @@ public class UI_Home {
             password = sc.nextLine();
         }
         Azienda azienda = getGestoreByLogin(email, password);
-        if(azienda == null){
+        if (azienda == null) {
             System.out.println("""
                     Credenziali non valide. Inserisci :
                     1. Esegui nuovamente il Login.
                     2. Ritorna alla Home.
-                    
+                                        
                     """);
             int choice = sc.nextInt();
-            switch (choice){
+            switch (choice) {
                 case 1 -> loginTitolare();
                 case 2 -> login();
             }
-        }else {
+        } else {
             System.out.println("Login Success.");
-            UI_Titolare ui = new UI_Titolare(azienda, this);
+            System.out.println("""
+                    BENVENUTO
+                    Elenco le sezioni disponibili nella Dashboard Titolare: 
+                    1. Sezione Backoffice.
+                    2. Sezione Dipendente.
+                    3. Ritorna alla Home.
+                    Inserisci il numero corrispettivo.
+                    """);
+            int choice = sc.nextInt();
+            switch (choice) {
+                case 1 -> {
+                    UI_Titolare ui = new UI_Titolare(azienda, this);
+                }
+                case 2 ->{
+                    UI_Dipendente ui = new UI_Dipendente(azienda, this);
+                }
+                case 3 -> welcomePage();
+            }
         }
     }
 
@@ -134,19 +153,19 @@ public class UI_Home {
             password = sc.next();
         }
         Azienda azienda = getDipendenteByLogin(email, password);
-        if(azienda == null){
+        if (azienda == null) {
             System.out.println("""
                     Credenziali non valide. Inserisci :
                     1. Esegui nuovamente il Login.
                     2. Ritorna alla Home.
-                    
+                                        
                     """);
             int choice = sc.nextInt();
-            switch (choice){
+            switch (choice) {
                 case 1 -> loginDipendente();
                 case 2 -> login();
             }
-        }else {
+        } else {
             System.out.println("Login Success.");
             UI_Dipendente ui = new UI_Dipendente(azienda, this);
         }
@@ -169,21 +188,21 @@ public class UI_Home {
             password = sc.nextLine();
         }
         Cliente cliente = getClienteByLogin(email, password);
-        if(cliente == null){
+        if (cliente == null) {
             System.out.println("""
                     Credenziali non valide. Inserisci :
                     1. Esegui nuovamente il Login.
                     2. Ritorna alla Home.
-                    
+                                        
                     """);
             int choice = sc.nextInt();
-            switch (choice){
+            switch (choice) {
                 case 1 -> loginCliente();
                 case 2 -> login();
             }
-        }else {
+        } else {
             System.out.println("Login Success.");
-            UI_Cliente ui = new UI_Cliente(cliente,this);
+            UI_Cliente ui = new UI_Cliente(cliente, this);
         }
     }
 
@@ -216,10 +235,10 @@ public class UI_Home {
                 """);
         String password = sc.nextLine();
         boolean res = this.utils.getHandlerCliente().addCliente(nome, cognome, numeroTelefono, email, password);
-        if(res){
+        if (res) {
             System.out.println("Account creato correttamente. Ritorno alla pagina iniziale...");
             welcomePage();
-        }else {
+        } else {
             System.out.println("Errore temporaneo. Ritorno alla fase di registrazione");
             registrazione();
         }
@@ -242,6 +261,6 @@ public class UI_Home {
     }
 
     private Cliente getClienteByLogin(String email, String password) {
-       return this.utils.getClienteByLogin(email, password);
+        return this.utils.getClienteByLogin(email, password);
     }
 }
