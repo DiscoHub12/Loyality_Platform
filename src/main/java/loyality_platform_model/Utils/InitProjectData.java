@@ -18,8 +18,16 @@ public class InitProjectData {
 
     private final Azienda azienda = new Azienda(titolare, spazioFedelta);
 
+
+    private final Coupon coupon = new Coupon(20, "2022-04-12");
+
+    private final ConfigurazioneSMS configurazioneSMS = new ConfigurazioneSMS("Benvenuto.");
+
+    private final SMS sms = new SMS(configurazioneSMS.getTestoConfigurato());
+
     //CLIENTE
     private final Cliente cliente = new Cliente("Luigi", "Mauri", "0000000", "lucamauri@gmail.com", "password3");
+
 
     public InitProjectData() {
         //DATABASE
@@ -27,7 +35,11 @@ public class InitProjectData {
         dbms.addAzienda(azienda);
         dbms.addDipendente(azienda.getIdAzienda(), dipendente0);
         dbms.addDipendente(azienda.getIdAzienda(), dipendente1);
+        dbms.addCouponPreconfiguratoAzienda(azienda.getIdAzienda(), coupon);
+        dbms.addConfigurazioneSMS(azienda.getIdAzienda(), sms);
         dbms.addCliente(cliente);
+        dbms.addCoupon(azienda.getIdAzienda(), cliente.getIdCliente(), coupon.getIdCoupon());
+
     }
 
     public static InitProjectData getInstance() {
@@ -57,7 +69,12 @@ public class InitProjectData {
         return azienda;
     }
 
+    public Coupon getCoupon(){ return coupon; }
+
+    public SMS getSms(){ return sms; }
+
     public Cliente getCliente() {
         return cliente;
     }
+
 }
