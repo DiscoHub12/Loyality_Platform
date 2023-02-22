@@ -868,6 +868,73 @@ public class UI_Titolare {
 
     //SEZIONE 1
     public void sezioneCoalizioneAzienda() {
+        sc.nextLine();
+        System.out.println("""
+                \nElenco le possibili operazioni : 
+                1. Partecipa Coalizione. 
+                2. Vedi Aziende iscritte.
+                3. Torna alla Home.
+                """);
+        int choice = sc.nextInt();
+        switch (choice){
+            case 1 -> partecipaCoalizione();
+            case 2 -> aziendeIscritteCoalizione();
+            case 3 -> sezioneBackOffice();
+        }
+    }
+
+    public void partecipaCoalizione(){
+        sc.nextLine();
+        System.out.println("""
+                SEZIONE PARTECIPA COALIZIONE
+                Qui sottostante, verranno mostrate le Aziende iscritte 
+                alla piattaforma, e i relativi Programmi Fedeltà. 
+                """);
+        Map<ProgrammaFedelta, Set<Azienda>> aziendeProgrammi = DBMS.getInstance().getCoalizione().getAziendePerProgramma();
+        if(aziendeProgrammi == null || aziendeProgrammi.isEmpty()){
+            System.out.println("""
+                    Nessun azienda iscritta e nessun programma fedeltà disponibile. 
+                    Ritorno alla schermata precedente.. 
+                    """);
+            sezioneCoalizioneAzienda();
+        }else {
+            for(ProgrammaFedelta programmaFedelta : aziendeProgrammi.keySet()){
+                System.out.println("\nPROGRAMMA FEDELTA : " +
+                        "\n" + programmaFedelta.toString());
+                for(Azienda azienda : aziendeProgrammi.get(programmaFedelta)){
+                    System.out.println( "\nAZIENDE ISCRITTE : " +
+                            "\nNome Azienda : " + azienda.getSpazioFedelta().getNome());
+                }
+            }
+        }
+        System.out.println("""
+                Inserisci l'id del Programma Fedeltà a cui vuoi iscriverti:
+                """);
+        int programmaFedelta = sc.nextInt();
+        assert aziendeProgrammi != null;
+        for(ProgrammaFedelta programmaFedelta1 : aziendeProgrammi.keySet()){
+            if(programmaFedelta == programmaFedelta1.getIdProgramma()){
+                if(this.handlers.getHandlerProgrammaFedelta().aggiungiProgrammaEsistente(azienda.getIdAzienda(), programmaFedelta1)){
+                    System.out.println("""
+                        Programma aggiunto correttamente.
+                        Ritorno alla sezione Coalizione.
+                        """);
+                    sezioneCoalizioneAzienda();
+                }else {
+                    System.out.println("""
+                            Non è possibile aggiungere il seguente Programma Fedeltà.
+                            Ritorno alla schermata precedente.
+                            """);
+                    partecipaCoalizione();
+                }
+            }
+        }
+
+
+    }
+
+    public void aziendeIscritteCoalizione(){
+        sc.nextLine();
         System.out.println("""
                 SEZIONE COALIZIONE AZIENDA
                 In questa sezione, verranno mostrati i tuoi Programmi Fedelta'
@@ -893,7 +960,6 @@ public class UI_Titolare {
         int choice = sc.nextInt();
         if (choice == 1)
             sezioneBackOffice();
-
     }
 
     //-------------------------SEZIONE LOGOUT--------------------
