@@ -41,7 +41,7 @@ public class ProgrammaPuntiTest {
         Premio premio = new Premio("Zaino", true, 20);
         Set<Premio> premi = new HashSet<>();
         premi.add(premio);
-        CatalogoPremi catalogoPremi = new CatalogoPremi(premi);
+        CatalogoPremi catalogoPremi = new CatalogoPremi("Catalogo", premi);
         programmaPunti.setCatalogoPremi(catalogoPremi);
         assertEquals(catalogoPremi, programmaPunti.getCatalogoPremi());
         System.out.println(programmaPunti);
