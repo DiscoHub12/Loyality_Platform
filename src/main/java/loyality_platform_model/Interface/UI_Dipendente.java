@@ -36,7 +36,7 @@ public class UI_Dipendente {
         int choice;
         System.out.println("""
                 BENVENUTO
-                Elenco le sezioni disponibili nella Dashboard Dipendente:
+                Elenco le sezioni disponibili nella Sezione Dipendente:
                                 
                 1. Sezione Crea Tessera
                 2. Sezione Identifica Cliente

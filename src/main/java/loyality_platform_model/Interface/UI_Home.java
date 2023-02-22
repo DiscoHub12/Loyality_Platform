@@ -1,7 +1,9 @@
 package loyality_platform_model.Interface;
 
+import loyality_platform_model.DBMS.DBMS;
 import loyality_platform_model.Models.Azienda;
 import loyality_platform_model.Models.Cliente;
+import loyality_platform_model.Models.Dipendente;
 import loyality_platform_model.Utils.InitProjectData;
 import loyality_platform_model.Utils.Utils;
 
@@ -117,7 +119,7 @@ public class UI_Home {
             System.out.println("Login Success.");
             System.out.println("""
                     BENVENUTO
-                    Elenco le sezioni disponibili nella Dashboard Titolare: 
+                    Elenco le sezioni disponibili nella Dashboard Titolare:
                     1. Sezione Backoffice.
                     2. Sezione Dipendente.
                     3. Ritorna alla Home.
@@ -128,7 +130,7 @@ public class UI_Home {
                 case 1 -> {
                     UI_Titolare ui = new UI_Titolare(azienda, this);
                 }
-                case 2 ->{
+                case 2 -> {
                     UI_Dipendente ui = new UI_Dipendente(azienda, this);
                 }
                 case 3 -> welcomePage();
@@ -153,7 +155,8 @@ public class UI_Home {
             password = sc.next();
         }
         Azienda azienda = getDipendenteByLogin(email, password);
-        if (azienda == null) {
+        Dipendente dipendente = getDipendenteDatiByLogin(email, password);
+        if (azienda == null || dipendente == null) {
             System.out.println("""
                     Credenziali non valide. Inserisci :
                     1. Esegui nuovamente il Login.
@@ -167,7 +170,28 @@ public class UI_Home {
             }
         } else {
             System.out.println("Login Success.");
-            UI_Dipendente ui = new UI_Dipendente(azienda, this);
+            if (dipendente.isRestrizioni()) {
+                UI_Dipendente ui = new UI_Dipendente(azienda, this);
+            } else {
+                System.out.println("""
+                        BENVENUTO
+                        Elenco le sezioni disponibili nella Dashboard Dipendente:
+                        1. Sezione Backoffice.
+                        2. Sezione Dipendente.
+                        3. Ritorna alla Home.
+                        Inserisci il numero corrispettivo.
+                        """);
+                int choice = sc.nextInt();
+                switch (choice) {
+                    case 1 -> {
+                        UI_Titolare ui = new UI_Titolare(azienda, this);
+                    }
+                    case 2 -> {
+                        UI_Dipendente ui = new UI_Dipendente(azienda, this);
+                    }
+                    case 3 -> welcomePage();
+                }
+            }
         }
     }
 
@@ -258,6 +282,10 @@ public class UI_Home {
 
     private Azienda getDipendenteByLogin(String email, String password) {
         return this.utils.getAziendaByLoginDipendente(email, password);
+    }
+
+    private Dipendente getDipendenteDatiByLogin(String email, String password) {
+        return this.utils.getDipendenteDatiByLogin(email, password);
     }
 
     private Cliente getClienteByLogin(String email, String password) {
