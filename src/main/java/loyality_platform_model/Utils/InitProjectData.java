@@ -31,7 +31,7 @@ public class InitProjectData {
 
     private final ConfigurazioneSMS configurazioneSMS = new ConfigurazioneSMS("Benvenuto.");
 
-    private final SMS sms = new SMS(configurazioneSMS.getTestoConfigurato());
+    private final SMS sms = new SMS(configurazioneSMS);
 
     //CLIENTE
     private final Cliente cliente = new Cliente("Luigi", "Mauri", "0000000", "lucamauri@gmail.com", "password3");
@@ -43,6 +43,7 @@ public class InitProjectData {
         dbms.addAzienda(azienda);
         dbms.addDipendente(azienda.getIdAzienda(), dipendente0);
         dbms.addDipendente(azienda.getIdAzienda(), dipendente1);
+        dbms.addProgrammaAzienda(this.azienda.getIdAzienda(), new ProgrammaPunti("PP1", "22/02/2023", 100, 50, 3, 10, null));
         dbms.addCouponPreconfiguratoAzienda(azienda.getIdAzienda(), coupon);
         dbms.addConfigurazioneSMS(azienda.getIdAzienda(), sms);
         dbms.addCliente(cliente);

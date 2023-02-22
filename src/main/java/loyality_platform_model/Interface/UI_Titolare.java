@@ -463,6 +463,7 @@ public class UI_Titolare {
 
     //SEZIONE 3
     public void sezioneConfigurazioneSMS() {
+        sc.nextLine();
         int choice;
         Set<SMS> smsPreconfigurati = this.handlers.getHandlerMessaggi().getSMSPreconfigurati(this.azienda.getIdAzienda());
         if (smsPreconfigurati == null || smsPreconfigurati.isEmpty()) {
@@ -473,7 +474,8 @@ public class UI_Titolare {
                     Elenco tutti i tuoi SMS Preconfigurati creati precedentemente :
                     """);
             for (SMS sms : smsPreconfigurati) {
-                System.out.println("Id SMS : " + sms.getIdSMS() + " Messaggio Preconfigurato : " + sms.getConfigurazione().getTestoConfigurato());
+                if(sms.getConfigurazione() != null)
+                    System.out.println("Id SMS : " + sms.getIdSMS() + " Messaggio Preconfigurato : " + sms.getConfigurazione().getTestoConfigurato());
             }
         }
         System.out.println("""
@@ -513,6 +515,7 @@ public class UI_Titolare {
             choice = sc.nextInt();
             switch (choice) {
                 case 1 -> {
+                    sc.nextLine();
                     System.out.println("Inserisci il nuovo testo per l'SMS :");
                     String nuovoTesto = sc.nextLine();
                     while (Objects.equals(nuovoTesto, "") || nuovoTesto == null) {
@@ -554,7 +557,12 @@ public class UI_Titolare {
                     System.out.println("Sei Sicuro di voler eliminare l'SMS Preconfigurato ? (SI-NO)");
                     String choice1 = sc.nextLine();
                     if (Objects.equals(choice1, "SI") || Objects.equals(choice1, "si")) {
-                        //Todo implementare
+                        this.handlers.getHandlerMessaggi().rimuoviConfigurazioenSMS(this.azienda.getIdAzienda(), idSMS);
+                        System.out.println("""
+                                SMS Preconfigurato rimosso correttamente.
+                                Ritorno alla schermata precedente.
+                                """);
+                        sezioneConfigurazioneSMS();
                     } else {
                         System.out.println("Ritorno alla schermata principale.");
                         sezioneCouponPreconfigurato();

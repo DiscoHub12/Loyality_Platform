@@ -148,7 +148,8 @@ public class HandlerMessaggi {
             throw new IllegalArgumentException("Company id not correct");
         if(Objects.equals(testo,""))
             throw new IllegalArgumentException("you have not written the text for the message");
-        SMS newSMS = new SMS(testo);
+        ConfigurazioneSMS configurazioneSMS = creaConfigurazioneSMS(testo);
+        SMS newSMS = new SMS(configurazioneSMS);
         this.dbms.addConfigurazioneSMS(idAzienda,newSMS);
     }
     public void aggiornaConfigurazioneSMS(int idAzienda,int idConfigurazione,String testo){

@@ -25,6 +25,7 @@ public class SMS {
     public SMS(ConfigurazioneSMS configurazione){
         this.idSMS=++contatoreSMS;
         this.testo= configurazione.getTestoConfigurato();
+        this.configurazione = configurazione;
     }
     public int getIdSMS(){
         return this.idSMS;
