@@ -126,7 +126,7 @@ public class CatalogoPremi {
 
     private String toStringPremi() {
         if (this.premiCatalogo.isEmpty())
-            return "There are not prize in this Reward Catalog.";
+            return "Il Catalogo Premi e' vuoto.";
         int contatore = 1;
         String tmp = "";
         for (int i = 0; i < this.premiCatalogo.size(); i++) {
