@@ -30,9 +30,9 @@ public class HandlerPremiTest {
     private final ProgrammaFedelta programmaFedeltaLivelli3 = new ProgrammaLivelli("ProgrammaUno", "22-02-2022",100, 2, policy, 2, 10, null);
 
     //COUPON
-    private final Coupon coupon = new Coupon(20, "22-03-2022");
-    private final Coupon coupon1 = new Coupon(20, "22-03-2022");
-    private final Coupon coupon2 = new Coupon(20, "22-03-2022");
+    private final Coupon coupon = new Coupon(20, "", "22-03-2022");
+    private final Coupon coupon1 = new Coupon(20, "","22-03-2022");
+    private final Coupon coupon2 = new Coupon(20, "","22-03-2022");
     private final Set<Coupon> couponAzienda = new HashSet<>();
 
     //CATALOGO PREMI PUNTI
@@ -86,14 +86,14 @@ public class HandlerPremiTest {
         this.premiPunti.add(premioPunti1);
         this.premiPunti.add(premioPunti2);
         this.premiPunti.add(premioPunti3);
-        CatalogoPremi catalogoPremiPunti = new CatalogoPremi(this.premiPunti);
+        CatalogoPremi catalogoPremiPunti = new CatalogoPremi("Catalogo Premi", this.premiPunti);
         this.dbms.addCatalogoPremiAzienda(this.azienda.getIdAzienda(), catalogoPremiPunti);
         //PREMI PUNTI E CATALOGO
         this.premiLivelli.add(premioLivelli);
         this.premiLivelli.add(premioLivelli1);
         this.premiLivelli.add(premioLivelli2);
         this.premiLivelli.add(premioLivelli3);
-        CatalogoPremi catalogoPremiLivelli = new CatalogoPremi(this.premiLivelli);
+        CatalogoPremi catalogoPremiLivelli = new CatalogoPremi("Catalogo Premi",this.premiLivelli);
         this.dbms.addCatalogoPremiAzienda(this.azienda.getIdAzienda(), catalogoPremiLivelli);
         //CATALOGO PREMI PROGRAMMI
         this.programmaFedeltaPunti3.setCatalogoPremi(catalogoPremiPunti);
@@ -137,11 +137,11 @@ public class HandlerPremiTest {
     @Test
     public void testCreaCatalogo(){
         initDb();
-        assertThrows(NullPointerException.class, () -> this.gestorePremi.creaCatalogo(null));
-        CatalogoPremi catalogo = this.gestorePremi.creaCatalogo(this.premiPunti);
+        assertThrows(NullPointerException.class, () -> this.gestorePremi.creaCatalogo("Catalogo Premi",null));
+        CatalogoPremi catalogo = this.gestorePremi.creaCatalogo("Catalogo Premi",this.premiPunti);
         assertNotNull(catalogo);
         assertEquals(this.premiPunti, catalogo.getPremiCatalogo());
-        CatalogoPremi catalogo1 = this.gestorePremi.creaCatalogo(this.premiLivelli);
+        CatalogoPremi catalogo1 = this.gestorePremi.creaCatalogo("Catalogo Premi",this.premiLivelli);
         assertNotNull(catalogo1);
         assertEquals(this.premiLivelli, catalogo1.getPremiCatalogo());
     }
@@ -149,13 +149,13 @@ public class HandlerPremiTest {
     @Test
     public void testCreaCoupon(){
         initDb();
-        assertThrows(IllegalArgumentException.class, () -> this.gestorePremi.creaCoupon(-1, "12-03-2022"));
-        assertThrows(NullPointerException.class, () -> this.gestorePremi.creaCoupon(1, null));
-        Coupon coupon = this.gestorePremi.creaCoupon(10, "data");
+        assertThrows(IllegalArgumentException.class, () -> this.gestorePremi.creaCoupon(-1, "12-03-2022", "20/03/2023"));
+        assertThrows(NullPointerException.class, () -> this.gestorePremi.creaCoupon(1, null, "20/03/2023"));
+        Coupon coupon = this.gestorePremi.creaCoupon(10, "data", "20/03/2023");
         assertNotNull(coupon);
         assertEquals(10, coupon.getValoreSconto());
         assertEquals("data", coupon.getDataScadenza());
-        Coupon coupon1 = this.gestorePremi.creaCoupon(20, "data");
+        Coupon coupon1 = this.gestorePremi.creaCoupon(20, "data", "20/03/2023");
         assertNotNull(coupon1);
         assertEquals(20, coupon1.getValoreSconto());
         assertEquals("data", coupon1.getDataScadenza());
@@ -299,12 +299,12 @@ public class HandlerPremiTest {
         premi1.add(premio2);
         premi1.add(premio3);
         premi1.add(premio4);
-        assertTrue(this.gestorePremi.aggiungiCatalogoPremi(this.azienda.getIdAzienda(), premi1));
-        assertTrue(this.gestorePremi.aggiungiCatalogoPremi(this.azienda.getIdAzienda(), premi1));
+        assertTrue(this.gestorePremi.aggiungiCatalogoPremi(this.azienda.getIdAzienda(), "Catalogo Premi", premi1));
+        assertTrue(this.gestorePremi.aggiungiCatalogoPremi(this.azienda.getIdAzienda(),"Catalogo Premi", premi1));
         Set<CatalogoPremi> catalogoPremiUpdated = this.gestoreAzienda.getCatalogoPremiAzienda(this.azienda.getIdAzienda());
         assertEquals(4, catalogoPremiUpdated.size());
-        assertTrue(this.gestorePremi.aggiungiCatalogoPremi(this.azienda.getIdAzienda(), premi1));
-        assertTrue(this.gestorePremi.aggiungiCatalogoPremi(this.azienda.getIdAzienda(), premi1));
+        assertTrue(this.gestorePremi.aggiungiCatalogoPremi(this.azienda.getIdAzienda(),"Catalogo Premi", premi1));
+        assertTrue(this.gestorePremi.aggiungiCatalogoPremi(this.azienda.getIdAzienda(), "Catalogo Premi",premi1));
         Set<CatalogoPremi> catalogoPremiUpdated1 = this.gestoreAzienda.getCatalogoPremiAzienda(this.azienda.getIdAzienda());
         assertEquals(6, catalogoPremiUpdated1.size());
     }
@@ -327,9 +327,9 @@ public class HandlerPremiTest {
         premiCatalogo.add(new Premio("premio", true, 10));
         premiCatalogo.add(new Premio("premi1", true, 10));
         premiCatalogo.add(new Premio("premio2", true, 10));
-        assertThrows(NullPointerException.class, () -> this.gestorePremi.aggiungiCatalogoAProgrammaPunti(this.azienda.getIdAzienda(), this.programmaFedeltaPunti1.getIdProgramma(), null));
-        assertThrows(IllegalArgumentException.class, () -> this.gestorePremi.aggiungiCatalogoAProgrammaPunti(this.azienda.getIdAzienda(), -1, premiCatalogo));
-        assertThrows(IllegalArgumentException.class, () -> this.gestorePremi.aggiungiCatalogoAProgrammaPunti(-1, this.programmaFedeltaPunti1.getIdProgramma(), premiCatalogo));
+        assertThrows(NullPointerException.class, () -> this.gestorePremi.aggiungiCatalogoAProgrammaPunti (this.azienda.getIdAzienda(), this.programmaFedeltaPunti1.getIdProgramma(), "Catalogo Premi",null));
+        assertThrows(IllegalArgumentException.class, () -> this.gestorePremi.aggiungiCatalogoAProgrammaPunti(this.azienda.getIdAzienda(), -1, "Catalogo Premi",premiCatalogo));
+        assertThrows(IllegalArgumentException.class, () -> this.gestorePremi.aggiungiCatalogoAProgrammaPunti(-1, this.programmaFedeltaPunti1.getIdProgramma(),"Catalogo Premi", premiCatalogo));
         Set<ProgrammaFedelta> programmiAzienda = this.gestoreAzienda.getProgrammiFedeltaAzienda(this.azienda.getIdAzienda());
         ProgrammaFedelta programmaFedelta = null;
         for(ProgrammaFedelta programmaFedelta1 : programmiAzienda){
@@ -338,7 +338,7 @@ public class HandlerPremiTest {
         }
         assertNotNull(programmaFedelta);
         assertNull(programmaFedelta.getCatalogoPremi());
-        assertTrue(this.gestorePremi.aggiungiCatalogoAProgrammaPunti(this.azienda.getIdAzienda(), this.programmaFedeltaPunti1.getIdProgramma(), premiCatalogo));
+        assertTrue(this.gestorePremi.aggiungiCatalogoAProgrammaPunti(this.azienda.getIdAzienda(), this.programmaFedeltaPunti1.getIdProgramma(), "Catalogo Premi",premiCatalogo));
         Set<ProgrammaFedelta> programmiAziendaUpdated = this.gestoreAzienda.getProgrammiFedeltaAzienda(this.azienda.getIdAzienda());
         ProgrammaFedelta programmaFedeltaUpdated = null;
         for(ProgrammaFedelta programmaFedelta1 : programmiAziendaUpdated){
@@ -357,9 +357,9 @@ public class HandlerPremiTest {
         premiCatalogo.add(new Premio("premio", false, 10));
         premiCatalogo.add(new Premio("premi1", false, 10));
         premiCatalogo.add(new Premio("premio2", false, 10));
-        assertThrows(NullPointerException.class, () -> this.gestorePremi.aggiungiCatalogoProgrammaLivelli(this.azienda.getIdAzienda(), this.programmaFedeltaPunti1.getIdProgramma(), null));
-        assertThrows(IllegalArgumentException.class, () -> this.gestorePremi.aggiungiCatalogoProgrammaLivelli(this.azienda.getIdAzienda(), -1, premiCatalogo));
-        assertThrows(IllegalArgumentException.class, () -> this.gestorePremi.aggiungiCatalogoProgrammaLivelli(-1, this.programmaFedeltaPunti1.getIdProgramma(), premiCatalogo));
+        assertThrows(NullPointerException.class, () -> this.gestorePremi.aggiungiCatalogoProgrammaLivelli(this.azienda.getIdAzienda(), this.programmaFedeltaPunti1.getIdProgramma(), "Catalogo Premi",null));
+        assertThrows(IllegalArgumentException.class, () -> this.gestorePremi.aggiungiCatalogoProgrammaLivelli(this.azienda.getIdAzienda(), -1,"Catalogo Premi", premiCatalogo));
+        assertThrows(IllegalArgumentException.class, () -> this.gestorePremi.aggiungiCatalogoProgrammaLivelli(-1, this.programmaFedeltaPunti1.getIdProgramma(),"Catalogo Premi", premiCatalogo));
         Set<ProgrammaFedelta> programmiAzienda = this.gestoreAzienda.getProgrammiFedeltaAzienda(this.azienda.getIdAzienda());
         ProgrammaFedelta programmaFedelta = null;
         for(ProgrammaFedelta programmaFedelta1 : programmiAzienda){
@@ -368,7 +368,7 @@ public class HandlerPremiTest {
         }
         assertNotNull(programmaFedelta);
         assertNull(programmaFedelta.getCatalogoPremi());
-        assertTrue(this.gestorePremi.aggiungiCatalogoProgrammaLivelli(this.azienda.getIdAzienda(), this.programmaFedeltaLivelli1.getIdProgramma(), premiCatalogo));
+        assertTrue(this.gestorePremi.aggiungiCatalogoProgrammaLivelli(this.azienda.getIdAzienda(), this.programmaFedeltaLivelli1.getIdProgramma(), "Catalogo Premi",premiCatalogo));
         Set<ProgrammaFedelta> programmiAziendaUpdated = this.gestoreAzienda.getProgrammiFedeltaAzienda(this.azienda.getIdAzienda());
         ProgrammaFedelta programmaFedeltaUpdated = null;
         for(ProgrammaFedelta programmaFedelta1 : programmiAziendaUpdated){
@@ -386,9 +386,9 @@ public class HandlerPremiTest {
         premiCatalogo.add(new Premio("premio", false, 10));
         premiCatalogo.add(new Premio("premi1", false, 10));
         premiCatalogo.add(new Premio("premio2", false, 10));
-        assertThrows(NullPointerException.class, () -> this.gestorePremi.aggiungiCatalogoProgrammaLivelli(this.azienda.getIdAzienda(), this.programmaFedeltaPunti1.getIdProgramma(), null));
-        assertThrows(IllegalArgumentException.class, () -> this.gestorePremi.aggiungiCatalogoProgrammaLivelli(this.azienda.getIdAzienda(), -1, premiCatalogo));
-        assertThrows(IllegalArgumentException.class, () -> this.gestorePremi.aggiungiCatalogoProgrammaLivelli(-1, this.programmaFedeltaPunti1.getIdProgramma(), premiCatalogo));
+        assertThrows(NullPointerException.class, () -> this.gestorePremi.aggiungiCatalogoProgrammaLivelli(this.azienda.getIdAzienda(), this.programmaFedeltaPunti1.getIdProgramma(), "Catalogo Premi",null));
+        assertThrows(IllegalArgumentException.class, () -> this.gestorePremi.aggiungiCatalogoProgrammaLivelli(this.azienda.getIdAzienda(), -1, "Catalogo Premi",premiCatalogo));
+        assertThrows(IllegalArgumentException.class, () -> this.gestorePremi.aggiungiCatalogoProgrammaLivelli(-1, this.programmaFedeltaPunti1.getIdProgramma(),"Catalogo Premi", premiCatalogo));
         Set<ProgrammaFedelta> programmiAzienda = this.gestoreAzienda.getProgrammiFedeltaAzienda(this.azienda.getIdAzienda());
         ProgrammaFedelta programmaFedelta = null;
         for(ProgrammaFedelta programmaFedelta1 : programmiAzienda){
@@ -397,7 +397,7 @@ public class HandlerPremiTest {
         }
         assertNotNull(programmaFedelta);
         assertNull(programmaFedelta.getCatalogoPremi());
-        assertTrue(this.gestorePremi.aggiungiCatalogoProgrammaLivelli(this.azienda.getIdAzienda(), this.programmaFedeltaLivelli1.getIdProgramma(), premiCatalogo));
+        assertTrue(this.gestorePremi.aggiungiCatalogoProgrammaLivelli(this.azienda.getIdAzienda(), this.programmaFedeltaLivelli1.getIdProgramma(), "Catalogo Premi",premiCatalogo));
         Set<ProgrammaFedelta> programmiAziendaUpdated = this.gestoreAzienda.getProgrammiFedeltaAzienda(this.azienda.getIdAzienda());
         ProgrammaFedelta programmaFedeltaUpdated = null;
         for(ProgrammaFedelta programmaFedelta1 : programmiAziendaUpdated){
@@ -422,7 +422,7 @@ public class HandlerPremiTest {
         initDb();
         Set<Coupon> couponAzienda = this.gestorePremi.getCouponPreconfiguratiAzienda(this.azienda.getIdAzienda());
         assertEquals(3, couponAzienda.size());
-        assertTrue(this.gestorePremi.aggiungiCouponPreconfigurato(this.azienda.getIdAzienda(), 10, "dataScadenza"));
+        assertTrue(this.gestorePremi.aggiungiCouponPreconfigurato(this.azienda.getIdAzienda(), 10, "dataAttivazione", "dataScadenza"));
         Set<Coupon> couponAziendaUpdated = this.gestorePremi.getCouponPreconfiguratiAzienda(this.azienda.getIdAzienda());
         assertEquals(4, couponAziendaUpdated.size());
         Coupon coupon = null;
@@ -440,7 +440,7 @@ public class HandlerPremiTest {
         initDb();
         Set<Coupon> couponAzienda = this.gestorePremi.getCouponPreconfiguratiAzienda(this.azienda.getIdAzienda());
         assertEquals(3, couponAzienda.size());
-        assertTrue(this.gestorePremi.aggiungiCouponPreconfigurato(this.azienda.getIdAzienda(), 10, "dataScadenza"));
+        assertTrue(this.gestorePremi.aggiungiCouponPreconfigurato(this.azienda.getIdAzienda(), 10, "dataAttivazione", "dataScadenza"));
         Set<Coupon> couponAziendaUpdated = this.gestorePremi.getCouponPreconfiguratiAzienda(this.azienda.getIdAzienda());
         assertEquals(4, couponAziendaUpdated.size());
         Coupon coupon = null;

@@ -59,10 +59,10 @@ public class HandlerClienteTest {
         this.dbms.getPremiCliente().put(cliente, premiCliente);
         //COUPON CLIENTE :
         Set<Coupon> couponCliente = new HashSet<>();
-        Coupon coupon0 = new Coupon(5, "10-2-2022");
-        Coupon coupon1 = new Coupon(5, "10-2-2022");
-        Coupon coupon2 = new Coupon(5, "10-2-2022");
-        Coupon coupon3 = new Coupon(5, "10-2-2022");
+        Coupon coupon0 = new Coupon(5, "","10-2-2022");
+        Coupon coupon1 = new Coupon(5, "","10-2-2022");
+        Coupon coupon2 = new Coupon(5, "","10-2-2022");
+        Coupon coupon3 = new Coupon(5, "","10-2-2022");
         couponCliente.add(coupon0);
         couponCliente.add(coupon1);
         couponCliente.add(coupon2);
