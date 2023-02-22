@@ -107,23 +107,25 @@ public class Tessera {
     /**
      * This method adds a new loyalty program.
      * @param programmaFedelta new loyalty program.
+     * @return <code>true</code> if the program is added, <code>false</code> otherwise.
      */
-    public void addPogrammaFedelta(ProgrammaFedelta programmaFedelta){
+    public boolean addPogrammaFedelta(ProgrammaFedelta programmaFedelta){
         Objects.requireNonNull(programmaFedelta);
         if(this.getProgrammiFedelta().contains(programmaFedelta))
             throw new IllegalArgumentException("Program already present.");
-        this.getProgrammiFedelta().add(programmaFedelta);
+        return this.getProgrammiFedelta().add(programmaFedelta);
     }
 
     /**
      * This method removes a loyalty program.
      * @param programmaFedelta loyalty program to be removed.
+     * @return <code>true</code> if the program is deleted, <code>false</code> otherwise.
      */
-   public void deleteProgrammaFedelta(ProgrammaFedelta programmaFedelta){
+   public boolean deleteProgrammaFedelta(ProgrammaFedelta programmaFedelta){
         Objects.requireNonNull(programmaFedelta);
        if(!this.getProgrammiFedelta().contains(programmaFedelta))
            throw new IllegalArgumentException("Program not exists.");
-       this.getProgrammiFedelta().remove(programmaFedelta);
+       return this.getProgrammiFedelta().remove(programmaFedelta);
 
    }
 

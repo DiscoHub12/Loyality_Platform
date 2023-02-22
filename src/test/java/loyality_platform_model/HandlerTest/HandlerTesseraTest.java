@@ -254,7 +254,7 @@ public class HandlerTesseraTest {
         ProgrammaFedelta programmaFedelta = new ProgrammaPunti("PP", "2022-02-02", 100, 80, 10, 10, null);
         dbms.addAzienda(azienda);
         dbms.addProgrammaAzienda(azienda.getIdAzienda(), programmaFedelta);
-        assertTrue(handlerTessera.addProgrammaFedelta(tessera.getIdTessera(), programmaFedelta));
+        assertTrue(handlerTessera.addProgrammaFedelta(cliente.getIdCliente(), programmaFedelta));
         System.out.println(dbms.getTessereClienti());
         System.out.println(dbms.getCoalizione().getClientiIscrittiAProgrammaAzienda(azienda.getIdAzienda(), programmaFedelta.getIdProgramma()));
 
@@ -289,7 +289,7 @@ public class HandlerTesseraTest {
         dbms.getCoalizione().addClienteCoalizione(programmaFedelta, cliente);
         System.out.println("Coalizione: " + dbms.getCoalizione().getClientiIscrittiProgramma(programmaFedelta.getIdProgramma()));
         System.out.println(dbms.getTessereClienti());
-        assertTrue(handlerTessera.deleteProgrammaFedelta(tessera.getIdTessera(), programmaFedelta));
+        assertTrue(handlerTessera.deleteProgrammaFedelta(cliente.getIdCliente(), programmaFedelta));
         System.out.println(dbms.getTessereClienti());
         System.out.println("Coalizione: " + dbms.getCoalizione().getClientiIscrittiProgramma(programmaFedelta.getIdProgramma()));
 

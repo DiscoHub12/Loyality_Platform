@@ -2,6 +2,7 @@ package loyality_platform_model.Handler;
 
 import loyality_platform_model.DBMS.DBMS;
 import loyality_platform_model.Models.*;
+
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
@@ -194,34 +195,16 @@ public class HandlerTessera {
      * This method adds a loyalty program to the customer card,
      * when the customer signs up for a loyalty program.
      *
-     * @param idTessera        card where to add the program.
+     * @param idCliente        card where to add the program.
      * @param programmaFedelta loyalty program to add.
      * @return <code>true</code> if the program is added successfully, <code>false</code> otherwise.
      */
-    public boolean addProgrammaFedelta(int idTessera, ProgrammaFedelta programmaFedelta) {
+    public boolean addProgrammaFedelta(int idCliente, ProgrammaFedelta programmaFedelta) {
         Objects.requireNonNull(programmaFedelta);
-        if (idTessera < 1)
+        if (idCliente < 1)
             throw new IllegalArgumentException("Id not correct");
-        Tessera tessera = this.getDbms().getTesseraById(idTessera);
-        if (tessera != null) {
-            if (tessera.getProgrammiFedelta().isEmpty()) {
-                tessera.addPogrammaFedelta(programmaFedelta);
-            } else {
-                for (Map.Entry<Azienda, Set<ProgrammaFedelta>> entry : this.getDbms().getProgrammiAzienda().entrySet()) {
-                    for (ProgrammaFedelta program : entry.getValue()) {
-                        if (program.equals(programmaFedelta)) {
-                            for (ProgrammaFedelta toScroll : tessera.getProgrammiFedelta()) {
-                                if (!toScroll.equals(program)) {
-                                    tessera.addPogrammaFedelta(programmaFedelta);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return this.getDbms().addClienteCoalizione(tessera.getIdCliente(), programmaFedelta);
-        }
-        return false;
+        return this.getDbms().addClienteProgramma(idCliente, programmaFedelta);
+
     }
 
 
@@ -229,26 +212,15 @@ public class HandlerTessera {
      * This method removes a loyalty program to the customer card,
      * when the customer signs up for a loyalty program.
      *
-     * @param idTessera        card where to remove the program.
+     * @param idCliente        card where to remove the program.
      * @param programmaFedelta loyalty program to remove.
      * @return <code>true</code> if the program is deleted successfully, <code>false</code> otherwise.
      */
-    public boolean deleteProgrammaFedelta(int idTessera, ProgrammaFedelta programmaFedelta) {
+    public boolean deleteProgrammaFedelta(int idCliente, ProgrammaFedelta programmaFedelta) {
         Objects.requireNonNull(programmaFedelta);
-        if (idTessera < 1)
+        if (idCliente < 1)
             throw new IllegalArgumentException("Id not correct");
-        Tessera tessera = this.getDbms().getTesseraById(idTessera);
-        if (tessera != null) {
-            if (!tessera.getProgrammiFedelta().isEmpty()) {
-                for (ProgrammaFedelta program : tessera.getProgrammiFedelta()) {
-                    if (program.equals(programmaFedelta)) {
-                        tessera.deleteProgrammaFedelta(programmaFedelta);
-                        return this.getDbms().deleteClienteCoalizione(tessera.getIdCliente(), programmaFedelta);
-                    }
-                }
-            }
-        }
-        return false;
+        return this.getDbms().deleteClienteProgramma(idCliente, programmaFedelta);
     }
 
 
@@ -275,8 +247,8 @@ public class HandlerTessera {
      * This method enforces the loyalty program policies and escalates the customer level if necessary and
      * add points.
      *
-     * @param pl      levels program considered.
-     * @param tessera customer card.
+     * @param pl           levels program considered.
+     * @param tessera      customer card.
      * @param importoSpeso amount spent by the customer.
      */
     private void addPuntiLivelloPL(ProgrammaLivelli pl, Tessera tessera, double importoSpeso) {
@@ -299,10 +271,11 @@ public class HandlerTessera {
 
     /**
      * This method enforces the loyalty program policies and escalates the customer level if necessary.
-     * @param pl levels program considered.
+     *
+     * @param pl      levels program considered.
      * @param tessera customer card.
      */
-    private void addLivelloPL(ProgrammaLivelli pl, Tessera tessera){
+    private void addLivelloPL(ProgrammaLivelli pl, Tessera tessera) {
         int puntiAttuali = tessera.getPunti();
         int livelloAttuale = tessera.getLivelli();
         for (Map.Entry<Integer, Integer> entry : pl.getPolicyLivelli().entrySet()) {

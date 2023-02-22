@@ -10,8 +10,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class HandlerVisiteTest {
     private final Visita visita= new Visita("Camerino","16/02/2023");
     private final Visita visita1 = new Visita("civitanova","17/02/2023");
-    private final Cliente cliente= new Cliente("fabio","evangelista","1111","email");
-    private final Cliente cliente1= new Cliente("carlo","evangelista","1211","Email");
+    private final Cliente cliente= new Cliente("fabio","evangelista","1111","email", "password");
+    private final Cliente cliente1= new Cliente("carlo","evangelista","1211","Email", "password");
     private final HandlerVisite handler = new HandlerVisite();
     private final DBMS db = DBMS.getInstance();
     public void init(){
