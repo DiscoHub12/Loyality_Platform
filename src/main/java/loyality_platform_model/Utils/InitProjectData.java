@@ -7,7 +7,7 @@ public class InitProjectData {
 
     private static InitProjectData instance;
 
-    //GESTORE E AZIENDA
+    //GESTORE E AZIENDA 1 :
     private final GestorePuntoVendita titolare = new GestorePuntoVendita("Mario", "Rossi", "mariorossi@gmail.com", "password");
 
     private final Dipendente dipendente0 = new Dipendente("Luca", "Neri", "lucaneri@gmail.com", "password1", true);
@@ -18,6 +18,14 @@ public class InitProjectData {
 
     private final Azienda azienda = new Azienda(titolare, spazioFedelta);
 
+    //GESTORE E AZIENDA 2:
+    private final GestorePuntoVendita titolare1 = new GestorePuntoVendita("Sofia", "Scattolini", "sofiascattolini@gmail.com", "password");
+
+    private final SpazioFedelta spazioFedelta1 = new SpazioFedelta("Azienda1", "Indirizzo1", "000001", "emailazienda1@gmail.com");
+
+    private final Azienda azienda1 = new Azienda(titolare1, spazioFedelta1);
+
+    //ALTRO :
 
     private final Coupon coupon = new Coupon(20, "2022-04-12", "2022-12-12");
 
@@ -39,6 +47,8 @@ public class InitProjectData {
         dbms.addConfigurazioneSMS(azienda.getIdAzienda(), sms);
         dbms.addCliente(cliente);
         dbms.addCoupon(azienda.getIdAzienda(), cliente.getIdCliente(), coupon.getIdCoupon());
+
+        dbms.addAzienda(azienda1);
 
     }
 
