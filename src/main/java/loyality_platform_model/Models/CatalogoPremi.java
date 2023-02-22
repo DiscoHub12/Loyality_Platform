@@ -16,6 +16,12 @@ public class CatalogoPremi {
     private static int contatoreCatalogo = 0;
 
     /**
+     * This attribute rappresent the name
+     * of this Reward Catalog.
+     */
+    private String nomeCatalogo;
+
+    /**
      * This attribute represents the
      * unique id of this Reward Catalogue.
      */
@@ -38,15 +44,24 @@ public class CatalogoPremi {
      * @param premiCatalogo the prizes of this catalogue
      * @throws NullPointerException if the premiCatalogo is null.
      */
-    public CatalogoPremi(Set<Premio> premiCatalogo) {
+    public CatalogoPremi(String nomeCatalogo, Set<Premio> premiCatalogo) {
         Objects.requireNonNull(premiCatalogo);
         this.idCatalogoPremi = ++contatoreCatalogo;
+        this.setNomeCatalogo(nomeCatalogo);
         this.setPremiCatalogo(premiCatalogo);
 
     }
 
     public int getIdCatalogoPremi() {
         return idCatalogoPremi;
+    }
+
+    public String getNomeCatalogo(){
+        return this.nomeCatalogo;
+    }
+
+    public void setNomeCatalogo(String nomeCatalogo){
+        this.nomeCatalogo = nomeCatalogo;
     }
 
     public Set<Premio> getPremiCatalogo() {
@@ -112,9 +127,11 @@ public class CatalogoPremi {
     private String toStringPremi() {
         if (this.premiCatalogo.isEmpty())
             return "There are not prize in this Reward Catalog.";
+        int contatore = 1;
         String tmp = "";
         for (int i = 0; i < this.premiCatalogo.size(); i++) {
-            tmp += i + ") PREMIO : " + this.premiCatalogo.toArray()[i].toString();
+            tmp += "\tPremio numero : " + contatore + "\n" + this.premiCatalogo.toArray()[i].toString();
+            contatore++;
         }
         return tmp;
     }
@@ -141,6 +158,6 @@ public class CatalogoPremi {
     public String toString() {
         return "\t-DETAILS CATALOGO PREMI-" +
                 "\nId Catalogo : " + idCatalogoPremi +
-                "\nElenco Premi : " + toStringPremi();
+                "\n\tElenco Premi : \n" + toStringPremi();
     }
 }

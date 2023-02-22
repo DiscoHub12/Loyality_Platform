@@ -66,7 +66,7 @@ public class DBMSTest {
         premi.add(premio2);
         premi.add(premio3);
         premi.add(premio4);
-        CatalogoPremi catalogo = new CatalogoPremi(premi);
+        CatalogoPremi catalogo = new CatalogoPremi("Catalogo Premi", premi);
         Set<CatalogoPremi> catalogoPremi = new HashSet<>();
         catalogoPremi.add(catalogo);
         catalogoPremi.add(catalogo);
