@@ -406,6 +406,7 @@ public class DBMS {
             if (azienda.getIdAzienda() == idAzienda) {
                 for (CatalogoPremi catalogoPremi : azienda.getCatalogoPremi()) {
                     if (catalogoPremi.getIdCatalogoPremi() == idCatalogoPremi) {
+                        catalogoPremi.setNomeCatalogo(catalogoPremiUpdated.getNomeCatalogo());
                         catalogoPremi.setPremiCatalogo(catalogoPremiUpdated.getPremiCatalogo());
                         return true;
                     }
@@ -660,7 +661,7 @@ public class DBMS {
                     if(this.getSMSPreconfiguratiAzienda().get(azienda) == null){
                         Set<SMS> smsAzienda = new HashSet<>();
                         smsAzienda.add(smsPreconfigurato);
-                        this.getSMSPreconfiguratiAzienda().put(azienda, smsAzienda);
+                        this.SMSPreconfiguratiAzienda.put(azienda, smsAzienda);
                         return true;
                     }else {
                         return this.getSMSPreconfiguratiAzienda().get(azienda).add(smsPreconfigurato);
@@ -668,7 +669,7 @@ public class DBMS {
                 }else {
                     Set<SMS> smsAzienda = new HashSet<>();
                     smsAzienda.add(smsPreconfigurato);
-                    this.getSMSPreconfiguratiAzienda().put(azienda,smsAzienda);
+                    this.SMSPreconfiguratiAzienda.put(azienda,smsAzienda);
                     return true;
                 }
             }
