@@ -668,7 +668,7 @@ public class DBMS {
     }
 
     public boolean addConfigurazioneSMS(int idAzienda, SMS smsPreconfigurato) {
-        for(Azienda azienda : this.getSMSPreconfiguratiAzienda().keySet()){
+        for(Azienda azienda : this.getAziendeIscritte()){
             if(azienda.getIdAzienda() == idAzienda){
                 if(this.getSMSPreconfiguratiAzienda().containsKey(azienda)){
                     if(this.getSMSPreconfiguratiAzienda().get(azienda) == null){

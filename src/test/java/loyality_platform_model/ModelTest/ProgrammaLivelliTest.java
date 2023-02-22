@@ -70,7 +70,7 @@ public class ProgrammaLivelliTest {
         Premio premio = new Premio("Zaino", false, 4);
         Set<Premio> premi = new HashSet<>();
         premi.add(premio);
-        CatalogoPremi catalogoPremi = new CatalogoPremi(premi);
+        CatalogoPremi catalogoPremi = new CatalogoPremi("Catalogo", premi);
         programmaLivelli.setCatalogoPremi(catalogoPremi);
         assertEquals(catalogoPremi, programmaLivelli.getCatalogoPremi());
         System.out.println(programmaLivelli);

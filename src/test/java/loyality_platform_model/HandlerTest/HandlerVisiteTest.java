@@ -82,7 +82,7 @@ public class HandlerVisiteTest {
         Set<Visita> visite2= this.handler.getVisiteCliente(this.cliente.getIdCliente());
         assertTrue(this.handler.rimuoviVisita(this.cliente.getIdCliente(), 2));
         assertFalse(visite2.contains(visita2));
-        }
+    }
 
     @Test
     public void testRimuoviVisitaGenerale(){
@@ -94,7 +94,7 @@ public class HandlerVisiteTest {
         assertTrue(this.handler.rimuoviVisitaGenerale(clienti1,visitaDel));
         Set<Visita> visite2 = this.db.getVisiteCliente().get(cliente);
         assertEquals(1,visite2.size());
-        }
+    }
 }
 
 

@@ -55,9 +55,8 @@ public class SMS {
     }
     @Override
     public String toString() {
-        return "SMS{" +
-                "testo='" + this.testo + '\'' +
-                ", oraInvio='" + this.dataInvio + '\'' +
-                '}';
+        return "\t SMS: " +
+                "\nId : " + this.idSMS +
+                "\nTesto :" + this.testo;
     }
 }

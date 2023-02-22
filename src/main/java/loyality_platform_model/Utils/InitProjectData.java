@@ -19,7 +19,7 @@ public class InitProjectData {
     private final Azienda azienda = new Azienda(titolare, spazioFedelta);
 
 
-    private final Coupon coupon = new Coupon(20, "2022-04-12");
+    private final Coupon coupon = new Coupon(20, "2022-04-12", "2022-12-12");
 
     private final ConfigurazioneSMS configurazioneSMS = new ConfigurazioneSMS("Benvenuto.");
 
