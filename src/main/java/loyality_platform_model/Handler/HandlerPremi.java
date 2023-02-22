@@ -93,9 +93,9 @@ public class HandlerPremi {
      * @return the new Reward Catalog.
      * @throws NullPointerException if the premiCatalogo is null.
      */
-    public CatalogoPremi creaCatalogo(Set<Premio> premiCatalogo) {
+    public CatalogoPremi creaCatalogo(String nomeCatalogo, Set<Premio> premiCatalogo) {
         Objects.requireNonNull(premiCatalogo);
-        return new CatalogoPremi(premiCatalogo);
+        return new CatalogoPremi(nomeCatalogo, premiCatalogo);
     }
 
     /**
@@ -109,11 +109,12 @@ public class HandlerPremi {
      * @throws NullPointerException     if dataScadenza is null.
      * @throws IllegalArgumentException if valoreSconto value is not valid.
      */
-    public Coupon creaCoupon(int valoreSconto, String dataScadenza) {
+    public Coupon creaCoupon(int valoreSconto, String dataAttivazione ,String dataScadenza) {
+        Objects.requireNonNull(dataAttivazione);
         Objects.requireNonNull(dataScadenza);
         if (valoreSconto <= 0)
             throw new IllegalArgumentException("Illegal value for the discount value.");
-        return new Coupon(valoreSconto, dataScadenza);
+        return new Coupon(valoreSconto, dataAttivazione, dataScadenza);
     }
 
     /**
@@ -271,11 +272,11 @@ public class HandlerPremi {
      * @throws NullPointerException     if the premiCatalogo is null.
      * @throws IllegalArgumentException if the id for the Company is not valid.
      */
-    public boolean aggiungiCatalogoPremi(int idAzienda, Set<Premio> premiCatalogo) {
+    public boolean aggiungiCatalogoPremi(int idAzienda, String nomeCatalogo, Set<Premio> premiCatalogo) {
         Objects.requireNonNull(premiCatalogo);
         if (idAzienda <= 0)
             throw new IllegalArgumentException("Invalid id for the Company.");
-        CatalogoPremi catalogoNew = creaCatalogo(premiCatalogo);
+        CatalogoPremi catalogoNew = creaCatalogo(nomeCatalogo, premiCatalogo);
         return this.dbms.addCatalogoPremiAzienda(idAzienda, catalogoNew);
     }
 
@@ -304,11 +305,11 @@ public class HandlerPremi {
      * @param premiCatalogo      the Prize for the new Catalog.
      * @throws IllegalArgumentException if the idAzienda or idProgrammaFedeltà is not correct.
      */
-    public boolean aggiungiCatalogoAProgrammaPunti(int idAzienda, int idProgrammaFedelta, Set<Premio> premiCatalogo) {
+    public boolean aggiungiCatalogoAProgrammaPunti(int idAzienda, int idProgrammaFedelta, String nomeCatalogo, Set<Premio> premiCatalogo) {
         Objects.requireNonNull(premiCatalogo);
         if (idAzienda <= 0 || idProgrammaFedelta <= 0)
             throw new IllegalArgumentException("Invalid id for the fileds.");
-        CatalogoPremi catalogoPremi = creaCatalogo(premiCatalogo);
+        CatalogoPremi catalogoPremi = creaCatalogo(nomeCatalogo, premiCatalogo);
         ProgrammaFedelta programmaPunti = this.dbms.getProgrammaFedeltaById(idAzienda, idProgrammaFedelta);
         programmaPunti.setCatalogoPremi(catalogoPremi);
         return this.dbms.updateProgrammaAzienda(idAzienda, idProgrammaFedelta);
@@ -325,11 +326,11 @@ public class HandlerPremi {
      * @throws NullPointerException     if the premiCatalogo is null.
      * @throws IllegalArgumentException if the idAzienda or idProgrammaFedelta is not correct.
      */
-    public boolean aggiungiCatalogoProgrammaLivelli(int idAzienda, int idProgrammaFedelta, Set<Premio> premiCatalogo) {
+    public boolean aggiungiCatalogoProgrammaLivelli(int idAzienda, int idProgrammaFedelta, String nomeCatalogo, Set<Premio> premiCatalogo) {
         Objects.requireNonNull(premiCatalogo);
         if (idAzienda <= 0 || idProgrammaFedelta <= 0)
             throw new IllegalArgumentException("Invalid id for the Company or the id for Loyalty Program.");
-        CatalogoPremi catalogoPremi = creaCatalogo(premiCatalogo);
+        CatalogoPremi catalogoPremi = creaCatalogo(nomeCatalogo, premiCatalogo);
         ProgrammaFedelta programmaLivelli = this.dbms.getProgrammaFedeltaById(idAzienda, idProgrammaFedelta);
         programmaLivelli.setCatalogoPremi(catalogoPremi);
         return this.dbms.updateProgrammaAzienda(idAzienda, programmaLivelli.getIdProgramma());
@@ -360,14 +361,15 @@ public class HandlerPremi {
      * @param idAzienda    the id for the Company.
      * @param valoreSconto the discount value.
      * @param dataScadenza the expiration date for this Coupon.
-     * @throws NullPointerException     if the dataScadenza is null.
+     * @throws NullPointerException     if the dataAttivazione or dataScadenza is null.
      * @throws IllegalArgumentException if the idAzienda or valoreSconto is not correct.
      */
-    public boolean aggiungiCouponPreconfigurato(int idAzienda, int valoreSconto, String dataScadenza) {
+    public boolean aggiungiCouponPreconfigurato(int idAzienda, int valoreSconto, String dataAttivazione, String dataScadenza) {
         Objects.requireNonNull(dataScadenza);
+        Objects.requireNonNull(dataAttivazione);
         if (idAzienda <= 0 || valoreSconto <= 1)
             throw new IllegalArgumentException("Invalid id for the fields.");
-        Coupon newCoupon = creaCoupon(valoreSconto, dataScadenza);
+        Coupon newCoupon = creaCoupon(valoreSconto, dataAttivazione, dataScadenza);
         return this.dbms.addCouponPreconfiguratoAzienda(idAzienda, newCoupon);
     }
 
@@ -387,7 +389,7 @@ public class HandlerPremi {
         Objects.requireNonNull(dataScadenza);
         if (idAzienda <= 0 || idCoupon <= 0 || valoreSconto <= 1)
             throw new IllegalArgumentException("Invalid id for the filed.");
-        Coupon couponUpdated = new Coupon(valoreSconto, dataScadenza);
+        Coupon couponUpdated = new Coupon(valoreSconto, "", dataScadenza);
         return this.dbms.updateCouponPreconfiguratoAzienda(idAzienda, idCoupon, couponUpdated);
     }
 
