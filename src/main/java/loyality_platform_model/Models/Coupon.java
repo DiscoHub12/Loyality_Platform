@@ -47,9 +47,10 @@ public class Coupon {
      * @param valoreSconto the discount value of this Coupon.
      * @param dataScadenza expiration date of this Coupon.
      */
-    public Coupon(int valoreSconto, String dataScadenza) {
+    public Coupon(int valoreSconto, String dataAttivazione, String dataScadenza) {
         this.idCoupon = ++contatoreCoupon;
         this.setValoreSconto(valoreSconto);
+        this.setDataAttivazione(dataAttivazione);
         this.setDataScadenza(dataScadenza);
     }
 
@@ -78,8 +79,6 @@ public class Coupon {
      * @throws IllegalArgumentException if the dataAttivazione is null or invalid.
      */
     public void setDataAttivazione(String dataAttivazione) {
-        if(Objects.equals(dataAttivazione, "") || dataAttivazione == null)
-            throw new IllegalArgumentException("Invalid activation date.");
         this.dataAttivazione = dataAttivazione;
     }
 
