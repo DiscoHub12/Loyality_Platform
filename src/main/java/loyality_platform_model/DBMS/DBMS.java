@@ -382,6 +382,19 @@ public class DBMS {
         return null;
     }
 
+    public ConfigurazioneSMS getSMSPreconfigurato(int idAzienda, int idSMS) {
+        for (Azienda azienda : this.getSMSPreconfiguratiAzienda().keySet()) {
+            if (azienda.getIdAzienda() == idAzienda) {
+                for (SMS sms : this.getSMSPreconfiguratiAzienda().get(azienda)) {
+                    if (sms.getIdSMS() == idSMS) {
+                        return sms.getConfigurazione();
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     public Set<CatalogoPremi> getCatalogoPremiAzienda(int idAzienda) {
         for (Azienda azienda : this.getAziendeIscritte()) {
             if (azienda.getIdAzienda() == idAzienda) {
@@ -1049,18 +1062,46 @@ public class DBMS {
     }
 
 
-    //TODO rivedere, per me non serve
-    public ConfigurazioneSMS getSMSPreconfigurato(int idAzienda, int idSMS) {
-        for (Azienda azienda : this.getSMSPreconfiguratiAzienda().keySet()) {
-            if (azienda.getIdAzienda() == idAzienda) {
-                for (SMS sms : this.getSMSPreconfiguratiAzienda().get(azienda)) {
-                    if (sms.getIdSMS() == idSMS) {
-                        return sms.getConfigurazione();
+    public boolean addClienteProgramma(int idCliente, ProgrammaFedelta programmaFedelta){
+        Tessera tessera =  this.getTesseraCliente(idCliente);
+        if(tessera != null){
+            if(tessera.getProgrammiFedelta().isEmpty())
+                return tessera.addPogrammaFedelta(programmaFedelta) && this.addClienteCoalizione(tessera.getIdCliente(), programmaFedelta);
+            else {
+                for (Map.Entry<Azienda, Set<ProgrammaFedelta>> entry : this.getProgrammiAzienda().entrySet()) {
+                    for (ProgrammaFedelta program : entry.getValue()) {
+                        if (program.equals(programmaFedelta)) {
+                            for (ProgrammaFedelta toScroll : tessera.getProgrammiFedelta()) {
+                                if (!toScroll.equals(program)) {
+                                    return tessera.addPogrammaFedelta(programmaFedelta) && this.addClienteCoalizione(tessera.getIdCliente(), programmaFedelta);
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
-        return null;
+        return false;
     }
+
+
+    public boolean deleteClienteProgramma(int idCliente, ProgrammaFedelta programmaFedelta){
+        Tessera tessera = this.getTesseraCliente(idCliente);
+        if (tessera != null) {
+            if (!tessera.getProgrammiFedelta().isEmpty()) {
+                for (ProgrammaFedelta program : tessera.getProgrammiFedelta()) {
+                    if (program.equals(programmaFedelta)) {
+                        return this.deleteClienteCoalizione(tessera.getIdCliente(), programmaFedelta) && tessera.deleteProgrammaFedelta(programmaFedelta);
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+
+
+
+
 }
 
