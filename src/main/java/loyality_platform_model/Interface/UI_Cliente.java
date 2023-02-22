@@ -18,9 +18,12 @@ public class UI_Cliente {
     private final HandlerVisite gestoreVisite = new HandlerVisite();
     private final HandlerAzienda gestoreAzienda = new HandlerAzienda();
     private final HandlerTessera gestoreTessera= new HandlerTessera();
-    public UI_Cliente(Cliente cliente){
+    private final UI_Home home;
+    public UI_Cliente(Cliente cliente,UI_Home home){
         this.cliente = cliente;
         this.sc = new Scanner(System.in);
+        this.home = home;
+        homeBackoffice();
     }
     public void homeBackoffice() {
         int choice;

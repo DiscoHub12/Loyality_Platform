@@ -183,7 +183,7 @@ public class UI_Home {
             }
         }else {
             System.out.println("Login Success.");
-            UI_Cliente ui = new UI_Cliente(cliente);
+            UI_Cliente ui = new UI_Cliente(cliente,this);
         }
     }
 
