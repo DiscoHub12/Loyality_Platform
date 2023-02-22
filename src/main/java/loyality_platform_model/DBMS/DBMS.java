@@ -382,6 +382,19 @@ public class DBMS {
         return null;
     }
 
+    public ConfigurazioneSMS getSMSPreconfigurato(int idAzienda, int idSMS) {
+        for (Azienda azienda : this.getSMSPreconfiguratiAzienda().keySet()) {
+            if (azienda.getIdAzienda() == idAzienda) {
+                for (SMS sms : this.getSMSPreconfiguratiAzienda().get(azienda)) {
+                    if (sms.getIdSMS() == idSMS) {
+                        return sms.getConfigurazione();
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     public Set<CatalogoPremi> getCatalogoPremiAzienda(int idAzienda) {
         for (Azienda azienda : this.getAziendeIscritte()) {
             if (azienda.getIdAzienda() == idAzienda) {
@@ -955,25 +968,36 @@ public class DBMS {
         }
         return false;
     }
-
-    public boolean addVisita(int idCliente, Visita visita) {
+    public Visita getVisitaById(int idCliente, int idVisita) {
         for (Cliente cliente : this.getVisiteCliente().keySet()) {
             if (cliente.getIdCliente() == idCliente) {
-                if (this.getVisiteCliente().containsKey(cliente)) {
-                    if (this.getVisiteCliente().get(cliente) == null) {
-                        Set<Visita> visiteCliente = new HashSet<>();
-                        visiteCliente.add(visita);
-                        this.getVisiteCliente().put(cliente, visiteCliente);
-                        return true;
-                    } else {
+                for (Visita visita : this.getVisiteCliente().get(cliente)) {
+                    if (visita.getIdVisita() == idVisita) {
+                        return visita;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public boolean addVisita(int idCliente, Visita visita) {
+        for(Cliente cliente : this.getClientiIscritti()){
+            if(cliente.getIdCliente() == idCliente){
+                if(this.getVisiteCliente().containsKey(cliente)){
+                    if(this.getVisiteCliente().get(cliente) == null){
+                        Set<Visita> visite = new HashSet<>();
+                        visite.add(visita);
+                        this.getVisiteCliente().put(cliente, visite);
+                    }else{
                         return this.getVisiteCliente().get(cliente).add(visita);
                     }
-                } else {
-                    Set<Visita> visiteCliente = new HashSet<>();
-                    visiteCliente.add(visita);
-                    this.getVisiteCliente().put(cliente, visiteCliente);
-                    return true;
+            }else{
+                    Set<Visita> visite = new HashSet<>();
+                    visite.add(visita);
+                    this.getVisiteCliente().put(cliente, visite);
                 }
+                return true;
             }
         }
         return false;
@@ -1039,18 +1063,46 @@ public class DBMS {
     }
 
 
-    //TODO rivedere, per me non serve
-    public ConfigurazioneSMS getSMSPreconfigurato(int idAzienda, int idSMS) {
-        for (Azienda azienda : this.getSMSPreconfiguratiAzienda().keySet()) {
-            if (azienda.getIdAzienda() == idAzienda) {
-                for (SMS sms : this.getSMSPreconfiguratiAzienda().get(azienda)) {
-                    if (sms.getIdSMS() == idSMS) {
-                        return sms.getConfigurazione();
+    public boolean addClienteProgramma(int idCliente, ProgrammaFedelta programmaFedelta){
+        Tessera tessera =  this.getTesseraCliente(idCliente);
+        if(tessera != null){
+            if(tessera.getProgrammiFedelta().isEmpty())
+                return tessera.addPogrammaFedelta(programmaFedelta) && this.addClienteCoalizione(tessera.getIdCliente(), programmaFedelta);
+            else {
+                for (Map.Entry<Azienda, Set<ProgrammaFedelta>> entry : this.getProgrammiAzienda().entrySet()) {
+                    for (ProgrammaFedelta program : entry.getValue()) {
+                        if (program.equals(programmaFedelta)) {
+                            for (ProgrammaFedelta toScroll : tessera.getProgrammiFedelta()) {
+                                if (!toScroll.equals(program)) {
+                                    return tessera.addPogrammaFedelta(programmaFedelta) && this.addClienteCoalizione(tessera.getIdCliente(), programmaFedelta);
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
-        return null;
+        return false;
     }
+
+
+    public boolean deleteClienteProgramma(int idCliente, ProgrammaFedelta programmaFedelta){
+        Tessera tessera = this.getTesseraCliente(idCliente);
+        if (tessera != null) {
+            if (!tessera.getProgrammiFedelta().isEmpty()) {
+                for (ProgrammaFedelta program : tessera.getProgrammiFedelta()) {
+                    if (program.equals(programmaFedelta)) {
+                        return this.deleteClienteCoalizione(tessera.getIdCliente(), programmaFedelta) && tessera.deleteProgrammaFedelta(programmaFedelta);
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+
+
+
+
 }
 

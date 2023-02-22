@@ -83,8 +83,7 @@ public class Visita {
     }
     /**
      * method that returns whether the visit is completed or not
-     * @return true if it's completed
-     * @return false if it it's not completed
+     * @return <code>false</code> if it's not completed, <code>true</code> otherwise.
      */
     public boolean isCompletata() {
         return completata;
@@ -97,8 +96,22 @@ public class Visita {
         this.completata = completata;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Visita visita = (Visita) o;
+        return completata == visita.completata && Objects.equals(data, visita.data) && Objects.equals(luogo, visita.luogo);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idVisita, data, luogo, completata);
+    }
+
     public String toString() {
-        return "\n\t Visit details : " +
+        return "\t Visit details : " +
+                "\n Id visita : " + this.idVisita +
                 "\n Place : " + this.luogo +
                 "\n Date : " + this.data+
                 "\n Complete : " + this.completata;

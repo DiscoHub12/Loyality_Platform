@@ -122,16 +122,16 @@ public class UI_Home {
         String email;
         String password;
         System.out.println("Inserisci la tua email: ");
-        email = sc.nextLine();
+        email = sc.next();
         while (Objects.equals(email, "") || email == null) {
-            System.out.println("L'email non può essere vuota. Reinserisci l'email.");
-            email = sc.nextLine();
+            System.out.println("L'email non puo' essere vuota. Reinserisci l'email.");
+            email = sc.next();
         }
         System.out.println("Inserisci la tua password: ");
-        password = sc.nextLine();
+        password = sc.next();
         while (Objects.equals(password, "") || password == null) {
-            System.out.println("La password non può essere vuota. Reinserisci la password : ");
-            password = sc.nextLine();
+            System.out.println("La password non puo' essere vuota. Reinserisci la password : ");
+            password = sc.next();
         }
         Azienda azienda = getDipendenteByLogin(email, password);
         if(azienda == null){
@@ -148,7 +148,7 @@ public class UI_Home {
             }
         }else {
             System.out.println("Login Success.");
-            UI_Dipendente ui = new UI_Dipendente(azienda);
+            UI_Dipendente ui = new UI_Dipendente(azienda, this);
         }
     }
 

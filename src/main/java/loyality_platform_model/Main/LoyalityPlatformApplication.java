@@ -6,9 +6,9 @@ import loyality_platform_model.Utils.InitProjectData;
 public class LoyalityPlatformApplication {
     public static void main(String[] args) {
 
-        InitProjectData initData = new InitProjectData();
-
+       InitProjectData.getInstance();
         UI_Home home = new UI_Home();
+        home.welcomePage();
 
     }
 }
