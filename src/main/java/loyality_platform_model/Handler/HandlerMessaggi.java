@@ -49,11 +49,7 @@ public class HandlerMessaggi {
             throw new IllegalArgumentException("Illegal text for sms.");
         return new SMS(testo);
     }
-    public SMS creaSMSPreconfigurato(ConfigurazioneSMS sms){
-        if(Objects.isNull(sms))
-            throw new IllegalArgumentException(("Empty message"));
-        return new SMS(sms);
-    }
+
     public ConfigurazioneSMS creaConfigurazioneSMS(String testo){
         if (Objects.equals(testo, ""))
             throw new IllegalArgumentException("Illegal text for sms.");
@@ -87,12 +83,25 @@ public class HandlerMessaggi {
      * @param sms
      * @param clienti
      */
-    public void inviaSmsGenerale(String sms, Set<Cliente> clienti){
-        if(Objects.isNull(sms))
-            throw new IllegalArgumentException("Error in sms");
-        for(Cliente cliente : clienti){
-            this.dbms.addSMS(cliente.getIdCliente(),creaSMS(sms));
+    public boolean inviaSmsGenerale(String sms, Set<Cliente> clienti){
+        if(Objects.equals(sms,""))
+            throw new IllegalArgumentException("no message written");
+        boolean smsAll=true;
+        SMS sms1=creaSMS(sms);
+        for(int i=1; i<=clienti.size();i++){
+            boolean smsInviato=false;
+            for(Cliente cliente : clienti){
+                if(cliente.getIdCliente() == i){
+                    dbms.addSMS(cliente.getIdCliente(),sms1);
+                    smsInviato = true;
+                    break;
+                }
+            }
+            if(!smsInviato){
+                smsAll=false;
+            }
         }
+        return smsAll;
     }
 
     /**
@@ -104,7 +113,7 @@ public class HandlerMessaggi {
             throw new IllegalArgumentException("unable to send empty messages");
         if(idCliente<1)
             throw new IllegalArgumentException("Customer id not correct");
-        SMS messaggio = creaSMSPreconfigurato(smsConfigurato);
+        SMS messaggio = new SMS(smsConfigurato);
         this.dbms.addSMS(idCliente,messaggio);
     }
 
@@ -114,21 +123,32 @@ public class HandlerMessaggi {
      * This method allows you to send a configured text message to a set of customers.
      *
      */
-    public void inviaSMSPreconfiguratoGenerale(Set<Cliente> clienti,ConfigurazioneSMS smsConfigurato){
+    public boolean inviaSMSPreconfiguratoGenerale(Set<Cliente> clienti,ConfigurazioneSMS smsConfigurato){
         if(Objects.isNull(smsConfigurato))
             throw new IllegalArgumentException("Error in sms");
-        for(Cliente cliente : clienti){
-            SMS messaggio= creaSMSPreconfigurato(smsConfigurato);
-            this.dbms.addSMS(cliente.getIdCliente(),messaggio);
+        boolean smsAll=true;
+        SMS sms1= new SMS(smsConfigurato);
+        for(int i=1; i<=clienti.size();i++){
+            boolean smsInviato=false;
+            for(Cliente cliente : clienti){
+                if(cliente.getIdCliente() == i){
+                    dbms.addSMS(cliente.getIdCliente(),sms1);
+                    smsInviato = true;
+                    break;
+                }
+            }
+            if(!smsInviato){
+                smsAll=false;
+            }
         }
+        return smsAll;
     }
     public void aggiungiConfigurazioneSMS(int idAzienda, String testo){
         if(idAzienda<1)
             throw new IllegalArgumentException("Company id not correct");
         if(Objects.equals(testo,""))
             throw new IllegalArgumentException("you have not written the text for the message");
-        ConfigurazioneSMS newConfigurazione = creaConfigurazioneSMS(testo);
-        SMS newSMS = creaSMSPreconfigurato(newConfigurazione);
+        SMS newSMS = new SMS(testo);
         this.dbms.addConfigurazioneSMS(idAzienda,newSMS);
     }
     public void aggiornaConfigurazioneSMS(int idAzienda,int idConfigurazione,String testo){
@@ -136,8 +156,7 @@ public class HandlerMessaggi {
             throw new IllegalArgumentException("Company id or sms id are not correct");
         if(Objects.equals(testo,""))
             throw new IllegalArgumentException("you have not written the text for the message");
-        ConfigurazioneSMS newConfigurazione = creaConfigurazioneSMS(testo);
-        SMS newSMS = creaSMSPreconfigurato(newConfigurazione);
+        SMS newSMS = creaSMS(testo);
         this.dbms.updateConfigurazioneSMS(idAzienda,idConfigurazione,newSMS);
     }
     public void rimuoviConfigurazioenSMS(int idAzienda, int idConfigurazione){
