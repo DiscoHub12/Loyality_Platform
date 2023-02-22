@@ -402,7 +402,7 @@ public class UI_Titolare {
                             Catalogo Premi rimosso correttamente. 
                             Ritorno alla schermata precedente. 
                             """);
-                    sezioneProgrammaFedelta();
+                    sezioneProgrammiFedelta();
                 }
             }
             case 3 -> sezioneCatalogoPremi();
