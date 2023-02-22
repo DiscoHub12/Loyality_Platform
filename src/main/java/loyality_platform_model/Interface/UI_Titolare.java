@@ -800,13 +800,14 @@ public class UI_Titolare {
 
     //SEZIONE 1
     public void sezioneClientiIscritti() {
+        sc.nextLine();
         int choice;
         Set<Cliente> clientiIscritti = this.handlers.getHandlerAzienda().getClientiAzienda(this.azienda.getIdAzienda(), DBMS.getInstance().getCoalizione());
         System.out.println("Ecco la lista di tutti i tuoi clienti :");
         if (clientiIscritti == null || clientiIscritti.isEmpty()) {
             System.out.println("""
-                    Nessun Cliente iscritto al/ai Programmi Fedelta'. 
-                    Ritorno alla Home. 
+                    Nessun Cliente iscritto al/ai Programmi Fedelta'.
+                    Ritorno alla Home.
                     """);
             sezioneBackOffice();
         } else {
