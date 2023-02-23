@@ -118,6 +118,16 @@ public class Utils {
         return null;
     }
 
+    public Dipendente getDipendenteDatiByLogin(String email, String password){
+        for(Map.Entry<Azienda, Set<Dipendente>> entry: DBMS.getInstance().getDipendentiAzienda().entrySet()){
+            for(Dipendente dipendente : entry.getValue()){
+                if(Objects.equals(dipendente.getEmail(), email) && Objects.equals(dipendente.getPassword(), password))
+                    return dipendente;
+            }
+        }
+        return null;
+    }
+
    public Cliente getClienteByLogin(String email, String password){
         for(Cliente cliente: DBMS.getInstance().getClientiIscritti()){
             if(Objects.equals(cliente.getEmail(), email) && Objects.equals(cliente.getPassword(), password))

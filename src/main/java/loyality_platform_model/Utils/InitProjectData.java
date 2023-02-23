@@ -10,7 +10,7 @@ public class InitProjectData {
     //GESTORE E AZIENDA 1 :
     private final GestorePuntoVendita titolare = new GestorePuntoVendita("Mario", "Rossi", "mariorossi@gmail.com", "password");
 
-    private final Dipendente dipendente0 = new Dipendente("Luca", "Neri", "lucaneri@gmail.com", "password1", true);
+    private final Dipendente dipendente0 = new Dipendente("Luca", "Neri", "lucaneri@gmail.com", "password1", false);
 
     private final Dipendente dipendente1 = new Dipendente("Marco", "Magni", "marcomagni@gmail.com", "password2", true);
 
