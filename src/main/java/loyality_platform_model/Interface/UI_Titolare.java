@@ -53,7 +53,8 @@ public class UI_Titolare {
         this.handlers = new Utils();
         this.home = home;
         this.sc = new Scanner(System.in);
-        homeBackoffice();
+        //homeBackoffice();
+        sezioneBackOffice();
     }
 
     public void homeBackoffice() {
