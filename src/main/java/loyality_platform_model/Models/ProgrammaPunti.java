@@ -270,7 +270,7 @@ public class ProgrammaPunti implements ProgrammaFedelta {
                 "\nPunti Spesa: " + puntiSpesa +
                 "\nImporto Spesa: " + importoSpesa +
                 "\nTipo Programma: " + tipoProgramma +
-                "\nId Catalogo Premi: " + catalogoPremi.getIdCatalogoPremi();
+                "\nId Catalogo Premi: " + toStringCatalogo();
     }
 
     private String toStringCatalogo(){

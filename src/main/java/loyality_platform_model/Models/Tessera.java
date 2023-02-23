@@ -152,16 +152,19 @@ public class Tessera {
         return "\t-DETAILS TESSERA-" +
                 "\nId Tessera: "+ idTessera +
                 "\nId Cliente: " + idCliente +
-                "\nProgrammiFedelta: " + toStringProgrammiFedelta() +
+                "\nProgrammiFedelta: " + "\n" +toStringProgrammiFedelta() +
                 "\nPunti: " + punti +
                 "\nLivelli : "+ livelli;
     }
 
     private String toStringProgrammiFedelta() {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (ProgrammaFedelta programmaFedelta : this.getProgrammiFedelta()) {
-            stringBuilder.append("\n-").append(programmaFedelta);
+        String tmp = "";
+        int c = 1;
+        if(programmiFedelta.isEmpty())
+            tmp = "Non sei iscritto a nessun programma fedeltà.";
+        for(ProgrammaFedelta programmaFedelta : this.programmiFedelta){
+            tmp += "Programma numero :" + c + "Nome Programma : " + programmaFedelta.getNome() + " Tipo Programma : " + programmaFedelta.getTipoProgramma();
         }
-        return stringBuilder.toString();
+       return tmp;
     }
 }
