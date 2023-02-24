@@ -1,15 +1,11 @@
 package loyality_platform_model.Interface;
 
-import loyality_platform_model.DBMS.DBMS;
 import loyality_platform_model.Models.Azienda;
 import loyality_platform_model.Models.Cliente;
 import loyality_platform_model.Models.Dipendente;
-import loyality_platform_model.Utils.InitProjectData;
 import loyality_platform_model.Utils.Utils;
-
 import java.util.Objects;
 import java.util.Scanner;
-
 import static java.lang.System.exit;
 
 /**

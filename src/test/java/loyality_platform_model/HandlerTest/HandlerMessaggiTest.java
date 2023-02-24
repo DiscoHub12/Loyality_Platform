@@ -27,7 +27,7 @@ public class HandlerMessaggiTest {
     public void testInviaSMS(){
         init();
         assertThrows(IllegalArgumentException.class, () -> handler.inviaSMS(1,""));
-        this.handler.inviaSMS(cliente.getIdCliente(),"prova");
+        assertTrue(this.handler.inviaSMS(cliente.getIdCliente(),"prova"));
         Set<SMS> smss=db.getSMSClienteById(cliente.getIdCliente());
         assertEquals(1,smss.size());
         this.handler.inviaSMS(cliente.getIdCliente(),"prova2");
@@ -57,10 +57,10 @@ public class HandlerMessaggiTest {
         assertThrows(IllegalArgumentException.class, () -> handler.inviaSMSPreConfigurato(1,null));
         assertThrows(IllegalArgumentException.class, () -> handler.inviaSMSPreConfigurato(-1,newConfig));
         ConfigurazioneSMS newConfig2= new ConfigurazioneSMS("prova2");
-        this.handler.inviaSMSPreConfigurato(cliente.getIdCliente(),newConfig);
+        assertTrue(this.handler.inviaSMSPreConfigurato(cliente.getIdCliente(),newConfig));
         Set<SMS> smss=db.getSMSCliente().get(cliente);
         assertEquals(1,smss.size());
-        this.handler.inviaSMSPreConfigurato(cliente.getIdCliente(),newConfig2);
+        assertTrue(this.handler.inviaSMSPreConfigurato(cliente.getIdCliente(),newConfig2));
         Set<SMS> smss1=db.getSMSCliente().get(cliente);
         assertEquals(2,smss1.size());
 
@@ -106,12 +106,12 @@ public class HandlerMessaggiTest {
         assertThrows(IllegalArgumentException.class, () -> handler.aggiornaConfigurazioneSMS(1,-1,"testo"));
         assertThrows(IllegalArgumentException.class, () -> handler.aggiornaConfigurazioneSMS(-1,-1,"testo"));
         assertThrows(IllegalArgumentException.class, () -> handler.aggiornaConfigurazioneSMS(1,1,""));
-        handler.aggiungiConfigurazioneSMS(azienda.getIdAzienda(), "configurazione");
+        assertTrue(handler.aggiungiConfigurazioneSMS(azienda.getIdAzienda(), "configurazione"));
         Set<SMS> configurazioni=db.getSMSPreconfigurati(azienda.getIdAzienda());
         assertEquals(1,configurazioni.size());
-        handler.aggiungiConfigurazioneSMS(azienda.getIdAzienda(), "configurazione2");
+        assertTrue(handler.aggiungiConfigurazioneSMS(azienda.getIdAzienda(), "configurazione2"));
         assertEquals(2,configurazioni.size());
-        handler.aggiornaConfigurazioneSMS(azienda.getIdAzienda(),2,"ciao");
+        assertTrue(handler.aggiornaConfigurazioneSMS(azienda.getIdAzienda(),2,"ciao"));
         assertEquals(2,configurazioni.size());
         //testo cambiato correttamente visto con il debug nel giusto id
     }
@@ -123,9 +123,9 @@ public class HandlerMessaggiTest {
         handler.aggiungiConfigurazioneSMS(azienda.getIdAzienda(), "configurazione");
         Set<SMS> configurazioni=db.getSMSPreconfigurati(azienda.getIdAzienda());
         assertEquals(1,configurazioni.size());
-        handler.aggiungiConfigurazioneSMS(azienda.getIdAzienda(), "configurazione2");
+        assertTrue(handler.aggiungiConfigurazioneSMS(azienda.getIdAzienda(), "configurazione2"));
         assertEquals(2,configurazioni.size());
-        handler.rimuoviConfigurazioenSMS(azienda.getIdAzienda(), 2);
+        assertTrue(handler.rimuoviConfigurazioenSMS(azienda.getIdAzienda(), 2));
         assertEquals(1,configurazioni.size());
     }
 }
