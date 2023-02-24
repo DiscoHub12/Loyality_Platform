@@ -92,10 +92,10 @@ public class HandlerProgrammaFedelta {
     }
 
     /**
-     *
-     * @param idAzienda
-     * @param programmaFedelta
-     * @return
+     * This method adds a loyalty program to other company.
+     * @param idAzienda considered company.
+     * @param programmaFedelta loyalty program to add.
+     * @return <code>true</code> if the loyalty program is added, <code>false</code> otherwise.
      */
     public boolean aggiungiProgrammaEsistente(int idAzienda, ProgrammaFedelta programmaFedelta){
         Objects.requireNonNull(programmaFedelta);

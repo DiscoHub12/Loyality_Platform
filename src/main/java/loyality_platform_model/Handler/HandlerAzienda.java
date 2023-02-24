@@ -2,7 +2,6 @@ package loyality_platform_model.Handler;
 
 import loyality_platform_model.DBMS.DBMS;
 import loyality_platform_model.Models.*;
-
 import java.util.Objects;
 import java.util.Set;
 
@@ -77,7 +76,10 @@ public class HandlerAzienda {
      * @param nome    the name for the Employee to add.
      * @param cognome the surname for the Employee to add.
      * @param email   the email for the Employee to add.
+     * @param password the password for the Employee to add.
+     * @param restrizioni the restriction for the Employee to add.
      * @throws IllegalArgumentException if the id Company, Name, Surname or Email for Employee is not valid.
+     * @return new Employee.
      */
     public Dipendente creaDipendente(String nome, String cognome, String email, String password,boolean restrizioni) {
         if (Objects.equals(nome, "") || Objects.equals(cognome, "") || Objects.equals(email, "") || Objects.equals(password, ""))
@@ -93,7 +95,10 @@ public class HandlerAzienda {
      * @param nome      the name for the Employee to add.
      * @param cognome   the Surname for the Employee to add.
      * @param email     the email for the Employee to add.
+     * @param password the password for the Employee to add.
+     * @param restrizioni the restriction for the Employee to add.
      * @throws IllegalArgumentException if the idAzienda is not valid.
+     * @return <code>true</code> if the Employee is added, <code>false</code> otherwise.
      */
     public boolean aggiungiDipendente(int idAzienda, String nome, String cognome, String email, String password, boolean restrizioni) {
         if (idAzienda <= 0)
@@ -109,8 +114,9 @@ public class HandlerAzienda {
      * @param idAzienda    the Company (Azienda) id.
      * @param idDipendente the id for Employee to update.
      * @param email        the email for the Employee.
-     * @throws NullPointerException     if the gestore is null.
+     * @param restrizioni the restriction for the Employee.
      * @throws IllegalArgumentException if the idAzienda or idDipendente is not valid || email is not valid.
+     * @return <code>true</code> if the Employee is updated, <code>false</code> otherwise.
      */
     public boolean modificaDipendente(int idAzienda, int idDipendente, String email, boolean restrizioni) {
         if (idAzienda <= 0 || idDipendente <= 0)
@@ -127,6 +133,7 @@ public class HandlerAzienda {
      * @param idAzienda    the Company (Azienda) id.
      * @param idDipendente the Employee id to remove.
      * @throws IllegalArgumentException if the idAzienda or idDipendente is not valid.
+     * @return <code>true</code> if the Employee is removed, <code>false</code> otherwise.
      */
     public boolean rimuoviDipendente(int idAzienda, int idDipendente) {
         if (idAzienda <= 0 || idDipendente <= 0)
@@ -149,12 +156,17 @@ public class HandlerAzienda {
     }
 
     /**
-     * This method allowa you to change the Loyalty Area of
+     * This method allows you to change the Loyalty Area of
      * a registered Company (Azienda) taken through its id.
      *
      * @param idAzienda the Company (Azienda) id.
+     * @param nome new name.
+     * @param indirizzo new address.
+     * @param numeroTelefono new number.
+     * @param email new email.
      * @throws NullPointerException     if the spazioFedeltaNew is null.
      * @throws IllegalArgumentException if the idAzienda is not valid.
+     * @return <code>true</code> if the Loyalty space is updated, <code>false</code> otherwise.
      */
     public boolean modificaSpazioFedelta(int idAzienda, String nome, String indirizzo, String numeroTelefono, String email) {
         if (idAzienda <= 0)

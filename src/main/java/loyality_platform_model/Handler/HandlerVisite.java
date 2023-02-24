@@ -2,9 +2,7 @@ package loyality_platform_model.Handler;
 
 import loyality_platform_model.DBMS.DBMS;
 import loyality_platform_model.Models.Cliente;
-import loyality_platform_model.Models.SMS;
 import loyality_platform_model.Models.Visita;
-
 import java.util.Objects;
 import java.util.Set;
 
@@ -28,25 +26,39 @@ public class HandlerVisite {
         this.dbms = DBMS.getInstance();
     }
 
-    /**
-     * method that returns the details of the visit
-     */
 
     public DBMS getDbms() {
         return dbms;
     }
+
+    /**
+     * This method returns a set of visits of a costumer.
+     * @param idCliente considered costumer.
+     * @return a set of visits.
+     */
     public Set<Visita> getVisiteCliente(int idCliente){
         if(idCliente<1)
             throw new IllegalArgumentException("Illegal id");
         return this.dbms.getVisiteClienteById(idCliente);
     }
+
+    /**
+     * This method returns one visit of costumer.
+     * @param idCliente considered costumer.
+     * @param idVisita visit to return.
+     * @return visit if exists, null otherwise.
+     */
     public Visita getVisitaById(int idCliente, int idVisita) {
         if (idCliente <= 0 || idVisita <= 0)
             throw new IllegalArgumentException("Invalid id for Customer or Visit.");
         return this.dbms.getVisitaById(idCliente, idVisita);
     }
+
     /**
-     * method that returns the details of the visit
+     * This method returns the details of the visit.
+     * @param idCliente considered consumer.
+     * @param idVisita id of the visit to return.
+     * @return the details of the visit.
      */
     public String getDetailsVisita(int idCliente,int idVisita) {
         if (idVisita < 1)
@@ -70,8 +82,7 @@ public class HandlerVisite {
      * @param luogo the Place of the Visit.
      * @param data  the Date of the Visit.
      * @return the new Visit created.
-     * @throws NullPointerException     if the <data> is null.
-     * @throws IllegalArgumentException if the location or time is incorrect.
+     * @throws IllegalArgumentException if the location or data is incorrect.
      */
 
     public Visita creaVisita(String luogo, String data) {
@@ -84,11 +95,10 @@ public class HandlerVisite {
      * Method that allows you to add a visit to a particular Customer (registered).
      *
      * @param idCliente the Costumer (registrated)
-     *
-     * @throws NullPointerException     if the <cliente> or <visita> is null.
-     * @throws IllegalArgumentException if the Visit is already present into the Costumer's profile.
+     * @param data data of the visit.
+     * @param luogo place of the visit.
+     * @return <code>true</code> if the visit is added, <code>false</code> otherwise.
      */
-
     public boolean aggiungiVisita(int idCliente, String data, String luogo) {
         if(Objects.equals(luogo, "") || (Objects.equals(data,"")))
             throw new IllegalArgumentException("place or data are empty");
@@ -98,6 +108,15 @@ public class HandlerVisite {
         return this.dbms.addVisita(idCliente, visitaNew);
     }
 
+
+    /**
+     * Method that allows you to add a visit to a sets of Customer (registered).
+     *
+     * @param clienti the set of costumer (registrated)
+     * @param data data of the visit.
+     * @param luogo place of the visit.
+     * @return <code>true</code> if the visit is added, <code>false</code> otherwise.
+     */
     public boolean aggiungiVisitaGenerale(Set<Cliente> clienti, String data, String luogo){
         if(Objects.equals(luogo, "") || (Objects.equals(data,"")))
             throw new IllegalArgumentException("place or data are empty");
@@ -121,11 +140,12 @@ public class HandlerVisite {
 
     /**
      * Method that allows you to modify a specific visit for a specific Costumers.
+     * @param idCliente considered costumer.
+     * @param idVisita considered visit.
      * @param luogo   the new Place of the Visit.
      * @param data    the new Date of the Visit.
-     * @throws NullPointerException     if the <cliente> or <visita> or <data> is null.
-     * @throws IllegalArgumentException if the location or time is incorrect or the visit don't exist.
-     *                                  <<<<<<< HEAD
+     * @param completata <code>true</code> if the visit is complete, <code>false</code> otherwise
+     * @return <code>true</code> if the visit is updated, <code>false</code> otherwise.
      */
     public boolean modificaVisita(int idCliente, int idVisita,String data, String luogo,boolean completata) {
         if((Objects.equals(luogo, "") || (Objects.equals(data,""))))
@@ -140,16 +160,22 @@ public class HandlerVisite {
 
     /**
      * Method that allows you to remove a specific Visit for a specific Costumers.
-     * @throws NullPointerException     if the <cliente> or <visita> is null.
-     * @throws IllegalArgumentException if the Costumers don't have this Visit.
+     * @param idCliente considered costumer.
+     * @param idVisita visit to remove.
+     * @return <code>true</code> if the visit is removed, <code>false</code> otherwise.
      */
-
     public boolean rimuoviVisita(int idCliente, int idVisita) {
         if (idCliente < 1 || idVisita<1)
             throw new IllegalArgumentException("Customer Id or visit id are not correct");
         return this.dbms.removeVisita(idCliente, idVisita);
     }
 
+    /**
+     * Method that allows you to remove a specific Visit for a sets of Costumers.
+     * @param clienti considered costumers.
+     * @param visita visit to remove.
+     * @return <code>true</code> if the visit is removed, <code>false</code> otherwise.
+     */
     public boolean rimuoviVisitaGenerale(Set<Cliente> clienti, Visita visita) {
         if(Objects.isNull(visita))
             throw new IllegalArgumentException("null visit");
