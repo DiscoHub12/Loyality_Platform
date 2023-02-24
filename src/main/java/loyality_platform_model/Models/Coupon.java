@@ -1,6 +1,5 @@
 package loyality_platform_model.Models;
 
-import java.util.Date;
 import java.util.Objects;
 
 
@@ -15,25 +14,25 @@ public class Coupon {
     private static int contatoreCoupon = 0;
 
     /**
-     * This attribute rapresents the
+     * This attribute represents the
      * unique id of this Coupon.
      */
-    private int idCoupon;
+    private final int idCoupon;
 
     /**
-     * This attribute rapresents the discount
+     * This attribute represents the discount
      * value of this Coupon.
      */
     private int valoreSconto;
 
     /**
-     * This attribute rapresents the activation date
+     * This attribute represents the activation date
      * of this Coupon.
      */
     private String dataAttivazione;
 
     /**
-     * This attribute rapresents the expiration
+     * This attribute represents the expiration
      * date of this Coupon.
      */
     private String dataScadenza;
@@ -111,8 +110,7 @@ public class Coupon {
         if (object == null)
             return false;
         if (object instanceof Coupon tmp) {
-            if (this.getIdCoupon() == tmp.getIdCoupon() && this.getValoreSconto() == tmp.getValoreSconto())
-                return true;
+            return this.getIdCoupon() == tmp.getIdCoupon() && this.getValoreSconto() == tmp.getValoreSconto();
         }
         return false;
     }

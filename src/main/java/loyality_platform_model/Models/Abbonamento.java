@@ -1,31 +1,38 @@
 package loyality_platform_model.Models;
 
-import java.util.Date;
 
 /**
  * Class that represents a subscription that can be
  * purchased by companies that want to join the platform.
  */
 public class Abbonamento {
+
+
+    private static int contatoreAbbonamento=0;
+
     /**
      * attribute representing the id of the subscription
      */
-    private static int contatoreAbbonamento=0;
-    private int idAbbonamento;
+    private final int idAbbonamento;
+
     /**
      * attribute of type Date,
      * indicating the start date of the subscription
      */
-    private final Date dataInizio;
+    private final String dataInizio;
+
     /**
      * attribute of type Date,
      * indicating the end date of the subscription
      */
-    private Date dataFine;
+    private String dataFine;
+
     /**
      * attribute indicating the price of the subscription
      */
     private double prezzo;
+
+
     /**
      * constructor that instantiates a new object for the Subscription class,
      * where to be created, it needs the following parameters.
@@ -33,7 +40,7 @@ public class Abbonamento {
      * @param dataFine day on which the subscription end
      * @param prezzo price of subscription
      */
-    public Abbonamento(Date dataInizio, Date dataFine, double prezzo) {
+    public Abbonamento(String dataInizio, String dataFine, double prezzo) {
         this.idAbbonamento=++contatoreAbbonamento;
         this.dataInizio = dataInizio;
         this.dataFine = dataFine;
@@ -52,7 +59,7 @@ public class Abbonamento {
      * This method returns me the start date of the subscription
      * @return the start date of the subscription
      */
-    public Date getDataInizio() {
+    public String getDataInizio() {
         return this.dataInizio;
     }
 
@@ -60,14 +67,14 @@ public class Abbonamento {
      * This method returns me the end date of the subscription
      * @return the end date of the subscription
      */
-    public Date getDataFine() {
+    public String getDataFine() {
         return this.dataFine;
     }
     /**
      * This method edit the attribute of the Date attribute
      * @param df new date type
      */
-    public void setDataFine(Date df){
+    public void setDataFine(String df){
         this.dataFine=df;
     }
 
@@ -89,10 +96,10 @@ public class Abbonamento {
 
     @Override
     public String toString() {
-        return "Abbonamento{" +
-                "dataInizio=" + dataInizio +
-                ", dataFine=" + dataFine +
-                ", prezzo=" + prezzo +
-                '}';
+        return "\t-DETAILS ABBONAMENTO- " +
+                "\nId abbonamento: " + idAbbonamento +
+                "\nDataInizio: " + dataInizio +
+                "\nDataFine: " + dataFine +
+                "\nPrezzo: " + prezzo;
     }
 }

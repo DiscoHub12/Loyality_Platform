@@ -16,7 +16,7 @@ public class Premio {
      * This attribute represents the
      * unique id of this award.
      */
-    private int idPremio;
+    private final int idPremio;
 
     /**
      * This attribute represents the name
@@ -124,8 +124,7 @@ public class Premio {
         if (object == null)
             return false;
         if (object instanceof Premio tmp) {
-            if (this.getIdPremio() == tmp.getIdPremio() && this.getNome() == tmp.getNome())
-                return true;
+            return this.getIdPremio() == tmp.getIdPremio() && Objects.equals(this.getNome(), tmp.getNome());
         }
         return false;
     }

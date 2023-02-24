@@ -1,6 +1,6 @@
 package loyality_platform_model.Models;
 
-import java.util.Date;
+
 import java.util.Objects;
 
 /**
@@ -11,12 +11,14 @@ import java.util.Objects;
  * much other information.
  */
 public class Visita {
+
     private static int contatoreVisita=0;
+
     /**
      * This attribute rapresents the unique
      * id of this Visit.
      */
-    private int idVisita;
+    private final int idVisita;
 
     /**
      * This attribute rapresents the
@@ -29,6 +31,7 @@ public class Visita {
      * Place of this Visit.
      */
     private String luogo;
+
     /**
      * This attribute rapresents the status
      * of the visit, so whther it was completed
@@ -49,49 +52,42 @@ public class Visita {
         this.setLuogo(luogo);
         this.completata = false;
     }
-    /**
-     * method that returns the id of the visit
-     */
+
+
     public int getIdVisita() {
         return idVisita;
     }
-    /**
-     * method that returns the date of the visit
-     */
+
+
     public String getData() {
         return this.data;
     }
-    /**
-     * method that update the date of the visit
-     */
+
+
     public void setData(String data) {
+        if (Objects.equals(data, ""))
+            throw new IllegalArgumentException("Invalid data");
         this.data = data;
     }
-    /**
-     * method that returns the place of the visit
-     */
+
+
     public String getLuogo() {
         return luogo;
     }
-    /**
-     * method that update the place of the visit
-     */
+
+
     public void setLuogo(String luogo) {
         if (Objects.equals(luogo, ""))
             throw new IllegalArgumentException("Invalid Place");
         this.luogo = luogo;
     }
-    /**
-     * method that returns whether the visit is completed or not
-     * @return <code>false</code> if it's not completed, <code>true</code> otherwise.
-     */
+
+
     public boolean isCompletata() {
         return completata;
     }
-    /**
-     * method that set true or false on the boolean attribute
-     * indicating whether a visit is completed or not
-     */
+
+
     public void setCompletata(boolean completata) {
         this.completata = completata;
     }
@@ -110,7 +106,7 @@ public class Visita {
     }
 
     public String toString() {
-        return "\t Visit details : " +
+        return "\t-DETAILS VISITA-" +
                 "\n Id visita : " + this.idVisita +
                 "\n Place : " + this.luogo +
                 "\n Date : " + this.data+

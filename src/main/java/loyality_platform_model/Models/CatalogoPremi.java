@@ -25,7 +25,7 @@ public class CatalogoPremi {
      * This attribute represents the
      * unique id of this Reward Catalogue.
      */
-    private int idCatalogoPremi;
+    private final int idCatalogoPremi;
 
     /**
      * This attribute represents the list
@@ -128,12 +128,12 @@ public class CatalogoPremi {
         if (this.premiCatalogo.isEmpty())
             return "Il Catalogo Premi e' vuoto.";
         int contatore = 1;
-        String tmp = "";
+        StringBuilder tmp = new StringBuilder();
         for (int i = 0; i < this.premiCatalogo.size(); i++) {
-            tmp += "\tPremio numero : " + contatore + "\n" + this.premiCatalogo.toArray()[i].toString();
+            tmp.append("\tPremio numero : ").append(contatore).append("\n").append(this.premiCatalogo.toArray()[i].toString());
             contatore++;
         }
-        return tmp;
+        return tmp.toString();
     }
 
     /**
@@ -149,8 +149,7 @@ public class CatalogoPremi {
         if (object == null)
             return false;
         if (object instanceof CatalogoPremi tmp) {
-            if (this.getIdCatalogoPremi() == tmp.getIdCatalogoPremi() && this.getPremiCatalogo() == tmp.getPremiCatalogo())
-                return true;
+            return this.getIdCatalogoPremi() == tmp.getIdCatalogoPremi() && this.getPremiCatalogo() == tmp.getPremiCatalogo();
         }
         return false;
     }

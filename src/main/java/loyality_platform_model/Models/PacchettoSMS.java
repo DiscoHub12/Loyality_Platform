@@ -1,19 +1,25 @@
 package loyality_platform_model.Models;
+
+
 /**
  /**
  * Class representing an SMS packet.
  * It contains an id, the price and the messages available inside
  */
 public class PacchettoSMS {
+
+    private static int contatorePacchettoSMS=0;
+
     /**
      * attribute indicating the package id
      */
-    private static int contatorePacchettoSMS=0;
-    private int idPacchettoSMS;
+    private final int idPacchettoSMS;
+
     /**
      * attribute indicating the price of the package
      */
     private double prezzo;
+
     /**
      * attribute indicating the messages available within a package
      */
@@ -54,11 +60,10 @@ public class PacchettoSMS {
 
 
     public String toString() {
-        return "Pacchetto SMS{" +
-                "id =" + this.idPacchettoSMS +
-                ", prezzo =" + this.prezzo +
-                ", numero dei messaggi =" + this.numeroMessaggi +
-                '}';
+        return "\t-DETAILS PACCHETTO SMS-" +
+                "\nId: " + this.idPacchettoSMS +
+                "\nPrezzo: " + this.prezzo +
+                "\nNumero di messaggi: " + this.numeroMessaggi;
     }
 }
 

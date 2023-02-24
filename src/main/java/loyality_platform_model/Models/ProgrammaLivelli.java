@@ -285,23 +285,17 @@ public class ProgrammaLivelli implements ProgrammaFedelta {
 
     @Override
     public String toString() {
-        return "\t-ProgrammaLivelli-" +
-                "\nid: " + idProgrammaLivelli +
+        return "\tDETAILS PROGRAMMA LIVELLI" +
+                "\nId programma livelli: " + idProgrammaLivelli +
                 "\nnome: " + nome +
                 "\ndataAttivazione: " + dataAttivazione +
                 "\nmassimoLivelli: " + massimoLivelli +
                 "\nlivelloVip: " + livelloVip +
-                "\npolicyLivelli: " + policyLivelli +
-                "\npuntiSpesa: " + puntiSpesa +
-                "\nimportoSpesa: " + importoSpesa +
-                "\ntipoProgramma: " + tipoProgramma+
+                "\nPolicyLivelli: " + policyLivelli +
+                "\nPuntiSpesa: " + puntiSpesa +
+                "\nImportoSpesa: " + importoSpesa +
+                "\nTipoProgramma: " + tipoProgramma+
                 "\nId Catalogo Premi: " + this.catalogoPremi.getIdCatalogoPremi();
     }
 
-    private String toStringCatalogo(){
-        if(catalogoPremi != null){
-            return catalogoPremi.toString();
-        }
-        return null;
-    }
 }

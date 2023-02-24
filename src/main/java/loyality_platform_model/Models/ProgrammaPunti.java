@@ -131,7 +131,7 @@ public class ProgrammaPunti implements ProgrammaFedelta {
     }
 
     /**
-     * This method sets the variable to tell whether or not there are a maximum number of points.
+     * This method sets the variable to tell whether there are a maximum number of points.
      * @param maxPunti <code>true</code> if there are a maximum number of points
      *                 <code>false</code> otherwise.
      */
@@ -261,7 +261,7 @@ public class ProgrammaPunti implements ProgrammaFedelta {
     @Override
     public String toString() {
         return "\t-DETAILS PROGRAMMA PUNTI-" +
-                "\nId: " + idProgrammaPunti +
+                "\nId programma a punti: " + idProgrammaPunti +
                 "\nNome: " + nome +
                 "\nData Attivazione: " + dataAttivazione +
                 "\nMassimo Punti: " + maxPunti +

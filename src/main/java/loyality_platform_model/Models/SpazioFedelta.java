@@ -1,7 +1,5 @@
 package loyality_platform_model.Models;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -13,16 +11,19 @@ import java.util.Objects;
  */
 public class SpazioFedelta {
     private static int contatoreSpazioFedelta=0;
+
     /**
      * This attribute rapresents the
      * unique Id for this Loyality Space.
      */
-    private int idSpazioFedelta;
+    private final int idSpazioFedelta;
+
     /**
      * This attribute rapresents the
      * Name for this Loyality Space.
      */
     private  String nome;
+
     /**
      * This attribute rapresents the
      * address for this Loyality Space.
@@ -109,7 +110,6 @@ public class SpazioFedelta {
                 "\n Name : " + this.nome +
                 "\n Address : " + this.indirizzo +
                 "\n Telephone Number : " + this.numeroTelefono +
-                "\n Email : " + this.email +
-                "\n External Links : ";
+                "\n Email : " + this.email ;
     }
 }

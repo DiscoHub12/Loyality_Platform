@@ -1,15 +1,8 @@
 package loyality_platform_model.Models;
 
-import loyality_platform_model.DBMS.DBMS;
-
 import java.util.*;
 
 public class Coalizione {
-
-    /**
-     * This attribute represents the DataBase.
-     */
-
 
     /**
      * This attribute represents a map where the
@@ -46,7 +39,7 @@ public class Coalizione {
      * This method allows you to take all the customers
      * registered in a certain Loyalty Program.
      * @param idProgramma the id for Loyalty Program.
-     * @return a list of Customers registered in a certain Loyalty Program.
+     * @return a set of Customers registered in a certain Loyalty Program.
      */
     public Set<Cliente> getClientiIscrittiProgramma(int idProgramma) {
         if (idProgramma <= 0)
@@ -59,6 +52,12 @@ public class Coalizione {
         return null;
     }
 
+    /**
+     * This method allows you to take all the costumers
+     * at a certain Company.
+     * @param idAzienda the of Company.
+     * @return a set of Customers.
+     */
     public Set<Cliente> getClientiAzienda(int idAzienda){
         Set<Cliente> clienti = new HashSet<>();
         if(idAzienda <= 0)
@@ -79,7 +78,7 @@ public class Coalizione {
      * specific Company, if it exists.
      * @param idAzienda the id for the Company.
      * @param idProgramma the id for the Loyalty Program.
-     * @return a list of Customers enrolled in a certain Loyalty Program
+     * @return a set of Customers enrolled in a certain Loyalty Program
      * active in a Company.
      */
     public Set<Cliente> getClientiIscrittiAProgrammaAzienda(int idAzienda, int idProgramma) {

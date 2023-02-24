@@ -1,6 +1,5 @@
 package loyality_platform_model.Models;
 
-import javax.print.attribute.standard.JobKOctets;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -147,20 +146,19 @@ public class Azienda {
         if (object == null)
             return false;
         if (object instanceof Azienda tmp) {
-            if (this.getIdAzienda() == tmp.getIdAzienda() && this.getSpazioFedelta() == tmp.getSpazioFedelta())
-                return true;
+            return this.getIdAzienda() == tmp.getIdAzienda() && this.getSpazioFedelta() == tmp.getSpazioFedelta();
         }
         return false;
     }
 
     public String catalogoPremiIfExist() {
-        String tmp = "";
+        StringBuilder tmp = new StringBuilder();
         if (this.catalogoPremi.isEmpty())
-            tmp = "There is no active Rewards Catalogue.";
+            tmp = new StringBuilder("There is no active Rewards Catalogue.");
         for (int i = 0; i < this.catalogoPremi.size(); i++) {
-            tmp += i + ")" + this.catalogoPremi.toArray()[i].toString();
+            tmp.append(i).append(")").append(this.catalogoPremi.toArray()[i].toString());
         }
-        return tmp;
+        return tmp.toString();
     }
 
     public String toString() {
