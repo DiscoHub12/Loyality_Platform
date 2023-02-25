@@ -11,9 +11,9 @@ public class VisitaTest {
 
     @Test
     public void testCostructor(){
-        assertThrows(NullPointerException.class, () -> new Visita("", ""));
-        assertThrows(NullPointerException.class, () -> new Visita(luogo , null));
-        assertThrows(NullPointerException.class, () -> new Visita("", data));
+        assertThrows(IllegalArgumentException.class, () -> new Visita("", ""));
+        assertThrows(IllegalArgumentException.class, () -> new Visita(luogo , null));
+        assertThrows(IllegalArgumentException.class, () -> new Visita("", data));
     }
 
     @Test

@@ -165,12 +165,33 @@ public class DBMSTest {
 
     @Test
     public void testAddClienteCoalizione(){
-        //Todo implementare.
+        initDb();
+        assertTrue(this.db.getClientiIscritti().contains(cliente));
+        assertTrue(this.db.addClienteCoalizione(cliente.getIdCliente(), this.programmaFedeltaPunti1));
+        assertEquals(1, this.db.getCoalizione().getClientiIscritti().get(programmaFedeltaPunti1).size());
+        assertTrue(this.db.getCoalizione().getClientiIscritti().get(programmaFedeltaPunti1).contains(this.cliente));
     }
 
     @Test
     public void testRemoveClienteCoalizione(){
-        //Todo implementare.
+        initDb();
+        assertTrue(this.db.getClientiIscritti().contains(cliente));
+        assertTrue(this.db.addClienteCoalizione(cliente.getIdCliente(), this.programmaFedeltaPunti1));
+        assertEquals(1, this.db.getCoalizione().getClientiIscritti().get(programmaFedeltaPunti1).size());
+        assertTrue(this.db.getCoalizione().getClientiIscritti().get(programmaFedeltaPunti1).contains(this.cliente));
+
+        Cliente cliente1 = new Cliente("nome", "cognome", "telefono", "email", "password");
+
+        this.db.addCliente(cliente1);
+        assertTrue(this.db.getClientiIscritti().contains(cliente1));
+        assertTrue(this.db.getClientiIscritti().contains(cliente1));
+        assertTrue(this.db.addClienteCoalizione(cliente1.getIdCliente(), this.programmaFedeltaPunti1));
+        assertEquals(2, this.db.getCoalizione().getClientiIscritti().get(programmaFedeltaPunti1).size());
+        assertTrue(this.db.getCoalizione().getClientiIscritti().get(programmaFedeltaPunti1).contains(cliente1));
+
+        assertTrue(this.db.deleteClienteCoalizione(cliente.getIdCliente(), programmaFedeltaPunti1));
+        assertEquals(1, this.db.getCoalizione().getClientiIscritti().get(programmaFedeltaPunti1).size());
+        assertFalse(this.db.getCoalizione().getClientiIscritti().get(programmaFedeltaPunti1).contains(this.cliente));
     }
 
 

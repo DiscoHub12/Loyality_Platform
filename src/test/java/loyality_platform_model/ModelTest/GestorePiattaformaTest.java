@@ -19,25 +19,25 @@ public class GestorePiattaformaTest {
 
     @Test
     public void testCostructor() {
-        assertThrows(NullPointerException.class, () -> new GestorePiattaforma("", "", "", ""));
-        assertThrows(NullPointerException.class, () -> new GestorePiattaforma(nome, "", "", ""));
-        assertThrows(NullPointerException.class, () -> new GestorePiattaforma("", cognome, "", ""));
-        assertThrows(NullPointerException.class, () -> new GestorePiattaforma("", "", email, ""));
-        assertThrows(NullPointerException.class, () -> new GestorePiattaforma(nome, cognome, "", ""));
-        assertThrows(NullPointerException.class, () -> new GestorePiattaforma(nome, "", email, ""));
-        assertThrows(NullPointerException.class, () -> new GestorePiattaforma("", cognome, email, password));
+        assertThrows(IllegalArgumentException.class, () -> new GestorePiattaforma("", "", "", ""));
+        assertThrows(IllegalArgumentException.class, () -> new GestorePiattaforma(nome, "", "", ""));
+        assertThrows(IllegalArgumentException.class, () -> new GestorePiattaforma("", cognome, "", ""));
+        assertThrows(IllegalArgumentException.class, () -> new GestorePiattaforma("", "", email, ""));
+        assertThrows(IllegalArgumentException.class, () -> new GestorePiattaforma(nome, cognome, "", ""));
+        assertThrows(IllegalArgumentException.class, () -> new GestorePiattaforma(nome, "", email, ""));
+        assertThrows(IllegalArgumentException.class, () -> new GestorePiattaforma("", cognome, email, password));
     }
     @Test
     public void testClass(){
         GestorePiattaforma gestorePiattaforma = new GestorePiattaforma(nome,cognome,email, password);
-        assertEquals(0, gestorePiattaforma.getIdGestore());
+        assertEquals(1, gestorePiattaforma.getIdGestore());
         GestorePuntoVendita gestorePiattaforma1 = new GestorePuntoVendita("Mario1", "Rossi1", "aa@aa.it", "password");
         assertEquals(1, gestorePiattaforma1.getIdGestorePuntoVendita());
         System.out.println("IdGestorePiattaforma : "+ gestorePiattaforma.getIdGestore());
         System.out.println("IdGestorePiattaforma1: "+ gestorePiattaforma1.getIdGestorePuntoVendita());
         assertEquals("Mario", gestorePiattaforma.getNome());
         assertEquals("Rossi", gestorePiattaforma.getCognome());
-        assertEquals("mario.ross@gmmail.com", gestorePiattaforma.getEmail());
+        assertEquals("mario.rossi@gmmail.com", gestorePiattaforma.getEmail());
         assertEquals("password", gestorePiattaforma.getPassword());
         System.out.println(gestorePiattaforma);
 

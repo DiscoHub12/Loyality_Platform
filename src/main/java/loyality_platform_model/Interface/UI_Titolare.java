@@ -475,7 +475,7 @@ public class UI_Titolare {
                     Elenco tutti i tuoi SMS Preconfigurati creati precedentemente :
                     """);
             for (SMS sms : smsPreconfigurati) {
-                if(sms.getConfigurazione() != null)
+                if (sms.getConfigurazione() != null)
                     System.out.println("Id SMS : " + sms.getIdSMS() + " Messaggio Preconfigurato : " + sms.getConfigurazione().getTestoConfigurato());
             }
         }
@@ -812,7 +812,6 @@ public class UI_Titolare {
         sc.nextLine();
         int choice;
         Set<Cliente> clientiIscritti = this.handlers.getHandlerAzienda().getClientiAzienda(this.azienda.getIdAzienda(), DBMS.getInstance().getCoalizione());
-        System.out.println("Ecco la lista di tutti i tuoi clienti :");
         if (clientiIscritti == null || clientiIscritti.isEmpty()) {
             System.out.println("""
                     Nessun Cliente iscritto al/ai Programmi Fedelta'.
@@ -820,6 +819,7 @@ public class UI_Titolare {
                     """);
             sezioneBackOffice();
         } else {
+            System.out.println("Ecco la lista di tutti i tuoi clienti :");
             for (Cliente cliente : clientiIscritti)
                 System.out.println("Id Cliente : " + cliente.getIdCliente() + " Nome Cliente : " + cliente.getNome());
             System.out.println("""
@@ -886,14 +886,14 @@ public class UI_Titolare {
                 3. Torna alla Home.
                 """);
         int choice = sc.nextInt();
-        switch (choice){
+        switch (choice) {
             case 1 -> partecipaCoalizione();
             case 2 -> aziendeIscritteCoalizione();
             case 3 -> sezioneBackOffice();
         }
     }
 
-    public void partecipaCoalizione(){
+    public void partecipaCoalizione() {
         sc.nextLine();
         System.out.println("""
                 SEZIONE PARTECIPA COALIZIONE
@@ -901,18 +901,18 @@ public class UI_Titolare {
                 alla piattaforma, e i relativi Programmi Fedeltà. 
                 """);
         Map<ProgrammaFedelta, Set<Azienda>> aziendeProgrammi = DBMS.getInstance().getCoalizione().getAziendePerProgramma();
-        if(aziendeProgrammi == null || aziendeProgrammi.isEmpty()){
+        if (aziendeProgrammi == null || aziendeProgrammi.isEmpty()) {
             System.out.println("""
                     Nessun azienda iscritta e nessun programma fedeltà disponibile. 
                     Ritorno alla schermata precedente.. 
                     """);
             sezioneCoalizioneAzienda();
-        }else {
-            for(ProgrammaFedelta programmaFedelta : aziendeProgrammi.keySet()){
+        } else {
+            for (ProgrammaFedelta programmaFedelta : aziendeProgrammi.keySet()) {
                 System.out.println("\nPROGRAMMA FEDELTA : " +
                         "\n" + programmaFedelta.toString());
-                for(Azienda azienda : aziendeProgrammi.get(programmaFedelta)){
-                    System.out.println( "\nAZIENDE ISCRITTE : " +
+                for (Azienda azienda : aziendeProgrammi.get(programmaFedelta)) {
+                    System.out.println("\nAZIENDE ISCRITTE : " +
                             "\nNome Azienda : " + azienda.getSpazioFedelta().getNome());
                 }
             }
@@ -922,15 +922,15 @@ public class UI_Titolare {
                 """);
         int programmaFedelta = sc.nextInt();
         assert aziendeProgrammi != null;
-        for(ProgrammaFedelta programmaFedelta1 : aziendeProgrammi.keySet()){
-            if(programmaFedelta == programmaFedelta1.getIdProgramma()){
-                if(this.handlers.getHandlerProgrammaFedelta().aggiungiProgrammaEsistente(azienda.getIdAzienda(), programmaFedelta1)){
+        for (ProgrammaFedelta programmaFedelta1 : aziendeProgrammi.keySet()) {
+            if (programmaFedelta == programmaFedelta1.getIdProgramma()) {
+                if (this.handlers.getHandlerProgrammaFedelta().aggiungiProgrammaEsistente(azienda.getIdAzienda(), programmaFedelta1)) {
                     System.out.println("""
-                        Programma aggiunto correttamente.
-                        Ritorno alla sezione Coalizione.
-                        """);
+                            Programma aggiunto correttamente.
+                            Ritorno alla sezione Coalizione.
+                            """);
                     sezioneCoalizioneAzienda();
-                }else {
+                } else {
                     System.out.println("""
                             Non è possibile aggiungere il seguente Programma Fedeltà.
                             Ritorno alla schermata precedente.
@@ -943,7 +943,7 @@ public class UI_Titolare {
 
     }
 
-    public void aziendeIscritteCoalizione(){
+    public void aziendeIscritteCoalizione() {
         sc.nextLine();
         System.out.println("""
                 SEZIONE COALIZIONE AZIENDA

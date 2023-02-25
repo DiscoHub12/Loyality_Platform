@@ -55,13 +55,17 @@ public class UI_Cliente {
     //SOTTO-SEZIONE PROGRAMMI FEDELTA' (DI CLIENTI)
     public void sezioneIscrizioneProgrammiFedelta() {
         int choice;
+        Set<Azienda> aziende = DBMS.getInstance().getAziendeIscritte();
         System.out.println("""
                 SEZIONE PROGRAMMI FEDELTA' .
                 Elenco dei programmi fedeltà disponibili :
                 """);
-        Set<Azienda> aziende = DBMS.getInstance().getAziendeIscritte();
         if (aziende == null || aziende.isEmpty()) {
-            System.out.println("Programmi Fedelta' non disponibili.");
+            System.out.println("""
+                    Nessun Azienda iscritta. 
+                    Ritorno alla Home.
+                    """);
+            homeCliente();
         } else {
             for (Azienda azienda : aziende) {
                 System.out.println("Id Azienda : " + azienda.getIdAzienda());
@@ -75,12 +79,23 @@ public class UI_Cliente {
                     }
                 }
             }
+            System.out.println("""
+                    Elenco le operazioni disponibili: 
+                    1. Iscriviti ad un Programma Fedelta'. 
+                    2. Ritorna alla Home.
+                    """);
+            int choice1 = sc.nextInt();
+            switch (choice1) {
+                case 1 -> {
+                    System.out.println("Inserire l'id di una azienda: ");
+                    int azienda = sc.nextInt();
+                    System.out.println("Inserire l'id di un programma a cui iscriversi: ");
+                    choice = sc.nextInt();
+                    this.selezioneProgramma(choice, azienda);
+                }
+                case 2 -> homeCliente();
+            }
         }
-        System.out.println("Inserire l'id di una azienda: ");
-        int azienda = sc.nextInt();
-        System.out.println("Inserire l'id di un programma a cui iscriversi: ");
-        choice = sc.nextInt();
-        this.selezioneProgramma(choice, azienda);
     }
 
     //SOTTO SEZIONE CERCA NEGOZI (DI CLIENTI)
@@ -88,11 +103,10 @@ public class UI_Cliente {
         sc.nextLine();
         int choice;
         Set<Azienda> aziendeIscritte = DBMS.getInstance().getAziendeIscritte();
-        System.out.println("Elenco Aziende Iscritte : ");
-        for(Azienda azienda : aziendeIscritte){
-            System.out.println("-Id Azienda : "+  azienda.getIdAzienda() + "       Nome Azienda : " + azienda.getSpazioFedelta().getNome() + "       Indirizzo Azienda : " + azienda.getSpazioFedelta().getIndirizzo());
+        System.out.println("Elenco Aziende Iscritte :");
+        for (Azienda azienda : aziendeIscritte) {
+            System.out.println("-Id Azienda : " + azienda.getIdAzienda() + "       Nome Azienda : " + azienda.getSpazioFedelta().getNome() + "       Indirizzo Azienda : " + azienda.getSpazioFedelta().getIndirizzo());
         }
-
         System.out.println("""
                 Desideri cercare un negozio
                 1. Si
@@ -108,10 +122,14 @@ public class UI_Cliente {
                 String nomeNegozio = sc.nextLine();
                 for (Azienda toScroll : aziendeIscritte) {
                     if (Objects.equals(nomeNegozio, toScroll.getSpazioFedelta().getNome())) {
-                        System.out.println("Informazioni relative al negozio cercato: " +
-                                toScroll);
+                        System.out.println("\nInformazioni relative al negozio cercato: ");
+                        System.out.println("\n -Id Azienda : " + toScroll.getIdAzienda() +
+                                "\n -Nome Azienda : " + toScroll.getSpazioFedelta().getNome() +
+                                "\n -Indirizzo Azienda : " + toScroll.getSpazioFedelta().getIndirizzo() +
+                                "\n -Numero Telefono : " + toScroll.getSpazioFedelta().getNumeroTelefono() +
+                                "\n -Email : " + toScroll.getSpazioFedelta().getEmail());
                         System.out.println("""
-                                Desideri iscriverti ad un programma fedelta' del negozio: 
+                                Desideri iscriverti ad un Programma Fedelta' del negozio:
                                 1. Si
                                 2. Annulla
                                 Inserisci il numero corrispettivo
@@ -122,30 +140,33 @@ public class UI_Cliente {
                             case 1 -> {
                                 Set<ProgrammaFedelta> programmiAzienda = this.utils.getHandlerAzienda().getProgrammiFedeltaAzienda(toScroll.getIdAzienda());
                                 if (programmiAzienda == null || programmiAzienda.isEmpty()) {
-                                    System.out.println("L'Azienda non ha alcun Programma Fedelta' attivo.");
+                                    System.out.println("""
+                                            L'Azienda non ha alcun Programma Fedelta' attivo.
+                                            Ritorno alla schermata Principale.
+                                            """);
+                                    sezioneCercaNegozi();
                                 } else {
-                                    System.out.println("Elenco dei programmi fedeltà disponibili del negozio: " +
+                                    System.out.println("Elenco dei programmi fedeltà disponibili del negozio: \n" +
                                             programmiAzienda.toString());
                                     System.out.println("Inserire l'id di un programma a cui iscriversi: ");
                                     int program = sc.nextInt();
                                     this.selezioneProgramma(program, toScroll.getIdAzienda());
                                 }
-
                             }
                             case 2 -> this.homeCliente();
                         }
                     }
                 }
                 System.out.println("""
-                        Azienda non trovata. 
-                        Inserisci : 
+                        Azienda non trovata.
+                        Inserisci :
                         1. Cerca di nuovo l'Azienda.
                         2. Ritorna alla Home.
                         """);
                 int choice1 = sc.nextInt();
-                if(choice1 == 1){
+                if (choice1 == 1) {
                     sezioneCercaNegozi();
-                }else homeCliente();
+                } else homeCliente();
             }
             case 2 -> homeCliente();
         }
@@ -153,6 +174,7 @@ public class UI_Cliente {
 
     //SOTTO SEZIONE CERCA NEGOZI (DI ISCRIZIONE PROGRAMMA FEDELTA)
     public void selezioneProgramma(int idProgramma, int idAzienda) {
+        sc.nextLine();
         if (cliente.getTessera() == null) {
             System.out.println("""
                     Non possiedi la Tessera.
@@ -168,12 +190,17 @@ public class UI_Cliente {
                     if (this.utils.getHandlerTessera().creaTessera(cliente.getIdCliente())) {
                         System.out.println("Tessera creata correttamente.");
                     } else {
-                        System.out.println("Tessera non creata riprovare.");
-                        this.homeCliente();
+                        System.out.println("""
+                                Errore. Riprovare
+                                """);
+                        selezioneProgramma(idProgramma, idAzienda);
                     }
                 }
                 case 2 -> {
-                    System.out.println("Impossibile iscriversi al programma fedelta'");
+                    System.out.println("""
+                            Impossibile iscriversi al programma fedelta'
+                            Ritorno alla Home.
+                            """);
                     this.homeCliente();
                 }
             }
@@ -190,15 +217,24 @@ public class UI_Cliente {
             case 1 -> {
                 ProgrammaFedelta programmaFedelta = this.utils.getHandlerProgrammaFedelta().getProgrammaFedeltaById(idAzienda, idProgramma);
                 if (this.utils.getHandlerTessera().addProgrammaFedelta(cliente.getIdCliente(), programmaFedelta)) {
-                    System.out.println("Iscrizione avvenuta con successo.");
+                    System.out.println("""
+                            Iscrizione avvenuta con successo.
+                            Ritorno alla Home.
+                            """);
                     this.homeCliente();
                 } else {
-                    System.out.println("Iscrizione non avvenuta.");
+                    System.out.println("""
+                            Iscrizione non avvenuta.
+                            Ritorno alla Home.
+                            """);
                     this.homeCliente();
                 }
             }
             case 2 -> {
-                System.out.println("Iscrizione annullata.");
+                System.out.println("""
+                        Iscrizione annullata.
+                        Ritorno alla Home.
+                        """);
                 this.homeCliente();
             }
         }
@@ -229,7 +265,7 @@ public class UI_Cliente {
             }
         }
         System.out.println("""
-                SEZIONE INFO TESSERA
+                SEZIONE TESSERA
                 Ecco le info della tua tessera :
 
                 """);
@@ -271,37 +307,37 @@ public class UI_Cliente {
             }
         } else {
             System.out.println("""
-                    Non sei iscritto a nessun programma fedelta'.
+                    Non sei iscritto a nessun Programma Fedelta'.
                     Ritorno alla Home.
                     """);
             homeCliente();
         }
-
     }
 
     //SOTTO SEZIONE PREMI (DI CLIENTI)
     public void sezioneCatalogoPremi() {
         sc.nextLine();
         Set<Premio> premi = this.utils.getHandlerCliente().getPremiCliente(cliente.getIdCliente());
-        System.out.println("""
-                SEZIONE PREMI
-                Elenco dei premi riscattati :
+        if (premi == null || premi.isEmpty()) {
+            System.out.println("""
+                     Non possiedi alcun Premio.
+                    """);
+        } else {
+            System.out.println("""
+                    SEZIONE PREMI
+                    Elenco dei premi riscattati :
 
-                """);
-        if (premi != null) {
+                    """);
             for (Premio premio : premi) {
                 System.out.println(premio.toString());
-
             }
-        } else {
-            System.out.println("Non c'e' nessun premio riscattato\n");
 
         }
         System.out.println("""
-                Vuoi riscattare un premio: 
+                Vuoi riscattare un premio:
                 1. Conferma
                 2. Annulla
-                                
+                                                                
                 """);
         int riscatta = sc.nextInt();
         switch (riscatta) {
@@ -320,85 +356,85 @@ public class UI_Cliente {
                     Ritorno alla Home.
                     """);
             homeCliente();
-        }
-        assert tessera != null;
-        if (tessera.getProgrammiFedelta() == null || tessera.getProgrammiFedelta().isEmpty()) {
-            System.out.println("""
-                    Non sei iscritto a nessun Programma Fedelta'. Non puoi riscattare premi. 
-                    Ritorno alla Home.
-                    """);
-            homeCliente();
-        }
-
-        System.out.println("""
-                SEZIONE RISCATTA PREMIO
-                Elenco dei programmi fedelta' a cui si e' iscritto :
-                                
-                """);
-        Set<ProgrammaFedelta> programmiFedelta = tessera.getProgrammiFedelta();
-        for (ProgrammaFedelta programmaFedelta1 : programmiFedelta) {
-            System.out.println("-Id Programma : " + programmaFedelta1.getIdProgramma() + " Nome Programma : " + programmaFedelta1.getNome());
-        }
-        System.out.println("Inserisci l'id del programma fedelta' su cui vuoi vedere il catalogo premi :");
-        id = sc.nextInt();
-        for (ProgrammaFedelta programmaFedelta : programmiFedelta) {
-            if (id == programmaFedelta.getIdProgramma()) {
-                if (programmaFedelta.getCatalogoPremi() == null || programmaFedelta.getCatalogoPremi().getPremiCatalogo().isEmpty()) {
-                    System.out.println("""
-                            Il Programma Fedelta' non possiede alcun Catalogo Premi.
-                            Seleziona :
-                            1. Ritorna alla schermata precedente.
-                            2. Ritorna alla Home.
-                            """);
-                    int choice1 = sc.nextInt();
-                    switch (choice1) {
-                        case 1 -> sezioneCatalogoPremi();
-                        case 2 -> homeCliente();
-                    }
-                } else System.out.println(programmaFedelta.getCatalogoPremi());
-            }
-            Set<Azienda> aziendeIscritte = DBMS.getInstance().getCoalizione().getAziendeIscritteProgramma(programmaFedelta.getIdProgramma());
-            if (aziendeIscritte == null || aziendeIscritte.isEmpty()) {
-                System.out.println("Nessun Azienda ha in corso il Programma Fedelta' con id : " + programmaFedelta.getIdProgramma());
+        } else {
+            if (tessera.getProgrammiFedelta() == null || tessera.getProgrammiFedelta().isEmpty()) {
+                System.out.println("""
+                        Non sei iscritto a nessun Programma Fedelta'. Non puoi riscattare premi. 
+                        Ritorno alla Home.
+                        """);
+                homeCliente();
             } else {
-                System.out.println(" Aziende che hanno attivo il Programma Fedelta' : ");
-                for (Azienda azienda : aziendeIscritte) {
-                    System.out.println("-Id Azienda : " + azienda.getIdAzienda() + " Nome Azienda : " + azienda.getSpazioFedelta().getNome());
+                System.out.println("""
+                        SEZIONE RISCATTA PREMIO
+                        Elenco dei programmi fedelta' a cui si e' iscritto :
+                                        
+                        """);
+                Set<ProgrammaFedelta> programmiFedelta = tessera.getProgrammiFedelta();
+                for (ProgrammaFedelta programmaFedelta1 : programmiFedelta) {
+                    System.out.println("-Id Programma : " + programmaFedelta1.getIdProgramma() + " Nome Programma : " + programmaFedelta1.getNome());
                 }
-                System.out.println("Inserisci l'id dell'Azienda su cui vedere il Catalogo Premi del Programma Fedeltà selezionato :");
-                int idAzienda = sc.nextInt();
-                for (Azienda azienda : aziendeIscritte) {
-                    if (azienda.getIdAzienda() == idAzienda) {
-                        System.out.println(" Catalogo Premi Azienda : " +
-                                "\n" + DBMS.getInstance().getProgrammaFedeltaById(azienda.getIdAzienda(), programmaFedelta.getIdProgramma()).getCatalogoPremi().toString());
-                        Set<Premio> premiDisponibili = DBMS.getInstance().getProgrammaFedeltaById(azienda.getIdAzienda(), programmaFedelta.getIdProgramma()).getCatalogoPremi().getPremiCatalogo();
-                        for (Premio premio : premiDisponibili) {
-                            System.out.println("Puoi Riscattare i Seguenti Premi : ");
-                            if (this.cliente.getTessera().getPunti() >= premio.getPunti()) {
-                                if (premio.getPunti() != 0) {
-                                    System.out.println("-Id Premio : " + premio.getIdPremio() + " Nome premio : " + premio.getNome() + " Punti per il Premio : " + premio.getPunti());
-                                }
-                            } else if (this.cliente.getTessera().getLivelli() >= premio.getLivelli()) {
-                                System.out.println("-Id Premio : " + premio.getIdPremio() + " Nome premio : " + premio.getNome() + " Livelli per il Premio : " + premio.getPunti());
-
-                            }
-                        }
-                        System.out.println("Inserisci l'id del premio che vuoi riscattare : ");
-                        int idPremio = sc.nextInt();
-                        int numeroPunti = 0;
-                        for (Premio premio : premiDisponibili) {
-                            if (premio.getIdPremio() == idPremio) {
-                                numeroPunti = premio.getPunti();
-                            }
-                        }
-                        boolean res = this.utils.getHandlerPremi().aggiungiPremioClienteCatalogoProgramma(azienda.getIdAzienda(), programmaFedelta.getIdProgramma(), this.cliente.getIdCliente(), idPremio);
-                        if (res) {
-                            this.utils.getHandlerTessera().removePuntiCliente(tessera.getIdTessera(), numeroPunti);
+                System.out.println("Inserisci l'id del programma fedelta' su cui vuoi vedere il catalogo premi :");
+                id = sc.nextInt();
+                for (ProgrammaFedelta programmaFedelta : programmiFedelta) {
+                    if (id == programmaFedelta.getIdProgramma()) {
+                        if (programmaFedelta.getCatalogoPremi() == null || programmaFedelta.getCatalogoPremi().getPremiCatalogo().isEmpty()) {
                             System.out.println("""
-                                    Premio riscattato correttamente.
-                                    Ritorno alla schermata precedente.
+                                    Il Programma Fedelta' non possiede alcun Catalogo Premi.
+                                    Seleziona :
+                                    1. Ritorna alla schermata precedente.
+                                    2. Ritorna alla Home.
                                     """);
-                            sezioneCatalogoPremi();
+                            int choice1 = sc.nextInt();
+                            switch (choice1) {
+                                case 1 -> sezioneCatalogoPremi();
+                                case 2 -> homeCliente();
+                            }
+                        } else System.out.println(programmaFedelta.getCatalogoPremi());
+                    }
+                    Set<Azienda> aziendeIscritte = DBMS.getInstance().getCoalizione().getAziendeIscritteProgramma(programmaFedelta.getIdProgramma());
+                    if (aziendeIscritte == null || aziendeIscritte.isEmpty()) {
+                        System.out.println("Nessun Azienda ha in corso il Programma Fedelta' con id : " + programmaFedelta.getIdProgramma());
+                    } else {
+                        System.out.println(" Aziende che hanno attivo il Programma Fedelta' : ");
+                        for (Azienda azienda : aziendeIscritte) {
+                            System.out.println("-Id Azienda : " + azienda.getIdAzienda() + " Nome Azienda : " + azienda.getSpazioFedelta().getNome());
+                        }
+                        System.out.println("Inserisci l'id dell'Azienda su cui vedere il Catalogo Premi del Programma Fedeltà selezionato :");
+                        int idAzienda = sc.nextInt();
+                        for (Azienda azienda : aziendeIscritte) {
+                            if (azienda.getIdAzienda() == idAzienda) {
+                                System.out.println(" Catalogo Premi Azienda : " +
+                                        "\n" + DBMS.getInstance().getProgrammaFedeltaById(azienda.getIdAzienda(), programmaFedelta.getIdProgramma()).getCatalogoPremi().toString());
+                                Set<Premio> premiDisponibili = DBMS.getInstance().getProgrammaFedeltaById(azienda.getIdAzienda(), programmaFedelta.getIdProgramma()).getCatalogoPremi().getPremiCatalogo();
+                                for (Premio premio : premiDisponibili) {
+                                    System.out.println("Puoi Riscattare i Seguenti Premi : ");
+                                    if (this.cliente.getTessera().getPunti() >= premio.getPunti()) {
+                                        if (premio.getPunti() != 0) {
+                                            System.out.println("-Id Premio : " + premio.getIdPremio() + " Nome premio : " + premio.getNome() + " Punti per il Premio : " + premio.getPunti());
+                                        }
+                                    } else if (this.cliente.getTessera().getLivelli() >= premio.getLivelli()) {
+                                        System.out.println("-Id Premio : " + premio.getIdPremio() + " Nome premio : " + premio.getNome() + " Livelli per il Premio : " + premio.getPunti());
+
+                                    }
+                                }
+                                System.out.println("Inserisci l'id del premio che vuoi riscattare : ");
+                                int idPremio = sc.nextInt();
+                                int numeroPunti = 0;
+                                for (Premio premio : premiDisponibili) {
+                                    if (premio.getIdPremio() == idPremio) {
+                                        numeroPunti = premio.getPunti();
+                                    }
+                                }
+                                boolean res = this.utils.getHandlerPremi().aggiungiPremioClienteCatalogoProgramma(azienda.getIdAzienda(), programmaFedelta.getIdProgramma(), this.cliente.getIdCliente(), idPremio);
+                                if (res) {
+                                    this.utils.getHandlerTessera().removePuntiCliente(tessera.getIdTessera(), numeroPunti);
+                                    System.out.println("""
+                                            Premio riscattato correttamente.
+                                            Ritorno alla schermata precedente.
+                                            """);
+                                    sezioneCatalogoPremi();
+                                }
+                            }
                         }
                     }
                 }
@@ -408,13 +444,26 @@ public class UI_Cliente {
 
     public void sezioneCoupon() {
         Set<Coupon> couponCliente = this.utils.getHandlerCliente().getCouponCliente(cliente.getIdCliente());
-        System.out.println("Ecco i tuoi coupon: "
-                + couponCliente.toString());
-        System.out.println("Premi 1 per tornare alla home: ");
-        int choice = sc.nextInt();
-        if (choice == 1) {
-            this.homeCliente();
-        } else this.sezioneCoupon();
+        if (couponCliente == null || couponCliente.isEmpty()) {
+            System.out.println("""
+                    Non possiedi alcun Coupon.
+                    Ritorno alla Home.
+                    """);
+            homeCliente();
+        } else {
+            System.out.println("Elenco i Coupon posseduti : " +
+                    "\n" + couponCliente.toString());
+            System.out.println("""
+                    Elenco le possibili operazioni :
+                    1. Ritorna alla Home. 
+                    """);
+            int choice = sc.nextInt();
+            if (choice == 1) {
+                this.homeCliente();
+            } else {
+                sezioneCoupon();
+            }
+        }
     }
 
     public void sezioneVisite() {
@@ -427,8 +476,8 @@ public class UI_Cliente {
                     """);
             homeCliente();
         } else {
-            System.out.println("Ecco le tue visite: " +
-                    visiteCliente.toString());
+            System.out.println("Elenco le Visite prenotate" +
+                    "\n" + visiteCliente.toString());
             System.out.println("""
                     Elenco delle attivita' disponibili: 
                     1. Prenota visita
@@ -445,7 +494,6 @@ public class UI_Cliente {
                 case 3 -> this.homeCliente();
             }
         }
-
     }
 
     //SOTTO-SEZIONE LOGOUT
@@ -462,5 +510,4 @@ public class UI_Cliente {
             homeCliente();
         }
     }
-
 }

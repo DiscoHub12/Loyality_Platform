@@ -282,6 +282,13 @@ public class ProgrammaLivelli implements ProgrammaFedelta {
                 Objects.equals(catalogoPremi, that.catalogoPremi);
     }
 
+    public String toStringCatalogo(){
+        String tmp = "";
+        if(this.catalogoPremi == null || this.catalogoPremi.getPremiCatalogo().isEmpty()){
+            tmp = "\nIl programma  nonn possiede il Catalogo Premi.";
+        }else tmp = "\nId Catalogo Premi: " + this.catalogoPremi.getIdCatalogoPremi();
+        return tmp;
+    }
 
     @Override
     public String toString() {
@@ -295,7 +302,7 @@ public class ProgrammaLivelli implements ProgrammaFedelta {
                 "\nPuntiSpesa: " + puntiSpesa +
                 "\nImportoSpesa: " + importoSpesa +
                 "\nTipoProgramma: " + tipoProgramma+
-                "\nId Catalogo Premi: " + this.catalogoPremi.getIdCatalogoPremi();
+                toStringCatalogo();
     }
 
 }

@@ -48,7 +48,7 @@ public class Visita {
      */
     public Visita(String luogo, String data) {
         this.idVisita=++contatoreVisita;
-        this.data=data;
+        this.setData(data);
         this.setLuogo(luogo);
         this.completata = false;
     }
@@ -65,7 +65,7 @@ public class Visita {
 
 
     public void setData(String data) {
-        if (Objects.equals(data, ""))
+        if (Objects.equals(data, "") || data == null)
             throw new IllegalArgumentException("Invalid data");
         this.data = data;
     }

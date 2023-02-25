@@ -258,6 +258,14 @@ public class ProgrammaPunti implements ProgrammaFedelta {
         return false;
     }
 
+    public String toStringCatalogo(){
+        String tmp = "";
+        if(this.catalogoPremi == null || this.catalogoPremi.getPremiCatalogo().isEmpty()){
+            tmp = "\nIl programma  nonn possiede il Catalogo Premi.";
+        }else tmp = "\nId Catalogo Premi: " + this.catalogoPremi.getIdCatalogoPremi();
+        return tmp;
+    }
+
     @Override
     public String toString() {
         return "\t-DETAILS PROGRAMMA PUNTI-" +
@@ -270,13 +278,6 @@ public class ProgrammaPunti implements ProgrammaFedelta {
                 "\nPunti Spesa: " + puntiSpesa +
                 "\nImporto Spesa: " + importoSpesa +
                 "\nTipo Programma: " + tipoProgramma +
-                "\nId Catalogo Premi: " + toStringCatalogo();
-    }
-
-    private String toStringCatalogo(){
-        if(catalogoPremi != null){
-            return catalogoPremi.toString();
-        }
-        return null;
+                toStringCatalogo();
     }
 }

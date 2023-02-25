@@ -38,6 +38,7 @@ public class Coalizione {
     /**
      * This method allows you to take all the customers
      * registered in a certain Loyalty Program.
+     *
      * @param idProgramma the id for Loyalty Program.
      * @return a set of Customers registered in a certain Loyalty Program.
      */
@@ -55,17 +56,24 @@ public class Coalizione {
     /**
      * This method allows you to take all the costumers
      * at a certain Company.
+     *
      * @param idAzienda the of Company.
      * @return a set of Customers.
      */
-    public Set<Cliente> getClientiAzienda(int idAzienda){
+    public Set<Cliente> getClientiAzienda(int idAzienda) {
         Set<Cliente> clienti = new HashSet<>();
-        if(idAzienda <= 0)
+        if (idAzienda <= 0)
             throw new IllegalArgumentException("Invalid id for the Company.");
-        for(ProgrammaFedelta programmaFedelta : this.aziendePerProgramma.keySet()){
-            for(Azienda azienda : this.aziendePerProgramma.get(programmaFedelta)){
-                if(azienda.getIdAzienda() == idAzienda){
-                    clienti.addAll(this.clientiIscritti.get(programmaFedelta));
+        for (ProgrammaFedelta programmaFedelta : this.aziendePerProgramma.keySet()) {
+            for (Azienda azienda : this.aziendePerProgramma.get(programmaFedelta)) {
+                if (azienda.getIdAzienda() == idAzienda) {
+                    if (this.clientiIscritti.get(programmaFedelta) == null || this.clientiIscritti.get(programmaFedelta).isEmpty()) {
+                        clienti = null;
+                    } else {
+                        assert clienti != null;
+                        clienti.addAll(this.clientiIscritti.get(programmaFedelta));
+                    }
+
                 }
             }
         }
@@ -76,7 +84,8 @@ public class Coalizione {
      * This method allows you to take all the Customers
      * who are registered in an active Loyalty Program of a
      * specific Company, if it exists.
-     * @param idAzienda the id for the Company.
+     *
+     * @param idAzienda   the id for the Company.
      * @param idProgramma the id for the Loyalty Program.
      * @return a set of Customers enrolled in a certain Loyalty Program
      * active in a Company.
@@ -100,6 +109,7 @@ public class Coalizione {
     /**
      * This method allows you to take all the Companies
      * that are registered in a specific Loyalty Program.
+     *
      * @param idProgramma the id for the Loyalty Program to get all Company.
      * @return all Companies that have that specific Loyalty Program active.
      */
@@ -112,15 +122,15 @@ public class Coalizione {
         return null;
     }
 
-    public boolean addClienteCoalizione(ProgrammaFedelta programmaFedelta, Cliente cliente){
-        if(!this.clientiIscritti.containsKey(programmaFedelta)){
+    public boolean addClienteCoalizione(ProgrammaFedelta programmaFedelta, Cliente cliente) {
+        if (!this.clientiIscritti.containsKey(programmaFedelta)) {
             Set<Cliente> clienti = new HashSet<>();
             clienti.add(cliente);
             this.clientiIscritti.put(programmaFedelta, clienti);
             return true;
-        }else {
+        } else {
             Set<Cliente> clientiIscritti = this.clientiIscritti.get(programmaFedelta);
-            if(clientiIscritti.contains(cliente))
+            if (clientiIscritti.contains(cliente))
                 return false;
             clientiIscritti.add(cliente);
             this.clientiIscritti.put(programmaFedelta, clientiIscritti);
@@ -128,15 +138,15 @@ public class Coalizione {
         }
     }
 
-    public boolean addAziendaCoalizione(ProgrammaFedelta programmaFedelta, Azienda azienda){
-        if(!this.aziendePerProgramma.containsKey(programmaFedelta)){
+    public boolean addAziendaCoalizione(ProgrammaFedelta programmaFedelta, Azienda azienda) {
+        if (!this.aziendePerProgramma.containsKey(programmaFedelta)) {
             Set<Azienda> azienda1 = new HashSet<>();
             azienda1.add(azienda);
             this.aziendePerProgramma.put(programmaFedelta, azienda1);
             return true;
-        }else {
+        } else {
             Set<Azienda> aziendeIscritte = this.aziendePerProgramma.get(programmaFedelta);
-            if(aziendeIscritte.contains(azienda))
+            if (aziendeIscritte.contains(azienda))
                 return false;
             aziendeIscritte.add(azienda);
             this.aziendePerProgramma.put(programmaFedelta, aziendeIscritte);
@@ -168,11 +178,11 @@ public class Coalizione {
         this.aziendePerProgramma = aziendePerProgramma;
     }
 
-    public boolean deleteClienteProgramma(int idCliente, int idProgramma){
-        for(ProgrammaFedelta programmaFedelta : this.clientiIscritti.keySet()){
-            if(programmaFedelta.getIdProgramma() == idProgramma){
-                for(Cliente cliente : this.clientiIscritti.get(programmaFedelta)){
-                    if(cliente.getIdCliente() == idCliente){
+    public boolean deleteClienteProgramma(int idCliente, int idProgramma) {
+        for (ProgrammaFedelta programmaFedelta : this.clientiIscritti.keySet()) {
+            if (programmaFedelta.getIdProgramma() == idProgramma) {
+                for (Cliente cliente : this.clientiIscritti.get(programmaFedelta)) {
+                    if (cliente.getIdCliente() == idCliente) {
                         this.clientiIscritti.get(programmaFedelta).remove(cliente);
                         return true;
                     }
@@ -182,11 +192,11 @@ public class Coalizione {
         return false;
     }
 
-    public boolean deleteAziendaProgramma(int idAzienda, int idProgramma){
-        for(ProgrammaFedelta programmaFedelta : this.aziendePerProgramma.keySet()){
-            if(programmaFedelta.getIdProgramma() == idProgramma){
-                for(Azienda azienda : this.aziendePerProgramma.get(programmaFedelta)){
-                    if(azienda.getIdAzienda() == idAzienda){
+    public boolean deleteAziendaProgramma(int idAzienda, int idProgramma) {
+        for (ProgrammaFedelta programmaFedelta : this.aziendePerProgramma.keySet()) {
+            if (programmaFedelta.getIdProgramma() == idProgramma) {
+                for (Azienda azienda : this.aziendePerProgramma.get(programmaFedelta)) {
+                    if (azienda.getIdAzienda() == idAzienda) {
                         this.aziendePerProgramma.get(programmaFedelta).remove(azienda);
                         return true;
                     }
@@ -196,8 +206,8 @@ public class Coalizione {
         return false;
     }
 
-    public boolean addProgrammaFedelta(ProgrammaFedelta programmaFedelta){
-        if(programmaFedelta == null)
+    public boolean addProgrammaFedelta(ProgrammaFedelta programmaFedelta) {
+        if (programmaFedelta == null)
             return false;
         this.aziendePerProgramma.put(programmaFedelta, new HashSet<>());
         this.clientiIscritti.put(programmaFedelta, new HashSet<>());

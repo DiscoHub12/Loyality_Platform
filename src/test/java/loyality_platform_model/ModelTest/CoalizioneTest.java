@@ -59,6 +59,7 @@ public class CoalizioneTest {
 
     @Test
     public void testAddProgrammaFedelta() {
+        initDb();
         assertTrue(this.dbms.getCoalizione().addProgrammaFedelta(programmaPunti0));
         assertTrue(this.dbms.getCoalizione().addProgrammaFedelta(programmaPunti1));
         assertTrue(this.dbms.getCoalizione().addProgrammaFedelta(programmaPunti2));
@@ -73,6 +74,7 @@ public class CoalizioneTest {
 
     @Test
     public void testGetClientiIscrittiProgramma() {
+        initDb();
         assertTrue(this.dbms.getCoalizione().addProgrammaFedelta(programmaPunti0));
         assertTrue(this.dbms.getCoalizione().addProgrammaFedelta(programmaPunti1));
         assertTrue(this.dbms.getCoalizione().addProgrammaFedelta(programmaPunti2));
@@ -97,6 +99,7 @@ public class CoalizioneTest {
 
     @Test
     public void testGetClientiIscrittiAzienda() {
+        initDb();
         assertTrue(this.dbms.getCoalizione().addProgrammaFedelta(programmaPunti0));
         assertTrue(this.dbms.getCoalizione().addProgrammaFedelta(programmaPunti1));
         assertTrue(this.dbms.getCoalizione().addProgrammaFedelta(programmaPunti2));
@@ -136,6 +139,7 @@ public class CoalizioneTest {
 
     @Test
     public void testGetClientiAzienda(){
+        initDb();
         assertTrue(this.dbms.getCoalizione().addProgrammaFedelta(programmaPunti0));
         assertTrue(this.dbms.getCoalizione().addProgrammaFedelta(programmaPunti1));
         assertTrue(this.dbms.getCoalizione().addProgrammaFedelta(programmaPunti2));
@@ -183,6 +187,7 @@ public class CoalizioneTest {
 
     @Test
     public void testGetAziendeIscritteProgramma() {
+        initDb();
         assertTrue(this.dbms.getCoalizione().addProgrammaFedelta(programmaPunti0));
         assertTrue(this.dbms.getCoalizione().addProgrammaFedelta(programmaPunti1));
         assertTrue(this.dbms.getCoalizione().addProgrammaFedelta(programmaPunti2));
@@ -206,6 +211,7 @@ public class CoalizioneTest {
 
     @Test
     public void testAddAziendaCoalizione() {
+        initDb();
         assertTrue(this.dbms.getCoalizione().addProgrammaFedelta(programmaPunti0));
         assertTrue(this.dbms.getCoalizione().addProgrammaFedelta(programmaPunti1));
         assertTrue(this.dbms.getCoalizione().addProgrammaFedelta(programmaPunti2));
@@ -233,6 +239,7 @@ public class CoalizioneTest {
 
     @Test
     public void testAddClienteCoalizione() {
+        initDb();
         assertTrue(this.dbms.getCoalizione().addProgrammaFedelta(programmaPunti0));
         assertTrue(this.dbms.getCoalizione().addProgrammaFedelta(programmaPunti1));
         assertTrue(this.dbms.getCoalizione().addProgrammaFedelta(programmaPunti2));
@@ -253,6 +260,7 @@ public class CoalizioneTest {
 
     @Test
     public void deleteAziendaProgramma() {
+        initDb();
         assertTrue(this.dbms.getCoalizione().addProgrammaFedelta(programmaPunti0));
         assertTrue(this.dbms.getCoalizione().addProgrammaFedelta(programmaPunti1));
         assertTrue(this.dbms.getCoalizione().addProgrammaFedelta(programmaPunti2));
@@ -285,6 +293,7 @@ public class CoalizioneTest {
 
     @Test
     public void deleteClienteProgramma() {
+        initDb();
         assertTrue(this.dbms.getCoalizione().addProgrammaFedelta(programmaPunti0));
         assertTrue(this.dbms.getCoalizione().addProgrammaFedelta(programmaPunti1));
         assertTrue(this.dbms.getCoalizione().addProgrammaFedelta(programmaPunti2));
